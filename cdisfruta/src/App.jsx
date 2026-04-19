@@ -1,13 +1,22 @@
 import { useState } from 'react'
-
-import './App.css'
+import MainPage from './paginas/usuarios/MainPage'
+import {
+  createBrowserRouter,
+  RouterProvider
+} from "react-router";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+ const router = createBrowserRouter([
+    {
+      path:'/main', Component: MainPage
+    }
+  ])
+
+
 
   return (
-    <>
-    </>
+  <RouterProvider router={router} />
   )
 }
 

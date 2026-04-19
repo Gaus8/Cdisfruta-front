@@ -1,0 +1,128 @@
+/* 1. Contenedor Principal Split Screen */
+#seccion-productos-contenedor {
+    width: 100%;
+    max-width: 100vw;
+    height: 80vh; 
+    display: flex;
+    flex-direction: row; 
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+/* 2. Bloque de Texto (40%) */
+.slide-content-text {
+    flex: 4; /* Proporción 40% */
+    background-color: #fff5f2; 
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    z-index: 10;
+}
+
+.text-wrapper {
+    max-width: 450px;
+    text-align: left;
+}
+
+.text-wrapper h4 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.5rem, 3vw, 3rem); /* Tamaño fluido para evitar desbordes */
+    color: #ff6f61;
+    margin: 1rem 0;
+    line-height: 1.1;
+}
+
+/* 3. Bloque del Carrusel (60%) */
+.slide-content-image {
+    flex: 5; /* Proporción 60% */
+    height: 100%;
+    min-width: 0; /* Obligatorio para que Swiper no se rompa en Flexbox */
+    position: relative;
+    background-color: #eee; /* Fondo neutro mientras carga */
+}
+
+.mySwiper {
+    width: 100%;
+    height: 100%;
+}
+
+.img-full-slide {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+/* 4. Elementos de Interfaz */
+.badge {
+    color: #ff6f61;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.slide-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-primary {
+    background: #ff6f61;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #ff6f61;
+    color: #ff6f61;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ==========================================================
+   4. RESPONSIVIDAD PARA EL CARRUSEL
+   ========================================================== */
+
+/* --- TAMAÑO 1: Laptop (769px a 1024px) --- */
+@media (max-width: 1024px) {
+    #seccion-productos-contenedor {
+        height: 70vh; /* Bajamos un poco la altura general */
+    }
+    .slide-content-text {
+        padding: 30px; /* Menos espacio interno */
+    }
+    .text-wrapper h4 {
+        font-size: 2.2rem;
+    }
+}
+
+/* --- TAMAÑO 2: Tablet (481px a 768px) --- */
+@media (max-width: 768px) {
+    #seccion-productos-contenedor {
+        flex-direction: column; 
+        height: auto;
+    }
+    .slide-content-image {
+        height: 45vh; /* Imagen más alta en tablet vertical */
+        flex: none; 
+    }
+    .slide-content-text {
+        flex: none;
+        padding: 40px 20px;
+    }
+}
+
+
