@@ -3,11 +3,10 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router";
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { URL_SERVER } from '../conexion';
 
 function Registro() {
   const navigate = useNavigate();
-
-  const urlRender = 'https://web-inventario.onrender.com/api/registro';
 
   const [data, setData] = useState({
     name: "",
@@ -37,8 +36,10 @@ function Registro() {
       return;
     }
 
+    console.log(data)
+
     try {
-      const response = await axios.post(urlRender, data, { withCredentials: true });
+      const response = await axios.post(`${URL_SERVER}/registro`, data, { withCredentials: true });
       if (response.status === 201) {
         localStorage.setItem('userEmail', data.email);
         navigate('/validacion');

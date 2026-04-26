@@ -3,11 +3,10 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { URL_SERVER } from '../conexion';
 
 function Login() {
   const navigate = useNavigate();
-  const urlRender = 'https://web-inventario.onrender.com/api/login';
-  const urlServer = 'http://localhost:5000/api/login'
 
   const [respuestaServer, setRespuestaServer] = useState("");
 
@@ -31,7 +30,7 @@ function Login() {
     }
 
     try {
-      const res = await axios.post(`${urlRender}`, data, { withCredentials: true });
+      const res = await axios.post(`${URL_SERVER}/login`, data, { withCredentials: true });
 
 
       if (res.status === 200 && res.data?.rol === 'admin') {

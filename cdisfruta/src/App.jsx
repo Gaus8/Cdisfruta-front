@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import MainPage from './paginas/mainPage/MainPage';
 import Login from './paginas/usuarios/Login';
 import Registro from './paginas/usuarios/Registro';
+import Validacion from "./paginas/usuarios/Validacion";
 
 function App() {
   const router = createBrowserRouter([
@@ -16,6 +17,10 @@ function App() {
     {
       path: '/registro',
       element: <Registro />,
+    },
+    {
+      path: '/validacion',
+      element: <Validacion />,
     },
   ]);
 

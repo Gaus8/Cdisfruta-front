@@ -1,0 +1,155 @@
+/* --- RESET Y BASES --- */
+.body-validacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #dbe2ef 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+/* --- TARJETA DEL FORMULARIO --- */
+.form-container-validacion {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.logo-empresa-validacion {
+  width: 110px;
+  height: auto;
+  margin-bottom: 25px;
+}
+
+.form-container-validacion h3 {
+  color: #1a2a3a;
+  margin: 0 0 10px 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.form-container-validacion p {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+/* --- CONTENEDOR DE CUADRADOS (OTP) --- */
+.otp-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0 30px 0;
+}
+
+.otp-input {
+  width: 50px;
+  height: 60px;
+  border: 2px solid #ced4da;
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #f8f9fa;
+  color: #007bff;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el cuadro */
+.otp-input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* --- BOTÓN DE ACCIÓN --- */
+.btn-verificar {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-verificar:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-verificar:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-verificar:disabled {
+  background-color: #bcd0e7;
+  cursor: not-allowed;
+}
+
+/* --- MENSAJES DE RESPUESTA --- */
+.mensaje-ok {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.mensaje-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* --- LINKS --- */
+.footer-links {
+  margin-top: 25px;
+}
+
+.footer-links a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* --- RESPONSIVIDAD --- */
+@media (max-width: 450px) {
+  .otp-input {
+    width: 42px;
+    height: 52px;
+    font-size: 22px;
+    border-radius: 8px;
+  }
+  
+  .otp-container {
+    gap: 8px;
+  }
+  
+  .form-container-validacion {
+    padding: 30px 20px;
+  }
+}
