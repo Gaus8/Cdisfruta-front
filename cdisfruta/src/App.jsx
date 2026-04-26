@@ -1,25 +1,25 @@
-import { useState } from 'react'
+import { createBrowserRouter, RouterProvider } from "react-router";
 import MainPage from './paginas/mainPage/MainPage';
-import {
-  createBrowserRouter,
-  RouterProvider
-} from "react-router";
 import Login from './paginas/usuarios/Login';
+import Registro from './paginas/usuarios/Registro';
 
 function App() {
-
- const router = createBrowserRouter([
+  const router = createBrowserRouter([
     {
-      path:'/', Component: MainPage,
-      path:'/login', Component: Login
-    }
-  ])
+      path: '/',
+      element: <MainPage />,
+    },
+    {
+      path: '/login',
+      element: <Login />,
+    },
+    {
+      path: '/registro',
+      element: <Registro />,
+    },
+  ]);
 
-
-
-  return (
-  <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

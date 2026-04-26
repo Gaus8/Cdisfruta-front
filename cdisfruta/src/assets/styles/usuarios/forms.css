@@ -1,144 +1,184 @@
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Big Shoulders", sans-serif;
+:root {
+  --coral-main: #ff7961;
+  --coral-hover: #ff6347;
+  --bg-contrast: #f0f2f5;
+  --text-dark: #332d2d;
+  --text-muted: #7d706e;
+  --input-border: #e8e1e0;
 }
 
 .body {
-  position: relative;
-  background: none;
-}
-
-.body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/img/background_img.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  filter: blur(6px); 
-  transform: scale(1.1); 
-  z-index: -1;
-}
-
-/* Contenedor del formulario */
-.form-container {
-  margin: 100px auto;
-  width: 90%;
-  max-width: 400px; 
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-contrast);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  background-color: #0e163fed;
-  border-radius: 8px;
+  /* Padding dinámico: mayor en escritorio, menor en móvil */
+  padding: clamp(1rem, 5vh, 3rem) 1rem;
 }
 
-/* Logo */
-.logo-empresa {
-  width: 30%;
-  margin-bottom: 10px;
-}
-
-/* Título */
-h3 {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  color: white;
-  margin-bottom: 10px;
+.form-container {
+  background-color: #ffffff;
+  /* Padding responsivo usando clamp */
+  padding: clamp(2rem, 8vw, 4rem) clamp(1.5rem, 5vw, 3.5rem);
+  border-radius: 45px;
+  box-shadow: 0 25px 60px -15px rgba(255, 121, 97, 0.18), 
+              0 15px 30px -10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 500px;
   text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  /* Asegura que no se rompa en pantallas muy bajitas */
+  margin: auto;
 }
 
-/* Caja de input */
+.logo-empresa {
+  width: clamp(70px, 10vw, 100px);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+h3 {
+  color: var(--coral-main);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: clamp(1.5rem, 5vh, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
 .form-container-input {
-  width: 80%;
-  height: 40px;
-  margin: 10px auto;
   display: flex;
   align-items: center;
-  padding: 0 15px;
-  gap: 8px;
   background-color: #ffffff;
-  border-radius: 5px;
+  border: 2px solid var(--input-border);
+  border-radius: 18px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 5px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Input */
+.form-container-input:focus-within {
+  border-color: var(--coral-main);
+  box-shadow: 0 8px 15px -8px rgba(255, 121, 97, 0.2);
+  transform: scale(1.01);
+}
+
 .form-container-input input {
-  font-size: clamp(0.8rem, 2vw, 1rem);
   border: none;
   outline: none;
+  background: transparent;
   width: 100%;
-  height: 100%;
-  background-color: inherit;
-  padding-left: 5px;
+  color: var(--text-dark);
+  font-size: 1rem;
 }
 
-p{
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  text-align: center;
-  color: #ee364bc9;
+/* Iconos de React */
+.icon-react {
+  color: var(--coral-main);
+  font-size: 1.3rem;
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
-a{
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  color: rgb(98, 149, 230);
+p[id^="error-"] {
+  color: #e63946;
+  font-size: 0.75rem;
+  text-align: left;
+  margin: 2px 0 12px 10px;
+  min-height: 14px;
+}
+
+/* Enlaces */
+a {
+  color: var(--text-muted);
   text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2rem;
+  transition: color 0.3s;
 }
 
 a:hover {
-  border-bottom: 2px solid white;
+  color: var(--coral-main);
+  text-decoration: underline;
 }
 
 .button {
-  width: 80%;
-  border: none;
-  border-radius: 5px;
-  background-color: #f44821;
+  background-color: var(--coral-main);
   color: white;
-  padding: 12px;
+  border: none;
+  padding: 1rem;
+  width: 100%;
+  border-radius: 50px;
+  font-weight: 700;
   font-size: 1rem;
-  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  margin: 10px;
-  transition: all 0.3s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 20px rgba(255, 121, 97, 0.25);
 }
 
 .button:hover {
-  background-color: #d63b1e; /* Color más oscuro al pasar el mouse */
-  box-shadow: 0 8px 15px rgba(244, 72, 33, 0.4);
+  background-color: var(--coral-hover);
   transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(255, 121, 97, 0.35);
 }
 
-.button:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 10px rgba(244, 72, 33, 0.5);
+.icon-btn {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
-
-.button:hover::before {
-  transform: translate(-50%, -50%) scale(1);
+.button:hover .icon-btn {
+  transform: translateX(5px);
 }
 
-/* Responsividad */
-@media screen and (max-width: 400px) {
+/* --- MEDIA QUERIES MEJORADOS --- */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
   .form-container {
-    width: 90%;
-    padding: 15px;
+    max-width: 420px;
+    padding: 3rem 2rem;
   }
 }
 
-@media screen and (max-width: 1200px) {
+/* Móviles pequeños y modo horizontal (Landscape) */
+@media (max-width: 300px), (max-height: 700px) {
+  .body {
+    background-color: #ffffff; /* Fondo sólido para que parezca app nativa */
+    padding: 1rem;
+    align-items: flex-start; /* Permite scroll natural si el contenido es largo */
+  }
+
   .form-container {
-    max-width: 350px;
+    box-shadow: none;
+    border: none;
+    padding: 1.5rem 1rem;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  h3 {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-container-input {
+    padding: 0.7rem 1rem;
+  }
+
+  .button {
+    padding: 0.9rem;
   }
 }

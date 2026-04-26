@@ -2,6 +2,7 @@ import '../../assets/styles/usuarios/forms.css'
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline } from "react-icons/io5";
 
 function Login() {
   const navigate = useNavigate();
@@ -30,16 +31,16 @@ function Login() {
     }
 
     try {
-      const res = await axios.post(`${urlRender}`, data, {withCredentials:true});
+      const res = await axios.post(`${urlRender}`, data, { withCredentials: true });
 
 
       if (res.status === 200 && res.data?.rol === 'admin') {
         navigate("/dashboard_admin");
-      } 
+      }
       else if (res.status === 200 && res.data?.rol === 'user') {
         navigate("/dashboard_user");
       }
-      else{
+      else {
         window.alert('Fallo en el inicio de Sesión')
       }
 
@@ -59,7 +60,7 @@ function Login() {
           <img className="logo-empresa" src="/img/logo_siecu.png" alt="logo_aplicacion" />
           <h3>Inicio de Sesión</h3>
           <div className="form-container-input">
-            <ion-icon name="mail-outline"></ion-icon>
+            <IoPersonOutline className="icon-react" />
             <input
               id="email-input"
               type="email"
@@ -71,7 +72,7 @@ function Login() {
           </div>
           <p id="error-email"></p>
           <div className="form-container-input">
-            <ion-icon name="lock-closed-outline"></ion-icon>
+            < IoLockClosedOutline className="icon-react" />
             <input id="password-input"
               type="password"
               placeholder="Ingrese una contraseña"
@@ -82,7 +83,11 @@ function Login() {
           </div>
           <p id="error-password">{respuestaServer}</p>
           <a href="/registro">Registrarse</a>
-          <button className="button" id="send-form">Enviar</button>
+          <button className="button" type="submit">
+            <span>Iniciar Sesión</span>
+            <IoArrowForwardOutline className="icon-btn" />
+          </button>
+
         </form>
       </div>
     </>
