@@ -1,128 +1,252 @@
-/* 1. Contenedor Principal Split Screen */
-#seccion-productos-contenedor {
-    width: 100%;
-    max-width: 100vw;
-    height: 80vh; 
-    display: flex;
-    flex-direction: row; 
-    padding: 0;
-    overflow: hidden;
-    background-color: #fff;
+/* ════════════════════════════════════════
+   CDISFRUTA — carrusel.css
+════════════════════════════════════════ */
+ 
+/* ── Contenedor split-screen ── */
+.carrusel-section {
+  width: 100%;
+  height: calc(100vh - 72px);
+  display: flex;
+  overflow: hidden;
+  background: #fff;
 }
-
-/* 2. Bloque de Texto (40%) */
-.slide-content-text {
-    flex: 4; /* Proporción 40% */
-    background-color: #fff5f2; 
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    z-index: 10;
+ 
+/* ── Columna de texto (40%) ── */
+.carrusel-text {
+  flex: 0 0 42%;
+  background: #F9F1E8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
 }
-
-.text-wrapper {
-    max-width: 450px;
-    text-align: left;
+/* Decoración de fondo sutil */
+.carrusel-text::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,88,58,0.07) 0%, transparent 70%);
+  pointer-events: none;
 }
-
-.text-wrapper h4 {
-    font-family: 'Fredoka One', cursive;
-    font-size: clamp(1.5rem, 3vw, 3rem); /* Tamaño fluido para evitar desbordes */
-    color: #ff6f61;
-    margin: 1rem 0;
-    line-height: 1.1;
+ 
+.carrusel-text-inner {
+  max-width: 420px;
+  width: 100%;
 }
-
-/* 3. Bloque del Carrusel (60%) */
-.slide-content-image {
-    flex: 5; /* Proporción 60% */
-    height: 100%;
-    min-width: 0; /* Obligatorio para que Swiper no se rompa en Flexbox */
-    position: relative;
-    background-color: #eee; /* Fondo neutro mientras carga */
+ 
+/* Eyebrow */
+.carrusel-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #E8583A;
+  margin-bottom: 1.25rem;
 }
-
-.mySwiper {
-    width: 100%;
-    height: 100%;
+.carrusel-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1.5px;
+  background: #E8583A;
+  border-radius: 2px;
 }
-
-.img-full-slide {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    display: block;
+ 
+/* Título con animación de aparición al cambiar slide */
+.carrusel-title {
+  font-family: 'Fraunces', 'Georgia', serif;
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: #1C1209;
+  margin-bottom: 1.1rem;
+  animation: fadeSlideUp 0.45s ease both;
 }
-
-/* 4. Elementos de Interfaz */
-.badge {
-    color: #ff6f61;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
-.slide-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
+ 
+/* Descripción */
+.carrusel-desc {
+  font-size: 0.9375rem;
+  line-height: 1.78;
+  color: #8B6652;
+  max-width: 380px;
+  margin-bottom: 2.25rem;
+  animation: fadeSlideUp 0.5s 0.05s ease both;
 }
-
-.btn-primary {
-    background: #ff6f61;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+ 
+/* Botones de acción */
+.carrusel-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-
-.btn-secondary {
-    background: transparent;
-    border: 2px solid #ff6f61;
-    color: #ff6f61;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
+.car-btn {
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.75rem 1.6rem;
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.22s ease;
+  white-space: nowrap;
 }
-
-/* ==========================================================
-   4. RESPONSIVIDAD PARA EL CARRUSEL
-   ========================================================== */
-
-/* --- TAMAÑO 1: Laptop (769px a 1024px) --- */
+.car-btn--fill {
+  background: #E8583A;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(232,88,58,0.3);
+}
+.car-btn--fill:hover {
+  background: #C4431F;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(232,88,58,0.38);
+}
+.car-btn--line {
+  background: transparent;
+  color: #1C1209;
+  border: 1.5px solid #EAE0D5;
+}
+.car-btn--line:hover {
+  border-color: #E8583A;
+  color: #E8583A;
+}
+ 
+/* Indicadores / dots */
+.carrusel-indicators {
+  display: flex;
+  gap: 8px;
+  margin-top: 2.25rem;
+}
+.car-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(139,102,82,0.25);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+.car-dot--active {
+  background: #E8583A;
+  width: 24px;
+  border-radius: 4px;
+}
+ 
+/* ── Columna de imagen (60%) ── */
+.carrusel-image {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: #1C1209;
+  overflow: hidden;
+}
+ 
+/* Swiper ocupa todo el contenedor */
+.carrusel-swiper {
+  width: 100%;
+  height: 100%;
+}
+.carrusel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+ 
+/* Etiqueta flotante sobre la imagen */
+.carrusel-img-label {
+  position: absolute;
+  bottom: 2rem; left: 2rem;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  z-index: 10;
+  pointer-events: none;
+}
+.cil-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.65);
+}
+.cil-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+ 
+/* ── Swiper: flechas y paginación custom ── */
+.carrusel-swiper .swiper-button-next,
+.carrusel-swiper .swiper-button-prev {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  transition: background 0.2s;
+}
+.carrusel-swiper .swiper-button-next:hover,
+.carrusel-swiper .swiper-button-prev:hover {
+  background: rgba(232,88,58,0.75);
+}
+.carrusel-swiper .swiper-button-next::after,
+.carrusel-swiper .swiper-button-prev::after {
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+ 
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+ 
+/* Laptop (≤1024px) */
 @media (max-width: 1024px) {
-    #seccion-productos-contenedor {
-        height: 70vh; /* Bajamos un poco la altura general */
-    }
-    .slide-content-text {
-        padding: 30px; /* Menos espacio interno */
-    }
-    .text-wrapper h4 {
-        font-size: 2.2rem;
-    }
+  .carrusel-section { height: 75vh; }
+  .carrusel-text { padding: 2.5rem 2rem; }
 }
-
-/* --- TAMAÑO 2: Tablet (481px a 768px) --- */
+ 
+/* Tablet (≤768px): apilar */
 @media (max-width: 768px) {
-    #seccion-productos-contenedor {
-        flex-direction: column; 
-        height: auto;
-    }
-    .slide-content-image {
-        height: 45vh; /* Imagen más alta en tablet vertical */
-        flex: none; 
-    }
-    .slide-content-text {
-        flex: none;
-        padding: 40px 20px;
-    }
+  .carrusel-section {
+    flex-direction: column;
+    height: auto;
+  }
+  .carrusel-text {
+    flex: none;
+    padding: 2.5rem 1.5rem 2rem;
+    order: 2;
+  }
+  .carrusel-image {
+    flex: none;
+    height: 48vw;
+    min-height: 240px;
+    order: 1;
+  }
+  .carrusel-title { font-size: clamp(1.5rem, 5vw, 2rem); }
 }
-
-
+ 
+/* Móvil (≤480px) */
+@media (max-width: 480px) {
+  .carrusel-image { height: 56vw; }
+  .car-btn { padding: 0.65rem 1.25rem; font-size: 0.8rem; }
+  .carrusel-actions { gap: 0.6rem; }
+}

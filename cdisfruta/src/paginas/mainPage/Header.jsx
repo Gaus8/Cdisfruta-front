@@ -1,38 +1,54 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../../assets/styles/mainPage/header.css';
 import '../../assets/styles/mainPage/headerResponsive.css';
 import { IoPersonOutline, IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
+  const [scrolled, setScrolled] = useState(false);
+ 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+ 
+  const close = () => setMenuOpen(false);
+ 
   return (
-    <header className="header-container">
-      <div className="logo-img">
-        <img src="/img/logo_siecu.png" alt="Logo" />
-      </div>
-
-      <div>
-        <h1 className="titulo">Cdisfruta</h1>
-      </div>
-
-      {/* Icono de hamburguesa solo visible en móvil */}
-      <div className="mobile-menu-icon" onClick={toggleMenu}>
+    <header className={`hdr${scrolled ? ' hdr--scrolled' : ''}`}>
+ 
+      {/* ── Logo + Marca ── */}
+      <a href="#" className="hdr-brand" onClick={close}>
+        <div className="hdr-logo-ring">🍊</div>
+        <div className="hdr-brand-text">
+          <span className="hdr-brand-name">Cdisfruta</span>
+          <span className="hdr-brand-sub">Frutas Deshidratadas · Ubaté</span>
+        </div>
+      </a>
+ 
+      {/* ── Menú hamburguesa (solo móvil) ── */}
+      <button
+        className="hdr-hamburger"
+        onClick={() => setMenuOpen(v => !v)}
+        aria-label="Abrir menú"
+      >
         {menuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
-      </div>
-
-      {/* Navegación con clase dinámica */}
-      <nav className={`navbar ${menuOpen ? 'active' : ''}`}>
-        <a href="#" onClick={() => setMenuOpen(false)}>
-          <IoPersonOutline className="user-icon" />
-        </a>
-        <a href="#section-products" onClick={() => setMenuOpen(false)}>Sobre Nosotros</a>
-        <a href="#section-icons" onClick={() => setMenuOpen(false)}>Info</a>
-        <a href="#" onClick={() => setMenuOpen(false)}>Contacto</a>
+      </button>
+ 
+      {/* ── Nav ── */}
+      <nav className={`hdr-nav${menuOpen ? ' hdr-nav--open' : ''}`}>
+        <a href="#" onClick={close}>Inicio</a>
+        <a href="#sobre" onClick={close}>Sobre Nosotros</a>
+        <a href="#features" onClick={close}>Características</a>
+        <a href="#media" onClick={close}>Galería</a>
+        <a href="#contacto" onClick={close}>Contacto</a>
+ 
+        {/* Botones (también dentro del menú móvil) */}
+        <div className="hdr-actions">
+          <button className="hdr-btn hdr-btn--ghost">Ingresar</button>
+          <button className="hdr-btn hdr-btn--solid">Tienda →</button>
+        </div>
       </nav>
     </header>
   );
