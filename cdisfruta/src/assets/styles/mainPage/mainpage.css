@@ -1,0 +1,97 @@
+/* --- SECCIÓN DE ICONOS --- */
+#section-icons {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4rem;
+  padding: 100px 2rem;
+  background-color: #ffffff;
+  flex-wrap: wrap;
+}
+
+.icon-card {
+  display: flex;
+  flex-direction: column; /* Icono arriba, texto abajo */
+  align-items: center;
+  text-align: center;
+  width: 220px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.icon-card:hover {
+  transform: translateY(-15px);
+}
+
+/* El círculo del icono */
+#section-icons svg {
+  color: #FF7F66; 
+  background: #fff0ed; 
+  padding: 20px;
+  border-radius: 24px; /* Bordes ligeramente redondeados, muy moderno */
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(255, 127, 102, 0.15);
+  transition: all 0.3s ease;
+}
+
+.icon-card:hover svg {
+  background: #FF7F66;
+  color: white;
+  box-shadow: 0 15px 35px rgba(255, 127, 102, 0.3);
+}
+
+.icon-text {
+  color: #2d2d2d;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif; /* Si no tienes Poppins, usará Sans-serif */
+}
+
+/* --- FOOTER --- */
+.main-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 80px 12%;
+  background-color: #1a1a1a; /* Un negro más profundo */
+  color: #ffffff;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.info-item:hover {
+  opacity: 1;
+  color: #FF7F66;
+}
+
+.footer-social h3 {
+  color: #FF7F66;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-social p {
+  line-height: 1.8;
+  color: #b3b3b3;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .main-footer {
+    flex-direction: column;
+    padding: 60px 8%;
+  }
+  #section-icons {
+    gap: 2rem;
+  }
+}
