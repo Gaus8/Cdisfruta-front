@@ -71,7 +71,7 @@
 
 /* --- ESTILOS INTERNOS --- */
 .logo-empresa {
-  width: clamp(70px, 10vw, 90px);
+  width: clamp(100px, 10vw, 110px);
   margin-bottom: 1rem;
 }
 
@@ -89,7 +89,7 @@ h3 {
   border: 2px solid var(--input-border);
   border-radius: 18px;
   padding: 0.8rem 1.2rem;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   width: 100%;
 }
 
@@ -109,7 +109,7 @@ h3 {
   color: #e63946;
   font-size: 0.75rem;
   text-align: left;
-  margin: 2px 0 12px 10px;
+  margin: -10px 0 15px 10px;
   min-height: 14px;
 }
 
