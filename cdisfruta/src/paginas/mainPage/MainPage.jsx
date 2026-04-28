@@ -101,7 +101,9 @@ function MainPage() {
           {/* Marca */}
           <div className="footer-brand-col">
             <div className="footer-logo">
-              <div className="footer-logo-ring">🍊</div>
+              <div className="hdr-logo-ring">
+                <img src="/img/logo_cdisfruta.jpg" alt="CDISFRUTA Logo" />
+              </div>
               <span className="footer-brand-name">CDISFRUTA</span>
             </div>
             <p className="footer-tagline">
