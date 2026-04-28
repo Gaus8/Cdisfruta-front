@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
+import { GoogleLogin } from '@react-oauth/google';
 
 function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
@@ -45,6 +46,26 @@ function Login({ cerrar, irRegistro }) {
     } catch (err) {
       const errorData = err.response?.data;
       setRespuestaServer(errorData?.message || "Error al iniciar sesión. Intente de nuevo.");
+    }
+  };
+
+  // 2. Lógica para el éxito de Google
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      // Enviamos el token al endpoint /auth/google que creamos en el backend
+      const res = await axios.post(`${URL_SERVER}/auth/google`, {
+        token: credentialResponse.credential
+      }, { withCredentials: true });
+
+      if (res.status === 200) {
+        cerrar();
+        // Redirigimos según el rol que devuelva el backend
+        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
+        else navigate("/dashboard_user");
+      }
+    } catch (err) {
+      console.error("Error Google Login:", err);
+      setRespuestaServer("Error al iniciar sesión con Google.");
     }
   };
 
@@ -98,6 +119,23 @@ function Login({ cerrar, irRegistro }) {
           <IoArrowForwardOutline className="icon-btn" />
         </button>
         
+        {/* 3. Separador y Botón de Google */}
+        <div className="separator">
+          <span>o ingresa con</span>
+        </div>
+
+        <div className="google-btn-container">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setRespuestaServer("Error en la autenticación con Google")}
+            useOneTap={false} // Evita el popup automático al cargar si no lo deseas
+            theme="filled_blue"
+            shape="pill"
+            text="continue_with"
+            width="300" // Ajusta al ancho de tu formulario
+          />
+        </div>
+
         {/* Cambio a Registro */}
         <span className="link-switch" onClick={irRegistro}>
           ¿No tienes cuenta? Regístrate aquí
