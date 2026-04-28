@@ -23,10 +23,13 @@ function MainPage() {
       {/* ── SECCIÓN SOBRE NOSOTROS ── */}
       <section className="about-section" id="sobre">
         <div className="about-visual">
-          <div className="about-visual-glow" />
-          <div className="about-emoji-bg">🍊</div>
+          <img 
+            src="public/img/logo_cdisfruta.jpg" 
+            alt="Sobre nosotros" 
+            className="about-image-bg" 
+          />
           <div className="about-badge">
-            <span className="about-badge-num">4</span>
+            <span className="about-badge-num">6</span>
             <span className="about-badge-label">años en el mercado</span>
           </div>
         </div>
