@@ -114,9 +114,25 @@ function MainPage() {
               Sabor natural colombiano para el mundo.
             </p>
             <div className="footer-social">
-              <a href="#" className="social-pill">Instagram</a>
+              {/* Enlace a Instagram */}
+              <a 
+                href="https://www.instagram.com/cdisfruta_col" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-pill"
+              >
+                Instagram
+              </a>
               
-              <a href="#" className="social-pill">WhatsApp</a>
+              {/* Enlace a WhatsApp */}
+              <a 
+                href="https://wa.me/573112865361" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-pill"
+              >
+                WhatsApp
+              </a>
             </div>
           </div>
  
@@ -156,7 +172,7 @@ function MainPage() {
               </li>
               <li>
                 <span className="footer-contact-icon"><MdOutlineMail /></span>
-                <span>cdifruta@gmail.com</span>
+                <span>cdisfruta@gmail.com</span>
               </li>
             </ul>
           </div>
