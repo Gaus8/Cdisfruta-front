@@ -1,15 +1,13 @@
-import '../../assets/styles/usuarios/forms.css'
+import '../../assets/styles/usuarios/forms.css';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
 
-function Login() {
+function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
-
   const [respuestaServer, setRespuestaServer] = useState("");
-
   const [data, setData] = useState({
     email: "",
     password: ""
@@ -24,6 +22,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRespuestaServer("");
+
     if (!data.email || !data.password) {
       alert('Todos los campos son obligatorios');
       return;
@@ -32,66 +32,80 @@ function Login() {
     try {
       const res = await axios.post(`${URL_SERVER}/login`, data, { withCredentials: true });
 
+      if (res.status === 200) {
+        // Cerramos el modal antes de cualquier redirección
+        cerrar();
 
-      if (res.status === 200 && res.data?.rol === 'admin') {
-        navigate("/dashboard_admin");
+        if (res.data?.rol === 'admin') {
+          navigate("/dashboard_admin");
+        } else {
+          navigate("/dashboard_user");
+        }
       }
-      else if (res.status === 200 && res.data?.rol === 'user') {
-        navigate("/dashboard_user");
-      }
-      else {
-        window.alert('Fallo en el inicio de Sesión')
-      }
-
     } catch (err) {
       const errorData = err.response?.data;
-      if (errorData?.status === 'error') {
-        setRespuestaServer(errorData.message);
-      }
-
+      setRespuestaServer(errorData?.message || "Error al iniciar sesión. Intente de nuevo.");
     }
   };
 
   return (
-    <>
-      <div className="body">
-        <form className="form-container" onSubmit={handleSubmit}>
-          <img className="logo-empresa" src="/img/logo_siecu.png" alt="logo_aplicacion" />
-          <h3>Inicio de Sesión</h3>
-          <div className="form-container-input">
-            <IoPersonOutline className="icon-react" />
-            <input
-              id="email-input"
-              type="email"
-              placeholder="Ingrese su email"
-              name="email"
-              value={data.email}
-              onChange={handleChange}
-            />
-          </div>
-          <p id="error-email"></p>
-          <div className="form-container-input">
-            < IoLockClosedOutline className="icon-react" />
-            <input id="password-input"
-              type="password"
-              placeholder="Ingrese una contraseña"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-            />
-          </div>
-          <p id="error-password">{respuestaServer}</p>
-          <a href="/registro">Registrarse</a>
-          <button className="button" type="submit">
-            <span>Iniciar Sesión</span>
-            <IoArrowForwardOutline className="icon-btn" />
-          </button>
+    <div className="modal-overlay" onClick={cerrar}>
+      <form
+        className="form-container"
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()} // Evita que el click dentro cierre el modal
+      >
+        {/* Botón de cerrar modal */}
+        <button type="button" className="btn-close-modal" onClick={cerrar}>
+          <IoCloseOutline />
+        </button>
 
-        </form>
-      </div>
-    </>
-  )
+        <img className="logo-empresa" src="/img/logo_siecu.png" alt="logo_siecu" />
+        <h3>Inicio de Sesión</h3>
+
+        {/* Campo Email */}
+        <div className="form-container-input">
+          <IoMailOutline className="icon-react" />
+          <input
+            type="email"
+            placeholder="Ingrese su email"
+            name="email"
+            value={data.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* Campo Contraseña */}
+        <div className="form-container-input">
+          <IoLockClosedOutline className="icon-react" />
+          <input
+            type="password"
+            placeholder="Ingrese su contraseña"
+            name="password"
+            value={data.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* Mensaje de Error del Servidor */}
+        <p className="error-text">{respuestaServer}</p>
+
+
+        <button className="button" type="submit">
+          <span>Iniciar Sesión</span>
+          <IoArrowForwardOutline className="icon-btn" />
+        </button>
+        
+        {/* Cambio a Registro */}
+        <span className="link-switch" onClick={irRegistro}>
+          ¿No tienes cuenta? Regístrate aquí
+        </span>
+
+      </form>
+    </div>
+  );
 }
 
 export default Login;
-

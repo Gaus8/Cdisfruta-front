@@ -1,37 +1,32 @@
-/* ════════════════════════════════════════
-   CDISFRUTA — header.css
-════════════════════════════════════════ */
- 
-/* ── Base ── */
 .hdr {
   position: sticky;
-  top: 12px;
-  z-index: 999;
-  width: calc(100% - 24px);
-  margin: 0 auto;
-  border-radius: 16px;
-  overflow: hidden;
-  height: 80px; /* Un poco más de aire para que no se vea apretado */
-  padding: 0 2rem;
+  top: 0; 
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  background-color: #ffffff; 
   display: flex;
-  align-items: center; /* 👈 Esto centra TODO verticalmente */
+  align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease; /* 👈 Elimina el translateY si lo tienes */
+  padding: 0.5rem 3rem;
+  transition: all 0.3s ease;
+  margin: 0 auto; 
 }
 
 .hdr--scrolled {
   
   box-shadow: 0 4px 24px rgba(28, 18, 9, 0.07);
-  background: rgba(254, 250, 246, 0.97);
+  background: rgb(254, 250, 246);
 }
  
 /* ── Logo / Marca ── */
 .hdr-brand {
+
   display: flex;
   align-items: center; /* Centra el círculo naranja con el texto */
-  gap: 1rem;
-  margin-top: 25px; 
+  gap: 2rem;
 }
+
 .hdr-logo-ring {
   width: 54px;   /* Un poco más grande para que el logo se lea bien */
   height: 54px;
@@ -58,6 +53,17 @@
   justify-content: center;
   gap: 2px; /* Un pequeño respiro entre el nombre y el subtexto */
 }
+
+.hdr-brand-name {
+  font-size:1rem;
+  font-weight: 600;
+  color:#ff7961;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-top: 0;
+  
+}
+
 .hdr-brand-sub {
   font-size: 0.625rem;
   font-weight: 600;
@@ -71,36 +77,25 @@
 /* ── Nav links ── */
 .hdr-nav {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 2.25rem;
   height: 100%;
   padding-top: 0; 
 }
+
 .hdr-nav a {
-  display: inline-flex;
   align-items: center;
   font-size: 0.875rem;
   font-weight: 500;
   color: #8B6652;
   text-decoration: none;
-  line-height: 1;
-  
-  /* ── Ajuste Individual ── */
-  position: relative;
-  top: 15px; /* 👈 Ajusta este número (px) hasta que lo veas alineado con los botones */
+
+
 }
-.hdr-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px; /* 👈 Ajustamos para que la raya no quede muy pegada al texto */
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: #E8583A;
-  transition: width 0.25s ease;
-  border-radius: 2px;
-}
-.hdr-nav a:hover { color: #E8583A; }
+
+
+.hdr-nav a:hover { color: #ff7961; }
 .hdr-nav a:hover::after { width: 100%; }
  
 /* ── Botones de acción ── */
@@ -112,6 +107,7 @@
   margin-bottom: 0; /* 👈 Crucial para la alineación */
   margin-left: 1rem;
 }
+
 .hdr-btn {
   display: inline-flex; /* 👈 Ayuda a centrar el texto internamente */
   align-items: center;
@@ -126,20 +122,24 @@
   transition: all 0.2s ease;
   white-space: nowrap;
 }
+
 .hdr-btn--ghost {
   background: none;
   color: #8B6652;
   border: 1.5px solid #EAE0D5;
 }
+
 .hdr-btn--ghost:hover {
   border-color: #E8583A;
   color: #E8583A;
 }
+
 .hdr-btn--solid {
   background: #E8583A;
   color: #fff;
   box-shadow: 0 4px 14px rgba(232, 88, 58, 0.3);
 }
+
 .hdr-btn--solid:hover {
   background: #C4431F;
   transform: translateY(-1px);
@@ -152,15 +152,26 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #1C1209;
+  color: #ff7961;
   font-size: 1.75rem;
   line-height: 1;
   padding: 0.25rem;
   transition: color 0.2s;
   flex-shrink: 0;
 }
+
 .hdr-hamburger:hover { color: #E8583A; }
  
+a{
+  text-decoration: none;
+  transition: color 300ms ease-in-out;
+}
+
+a:hover{
+  color: #C4431F;
+
+}
+
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
