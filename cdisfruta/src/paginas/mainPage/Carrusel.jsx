@@ -11,23 +11,23 @@ import 'swiper/css/effect-fade';
 const productos = [
   {
     img: '/img/cdisfruta_01.jpg',
-    eyebrow: 'Exportación',
+    eyebrow: 'Presencia internacional',
     titulo: 'CDISFRUTA en Australia',
-    desc: 'Nuestras aromáticas cruzando fronteras. Sabor colombiano llegando hasta Melbourne.',
+    desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.',
     tag: 'Australia · Melbourne',
   },
   {
     img: '/img/cdisfruta_02.jpg',
-    eyebrow: 'Producto estrella',
-    titulo: 'Frutas Deshidratadas',
-    desc: 'Un snack saludable y práctico, 100% natural. Tradición y sabor de Ubaté en cada bocado.',
-    tag: 'Snack 100% Natural',
+    eyebrow: 'Producto destacado',
+    titulo: 'Aromaticas frutales',
+    desc: 'Infusiones naturales elaboradas con frutas seleccionadas, que brindan sabor, frescura y bienestar en cada taza.',
+    tag: '100% Natural',
   },
   {
     img: '/img/cdisfruta_03.jpg',
     eyebrow: 'Nuestra tierra',
     titulo: 'Tradición de Ubaté',
-    desc: 'Llevamos el alma de nuestra tierra en cada mezcla artesanal de hierbas y frutas selectas.',
+    desc: 'Reflejamos la riqueza de nuestra tierra en cada mezcla, con frutas y hierbas cuidadosamente seleccionadas.',
     tag: 'Ubaté · Cundinamarca',
   },
 ];

@@ -22,7 +22,7 @@ export default function Header() {
       <a href="#" className="hdr-brand" onClick={close}>
         <div className="hdr-logo-ring">🍊</div>
         <div className="hdr-brand-text">
-          <span className="hdr-brand-name">Cdisfruta</span>
+          <span className="hdr-brand-name">CDISFRUTA - SIECU</span>
           <span className="hdr-brand-sub">Frutas Deshidratadas · Ubaté</span>
         </div>
       </a>

@@ -1,4 +1,4 @@
-import '../../assets/Styles/mainPage/mainpage.css';
+import '../../assets/styles/mainPage/mainpage.css';
 import Videos from './Videos';
 import CarruselProductos from './Carrusel';
 import Header from './Header';
@@ -9,7 +9,11 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
- 
+import { FiShield } from "react-icons/fi";
+import { AiOutlineStar } from "react-icons/ai";
+import { FiCheckCircle } from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
+
 function MainPage() {
   return (
     <div className="main-page-wrapper">
@@ -32,19 +36,19 @@ function MainPage() {
             "Del campo de Ubaté al mundo"
           </blockquote>
           <p>
-            Somos una empresa de <strong>Ubaté, Cundinamarca</strong>, dedicada a la{' '}
-            <strong>producción de frutas deshidratadas</strong> y aromáticas, promoviendo
+            Somos una empresa fundada en el año 2020 por una <strong> Familia Ubatense, </strong> a partir de las oportunidades y necesidades generadas por la pandemia. Dedicada a la{' '}
+            producción de <strong> snacks de fruta deshidratada y aromáticas frutales</strong>, promoviendo
             una alimentación saludable y completamente natural.
           </p>
           <p>
-            Cada producto nace de la riqueza agrícola de nuestra región, procesado con
-            cuidado artesanal y tecnología moderna para preservar sabor, nutrientes y la
-            esencia de la fruta fresca.
+            Cada producto nace de la riqueza agrícola de nuestra región,
+            elaborado con frutas cultivadas por manos campesinas,
+            garantizando calidad, frescura y el auténtico sabor natural.
           </p>
           <div className="about-tags">
             <span className="about-tag">🌿 100% Natural</span>
-            <span className="about-tag">🏔️ Origen Cundinamarca</span>
-            <span className="about-tag">✈️ Exportación</span>
+            <span className="about-tag">🏔️ Origen Ubatense</span>
+            <span className="about-tag">✈️ Presencia Internacional</span>
             <span className="about-tag">🫙 Sin conservantes</span>
           </div>
         </div>
@@ -60,22 +64,22 @@ function MainPage() {
           <div className="feature-card">
             <div className="feat-icon-wrap"><MdOutlineComputer /></div>
             <h3>Diseño Adaptable</h3>
-            <p>Nuestra plataforma funciona perfectamente en cualquier dispositivo, brindando la mejor experiencia.</p>
+            <p>Nuestra plataforma se adapta a cualquier dispositivo para brindarte una mayor experiencia.</p>
           </div>
           <div className="feature-card">
-            <div className="feat-icon-wrap"><IoIosTimer /></div>
-            <h3>Procesos Eficientes</h3>
-            <p>Optimización constante en cada etapa de la producción de nuestras frutas deshidratadas.</p>
+            <div className="feat-icon-wrap"><FiShield /></div>
+            <h3>Compra fácil y segura</h3>
+            <p>Disfruta de un proceso de compra rápido, intuitivo y confiable, pensado para que adquieras nuestros productos sin complicaciones.</p>
           </div>
           <div className="feature-card">
-            <div className="feat-icon-wrap"><AiOutlineGlobal /></div>
-            <h3>Modernización</h3>
-            <p>Tecnología de punta aplicada al proceso artesanal de deshidratación de frutas naturales.</p>
+            <div className="feat-icon-wrap"><FiCheckCircle /></div>
+            <h3>Compromiso con la calidad</h3>
+            <p>Seleccionamos cuidadosamente cada producto para ofrecerte siempre frescura, sabor y estándares de alta calidad.</p>
           </div>
           <div className="feature-card">
-            <div className="feat-icon-wrap"><FaArrowTrendUp /></div>
-            <h3>Alto Rendimiento</h3>
-            <p>Resultados garantizados con estándares de calidad superiores en cada lote de producción.</p>
+            <div className="feat-icon-wrap"><FiTruck /></div>
+            <h3>Entrega rápida</h3>
+            <p>Llevamos nuestros productos hasta la puerta de tu casa, garantizando frescura, rapidez y calidad en cada envío.</p>
           </div>
         </div>
       </section>
@@ -98,7 +102,7 @@ function MainPage() {
           <div className="footer-brand-col">
             <div className="footer-logo">
               <div className="footer-logo-ring">🍊</div>
-              <span className="footer-brand-name">Cdisfruta</span>
+              <span className="footer-brand-name">CDISFRUTA</span>
             </div>
             <p className="footer-tagline">
               Frutas deshidratadas y aromáticas de Ubaté, Cundinamarca.
@@ -106,7 +110,7 @@ function MainPage() {
             </p>
             <div className="footer-social">
               <a href="#" className="social-pill">Instagram</a>
-              <a href="#" className="social-pill">Facebook</a>
+              
               <a href="#" className="social-pill">WhatsApp</a>
             </div>
           </div>
@@ -139,7 +143,7 @@ function MainPage() {
             <ul className="footer-contact-list">
               <li>
                 <span className="footer-contact-icon"><IoLocationOutline /></span>
-                <span>Ubaté, Cundinamarca, Colombia</span>
+                <span>Ubaté, Cundinamarca - Colombia</span>
               </li>
               <li>
                 <span className="footer-contact-icon"><BsTelephone /></span>
@@ -154,7 +158,7 @@ function MainPage() {
         </div>
  
         <div className="footer-bottom">
-          <p>© 2026 CDISFRUTA · Todos los derechos reservados</p>
+          <p>© 2026 CDISFRUTA - SIECU · Todos los derechos reservados</p>
           <p className="footer-made">Hecho con ❤️ en Ubaté, Colombia</p>
         </div>
       </footer>
