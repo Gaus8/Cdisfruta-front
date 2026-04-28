@@ -83,6 +83,7 @@ h3 {
 }
 
 .form-container-input {
+  position: relative;
   display: flex;
   align-items: center;
   border: 2px solid var(--input-border);
@@ -133,8 +134,19 @@ h3 {
   background-color: var(--coral-hover);
   transform: translateY(-3px);
 }
+.btn-eye {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
 
-/* Añade esto a tu forms.css */
+
 .link-switch {
   color: var(--text-muted);
   font-size: 0.9rem;
@@ -180,3 +192,4 @@ h3 {
   justify-content: center;
   margin-bottom: 20px;
 }
+

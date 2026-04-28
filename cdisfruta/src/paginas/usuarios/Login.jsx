@@ -2,18 +2,20 @@ import '../../assets/styles/usuarios/forms.css';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
+import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
 import { GoogleLogin } from '@react-oauth/google';
 
 function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
   const [respuestaServer, setRespuestaServer] = useState("");
+  const [mostrarPassword, setMostrarPassword] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: ""
   });
 
+  // 1. Definimos las funciones PRIMERO
   const handleChange = (e) => {
     setData({
       ...data,
@@ -32,51 +34,41 @@ function Login({ cerrar, irRegistro }) {
 
     try {
       const res = await axios.post(`${URL_SERVER}/login`, data, { withCredentials: true });
-
       if (res.status === 200) {
-        // Cerramos el modal antes de cualquier redirección
         cerrar();
-
-        if (res.data?.rol === 'admin') {
-          navigate("/dashboard_admin");
-        } else {
-          navigate("/dashboard_user");
-        }
+        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
+        else navigate("/dashboard_user");
       }
     } catch (err) {
       const errorData = err.response?.data;
-      setRespuestaServer(errorData?.message || "Error al iniciar sesión. Intente de nuevo.");
+      setRespuestaServer(errorData?.message || "Error al iniciar sesión.");
     }
   };
 
-  // 2. Lógica para el éxito de Google
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      // Enviamos el token al endpoint /auth/google que creamos en el backend
       const res = await axios.post(`${URL_SERVER}/auth/google`, {
         token: credentialResponse.credential
       }, { withCredentials: true });
 
       if (res.status === 200) {
         cerrar();
-        // Redirigimos según el rol que devuelva el backend
         if (res.data?.rol === 'admin') navigate("/dashboard_admin");
         else navigate("/dashboard_user");
       }
     } catch (err) {
-      console.error("Error Google Login:", err);
       setRespuestaServer("Error al iniciar sesión con Google.");
     }
   };
 
+  // 2. El RENDER va al final
   return (
     <div className="modal-overlay" onClick={cerrar}>
       <form
         className="form-container"
         onSubmit={handleSubmit}
-        onClick={(e) => e.stopPropagation()} // Evita que el click dentro cierre el modal
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Botón de cerrar modal */}
         <button type="button" className="btn-close-modal" onClick={cerrar}>
           <IoCloseOutline />
         </button>
@@ -97,29 +89,34 @@ function Login({ cerrar, irRegistro }) {
           />
         </div>
 
-        {/* Campo Contraseña */}
+        {/* Campo Contraseña con el OJO */}
         <div className="form-container-input">
           <IoLockClosedOutline className="icon-react" />
           <input
-            type="password"
+            type={mostrarPassword ? "text" : "password"}
             placeholder="Ingrese su contraseña"
             name="password"
             value={data.password}
             onChange={handleChange}
             required
           />
+          <button 
+            type="button" 
+            className="btn-eye" 
+            onClick={() => setMostrarPassword(!mostrarPassword)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}
+          >
+            {mostrarPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+          </button>
         </div>
 
-        {/* Mensaje de Error del Servidor */}
         <p className="error-text">{respuestaServer}</p>
-
 
         <button className="button" type="submit">
           <span>Iniciar Sesión</span>
           <IoArrowForwardOutline className="icon-btn" />
         </button>
         
-        {/* 3. Separador y Botón de Google */}
         <div className="separator">
           <span>o ingresa con</span>
         </div>
@@ -128,19 +125,16 @@ function Login({ cerrar, irRegistro }) {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => setRespuestaServer("Error en la autenticación con Google")}
-            useOneTap={false} // Evita el popup automático al cargar si no lo deseas
             theme="filled_blue"
             shape="pill"
             text="continue_with"
-            width="300" // Ajusta al ancho de tu formulario
+            width="300"
           />
         </div>
 
-        {/* Cambio a Registro */}
         <span className="link-switch" onClick={irRegistro}>
           ¿No tienes cuenta? Regístrate aquí
         </span>
-
       </form>
     </div>
   );
