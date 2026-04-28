@@ -15,7 +15,6 @@ function Login({ cerrar, irRegistro }) {
     password: ""
   });
 
-  // 1. Definimos las funciones PRIMERO
   const handleChange = (e) => {
     setData({
       ...data,
