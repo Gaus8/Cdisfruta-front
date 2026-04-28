@@ -10,7 +10,7 @@ import 'swiper/css/effect-fade';
 
 const productos = [
   {
-    img: '/img/cdisfruta_01.jpg',
+    img: '/img/cdisfruta_01.png',
     eyebrow: 'Presencia internacional',
     titulo: 'CDISFRUTA en Australia',
     desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.',
@@ -24,7 +24,7 @@ const productos = [
     tag: '100% Natural',
   },
   {
-    img: '/img/cdisfruta_03.jpg',
+    img: '/img/cdisfruta_07.png',
     eyebrow: 'Nuestra tierra',
     titulo: 'Tradición de Ubaté',
     desc: 'Reflejamos la riqueza de nuestra tierra en cada mezcla, con frutas y hierbas cuidadosamente seleccionadas.',

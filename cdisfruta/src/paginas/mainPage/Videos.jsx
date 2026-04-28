@@ -65,7 +65,7 @@ function Videos (){
           </article>
           <article className="card">
             <div className="card-img-box">
-              <img src="/img/cdisfruta_01.jpg" alt="imagen1" />
+              <img src="/img/cdisfruta_01.png" alt="imagen1" />
               <video src="/videos/CDISFRUTA2.mp4" muted loop></video>
             </div>
             <div className="card-text-box">
@@ -74,8 +74,8 @@ function Videos (){
           </article>
           <article className="card">
             <div className="card-img-box">
-              <img src="/img/cdisfruta_02.jpg" alt="imagen1" />
-              <video src="/videos/CDISFRUTA3.mp4" muted loop></video>
+              <img src="/img/cdisfruta_05.jpg" alt="imagen1" />
+              <video src="/videos/CDISFRUTA4.mp4" muted loop></video>
             </div>
             <div className="card-text-box">
               <h3>Ideal para cualquier momento</h3>

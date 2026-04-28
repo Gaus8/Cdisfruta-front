@@ -24,7 +24,7 @@ function MainPage() {
       <section className="about-section" id="sobre">
         <div className="about-visual">
           <img 
-            src="public/img/logo_cdisfruta.jpg" 
+            src="public/img/cdisfruta_06.png" 
             alt="Sobre nosotros" 
             className="about-image-bg" 
           />
@@ -153,7 +153,7 @@ function MainPage() {
             <ul className="footer-links">
               <li><a href="#">Nuestra historia</a></li>
               <li><a href="#">Proceso artesanal</a></li>
-              <li><a href="#">Exportaciones</a></li>
+              <li><a href="#">Presencia internacional</a></li>
               <li><a href="#">Distribuidores</a></li>
             </ul>
           </div>
@@ -168,7 +168,7 @@ function MainPage() {
               </li>
               <li>
                 <span className="footer-contact-icon"><BsTelephone /></span>
-                <span>+57 300 710 8920</span>
+                <span>+57 321 451 2250</span>
               </li>
               <li>
                 <span className="footer-contact-icon"><MdOutlineMail /></span>

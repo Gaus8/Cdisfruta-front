@@ -296,8 +296,8 @@ body {
 }
 
 .about-image-bg {
-  width: 90%;          /* ancho del contenedor */
-  height: 90%;         /* alto del contenedor */
+  width: 102%;          /* ancho del contenedor */
+  height: 105%;         /* alto del contenedor */
   object-fit: cover;    /* Evita que la foto se estire o se deforme */
   border-radius: 5px;  /* bordes redondeados */
   display: block;
