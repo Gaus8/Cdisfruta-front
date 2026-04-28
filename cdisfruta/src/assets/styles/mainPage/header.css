@@ -10,25 +10,17 @@
   width: calc(100% - 24px);
   margin: 0 auto;
   border-radius: 16px;
-  height: 72px;
-  padding: 0 3rem; /* Simétrico */
+  overflow: hidden;
+  height: 80px; /* Un poco más de aire para que no se vea apretado */
+  padding: 0 2rem;
   display: flex;
-  align-items: center; /* Centrado vertical */
-  justify-content: space-between; /* Espaciado entre grupos */
-  background: rgba(254, 250, 246, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid #EAE0D5;
-  transition: all 0.3s ease;
+  align-items: center; /* 👈 Esto centra TODO verticalmente */
+  justify-content: space-between;
+  transition: all 0.3s ease; /* 👈 Elimina el translateY si lo tienes */
 }
-.hdr-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  text-decoration: none;
-  flex-shrink: 0;
-}
+
 .hdr--scrolled {
+  
   box-shadow: 0 4px 24px rgba(28, 18, 9, 0.07);
   background: rgba(254, 250, 246, 0.97);
 }
@@ -36,38 +28,35 @@
 /* ── Logo / Marca ── */
 .hdr-brand {
   display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  text-decoration: none;
-  flex-shrink: 0;
+  align-items: center; /* Centra el círculo naranja con el texto */
+  gap: 1rem;
+  margin-top: 25px; 
 }
 .hdr-logo-ring {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #E8583A, #F5A623);
+  width: 54px;   /* Un poco más grande para que el logo se lea bien */
+  height: 54px;
+  border-radius: 50%; /* Un redondeado suave en lugar de círculo total */
+  background: #fff;    /* Fondo blanco por si el logo tiene esquinas */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(232, 88, 58, 0.35);
+  overflow: hidden;    /* Para que la imagen no se salga */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Sombra más sutil */
   transition: transform 0.25s ease;
+}
+
+.hdr-logo-ring img {
+  width: 100%;       /* Ocupa todo el espacio disponible */
+  height: 100%;
+  object-fit: cover; /* Cambia a 'contain' si ves que se corta mucho el logo */
 }
 .hdr-brand:hover .hdr-logo-ring { transform: rotate(-8deg) scale(1.05); }
 .hdr-brand-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 1.2; /* Ajusta un poco para que no se peguen tanto */
-}
-.hdr-brand-name {
-  font-family: 'Fraunces', 'Georgia', serif;
-  font-size: 1.55rem;
-  font-weight: 900;
-  color: #E8583A;
-  line-height: 1.1;
-  letter-spacing: -0.3px;
+  gap: 2px; /* Un pequeño respiro entre el nombre y el subtexto */
 }
 .hdr-brand-sub {
   font-size: 0.625rem;
@@ -84,20 +73,26 @@
   display: flex;
   align-items: center;
   gap: 2.25rem;
+  height: 100%;
+  padding-top: 0; 
 }
 .hdr-nav a {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.875rem;
   font-weight: 500;
   color: #8B6652;
   text-decoration: none;
+  line-height: 1;
+  
+  /* ── Ajuste Individual ── */
   position: relative;
-  transition: color 0.2s ease;
-  white-space: nowrap;
+  top: 15px; /* 👈 Ajusta este número (px) hasta que lo veas alineado con los botones */
 }
 .hdr-nav a::after {
   content: '';
   position: absolute;
-  bottom: -3px;
+  bottom: -5px; /* 👈 Ajustamos para que la raya no quede muy pegada al texto */
   left: 0;
   width: 0;
   height: 1.5px;
@@ -112,10 +107,15 @@
 .hdr-actions {
   display: flex;
   gap: 0.6rem;
-  align-items: center;
+  align-items: center; 
+  margin-top: 0;    /* 👈 Crucial para la alineación */
+  margin-bottom: 0; /* 👈 Crucial para la alineación */
   margin-left: 1rem;
 }
 .hdr-btn {
+  display: inline-flex; /* 👈 Ayuda a centrar el texto internamente */
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 0.46rem 1.1rem;

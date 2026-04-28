@@ -20,7 +20,9 @@ export default function Header() {
  
       {/* ── Logo + Marca ── */}
       <a href="#" className="hdr-brand" onClick={close}>
-        <div className="hdr-logo-ring">🍊</div>
+        <div className="hdr-logo-ring">
+          <img src="/img/logo_cdisfruta.jpg" alt="CDISFRUTA Logo" />
+        </div>
         <div className="hdr-brand-text">
           <span className="hdr-brand-name">CDISFRUTA - SIECU</span>
           <span className="hdr-brand-sub">Frutas Deshidratadas · Ubaté</span>
@@ -38,10 +40,6 @@ export default function Header() {
  
       {/* ── Nav ── */}
       <nav className={`hdr-nav${menuOpen ? ' hdr-nav--open' : ''}`}>
-        <a href="#" onClick={close}>Inicio</a>
-        <a href="#sobre" onClick={close}>Sobre Nosotros</a>
-        <a href="#features" onClick={close}>Características</a>
-        <a href="#media" onClick={close}>Galería</a>
         <a href="#contacto" onClick={close}>Contacto</a>
  
         {/* Botones (también dentro del menú móvil) */}
