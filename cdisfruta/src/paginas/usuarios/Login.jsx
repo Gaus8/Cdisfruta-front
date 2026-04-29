@@ -132,7 +132,7 @@ function Login({ cerrar, irRegistro }) {
         </div>
 
         <span className="link-switch" onClick={irRegistro}>
-          ¿No tienes cuenta? Regístrate aquí.
+          ¿No tienes cuenta? Regístrate aquí
         </span>
       </form>
     </div>
