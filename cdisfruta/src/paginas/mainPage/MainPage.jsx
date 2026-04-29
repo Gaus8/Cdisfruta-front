@@ -24,7 +24,7 @@ function MainPage() {
       <section className="about-section" id="sobre">
         <div className="about-visual">
           <img 
-            src="public/img/cdisfruta_06.png" 
+            src="/img/cdisfruta_06.png" 
             alt="Sobre nosotros" 
             className="about-image-bg" 
           />
