@@ -3,6 +3,7 @@ import MainPage from './paginas/mainPage/MainPage';
 import Login from './paginas/usuarios/Login';
 import Registro from './paginas/usuarios/Registro';
 import Validacion from "./paginas/usuarios/Validacion";
+import Dashboard from "./paginas/dashboardAdmin/Dashboard";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
     {
       path: '/validacion',
       element: <Validacion />,
+    },
+    {
+      path: '/dashboard_user',
+      element: <Dashboard />,
     },
   ]);
 

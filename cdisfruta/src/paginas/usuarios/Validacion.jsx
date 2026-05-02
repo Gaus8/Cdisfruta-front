@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useState, useRef } from 'react';
 import axios from 'axios';
 import '../../assets/styles/usuarios/validacion.css';
-import { URL_SERVER } from '../conexion';
+import { URL_SERVER } from '../../funciones/conexion';
 
 function Validacion() {
   const [codigo, setCodigo] = useState(new Array(6).fill(""));

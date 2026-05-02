@@ -130,6 +130,11 @@ h3 {
   margin-bottom: 1rem;
 }
 
+.button:hover {
+  background-color: var(--coral-hover);
+  transform: translateY(-3px);
+}
+
 .google-btn-container {
   width: 100%;
 
@@ -160,10 +165,6 @@ h3 {
   box-shadow: 2px 2px 5px var(--text-muted);
 }
 
-.button:hover {
-  background-color: var(--coral-hover);
-  transform: translateY(-3px);
-}
 
 .btn-eye {
   position: absolute;

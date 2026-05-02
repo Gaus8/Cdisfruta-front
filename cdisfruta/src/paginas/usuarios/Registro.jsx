@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router";
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
-import { URL_SERVER } from '../conexion';
+import { URL_SERVER } from '../../funciones/conexion';
 import { GoogleLogin } from '@react-oauth/google';
 import LoginGoogle from './LoginGoogle';
 

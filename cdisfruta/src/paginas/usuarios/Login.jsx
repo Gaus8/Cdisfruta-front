@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { URL_SERVER } from '../conexion';
+import { URL_SERVER } from '../../funciones/conexion';
 import LoginGoogle from './LoginGoogle';
 
 function Login({ cerrar, irRegistro }) {
@@ -43,23 +43,6 @@ function Login({ cerrar, irRegistro }) {
       setRespuestaServer(errorData?.message || "Error al iniciar sesión.");
     }
   };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const res = await axios.post(`${URL_SERVER}/auth/google`, {
-        token: credentialResponse.credential
-      }, { withCredentials: true });
-
-      if (res.status === 200) {
-        cerrar();
-        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
-        else navigate("/dashboard_user");
-      }
-    } catch (err) {
-      setRespuestaServer("Error al iniciar sesión con Google.");
-    }
-  };
-
 
   // 2. El RENDER va al final
   return (
@@ -117,7 +100,7 @@ function Login({ cerrar, irRegistro }) {
           <IoArrowForwardOutline className="icon-btn" />
         </button>
 
-    <LoginGoogle/>
+        <LoginGoogle />
         <span className="link-switch" onClick={irRegistro}>
           ¿No tienes cuenta? Regístrate aquí
         </span>
