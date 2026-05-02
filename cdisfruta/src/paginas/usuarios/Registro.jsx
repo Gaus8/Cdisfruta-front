@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
 import { GoogleLogin } from '@react-oauth/google';
+import LoginGoogle from './LoginGoogle';
 
 function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
   const navigate = useNavigate();
@@ -117,18 +118,7 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
           <IoArrowForwardOutline className="icon-btn" />
         </button>
 
-        <div className="google-btn-container">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => setRespuestaServer("Error en la autenticación con Google")}
-            theme="filled_blue"
-            shape="pill"
-            text="signin_with"
-            width="100%"
-            size='large'
-          />
-        </div>
-
+         <LoginGoogle/>
         {/* Cambiamos la ruta por la función irLogin */}
         <span className="link-switch" onClick={irLogin}>
           ¿Ya tienes cuenta? Inicia Sesión

@@ -14,14 +14,14 @@
   margin: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-  position: fixed;   
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); 
-  backdrop-filter: blur(8px);           
-  z-index: 9999;                        
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 450px;
-  position: relative; 
+  position: relative;
   animation: fadeInDown 0.4s ease-out;
 }
 
@@ -131,23 +131,40 @@ h3 {
 }
 
 .google-btn-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  margin-bottom: 0.8rem;
-  padding: 3px;
   width: 100%;
-  border-radius: 50px;
-  font-weight: 700;
+
 }
 
+.button-google {
+  color:var(--text-muted);
+  border: 2px solid var(--input-border);
+  padding: 0.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  width: inherit;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.4s;
+  margin-bottom: 1rem;
+}
 
+.button-google img {
+  width: 1.5rem;
+}
+
+.button-google:hover {
+  transform: translateY(-3px);
+  box-shadow: 2px 2px 5px var(--text-muted);
+}
 
 .button:hover {
   background-color: var(--coral-hover);
   transform: translateY(-3px);
 }
+
 .btn-eye {
   position: absolute;
   right: 10px;
@@ -178,8 +195,15 @@ h3 {
 /* Asegúrate de que .modal-overlay y .form-container sean los mismos del Registro */
 
 @keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .separator {
@@ -191,7 +215,8 @@ h3 {
   font-size: 0.9rem;
 }
 
-.separator::before, .separator::after {
+.separator::before,
+.separator::after {
   content: '';
   flex: 1;
   border-bottom: 1px solid #eee;
@@ -200,4 +225,3 @@ h3 {
 .separator span {
   padding: 0 10px;
 }
-
