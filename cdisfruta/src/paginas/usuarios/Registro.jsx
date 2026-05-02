@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router";
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
+import { GoogleLogin } from '@react-oauth/google';
 
 function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
   const navigate = useNavigate();
@@ -45,6 +46,22 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axios.post(`${URL_SERVER}/auth/google`, {
+        token: credentialResponse.credential
+      }, { withCredentials: true });
+
+      if (res.status === 200) {
+        cerrar();
+        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
+        else navigate("/dashboard_user");
+      }
+    } catch (err) {
+      setRespuestaServer("Error al iniciar sesión con Google.");
+    }
+  };
+
   return (
     <div className="modal-overlay" onClick={cerrar}>
       <form
@@ -61,36 +78,36 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
 
         <div className="form-container-input">
           <IoPersonOutline className="icon-react" />
-          <input 
-            type="text" 
-            placeholder="Nombre completo" 
-            name="name" 
-            value={data.name} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            placeholder="Nombre completo"
+            name="name"
+            value={data.name}
+            onChange={handleChange}
           />
         </div>
         <p className="error-text">{respuestas.s1}</p>
 
         <div className="form-container-input">
           <IoMailOutline className="icon-react" />
-          <input 
-            type="email" 
-            placeholder="Correo electrónico" 
-            name="email" 
-            value={data.email} 
-            onChange={handleChange} 
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            name="email"
+            value={data.email}
+            onChange={handleChange}
           />
         </div>
         <p className="error-text">{respuestas.s2}</p>
 
         <div className="form-container-input">
           <IoLockClosedOutline className="icon-react" />
-          <input 
-            type="password" 
-            placeholder="Contraseña" 
-            name="password" 
-            value={data.password} 
-            onChange={handleChange} 
+          <input
+            type="password"
+            placeholder="Contraseña"
+            name="password"
+            value={data.password}
+            onChange={handleChange}
           />
         </div>
         <p className="error-text">{respuestas.s3}</p>
@@ -99,6 +116,18 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
           <span>Registrarse</span>
           <IoArrowForwardOutline className="icon-btn" />
         </button>
+
+        <div className="google-btn-container">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setRespuestaServer("Error en la autenticación con Google")}
+            theme="filled_blue"
+            shape="pill"
+            text="signin_with"
+            width="100%"
+            size='large'
+          />
+        </div>
 
         {/* Cambiamos la ruta por la función irLogin */}
         <span className="link-switch" onClick={irLogin}>

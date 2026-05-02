@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { URL_SERVER } from '../conexion';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google'
 
 function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
@@ -60,6 +60,7 @@ function Login({ cerrar, irRegistro }) {
     }
   };
 
+
   // 2. El RENDER va al final
   return (
     <div className="modal-overlay" onClick={cerrar}>
@@ -99,9 +100,9 @@ function Login({ cerrar, irRegistro }) {
             onChange={handleChange}
             required
           />
-          <button 
-            type="button" 
-            className="btn-eye" 
+          <button
+            type="button"
+            className="btn-eye"
             onClick={() => setMostrarPassword(!mostrarPassword)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}
           >
@@ -115,10 +116,6 @@ function Login({ cerrar, irRegistro }) {
           <span>Iniciar Sesión</span>
           <IoArrowForwardOutline className="icon-btn" />
         </button>
-        
-        <div className="separator">
-          <span>o ingresa con</span>
-        </div>
 
         <div className="google-btn-container">
           <GoogleLogin
@@ -126,8 +123,9 @@ function Login({ cerrar, irRegistro }) {
             onError={() => setRespuestaServer("Error en la autenticación con Google")}
             theme="filled_blue"
             shape="pill"
-            text="continue_with"
-            width="300"
+            text="signin_with"
+            width="100%"
+            size='large'
           />
         </div>
 
