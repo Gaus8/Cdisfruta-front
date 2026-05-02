@@ -131,6 +131,9 @@ h3 {
 }
 
 .google-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   margin-bottom: 0.8rem;
   padding: 3px;
