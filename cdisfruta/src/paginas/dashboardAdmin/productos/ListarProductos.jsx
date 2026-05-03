@@ -1,5 +1,5 @@
 import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
-import '../../../assets/styles/dashboardAdmin/listar_productos.css'
+import '../../../assets/styles/productos/listar_productos.css'
 
 
 export default function ListarProductos({

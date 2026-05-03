@@ -1,4 +1,4 @@
-import '../../assets/styles/videos.css'
+import '../../assets/styles/mainPage/videos.css'
 import { useEffect } from 'react';
 
 function Videos (){

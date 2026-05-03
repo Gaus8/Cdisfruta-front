@@ -1,12 +1,12 @@
 import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
-import '../../../assets/styles/dashboardAdmin/form_productos.css'
+import '../../../assets/styles/productos/form_productos.css'
 
 export default function FormProductos({
   editingProduct, handleDragLeave, handleDragOver,
   handleDrop, fileInputRef, handleFileSelect,
   uploadStatus, formData, handleInputChange,
   handleSaveProduct,fileName,setShowModal,
-  handleDeleteProduct,
+  handleDeleteProduct, enviando
 }) 
 {
   return (
@@ -107,12 +107,29 @@ export default function FormProductos({
           </div>
         </div>
 
-        <div className="form-actions">
-          <button className="btn btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
-          <button className="btn btn-save" onClick={handleSaveProduct}>
-            {editingProduct ? 'Actualizar' : 'Guardar'}
-          </button>
-        </div>
+       <div className="form-actions">
+  <button 
+    className="btn btn-cancel" 
+    onClick={() => setShowModal(false)}
+    disabled={uploadStatus === 'loading'} // Bloquea cancelar mientras sube
+  >
+    Cancelar
+  </button>
+  
+  <button 
+    className="btn btn-save" 
+    onClick={handleSaveProduct}
+    disabled={uploadStatus === 'loading'} // Bloquea el botón de guardar
+  >
+    {uploadStatus === 'loading' ? (
+      <>
+        <span className="spinner"></span> Enviando...
+      </>
+    ) : (
+      editingProduct ? 'Actualizar' : 'Guardar'
+    )}
+  </button>
+</div>
       </div>
     </div>
   )
