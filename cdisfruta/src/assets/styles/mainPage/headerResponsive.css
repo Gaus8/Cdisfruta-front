@@ -31,49 +31,74 @@
 }
 
 /* --- RESPONSIVE --- */
-
+ 
+/* Móvil (≤ 768px): menú desplegable vertical */
 @media (max-width: 768px) {
-    .mobile-menu-icon {
-        display: block; /* Aparece el icono en móvil */
-        z-index: 1001;
-    }
+  .hdr { height: 64px; }
+ 
+  /* Mostrar hamburguesa */
+  .hdr-hamburger { display: flex; }
+ 
+  /* Nav se convierte en overlay vertical */
+  .hdr-nav {
 
-    .navbar {
-        position: fixed;
-        top: 0;
-        right: -100%; /* Escondido a la derecha */
-        width: 70%;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
-        flex-direction: column;
-        justify-content: center;
-        transition: 0.4s ease-in-out;
-        box-shadow: -10px 0 20px rgba(0,0,0,0.1);
-    }
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(254, 250, 246, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid #EAE0D5;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 1rem 0;
+    /* Estado cerrado */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 12px 32px rgba(28, 18, 9, 0.1);
+  }
 
-    /* Clase que activa el menú */
-    .navbar.active {
-        right: 0;
-    }
-
-    .navbar a {
-        font-size: 1.5rem;
-        padding: 1rem;
-        width: 100%;
-        text-align: center;
-    }
-
-    /* Reducimos el logo y el título en móvil para que quepan */
-    .logo-img img {
-        width: 4rem;
-    }
-
-    .titulo {
-        font-size: 2rem;
-    }
-    
-    .titulo::before, .titulo::after {
-        display: none; /* Quitamos capas extra en móvil para legibilidad */
-    }
+  .hdr-nav--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  
+  .hdr-nav a {
+    width: 100%;
+    text-align: center;
+    padding: 0.875rem 1.75rem;
+    font-size: 0.9375rem;
+    border-bottom: 1px solid rgba(234, 224, 213, 0.5);
+  }
+  .hdr-nav a::after { display: none; }
+  .hdr-nav a:hover { background: #FFF1EE; }
+ 
+  /* Botones al final del menú móvil */
+  .hdr-actions {
+    width: 100%;
+    padding: 1rem 1.75rem 0.5rem;
+    margin-left: 0;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .hdr-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+  }
 }
+ 
+/* Móvil chico (≤ 400px) */
+@media (max-width: 400px) {
+  .hdr { padding: 0 1rem; }
+  .hdr-logo-ring { width: 36px; height: 36px; font-size: 1rem; }
+  .hdr-brand-name { font-size: 1.25rem; }
+}
+ 
