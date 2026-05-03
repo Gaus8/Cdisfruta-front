@@ -1,4 +1,4 @@
-import '../../assets/styles/dashboard/styles_dashboard_admin.css'
+import '../../assets/styles/dashboardAdmin/styles_dashboard_admin.css'
 import {
   FaHome, FaBox, FaUsers, FaChartLine, FaCog, FaBell,
   FaUserCircle, FaSignOutAlt,FaUser, FaCogs, FaShieldAlt
@@ -12,7 +12,7 @@ import { useAuth } from '../../funciones/useAuth';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
-export default function Dashboard() {  
+export default function DashboardAdmin() {  
   const { userData, loading, authenticated } = useAuth();
   if (loading) {
     return <div>Cargando información del usuario...</div>;
@@ -21,7 +21,12 @@ export default function Dashboard() {
     
     return <div>Asegurese de Iniciar Sesión.</div>;
   }
+  else if(userData.rol !== 'admin' ){
+   return <div>No tiene los roles para acceder</div>;
+  }
   else{
+
+  
 
 
   return (
