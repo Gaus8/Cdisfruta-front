@@ -36,7 +36,7 @@ function Login({ cerrar, irRegistro }) {
       if (res.status === 200) {
         cerrar();
         if (res.data?.rol === 'admin') navigate("/dashboard_admin");
-        else navigate("/dashboard_user");
+        else navigate("/dashboard_usuario");
       }
     } catch (err) {
       const errorData = err.response?.data;

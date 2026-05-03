@@ -1,37 +1,25 @@
-import {FaHome, FaBox, FaUsers, FaChartLine, FaCog} from "react-icons/fa";
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate, data, Link, useLocation  } from "react-router";
-import { URL_SERVER } from '../../funciones/conexion';
-import { useAuth } from '../../funciones/useAuth';
+import { FaHome, FaBox, FaUsers, FaChartLine, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { Link } from "react-router";
+import '../../assets/styles/dashboardAdmin/sidebar_admin.css'
 
 export default function Sidebar() {
-  const location = useLocation();
-
   return (
-    <div className="sidebar">
-      <h2 className="logo">ShopAdmin</h2>
-      <ul className="menu">
-        <li className={location.pathname === "/dashboard_admin" ? "active" : ""}>
-          <Link to="/dashboard_admin" className="link"><FaHome /> Dashboard</Link>
-        </li>
-
-        <li className={location.pathname === "/productos" ? "active" : ""}>
-          <Link to="/productos" className="link"><FaBox /> Productos</Link>
-        </li>
-
-        <li className={location.pathname === "/usuarios" ? "active" : ""}>
-          <Link to="/usuarios" className="link"><FaUsers /> Usuarios</Link>
-        </li>
-
-        <li className={location.pathname === "/ventas" ? "active" : ""}>
-          <Link to="/ventas" className="link"><FaChartLine /> Ventas</Link>
-        </li>
-
-        <li className={location.pathname === "/configuracion" ? "active" : ""}>
-          <Link to="/configuracion" className="link"><FaCog /> Configuración</Link>
-        </li>
-      </ul>
-    </div>
+    <aside className="sidebar-admin">
+      <div className="sidebar-logo">
+        <h2>Panel Admin</h2>
+      </div>
+      <nav className="sidebar-nav">
+        <Link title="Inicio" to="/dashboard_admin/dashboard"><FaHome /> <span>Inicio</span></Link>
+        <Link title="Inventario" to="/dashboard_admin/productos"><FaBox /> <span>Inventario</span></Link>
+        <Link title="Usuarios" to="/dashboard_admin/usuarios"><FaUsers /> <span>Usuarios</span></Link>
+        <Link title="Reportes" to="/dashboard_admin/reportes"><FaChartLine /> <span>Reportes</span></Link>
+        <Link title="Configuración" to="/dashboard_admin/config"><FaCog /> <span>Configuración</span></Link>
+      </nav>
+      <div className="sidebar-footer">
+        <button className="btn-logout">
+          <FaSignOutAlt /> <span>Cerrar Sesión</span>
+        </button>
+      </div>
+    </aside>
   );
 }

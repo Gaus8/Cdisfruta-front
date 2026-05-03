@@ -1,0 +1,47 @@
+/* header_admin.css */
+.header-admin {
+  height: 65px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky; /* Se mantiene arriba */
+  top: 0;
+  z-index: 10;
+}
+
+.header-search input {
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+  width: 250px;
+  transition: width 0.3s ease;
+}
+
+.header-search input:focus {
+  width: 300px;
+  border-color: #007bff;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-btn {
+  font-size: 20px;
+  color: #555;
+  cursor: pointer;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #333;
+}

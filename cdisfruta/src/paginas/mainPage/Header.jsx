@@ -66,7 +66,7 @@ export default function Header() {
             <button
               className="hdr-btn hdr-btn--ghost"
               onClick={() => {
-                setAbrirRegistro(true);
+                setAbrirLogin(true);
                 setMenuOpen(false); // Cerramos el menú móvil al abrir el registro
               }}
             >
