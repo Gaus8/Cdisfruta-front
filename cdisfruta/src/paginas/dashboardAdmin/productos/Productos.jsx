@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
 import { URL_SERVER } from '../../../funciones/conexion';
+import ListarProductos from './ListarProductos';
+import FormProductos from './FormProductos';
 
 function Productos() {
   const [fileName, setFileName] = useState("");
@@ -176,156 +178,27 @@ function Productos() {
           </button>
         </div>
 
-        <div className="products-grid">
-          {products.length === 0 ? (
-            <div className="no-products">No hay productos registrados</div>
-          ) : (
-            products.map(product => (
-              <div key={product._id} className="product-card">
-                <div className="product-image">
-                  {product.imagen ? (
-                    <img
-                      src={product.imagen}
-                      alt={product.nombre}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '100%',
-                      height: '100%',
-                      background: '#f3f4f6',
-                      borderRadius: '6px'
-                    }} />
-                  )}
-                </div>
-                <div className="product-info">
-                  <h3>{product.nombre}</h3>
-                  <div className="product-price">${product.precio}</div>
-                  <div className="product-stock">{product.stock} unidades en stock</div>
-                  <div className="product-category">Categoría: {product.categoria}</div>
-                  <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '12px' }}>
-                    {product.descripcion}
-                  </p>
-                  <div className="product-actions">
-                    <button className="btn btn-edit" onClick={() => handleEditProduct(product)}>
-                      <FaEdit style={{ marginRight: '6px' }} /> Editar
-                    </button>
-                    <button className="btn btn-delete" onClick={() => handleDeleteProduct(product._id)}>
-                      <FaTrash style={{ marginRight: '6px' }} /> Eliminar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+        <ListarProductos
+          products={products}
+          handleDeleteProduct={handleDeleteProduct}
+          handleEditProduct={handleEditProduct} />
 
         {showModal && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h2>{editingProduct ? 'Editar Producto' : 'Agregar Producto'}</h2>
-              <div className="modal-content">
-
-                {/* Upload de imagen */}
-                <div className="form-group">
-                  <label>Imagen del Producto</label>
-                  <div
-                    className="image-upload"
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <FaCloudUploadAlt className="upload-icon" />
-                    <div className="upload-text">
-                      {fileName || 'Haz click o arrastra una imagen aquí'}
-                    </div>
-                    <div className="upload-hint">PNG, JPG, WEBP (Máx. 5MB)</div>
-
-                    {uploadStatus === 'loading' && <div className="upload-loading">📤 Subiendo imagen...</div>}
-                    {uploadStatus === 'success' && <div className="upload-success">✅ Imagen lista</div>}
-                    {uploadStatus === 'error' && <div className="upload-error">❌ Error al subir imagen</div>}
-                  </div>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileSelect}
-                    accept="image/*"
-                    name='img'
-                    style={{ display: 'none' }}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Nombre del Producto *</label>
-                  <input
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    placeholder="Ingresa el nombre del producto"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Categoría *</label>
-                  <input
-                    type="text"
-                    name="categoria"
-                    value={formData.categoria}
-                    onChange={handleInputChange}
-                    placeholder="Ingresa la categoría del producto"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Precio ($) *</label>
-                  <input
-                    type="number"
-                    name="precio"
-                    value={formData.precio}
-                    onChange={handleInputChange}
-                    placeholder="Ingresa el precio"
-                    required
-                    min="0"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Stock *</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    value={formData.stock}
-                    onChange={handleInputChange}
-                    placeholder="Ingresa la cantidad en stock"
-                    required
-                    min="0"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Descripción *</label>
-                  <textarea
-                    name="descripcion"
-                    value={formData.descripcion}
-                    onChange={handleInputChange}
-                    placeholder="Ingresa una descripción del producto"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-actions">
-                <button className="btn btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
-                <button className="btn btn-save" onClick={handleSaveProduct}>
-                  {editingProduct ? 'Actualizar' : 'Guardar'}
-                </button>
-              </div>
-            </div>
-          </div>
+          <FormProductos
+            editingProduct={editingProduct}
+            handleDragLeave={handleDragLeave}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            fileInputRef={fileInputRef}
+            handleFileSelect={handleFileSelect}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            handleSaveProduct={handleSaveProduct}
+            uploadStatus={uploadStatus}
+            setShowModal={setShowModal}
+            fileName={fileName}
+            handleDeleteProduct={handleDeleteProduct}
+          />
         )}
       </div>
     </div>
