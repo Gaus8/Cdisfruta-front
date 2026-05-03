@@ -36,7 +36,7 @@ export default function Header() {
         {/* ── Logo + Marca ── */}
         <a href="#" className="hdr-brand" onClick={closeMenu}>
           <div className="hdr-logo-ring">
-            <img src="/img/logo_cdisfruta.jpg" alt="CDISFRUTA Logo" />
+            <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
           </div>
           <div className="hdr-brand-text">
             <span className="hdr-brand-name">CDISFRUTA</span>

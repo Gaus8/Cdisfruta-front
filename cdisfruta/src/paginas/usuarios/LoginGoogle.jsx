@@ -37,7 +37,7 @@ export default function LoginGoogle() {
     <div className="google-btn-container">
       {/* 3. El onClick llama a 'login()', que es la función del hook */}
       <button className="button-google" type="button" onClick={() => login()}>
-        <img src="/img/google_logo.png" alt="Google" />
+        <img src="/img/google_logo.webp" alt="Google" />
         <span>Acceder con Google</span>
       </button>
       {respuestaServer && <p className="error-msg">{respuestaServer}</p>}

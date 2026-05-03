@@ -56,7 +56,7 @@ function Login({ cerrar, irRegistro }) {
           <IoCloseOutline />
         </button>
 
-        <img className="logo-empresa" src="/img/logo_siecu.png" alt="logo_siecu" />
+        <img className="logo-empresa" src="/img/logo_siecu.webp" alt="logo_siecu" />
         <h3>Inicio de Sesión</h3>
 
         {/* Campo Email */}

@@ -24,7 +24,7 @@ function MainPage() {
       <section className="about-section" id="sobre">
         <div className="about-visual">
           <img 
-            src="/img/cdisfruta_06.png" 
+            src="/img/cdisfruta_06.webp" 
             alt="Sobre nosotros" 
             className="about-image-bg" 
           />
@@ -105,7 +105,7 @@ function MainPage() {
           <div className="footer-brand-col">
             <div className="footer-logo">
               <div className="hdr-logo-ring">
-                <img src="/img/logo_cdisfruta.jpg" alt="CDISFRUTA Logo" />
+                <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
               </div>
               <span className="footer-brand-name">CDISFRUTA</span>
             </div>

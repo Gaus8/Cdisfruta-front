@@ -56,7 +56,7 @@ function Videos (){
 
           <article className="card">
             <div className="card-img-box">
-              <img src="/img/cdisfruta_03.jpg" alt="imagen1" />
+              <img src="/img/cdisfruta_03.webp" alt="imagen1" />
               <video src="/videos/CDISFRUTA1.mp4"muted loop></video>
             </div>
             <div className="card-text-box">
@@ -65,7 +65,7 @@ function Videos (){
           </article>
           <article className="card">
             <div className="card-img-box">
-              <img src="/img/cdisfruta_01.png" alt="imagen1" />
+              <img src="/img/cdisfruta_01.webp" alt="imagen1" />
               <video src="/videos/CDISFRUTA2.mp4" muted loop></video>
             </div>
             <div className="card-text-box">
@@ -74,7 +74,7 @@ function Videos (){
           </article>
           <article className="card">
             <div className="card-img-box">
-              <img src="/img/cdisfruta_05.jpg" alt="imagen1" />
+              <img src="/img/cdisfruta_05.webp" alt="imagen1" />
               <video src="/videos/CDISFRUTA4.mp4" muted loop></video>
             </div>
             <div className="card-text-box">
