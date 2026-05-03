@@ -1,4 +1,5 @@
 import { FaShoppingCart, FaSearch, FaUserCircle } from "react-icons/fa";
+import '../../assets/styles/dashboardUsuario/header_usuario.css';
 
 export default function HeaderDashboard() {
   return (

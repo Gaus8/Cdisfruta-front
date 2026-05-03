@@ -6,7 +6,7 @@ export default function FormProductos({
   handleDrop, fileInputRef, handleFileSelect,
   uploadStatus, formData, handleInputChange,
   handleSaveProduct,fileName,setShowModal,
-  handleDeleteProduct, enviando
+  handleDeleteProduct,
 }) 
 {
   return (

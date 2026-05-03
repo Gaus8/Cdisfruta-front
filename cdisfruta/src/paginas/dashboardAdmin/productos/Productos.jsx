@@ -9,7 +9,6 @@ function Productos() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [enviando, setEnviando] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     nombre: '',
@@ -124,7 +123,6 @@ function Productos() {
 
   const handleSaveProduct = async () => {
     try {
-      setEnviando(true);
       setUploadStatus('loading');
       const formDataToSend = new FormData();
       formDataToSend.append('nombre', formData.nombre);
@@ -151,7 +149,6 @@ function Productos() {
 
       setUploadStatus('success');
       setFileName('');
-      setEnviando(false)
       setShowModal(false);
       alert(result.message);
     } catch (error) {
@@ -201,7 +198,6 @@ function Productos() {
             setShowModal={setShowModal}
             fileName={fileName}
             handleDeleteProduct={handleDeleteProduct}
-            enviando={enviando}
           />
         )}
       </div>
