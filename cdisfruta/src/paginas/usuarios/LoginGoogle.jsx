@@ -26,7 +26,7 @@ export default function LoginGoogle() {
         if (rol === 'admin') {
           navigate("/dashboard_admin");
         } else {
-          navigate("/dashboard_user");
+          navigate("/dashboard_usuario");
         }
       }
     } catch (err) {
