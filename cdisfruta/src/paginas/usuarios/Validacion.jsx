@@ -72,7 +72,7 @@ function Validacion() {
   return (
     <div className="body-validacion">
       <form className="form-container-validacion" onSubmit={handleVerify}>
-        <img className="logo-empresa-validacion" src="/img/logo_siecu.png" alt="logo" />
+        <img className="logo-empresa-validacion" src="/img/logo_siecu.webp" alt="logo" />
         <h3>Verificación de Cuenta</h3>
         <p>Ingresa el código enviado a tu correo.</p>
 
