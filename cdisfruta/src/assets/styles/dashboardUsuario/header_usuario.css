@@ -1,10 +1,13 @@
 :root {
   --cdisfruta-orange: #f97316;
+  --cdisfruta-orange-hover: #ea6c0a;
   --cdisfruta-black: #0f172a;
   --cdisfruta-blue: #1e293b;
   --cdisfruta-blue-soft: #f1f5f9;
+  --danger: #d9534f;
 }
 
+/* ===================== HEADER ===================== */
 .user-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
@@ -12,7 +15,8 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  overflow: visible !important; /* Vital para que el menú no se corte */
 }
 
 .header-content {
@@ -21,30 +25,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem; /* Añadido para dar aire entre elementos */
+  overflow: visible !important;
 }
 
-/* --- Logo: Texto negro, punto naranja --- */
+/* --- Logo --- */
 .logo {
   font-size: 1.6rem;
   font-weight: 900;
   color: var(--cdisfruta-black);
   letter-spacing: -1px;
   margin: 0;
-  display: flex;
-  align-items: center;
+  white-space: nowrap;
 }
 
 .logo .dot-shop {
   color: var(--cdisfruta-orange);
 }
 
-/* --- Barra de Búsqueda --- */
+/* --- Barra de búsqueda --- */
 .search-bar {
   flex: 1;
   max-width: 550px;
   display: flex;
-  align-items: center; /* Alinea botón e input */
+  align-items: center;
   background-color: var(--cdisfruta-blue-soft);
   border-radius: 10px;
   padding: 4px;
@@ -60,7 +63,7 @@
 
 .search-bar input {
   flex: 1;
-  padding: 10px 15px;
+  padding: 8px 14px;
   border: none;
   background: transparent;
   outline: none;
@@ -72,8 +75,8 @@
   background-color: var(--cdisfruta-blue);
   color: white;
   border: none;
-  width: 42px;
-  height: 38px;
+  width: 40px;
+  height: 36px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -83,69 +86,245 @@
 }
 
 .search-btn:hover {
-  background-color: var(--cdisfruta-black);
-}
-
-/* --- Contenedor de Iconos (AQUÍ ESTABA EL ERROR) --- */
-.header-icons {
-  display: flex;
-  align-items: center; /* Alineación horizontal */
-  gap: 1.5rem; /* Espaciado entre carrito y perfil */
-}
-
-.icon-badge {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  font-size: 1.5rem;
-  color: var(--cdisfruta-blue);
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.icon:hover {
-  color: var(--cdisfruta-orange);
-}
-
-.badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
   background-color: var(--cdisfruta-orange);
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 50%;
+}
+
+/* ===================== ACCIONES DEL HEADER ===================== */
+.header-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border: 2px solid #ffffff;
+  gap: 25px;
 }
 
-.user-profile-icon {
-  font-size: 1.8rem; /* Tamaño más equilibrado */
-  color: var(--cdisfruta-blue); /* Perfil en azul para no saturar con naranja */
-  transition: all 0.2s ease;
+/* --- Iconos con badge (carrito) --- */
+.icon-wrapper {
+  position: relative;
+  cursor: pointer;
 }
 
-.user-profile-icon:hover {
+.icon-btn-large {
+  font-size: 24px;
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+.icon-btn-large:hover,
+.icon-btn-large.active {
   color: var(--cdisfruta-orange);
   transform: scale(1.1);
 }
 
-/* --- Responsive --- */
-@media (max-width: 768px) {
-  .user-header { padding: 0.8rem 1rem; }
-  .logo { font-size: 1.3rem; }
-  .search-bar { max-width: 250px; }
-  .search-bar input::placeholder { color: transparent; }
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background-color: var(--cdisfruta-orange);
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
-@media (max-width: 480px) {
-  .search-bar { display: none; }
+/* --- Perfil --- */
+.dropdown-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible !important;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--cdisfruta-blue);
+  transition: color 0.3s;
+}
+
+.user-profile:hover {
+  color: var(--cdisfruta-orange);
+}
+
+/* ===================== DROPDOWN ===================== */
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 220px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #eee;
+  overflow: hidden;
+  animation: slideDown 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.dropdown-header {
+  padding: 12px 15px;
+  background: #f9f9f9;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-bottom: 2px solid var(--cdisfruta-orange);
+  color: var(--cdisfruta-orange);
+}
+
+.dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-list li {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #444;
+}
+
+.dropdown-list li:hover {
+  background-color: #fff8f5;
+  color: var(--cdisfruta-orange);
+}
+
+.dropdown-list hr {
+  margin: 4px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+.logout-opt {
+  color: #555;
+  font-weight: 500;
+}
+
+.logout-opt:hover {
+  background-color: #fff5f5 !important;
+  color: var(--danger) !important;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== MODAL LOGOUT ===================== */
+.modal-overlay-logout {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.logout-modal-content {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 25px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  animation: scaleUp 0.3s ease;
+}
+
+.logout-modal-content h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--cdisfruta-black);
+  margin: 0.5rem 0;
+}
+
+.logout-modal-content p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.warning-icon {
+  font-size: 3rem;
+  color: var(--cdisfruta-orange);
+  margin-bottom: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancel,
+.btn-confirm {
+  padding: 10px 25px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.25s;
+}
+
+.btn-cancel {
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  color: #444;
+}
+
+.btn-cancel:hover {
+  background: #e8e8e8;
+}
+
+.btn-confirm {
+  border: none;
+  background: var(--cdisfruta-orange);
+  color: white;
+}
+
+.btn-confirm:hover {
+  background: var(--cdisfruta-orange-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .user-header  { padding: 0 1rem; }
+  .search-bar   { max-width: 200px; }
+  .logo         { font-size: 1.3rem; }
+
+  .dropdown-menu {
+    position: fixed;
+    top: 65px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    width: 100%;
+  }
 }

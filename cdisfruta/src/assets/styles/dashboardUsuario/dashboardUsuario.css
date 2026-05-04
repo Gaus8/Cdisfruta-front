@@ -7,7 +7,6 @@
   --text-light: #64748b;
   --bg-body: #f8fafc;           /* Fondo gris azulado muy sutil */
   --white: #ffffff;
-
 }
 
 .userpage-container {
@@ -37,7 +36,6 @@
   box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.05);
   flex-shrink: 0;
 }
-
 
 .filters-sidebar h3 {
   font-size: 1.2rem;
@@ -70,7 +68,6 @@
   box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
 }
 
-
 .sidebar-promo {
   margin-top: 40px;
   padding: 20px;
@@ -79,8 +76,6 @@
   border-radius: 16px;
   text-align: center;
 }
-
-
 
 /* --- Banner de Bienvenida --- */
 .products-welcome-card {
@@ -99,9 +94,7 @@
   font-weight: 800;
 }
 
-
 /* --- Responsive --- */
-
 @media (max-width: 1024px) {
   .content-wrapper { flex-direction: column; }
   .filters-sidebar { width: 100%; position: relative; top: 0; }
