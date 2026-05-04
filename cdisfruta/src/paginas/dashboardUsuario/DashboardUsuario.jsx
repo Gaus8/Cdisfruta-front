@@ -41,10 +41,13 @@ export default function DashboardUsuario() {
 
   return (
     <div className="userpage-container">
+      {/* 
+         NOTA: La barra de anuncio se recomienda ponerla dentro de <HeaderDashboard /> 
+         para que sea global, pero aquí se visualiza el orden lógico. 
+      */}
       <HeaderDashboard />
       
       <div className="content-wrapper">
-        {/* Sidebar con scroll horizontal automático en móvil */}
         <aside className="filters-sidebar">
           <h3>Categorías</h3>
           <ul className="category-list">
@@ -59,10 +62,10 @@ export default function DashboardUsuario() {
             ))}
           </ul>
 
-          <div className="sidebar-promo">
-            <span className="icon">🚚</span>
-            <p>Envío gratis por compras mayores a <strong>$100.000</strong></p>
-          </div>
+          {/* 
+             HEMOS ELIMINADO LA TARJETA "sidebar-promo-v2" DE AQUÍ.
+             Ahora el sidebar respira mejor y el foco son los productos.
+          */}
         </aside>
 
         <main className="main-products-content">
@@ -82,7 +85,6 @@ export default function DashboardUsuario() {
                 </div>
               </div>
               <div className="hero-visual">
-                
                 <div className="hero-badge-premium">
                     <span className="star">★</span>
                     <span>Calidad Premium</span>

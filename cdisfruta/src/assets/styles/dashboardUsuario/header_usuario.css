@@ -7,13 +7,37 @@
   --danger: #d9534f;
 }
 
+/* ===================== BARRA DE ANUNCIO (NUEVA) ===================== */
+.top-announcement-bar {
+  background: linear-gradient(90deg, var(--cdisfruta-orange) 0%, #fb923c 100%);
+  color: white;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.2);
+  position: relative;
+  z-index: 1001;
+}
+
+.top-announcement-bar p {
+  margin: 0;
+}
+
+.top-announcement-bar strong {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ===================== HEADER ===================== */
 .user-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   padding: 0.8rem 2rem;
   position: sticky;
-  top: 0;
+  top: 0; /* Si quieres que la barra naranja también se quede fija, cambia esto a la altura de la barra */
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   overflow: visible !important;
