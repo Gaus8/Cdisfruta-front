@@ -73,7 +73,7 @@ function Productos() {
     }
   };
 
-  // ... (tus funciones handleFileSelect, handleDrop, etc., se mantienen igual)
+
 
   if (loading) return <div className="loading-state">Cargando catálogo...</div>;
 
@@ -103,7 +103,16 @@ function Productos() {
           formData={formData}
           setFormData={setFormData}
           setShowModal={setShowModal}
-          
+          handleInputChange={handleInputChange} // <--- Faltaba esta
+          handleSaveProduct={handleSaveProduct}   // <--- Asegúrate de tenerla definida
+          fileInputRef={fileInputRef}
+          fileName={fileName}
+          uploadStatus={uploadStatus}
+          // Si tienes funciones de arrastrar y soltar, pásalas también:
+          handleFileSelect={handleFileSelect}
+          handleDrop={handleDrop}
+          handleDragOver={handleDragOver}
+          handleDragLeave={handleDragLeave}
         />
       )}
     </div>
