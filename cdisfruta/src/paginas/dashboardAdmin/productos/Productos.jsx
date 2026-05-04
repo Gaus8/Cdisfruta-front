@@ -101,6 +101,7 @@ function Productos() {
         <FormProductos
           editingProduct={editingProduct}
           formData={formData}
+          setFormData={setFormData}
           setShowModal={setShowModal}
           
         />
