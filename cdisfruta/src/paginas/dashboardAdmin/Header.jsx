@@ -90,7 +90,7 @@ export default function Header({ userName }) {
                   {notifications.length > 0 ? (
                     notifications.map((notif) => (
                       <li key={notif._id} className="notification-item">
-                        <span>{notif.mensaje}</span>
+                        <span className="notif-text">{notif.mensaje}</span> {/* Clase añadida */}
                         <button 
                           className="btn-check-read" 
                           onClick={() => markAsRead(notif._id)}
