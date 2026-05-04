@@ -212,3 +212,21 @@
 .price-container-main {
   margin-top: 8px;
 }
+.product-stock-text {
+  display: block;
+  font-size: 0.78rem;
+  color: #5e7e95; /* Un gris neutro que no distraiga */
+  margin-top: 5px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  text-transform: lowercase; /* Lo hace ver más sutil */
+}
+
+/* Opcional: si quieres que resalte sutilmente cuando hay poco */
+.product-card .product-tag.alert {
+  background-color: #fff1f0;
+  color: #f5222d;
+  font-size: 0.7rem;
+  font-weight: 600;
+  /* ... tus otros estilos de tag ... */
+}
