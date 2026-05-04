@@ -7,7 +7,6 @@ import FormProductos from './FormProductos';
 import "../../../assets/styles/dashboardAdmin/productos_admin.css";
 
 function Productos() {
-  // --- ESTADOS ---
   const [fileName, setFileName] = useState("");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,12 +18,12 @@ function Productos() {
     stock: '',
     descripcion: '',
     categoria: '',
-    imagen: ''
+    imagen: null // Aquí guardaremos el archivo real
   });
   const [uploadStatus, setUploadStatus] = useState('');
   const fileInputRef = useRef(null);
 
-  // --- CARGA DE DATOS ---
+  // 1. CARGA DE PRODUCTOS
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -34,7 +33,7 @@ function Productos() {
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar productos:", error);
       } finally {
         setLoading(false);
       }
@@ -42,19 +41,41 @@ function Productos() {
     fetchProducts();
   }, []);
 
-  // --- MANEJO DE FORMULARIO (INPUTS) ---
+  // 2. MANEJO DE INPUTS (Corregido para que no se repita)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // --- FUNCIONES DE BOTONES PRINCIPALES ---
+  // 3. SELECCIÓN DE IMAGEN
+  const handleFileSelect = (event) => {
+    const file = event.target.files?.[0] || event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La imagen es demasiado grande. Máximo 5MB.');
+      return;
+    }
+    
+    setFormData(prev => ({ ...prev, imagen: file }));
+    setFileName(file.name);
+    setUploadStatus('success');
+  };
+
+  // 4. FUNCIONES DE DRAG & DROP
+  const handleDrop = async (event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files.length > 0) handleFileSelect({ target: { files } });
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+  const handleDragLeave = (e) => e.preventDefault();
+
+  // 5. ACCIONES DE MODAL
   const handleAddProduct = () => {
     setEditingProduct(null);
-    setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagen: '' });
+    setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagen: null });
     setFileName('');
     setUploadStatus('');
     setShowModal(true);
@@ -68,43 +89,65 @@ function Productos() {
       stock: product.stock,
       descripcion: product.descripcion,
       categoria: product.categoria,
-      imagen: product.imagen || ''
+      imagen: null // No cargamos la imagen vieja en el input de archivo
     });
-    setFileName(product.imagen ? 'Imagen existente' : '');
-    setUploadStatus(''); // Reset status al abrir
+    setFileName(product.imagen ? 'Imagen actual conservada' : '');
+    setUploadStatus('');
     setShowModal(true);
   };
 
+  // 6. GUARDAR PRODUCTO (Rutas corregidas: /registro-productos y /productos/:id)
   const handleSaveProduct = async () => {
     try {
       setUploadStatus('loading');
+      const formDataToSend = new FormData();
+      formDataToSend.append('nombre', formData.nombre);
+      formDataToSend.append('precio', formData.precio);
+      formDataToSend.append('stock', formData.stock);
+      formDataToSend.append('descripcion', formData.descripcion);
+      formDataToSend.append('categoria', formData.categoria || 'General');
       
-      const metodo = editingProduct ? 'PUT' : 'POST';
-      const url = editingProduct 
-        ? `${URL_SERVER}/productos/${editingProduct._id}` 
-        : `${URL_SERVER}/productos`;
+      // Enviamos el archivo con el nombre 'img' como espera tu backend
+      if (formData.imagen) {
+        formDataToSend.append('img', formData.imagen);
+      }
 
-      const response = await fetch(url, {
-        method: metodo,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) throw new Error('Error al guardar el producto');
-
-      // Refrescar lista (puedes volver a llamar a fetchProducts o actualizar el estado local)
-      window.location.reload(); 
+      // LA CLAVE DEL 404 ESTABA AQUÍ:
+      const url = editingProduct
+        ? `${URL_SERVER}/productos/${editingProduct._id}`
+        : `${URL_SERVER}/registro-productos`; 
       
+      const method = editingProduct ? 'PUT' : 'POST';
+
+      const response = await fetch(url, { method, body: formDataToSend });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error del servidor: ${errorText}`);
+      }
+
+      const result = await response.json();
+
+      // Actualizar lista local sin recargar toda la página
+      if (editingProduct) {
+        setProducts(products.map(p => p._id === editingProduct._id ? result.product : p));
+      } else {
+        setProducts([...products, result.product]);
+      }
+
       setUploadStatus('success');
       setShowModal(false);
+      alert(result.message || 'Operación exitosa');
     } catch (error) {
       setUploadStatus('error');
-      alert("Error: " + error.message);
+      console.error(error);
+      alert('Error al guardar: ' + error.message);
     }
   };
 
+  // 7. ELIMINAR
   const handleDeleteProduct = async (productId) => {
-    if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) return;
+    if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
     try {
       const response = await fetch(`${URL_SERVER}/productos/${productId}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Error al eliminar');
@@ -114,42 +157,14 @@ function Productos() {
     }
   };
 
-  // --- MANEJO DE ARCHIVOS E IMÁGENES ---
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      setUploadStatus('success');
-      // Aquí podrías implementar la subida real a Cloudinary/S3
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setFileName(file.name);
-      setUploadStatus('success');
-    }
-  };
-
-  // --- RENDER ---
-  if (loading) return <div className="loading-state">Cargando catálogo...</div>;
+  if (loading) return <div className="loading-state">Cargando catálogo de CDISFRUTA...</div>;
 
   return (
     <div className="admin-products-page">
       <header className="products-header">
         <div className="header-info">
           <h2 className="main-title">Catálogo de Productos</h2>
-          <p className="subtitle">Aquí puedes agregar, editar y organizar todos los artículos disponibles para la venta en línea.</p>
+          <p className="subtitle">Gestión de inventario para la región de Ubaté.</p>
         </div>
         <button className="btn-add-product" onClick={handleAddProduct}>
           <FaPlus /> <span>Registrar Nuevo Producto</span>
@@ -178,7 +193,6 @@ function Productos() {
           handleDrop={handleDrop}
           handleDragOver={handleDragOver}
           handleDragLeave={handleDragLeave}
-          handleDeleteProduct={handleDeleteProduct}
         />
       )}
     </div>
