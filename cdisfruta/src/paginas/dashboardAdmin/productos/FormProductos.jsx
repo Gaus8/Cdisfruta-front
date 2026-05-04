@@ -8,7 +8,15 @@ export default function FormProductos({
   handleSaveProduct,fileName,setShowModal,
   handleDeleteProduct,
 }) 
+
 {
+  const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setFormData({
+    ...formData,
+    [name]: value
+  });
+};
   return (
     <div className="modal-overlay">
       <div className="modal">
