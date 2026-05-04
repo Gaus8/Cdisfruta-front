@@ -43,11 +43,18 @@ export default function HeaderDashboard() {
   return (
     <>
       {/* BARRA DE ANUNCIO SUPERIOR */}
-      <div className="top-announcement-bar">
-        <p>
-          🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong>
-        </p>
-      </div>
+      {/* BARRA DE ANUNCIO SUPERIOR */}
+        <div className="top-announcement-bar">
+          <div className="announcement-track">
+            <p>
+              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
+              ✨ <strong>Calidad Premium</strong> Garantizada  
+              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
+              ✨ <strong>Calidad Premium</strong> Garantizada  
+              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
+            </p>
+          </div>
+        </div>
 
       <header className="user-header">
         <div className="header-content">

@@ -9,35 +9,44 @@
 
 /* ===================== BARRA DE ANUNCIO (NUEVA) ===================== */
 .top-announcement-bar {
-  background: linear-gradient(90deg, var(--cdisfruta-orange) 0%, #fb923c 100%);
+  background: #F26522;
   color: white;
-  text-align: center;
   padding: 8px 0;
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 10px rgba(249, 115, 22, 0.2);
-  position: relative;
+  position: sticky; /* Se queda fija arriba */
+  top: 0;
   z-index: 1001;
+  overflow: hidden; /* Oculta lo que se sale del ancho */
+  white-space: nowrap; /* Evita que el texto salte de línea */
 }
 
-.top-announcement-bar p {
+.announcement-track {
+  display: inline-block;
+  padding-left: 100%; /* Empieza desde afuera a la derecha */
+  animation: marquee 35s linear infinite; /* 35 segundos de duración */
+}
+
+.announcement-track p {
   margin: 0;
+  display: inline-block;
 }
 
-.top-announcement-bar strong {
-  font-weight: 800;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* La animación que mueve el texto */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
 }
 
-/* ===================== HEADER ===================== */
+/* ===================== HEADER (STICKY AJUSTADO) ===================== */
 .user-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   padding: 0.8rem 2rem;
   position: sticky;
-  top: 0; /* Si quieres que la barra naranja también se quede fija, cambia esto a la altura de la barra */
+  top: 35px; /* IMPORTANTE: Baja el header para que no tape la barra naranja */
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   overflow: visible !important;
@@ -53,6 +62,12 @@
   gap: 2rem;
 }
 
+/* Ajuste para móvil (donde la barra suele ser un poco más alta) */
+@media (max-width: 768px) {
+  .user-header {
+    top: 31px; 
+  }
+}
 /* --- Logo --- */
 .logo {
   font-size: 1.6rem;
