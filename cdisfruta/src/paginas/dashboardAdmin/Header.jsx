@@ -72,10 +72,8 @@ export default function Header({ userName }) {
   return (
     <>
       <header className="header-admin">
-        <div className="header-search">
-          <input type="text" placeholder="Buscar..." />
-        </div>
-
+        
+    
         <div className="header-actions">
           <div className="dropdown-container">
             <div className="icon-wrapper" onClick={toggleNotifications}>

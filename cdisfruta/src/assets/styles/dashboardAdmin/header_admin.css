@@ -144,9 +144,6 @@
 @media (max-width: 600px) {
   .header-admin { padding: 0 1rem; }
   
-  .header-search input { width: 120px; }
-  .header-search input:focus { width: 150px; }
-  
   .user-name-text {
     display: none; /* Oculta el nombre en móviles para ahorrar espacio */
   }
