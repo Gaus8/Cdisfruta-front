@@ -58,7 +58,7 @@ export default function FormProductos({
             <input
               type="text"
               name="nombre"
-              value={formData.nombre}
+              value={formData.nombre || ''}
               onChange={handleInputChange}
               placeholder="Ingresa el nombre del producto"
               required
@@ -70,7 +70,7 @@ export default function FormProductos({
             <input
               type="text"
               name="categoria"
-              value={formData.categoria}
+              value={formData.categoria || ''}
               onChange={handleInputChange}
               placeholder="Ingresa la categoría del producto"
               required
@@ -82,7 +82,7 @@ export default function FormProductos({
             <input
               type="number"
               name="precio"
-              value={formData.precio}
+              value={formData.precio || ''}
               onChange={handleInputChange}
               placeholder="Ingresa el precio"
               required
@@ -95,7 +95,7 @@ export default function FormProductos({
             <input
               type="number"
               name="stock"
-              value={formData.stock}
+              value={formData.stock || ''}
               onChange={handleInputChange}
               placeholder="Ingresa la cantidad en stock"
               required
@@ -107,7 +107,7 @@ export default function FormProductos({
             <label>Descripción *</label>
             <textarea
               name="descripcion"
-              value={formData.descripcion}
+              value={formData.descripcion || ''}
               onChange={handleInputChange}
               placeholder="Ingresa una descripción del producto"
               required
