@@ -55,7 +55,7 @@ export default function Header({ userName }) {
       await axios.delete(`${URL_SERVER}/notificaciones-todas`, { withCredentials: true });
       setNotifications([]);
     } catch (err) {
-      console.error("Error al limpiar notificaciones:", err);
+      console.error("Error al limpiar notificacioness:", err);
     }
   };
 
