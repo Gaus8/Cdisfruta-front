@@ -121,7 +121,8 @@ export default function FormProductos({
   <button 
     className="btn btn-save" 
     onClick={handleSaveProduct}
-    disabled={uploadStatus === 'loading'} // Bloquea el botón de guardar
+    // No permitir guardar si el nombre está vacío 
+    disabled={uploadStatus === 'loading' || !formData.nombre} 
   >
     {uploadStatus === 'loading' ? (
       <>

@@ -1,5 +1,6 @@
 // Productos.jsx
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from "react-router"; 
 import { FaPlus } from 'react-icons/fa';
 import { URL_SERVER } from '../../../funciones/conexion';
 import ListarProductos from './ListarProductos';
@@ -18,12 +19,29 @@ function Productos() {
     stock: '',
     descripcion: '',
     categoria: '',
-    imagen: null // Aquí guardaremos el archivo real
+    imagen: null 
   });
   const [uploadStatus, setUploadStatus] = useState('');
   const fileInputRef = useRef(null);
 
-  // 1. CARGA DE PRODUCTOS
+  const location = useLocation();
+
+  // 1. LÓGICA DE ACCESO RÁPIDO (Desde HomeAdmin)
+  useEffect(() => {
+    if (location.state?.openModal) {
+      // Agregamos un delay de 100ms para asegurar que el componente esté montado
+      const timer = setTimeout(() => {
+        handleAddProduct(); 
+      }, 100);
+
+      // Limpiamos el estado para evitar reaperturas accidentales al refrescar
+      window.history.replaceState({}, document.title);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
+
+  // 2. CARGA DE PRODUCTOS INICIAL
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -41,15 +59,14 @@ function Productos() {
     fetchProducts();
   }, []);
 
-  // 2. MANEJO DE INPUTS (Corregido para que no se repita)
+  // 3. MANEJO DE INPUTS Y ARCHIVOS
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // 3. SELECCIÓN DE IMAGEN
   const handleFileSelect = (event) => {
-    const file = event.target.files?.[0] || event.target.files?.[0];
+    const file = event.target.files?.[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
@@ -62,7 +79,6 @@ function Productos() {
     setUploadStatus('success');
   };
 
-  // 4. FUNCIONES DE DRAG & DROP
   const handleDrop = async (event) => {
     event.preventDefault();
     const files = event.dataTransfer.files;
@@ -72,7 +88,7 @@ function Productos() {
   const handleDragOver = (e) => e.preventDefault();
   const handleDragLeave = (e) => e.preventDefault();
 
-  // 5. ACCIONES DE MODAL
+  // 4. CONTROL DE MODAL
   const handleAddProduct = () => {
     setEditingProduct(null);
     setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagen: null });
@@ -89,46 +105,57 @@ function Productos() {
       stock: product.stock,
       descripcion: product.descripcion,
       categoria: product.categoria,
-      imagen: null // No cargamos la imagen vieja en el input de archivo
+      imagen: null 
     });
     setFileName(product.imagen ? 'Imagen actual conservada' : '');
     setUploadStatus('');
     setShowModal(true);
   };
 
-  // 6. GUARDAR PRODUCTO (Rutas corregidas: /registro-productos y /productos/:id)
+  // 5. GUARDAR PRODUCTO (POST / PUT)
   const handleSaveProduct = async () => {
+    // Validación preventiva para evitar que el servidor reciba campos vacíos y mande error 500
+    if (!formData.nombre || !formData.precio || !formData.stock) {
+      alert("Por favor rellena los campos obligatorios (*)");
+      return;
+    }
+
     try {
       setUploadStatus('loading');
       const formDataToSend = new FormData();
+      
       formDataToSend.append('nombre', formData.nombre);
       formDataToSend.append('precio', formData.precio);
       formDataToSend.append('stock', formData.stock);
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria || 'General');
       
-      // Enviamos el archivo con el nombre 'img' como espera tu backend
+      // Enviamos la imagen solo si el usuario seleccionó una nueva
       if (formData.imagen) {
-        formDataToSend.append('img', formData.imagen);
+        formDataToSend.append('imagen', formData.imagen); 
       }
 
-      // LA CLAVE DEL 404 ESTABA AQUÍ:
       const url = editingProduct
         ? `${URL_SERVER}/productos/${editingProduct._id}`
         : `${URL_SERVER}/registro-productos`; 
       
       const method = editingProduct ? 'PUT' : 'POST';
 
-      const response = await fetch(url, { method, body: formDataToSend });
+      // NOTA: No enviamos Headers de Content-Type, el navegador lo gestiona con FormData
+      const response = await fetch(url, { 
+        method, 
+        body: formDataToSend 
+      });
       
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error del servidor: ${errorText}`);
+        const errorText = await response.text(); 
+        console.error("Detalle del error del servidor:", errorText);
+        throw new Error(`Error del servidor (${response.status}). Revisa que todos los campos sean válidos.`);
       }
 
       const result = await response.json();
 
-      // Actualizar lista local sin recargar toda la página
+      // Actualizar estado local sin recargar página
       if (editingProduct) {
         setProducts(products.map(p => p._id === editingProduct._id ? result.product : p));
       } else {
@@ -137,20 +164,20 @@ function Productos() {
 
       setUploadStatus('success');
       setShowModal(false);
-      alert(result.message || 'Operación exitosa');
+      alert('¡Operación realizada con éxito en CDISFRUTA!');
     } catch (error) {
       setUploadStatus('error');
       console.error(error);
-      alert('Error al guardar: ' + error.message);
+      alert(error.message);
     }
   };
 
-  // 7. ELIMINAR
+  // 6. ELIMINAR PRODUCTO
   const handleDeleteProduct = async (productId) => {
     if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
     try {
       const response = await fetch(`${URL_SERVER}/productos/${productId}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('Error al eliminar');
+      if (!response.ok) throw new Error('No se pudo eliminar el producto del servidor.');
       setProducts(products.filter(p => p._id !== productId));
     } catch (error) {
       alert('Error: ' + error.message);
@@ -164,7 +191,7 @@ function Productos() {
       <header className="products-header">
         <div className="header-info">
           <h2 className="main-title">Catálogo de Productos</h2>
-          <p className="subtitle">Aquí puedes agregar, editar y organizar todos los articulos disponibles para la venta en línea.</p>
+          <p className="subtitle">Gestiona los artículos de la tienda desde aquí.</p>
         </div>
         <button className="btn-add-product" onClick={handleAddProduct}>
           <FaPlus /> <span>Registrar Nuevo Producto</span>
