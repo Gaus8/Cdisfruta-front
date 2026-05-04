@@ -54,7 +54,7 @@ export default function Sidebar() {
         </nav>
         <div className="sidebar-footer">
           <button className="btn-logout" onClick={() => setShowLogoutModal(true)}>
-            <FaSignOutAlt /> <span>Cerrar Sesión</span>
+            <span>Cerrar Sesión</span>
           </button>
         </div>
       </aside>

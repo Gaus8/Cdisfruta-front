@@ -1,9 +1,4 @@
-.header-info {
-  max-width: 65%; /* Limita el texto al 65% del ancho para que nunca toque el botón */
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+/* --- ESTILOS BASE (ESCRITORIO) --- */
 
 .admin-products-page {
   padding: 30px;
@@ -20,6 +15,14 @@
   padding: 20px 30px;
   border-radius: 15px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  gap: 20px; /* Espacio mínimo entre texto y botón */
+}
+
+.header-info {
+  max-width: 65%; /* Evita que el texto choque con el botón en PC */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .main-title {
@@ -27,16 +30,16 @@
   color: #1e293b;
   font-weight: 700;
   letter-spacing: -0.5px;
+  margin: 0;
 }
 
 .subtitle {
   color: #64748b;
   font-size: 1rem;
-  line-height: 1.5; 
+  line-height: 1.5;
   margin: 0;
-  max-width: 900px; 
+  max-width: 900px;
 }
-
 
 .btn-add-product {
   background: #ff7e5f; /* Naranja SIECU */
@@ -48,6 +51,7 @@
   align-items: center;
   gap: 10px;
   font-weight: 600;
+  white-space: nowrap; /* Evita que el texto del botón se rompa en dos líneas */
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
@@ -62,12 +66,10 @@
   font-size: 1.1rem;
 }
 
-/* Contenedor de la lista */
 .products-grid-container {
   margin-top: 20px;
 }
 
-/* Estado de carga */
 .loading-state {
   display: flex;
   justify-content: center;
@@ -76,4 +78,60 @@
   font-size: 1.2rem;
   color: #64748b;
   font-weight: 500;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* Tablets (iPad, laptops pequeñas) */
+@media (max-width: 992px) {
+  .header-info {
+    max-width: 70%;
+  }
+  
+  .main-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Celulares grandes (768px hacia abajo) */
+@media (max-width: 768px) {
+  .admin-products-page {
+    padding: 15px; /* Menos margen lateral para aprovechar el espacio */
+  }
+
+  .products-header {
+    flex-direction: column; /* Apila el texto sobre el botón */
+    align-items: flex-start; /* Todo alineado a la izquierda */
+    padding: 20px;
+  }
+
+  .header-info {
+    max-width: 100%; /* El texto puede ocupar todo el ancho */
+    margin-bottom: 15px; /* Separación con el botón de abajo */
+  }
+
+  .btn-add-product {
+    width: 100%; /* Botón ancho para que sea fácil de pulsar */
+    justify-content: center;
+  }
+  
+  .subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* Celulares pequeños (480px hacia abajo) */
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.3rem;
+  }
+
+  .products-header {
+    padding: 15px;
+  }
+  
+  .btn-add-product {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
 }
