@@ -58,3 +58,23 @@
   border-radius: 6px;
   cursor: pointer;
 }
+/* ... tu código anterior ... */
+
+.btn-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #ef4444; /* Rojo */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease; /* Transición suave */
+}
+
+.btn-logout:hover {
+  background: #dc2626; /* Un rojo un poco más oscuro al pasar el mouse */
+}

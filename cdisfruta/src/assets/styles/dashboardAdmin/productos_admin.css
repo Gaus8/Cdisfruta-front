@@ -1,0 +1,79 @@
+.header-info {
+  max-width: 65%; /* Limita el texto al 65% del ancho para que nunca toque el botón */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin-products-page {
+  padding: 30px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.main-title {
+  font-size: 1.8rem;
+  color: #1e293b;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.5; 
+  margin: 0;
+  max-width: 900px; 
+}
+
+
+.btn-add-product {
+  background: #ff7e5f; /* Naranja SIECU */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
+}
+
+.btn-add-product:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 126, 95, 0.4);
+}
+
+.btn-add-product svg {
+  font-size: 1.1rem;
+}
+
+/* Contenedor de la lista */
+.products-grid-container {
+  margin-top: 20px;
+}
+
+/* Estado de carga */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 1.2rem;
+  color: #64748b;
+  font-weight: 500;
+}
