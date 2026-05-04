@@ -6,13 +6,15 @@ import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 
 export default function DashboardUsuario() {
   const { userData, loading } = useAuth();
+  
+  // 1. Estado inicial en "Todos los productos"
   const [categoriaActiva, setCategoriaActiva] = useState("Todos los productos");
 
+  // 2. Definimos las nuevas categorías solicitadas
   const categorias = [
     "Todos los productos",
-    "Frutas Deshidratadas",
-    "Mix Energético",
-    "Infusiones",
+    "Infusiones y Aromáticas",
+    "Snacks Saludables",
     "Promociones"
   ];
 
@@ -41,10 +43,6 @@ export default function DashboardUsuario() {
 
   return (
     <div className="userpage-container">
-      {/* 
-         NOTA: La barra de anuncio se recomienda ponerla dentro de <HeaderDashboard /> 
-         para que sea global, pero aquí se visualiza el orden lógico. 
-      */}
       <HeaderDashboard />
       
       <div className="content-wrapper">
@@ -55,17 +53,13 @@ export default function DashboardUsuario() {
               <li 
                 key={cat}
                 className={categoriaActiva === cat ? "active" : ""}
+                /* 3. Al hacer click, enviamos el nombre exacto de la categoría */
                 onClick={() => setCategoriaActiva(cat)}
               >
                 {cat}
               </li>
             ))}
           </ul>
-
-          {/* 
-             HEMOS ELIMINADO LA TARJETA "sidebar-promo-v2" DE AQUÍ.
-             Ahora el sidebar respira mejor y el foco son los productos.
-          */}
         </aside>
 
         <main className="main-products-content">
@@ -93,6 +87,7 @@ export default function DashboardUsuario() {
             </div>
           </header>
 
+          {/* 4. Pasamos la categoría activa al componente que renderiza los productos */}
           <ProductosTienda categoria={categoriaActiva} />
         </main>
       </div>
