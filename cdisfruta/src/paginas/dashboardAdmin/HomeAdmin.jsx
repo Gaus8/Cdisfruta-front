@@ -29,7 +29,7 @@ export default function HomeAdmin() {
     <div className="home-admin-content">
       <header className="home-header">
         <h1>Panel de Control</h1>
-        <p>Revisa el estado de CDISFRUTA hoy.</p>
+        <p>Revisa el estado de CDISFRUTA hoy</p>
       </header>
 
       {/* MÉTRICAS */}
@@ -92,14 +92,14 @@ export default function HomeAdmin() {
               <tbody>
                 <tr>
                   <td>Juan Pérez</td>
-                  <td>Mix Frutos 250g</td>
+                  <td>Saco Aromáticas x10 Unidades</td>
                   <td>$15,000</td>
                   <td><span className="status-tag shipped">Enviado</span></td>
                 </tr>
                 <tr>
                   <td>María López</td>
-                  <td>Mango Deshidratado</td>
-                  <td>$45,000</td>
+                  <td>Snack Fruta Deshidratada Mix x50g</td>
+                  <td>$35,500</td>
                   <td><span className="status-tag pending">Pendiente</span></td>
                 </tr>
               </tbody>
