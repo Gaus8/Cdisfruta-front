@@ -164,7 +164,7 @@ function Productos() {
       <header className="products-header">
         <div className="header-info">
           <h2 className="main-title">Catálogo de Productos</h2>
-          <p className="subtitle">Gestión de inventario para la región de Ubaté.</p>
+          <p className="subtitle">Aquí puedes agregar, editar y organizar todos los articulos disponibles para la venta en línea.</p>
         </div>
         <button className="btn-add-product" onClick={handleAddProduct}>
           <FaPlus /> <span>Registrar Nuevo Producto</span>
