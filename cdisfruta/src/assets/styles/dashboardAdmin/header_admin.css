@@ -2,6 +2,7 @@
 :root {
   --coral-main: #ff7961;
   --coral-hover: #ff6347;
+  --danger: #d9534f;
 }
 
 /* --- ESTRUCTURA DEL HEADER --- */
@@ -114,59 +115,70 @@
   color: var(--coral-main);
 }
 
-.dropdown-footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 0.8rem;
-  border-top: 1px solid #eee;
-  cursor: pointer;
-  color: #777;
-  background: #fff;
-}
-
-/* --- SISTEMA DE NOTIFICACIONES (SCROLLABLE) --- */
-.notifications-menu {
-  width: 320px; /* Más ancho para leer mejor los mensajes */
-  max-height: 450px; /* Altura máxima en desktop */
-}
-
+/* --- LISTA DE OPCIONES (GENERAL) --- */
 .dropdown-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  overflow-y: auto; /* HABILITA EL SCROLL */
-  flex-grow: 1;    /* Empuja el footer hacia abajo */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Estilo de la barra de scroll */
-.dropdown-list::-webkit-scrollbar {
-  width: 6px;
+.dropdown-list li {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #444;
 }
-.dropdown-list::-webkit-scrollbar-thumb {
-  background: #ddd;
-  border-radius: 10px;
+
+.dropdown-list li:hover {
+  background-color: #fff5f3;
+  color: var(--coral-main);
+}
+
+/* Separador en el menú de perfil */
+.dropdown-list hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+/* Opción específica de Cerrar Sesión */
+.logout-opt {
+  color: #555;
+  font-weight: 500;
+}
+
+.logout-opt:hover {
+  background-color: #fff5f5 !important;
+  color: var(--danger) !important;
+}
+
+/* --- AJUSTES ESPECÍFICOS PARA NOTIFICACIONES (SCROLL) --- */
+.notifications-menu {
+  width: 320px;
+  max-height: 450px;
+}
+
+.notifications-menu .dropdown-list {
+  overflow-y: auto; /* Solo el de notificaciones tiene scroll */
+  flex-grow: 1;
 }
 
 .notification-item {
-  display: flex !important;
   justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 15px;
   border-bottom: 1px solid #f8f9fa;
-  transition: background 0.2s;
-}
-
-.notification-item:hover {
-  background-color: #fff5f3;
 }
 
 .notif-text {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.4;
   word-break: break-word;
-  color: #444;
 }
 
 .btn-check-read {
@@ -177,34 +189,32 @@
   height: 28px;
   border-radius: 50%;
   display: flex;
-  flex-shrink: 0; /* Evita que el botón se encoja */
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .btn-check-read:hover {
   background-color: #22c55e;
   color: white;
-  transform: scale(1.1);
 }
 
-.no-notifications {
-  padding: 30px 20px;
+.dropdown-footer {
   text-align: center;
-  color: #999;
-  font-style: italic;
-  font-size: 0.85rem;
+  padding: 10px;
+  font-size: 0.8rem;
+  border-top: 1px solid #eee;
+  cursor: pointer;
+  color: #777;
+  background: #fff;
 }
 
-/* --- MODAL DE CIERRE DE SESIÓN --- */
+/* --- MODAL Y ANIMACIONES (Sin cambios) --- */
 .modal-overlay-logout {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
@@ -245,49 +255,29 @@
   transition: 0.3s;
 }
 
-.btn-cancel {
-  border: 1px solid #ddd;
-  background: #f5f5f5;
-}
+.btn-cancel { border: 1px solid #ddd; background: #f5f5f5; }
+.btn-confirm { border: none; background: var(--coral-main); color: white; }
 
-.btn-confirm {
-  border: none;
-  background: var(--coral-main);
-  color: white;
-}
-
-/* --- ANIMACIONES --- */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { opacity: 1; } }
 
-@keyframes scaleUp {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
+/* Estilo de la barra de scroll */
+.dropdown-list::-webkit-scrollbar { width: 6px; }
+.dropdown-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 600px) {
   .header-admin { padding: 0 1rem; }
-  
   .user-name-text { display: none; }
-
   .dropdown-menu {
     position: fixed;
-    top: 65px;
-    right: 10px;
-    left: 10px;
+    top: 65px; right: 10px; left: 10px;
     width: auto;
   }
-
-  .notifications-menu {
-    max-height: 70vh; /* Para que no tape toda la pantalla en móvil */
-  }
-
-  .modal-actions {
-    flex-direction: column;
-  }
+  .notifications-menu .dropdown-list { max-height: 60vh; }
 }
