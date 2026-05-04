@@ -1,17 +1,22 @@
 import { useState, useEffect, useRef } from "react";
+// 1. Importar useNavigate para la redirección
+import { useNavigate } from "react-router-dom"; 
 import { 
   FaShoppingCart, FaSearch, FaUserCircle, FaCog, 
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag 
 } from "react-icons/fa";
-import CartModal from "./CartModal"; // Asegúrate de crear este componente en la misma carpeta
+import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 
 export default function HeaderDashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
-  const [cartModalOpen, setCartModalOpen] = useState(false); // Estado para abrir/cerrar el carrito
+  const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const containerRef = useRef(null);
+  
+  // 2. Inicializar el navegador
+  const navigate = useNavigate(); 
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
 
@@ -20,34 +25,41 @@ export default function HeaderDashboard() {
     setLogoutModalOpen(true);
   };
 
+  // 3. Función de confirmación corregida
   const handleConfirmLogout = () => {
+    // A. Cerramos el modal
     setLogoutModalOpen(false);
-    // Lógica de logout (limpiar tokens, etc.)
+
+    // B. Limpiamos la sesión (ajusta las llaves según uses 'token', 'user', etc.)
+    localStorage.removeItem('token'); 
+    localStorage.removeItem('user_cdisfruta');
+    // Nota: El carrito ('cart_cdisfruta') usualmente se deja para que no se pierda la compra
+    
     console.log("Sesión cerrada");
+
+    // C. Redirigimos a la página principal o login
+    navigate('/'); 
   };
 
   const handleCancelLogout = () => setLogoutModalOpen(false);
 
-  // Lógica para actualizar el badge del carrito
+  // --- El resto del código se mantiene igual ---
+
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
       const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
       setCartCount(totalItems);
     };
-
     updateBadge();
-
     window.addEventListener('cartUpdate', updateBadge);
     window.addEventListener('storage', updateBadge);
-
     return () => {
       window.removeEventListener('cartUpdate', updateBadge);
       window.removeEventListener('storage', updateBadge);
     };
   }, []);
 
-  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -58,7 +70,6 @@ export default function HeaderDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Bloquear scroll cuando hay modales abiertos
   useEffect(() => {
     if (logoutModalOpen || cartModalOpen) {
       document.body.style.overflow = "hidden";
@@ -70,14 +81,13 @@ export default function HeaderDashboard() {
 
   return (
     <>
-      {/* BARRA DE ANUNCIO SUPERIOR */}
       <div className="top-announcement-bar">
         <div className="announcement-track">
           <p>
             🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
-            ✨ <strong>Calidad Premium</strong> Garantizada  
+            ✨ <strong>Calidad Premium</strong> Garantizada   
             🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada  
+            ✨ <strong>Calidad Premium</strong> Garantizada   
             🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
           </p>
         </div>
@@ -85,8 +95,9 @@ export default function HeaderDashboard() {
 
       <header className="user-header">
         <div className="header-content">
-
-          <h1 className="logo">CDISFRUTA<span className="dot-shop">.shop</span></h1>
+          <h1 className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
+            CDISFRUTA<span className="dot-shop">.shop</span>
+          </h1>
 
           <div className="search-bar">
             <input type="text" placeholder="Buscar snacks saludables..." />
@@ -94,8 +105,6 @@ export default function HeaderDashboard() {
           </div>
 
           <div className="header-actions">
-
-            {/* Icono del Carrito con Trigger para abrir el Modal */}
             <div 
               className="icon-wrapper" 
               onClick={() => setCartModalOpen(true)} 
@@ -105,7 +114,6 @@ export default function HeaderDashboard() {
               <span className="notification-badge">{cartCount}</span>
             </div>
 
-            {/* Perfil y Dropdown */}
             <div className="dropdown-container" ref={containerRef}>
               <div className="user-profile" onClick={toggleDropdown}>
                 <FaUserCircle size={30} />
@@ -115,10 +123,10 @@ export default function HeaderDashboard() {
                 <div className="dropdown-menu profile-menu">
                   <div className="dropdown-header">Mi Cuenta</div>
                   <ul className="dropdown-list">
-                    <li onClick={() => setDropdownOpen(false)}>
+                    <li onClick={() => { setDropdownOpen(false); navigate('/configuracion'); }}>
                       <FaCog /> Configuración
                     </li>
-                    <li onClick={() => setDropdownOpen(false)}>
+                    <li onClick={() => { setDropdownOpen(false); navigate('/pedidos'); }}>
                       <FaShoppingBag /> Mis Pedidos
                     </li>
                     <hr />
@@ -129,18 +137,15 @@ export default function HeaderDashboard() {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </header>
 
-      {/* MODAL DEL CARRITO (Lógica y Formulario de pedido) */}
       <CartModal 
         isOpen={cartModalOpen} 
         onClose={() => setCartModalOpen(false)} 
       />
 
-      {/* MODAL DE CONFIRMACIÓN DE LOGOUT */}
       {logoutModalOpen && (
         <div className="modal-overlay-logout" onClick={handleCancelLogout}>
           <div className="logout-modal-content" onClick={(e) => e.stopPropagation()}>
