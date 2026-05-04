@@ -66,13 +66,29 @@ export default function DashboardUsuario() {
         </aside>
 
         <main className="main-products-content">
-          <header className="products-welcome-card">
-            <div className="text">
-              <h2>Nuestros Productos</h2>
-              <p>El sabor natural de Ubaté en cada bocado</p>
+          <header className="products-hero-section">
+            <div className="hero-content">
+              <div className="hero-text">
+                <span className="hero-subtitle">100% Natural • Artesanal</span>
+                <h1>Sabor Real, Energía de nuestra Tierra</h1>
+                <p>
+                  Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas 
+                  y deshidratadas con amor para acompañar tu estilo de vida saludable.
+                </p>
+                <div className="hero-features">
+                  <span>🍃 Sin Conservantes</span>
+                  <span>☀️ Cosecha de Origen</span>
+                  <span>📍 Origen Local</span>
+                </div>
+              </div>
+              <div className="hero-visual">
+                
+                <div className="hero-badge-premium">
+                    <span className="star">★</span>
+                    <span>Calidad Premium</span>
+                </div>
+              </div>
             </div>
-            {/* Badge con el color ámbar de la fruta */}
-            <div className="badge">✨ Proceso Artesanal</div>
           </header>
 
           <ProductosTienda categoria={categoriaActiva} />
