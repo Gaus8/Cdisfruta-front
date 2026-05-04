@@ -1,6 +1,5 @@
 import { useState } from "react";
-// Importamos FaStore para la tienda y FaBoxes para el inventario físico
-import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaSignOutAlt, FaExclamationTriangle } from "react-icons/fa";
+import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaSignOutAlt, FaExclamationTriangle, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
@@ -9,6 +8,7 @@ import '../../assets/styles/dashboardAdmin/sidebar_admin.css';
 export default function Sidebar() {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
 
   const handleLogout = async () => {
     try {
@@ -21,45 +21,53 @@ export default function Sidebar() {
     }
   };
 
+  const toggleSidebar = () => setIsOpen(!isOpen);
+
   return (
     <>
-      <aside className="sidebar-admin">
+      {/* Botón Hamburguesa - Solo visible en móvil */}
+      <button className="mobile-menu-btn" onClick={toggleSidebar}>
+        {isOpen ? <FaTimes /> : <FaBars />}
+      </button>
+
+      {/* Overlay para cerrar el menú al hacer clic fuera (solo móvil) */}
+      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+
+      <aside className={`sidebar-admin ${isOpen ? "open" : ""}`}>
         <div className="sidebar-logo">
           <h2>Panel Admin</h2>
         </div>
         <nav className="sidebar-nav">
-          <Link title="Inicio" to="/dashboard_admin/dashboard">
+          <Link title="Inicio" to="/dashboard_admin/dashboard" onClick={() => setIsOpen(false)}>
             <FaHome /> <span>Inicio</span>
           </Link>
           
-          {/* CAMBIO: Ahora es Productos Tienda */}
-          <Link title="Catálogo" to="/dashboard_admin/productos">
+          <Link title="Catálogo" to="/dashboard_admin/productos" onClick={() => setIsOpen(false)}>
             <FaStore /> <span>Catálogo</span>
           </Link>
           
-          {/* CAMBIO: Inventario para insumos físicos */}
-          <Link title="Inventario" to="/dashboard_admin/inventario">
+          <Link title="Inventario" to="/dashboard_admin/inventario" onClick={() => setIsOpen(false)}>
             <FaBoxes /> <span>Inventario</span>
           </Link>
 
-          <Link title="Usuarios" to="/dashboard_admin/usuarios">
+          <Link title="Usuarios" to="/dashboard_admin/usuarios" onClick={() => setIsOpen(false)}>
             <FaUsers /> <span>Usuarios</span>
           </Link>
-          <Link title="Reportes" to="/dashboard_admin/reportes">
+          <Link title="Reportes" to="/dashboard_admin/reportes" onClick={() => setIsOpen(false)}>
             <FaChartLine /> <span>Reportes</span>
           </Link>
-          <Link title="Configuración" to="/dashboard_admin/config">
+          <Link title="Configuración" to="/dashboard_admin/config" onClick={() => setIsOpen(false)}>
             <FaCog /> <span>Configuración</span>
           </Link>
         </nav>
         <div className="sidebar-footer">
           <button className="btn-logout" onClick={() => setShowLogoutModal(true)}>
-            <span>Cerrar Sesión</span>
+            <FaSignOutAlt /> <span>Cerrar Sesión</span>
           </button>
         </div>
       </aside>
 
-      {/* MODAL DE LOGOUT (Se mantiene igual) */}
+      {/* Modal de Logout se mantiene igual... */}
       {showLogoutModal && (
         <div className="modal-overlay-logout">
           <div className="logout-modal-content">

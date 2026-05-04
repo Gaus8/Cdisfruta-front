@@ -1,12 +1,17 @@
-/* sidebar_admin.css */
+/* sidebar_admin.css - Versión Completa Responsive */
+
+/* --- ESTILOS BASE (ESCRITORIO) --- */
 .sidebar-admin {
   width: 260px;
-  height: 100vh; /* Ocupa toda la pantalla */
-  background-color: #1e293b; /* Color oscuro profesional */
+  height: 100vh;
+  background-color: #1e293b;
   color: #f8fafc;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .sidebar-logo {
@@ -17,8 +22,13 @@
   border-bottom: 1px solid #334155;
 }
 
+.sidebar-logo h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
 .sidebar-nav {
-  flex: 1; /* Empuja el footer hacia abajo */
+  flex: 1;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
@@ -57,24 +67,69 @@
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
-}
-/* ... tu código anterior ... */
-
-.btn-logout {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: #ef4444; /* Rojo */
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease; /* Transición suave */
+  transition: background 0.3s ease;
 }
 
 .btn-logout:hover {
-  background: #dc2626; /* Un rojo un poco más oscuro al pasar el mouse */
+  background: #dc2626;
+}
+
+/* --- ELEMENTOS DEL MENÚ MÓVIL --- */
+
+/* Botón hamburguesa */
+.mobile-menu-btn {
+  display: none; /* Oculto en PC */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  background: #ff7e5f; /* Naranja SIECU */
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fondo oscuro cuando el menú está abierto */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+/* --- MEDIA QUERIES (RESPONSIVE) --- */
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex; /* Aparece en móviles */
+  }
+
+  .sidebar-admin {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%); /* Escondido por defecto */
+    z-index: 1000;
+    box-shadow: 10px 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Clase que se activa con el estado 'isOpen' de React */
+  .sidebar-admin.open {
+    transform: translateX(0);
+  }
+
+  /* Ajuste para que los textos no se desborden en pantallas pequeñas */
+  .sidebar-nav a span {
+    font-size: 1rem;
+  }
 }
