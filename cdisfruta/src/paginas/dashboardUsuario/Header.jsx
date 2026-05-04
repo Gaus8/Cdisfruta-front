@@ -5,11 +5,14 @@ export default function HeaderDashboard() {
   return (
     <header className="user-header">
       <div className="header-content">
-        <h1 className="logo">CDISFRUTA<span>.shop</span></h1>
+        {/* Logo con los colores de la marca: Negro y Verde/Naranja */}
+        <h1 className="logo">CDISFRUTA<span className="dot-shop">.shop</span></h1>
         
         <div className="search-bar">
           <input type="text" placeholder="Buscar snacks saludables..." />
-          <button className="search-btn"><FaSearch /></button>
+          <button className="search-btn">
+            <FaSearch />
+          </button>
         </div>
 
         <div className="header-icons">
