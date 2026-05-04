@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
-import { FaShoppingCart, FaInfoCircle } from "react-icons/fa";
+import { FaShoppingCart, FaPlus, FaMinus } from "react-icons/fa";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css'
 
-// Se agrega la prop 'categoria' que viene desde DashboardUsuario
 export default function ProductosTienda ({ categoria }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Estado para manejar las cantidades locales de cada card (por ID de producto)
+  const [quantities, setQuantities] = useState({});
+
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart_cdisfruta');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -16,6 +23,12 @@ export default function ProductosTienda ({ categoria }) {
         if (!response.ok) throw new Error(`Error ${response.status}`);
         const data = await response.json();
         setProducts(data);
+        
+        // Inicializamos las cantidades de todos los productos en 1
+        const initialQtys = {};
+        data.forEach(p => initialQtys[p._id] = 1);
+        setQuantities(initialQtys);
+
       } catch (error) {
         console.error("Error cargando productos:", error);
       } finally {
@@ -25,9 +38,46 @@ export default function ProductosTienda ({ categoria }) {
     fetchProducts();
   }, []);
 
-  // LÓGICA DE FILTRADO:
-  // Si la categoría es "Todos los productos", mostramos todo.
-  // De lo contrario, filtramos los productos que coincidan exactamente con la categoría seleccionada.
+  useEffect(() => {
+    localStorage.setItem('cart_cdisfruta', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdate'));
+  }, [cart]);
+
+  // Funciones para el contador visual
+  const handleIncrease = (id, stock) => {
+    setQuantities(prev => ({
+      ...prev,
+      [id]: prev[id] < stock ? prev[id] + 1 : prev[id]
+    }));
+  };
+
+  const handleDecrease = (id) => {
+    setQuantities(prev => ({
+      ...prev,
+      [id]: prev[id] > 1 ? prev[id] - 1 : 1
+    }));
+  };
+
+  const addToCart = (product) => {
+    const quantityToAdd = quantities[product._id] || 1;
+
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item._id === product._id);
+      
+      if (existingItem) {
+        return prevCart.map(item =>
+          item._id === product._id 
+            ? { ...item, quantity: item.quantity + quantityToAdd } 
+            : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: quantityToAdd }];
+    });
+    
+    // Opcional: Reiniciar el contador de la card a 1 después de agregar
+    setQuantities(prev => ({ ...prev, [product._id]: 1 }));
+  };
+
   const productosFiltrados = categoria === "Todos los productos" 
     ? products 
     : products.filter(product => product.categoria === categoria);
@@ -36,7 +86,6 @@ export default function ProductosTienda ({ categoria }) {
 
   return (
     <div className="products-grid">
-      {/* Usamos productosFiltrados en lugar de products para el renderizado */}
       {productosFiltrados.length === 0 ? (
         <div className="no-products">
           No hay productos disponibles en la categoría "{categoria}".
@@ -44,7 +93,6 @@ export default function ProductosTienda ({ categoria }) {
       ) : (
         productosFiltrados.map(product => (
           <div key={product._id} className="product-card">
-            {/* Tag Dinámico */}
             {product.stock <= 5 && product.stock > 0 && (
               <span className="product-tag alert">¡Últimas unidades!</span>
             )}
@@ -75,13 +123,41 @@ export default function ProductosTienda ({ categoria }) {
                   </span>
                 </div>
 
-                <button 
-                  className="add-to-cart-btn"
-                  onClick={() => console.log("Agregar:", product._id)}
-                  disabled={product.stock === 0}
-                >
-                  <FaShoppingCart /> {product.stock === 0 ? 'Agotado' : 'Agregar'}
-                </button>
+                {/* CONTENEDOR DE ACCIONES (CONTADOR + BOTÓN) */}
+                <div className="product-actions-vertical">
+  {product.stock > 0 && (
+    <div className="quantity-selector-full">
+      <button 
+        type="button" 
+        onClick={() => handleDecrease(product._id)}
+        className="qty-btn-v"
+      >
+        <FaMinus size={12} />
+      </button>
+
+      <span className="qty-number-v">
+        {quantities[product._id] || 1}
+      </span>
+
+      <button 
+        type="button" 
+        onClick={() => handleIncrease(product._id, product.stock)}
+        className="qty-btn-v"
+      >
+        <FaPlus size={12} />
+      </button>
+    </div>
+  )}
+
+  <button 
+    className="add-to-cart-btn-full"
+    onClick={() => addToCart(product)}
+    disabled={product.stock === 0}
+  >
+    <FaShoppingCart />
+    {product.stock === 0 ? 'Agotado' : 'Agregar'}
+  </button>
+</div>
               </div>
             </div>
           </div>

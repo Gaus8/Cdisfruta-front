@@ -137,3 +137,78 @@
   font-weight: 700;
   z-index: 5;
 }
+
+/* Contenedor principal de acciones (Uno arriba del otro) */
+.product-actions-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+/* Selector de cantidad ancho completo */
+.quantity-selector-full {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Botones a los lados, número al centro */
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 6px 12px;
+}
+
+.qty-btn-v {
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: var(--cdisfruta-orange);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qty-btn-v:hover {
+  background: var(--cdisfruta-orange);
+  color: white;
+  border-color: var(--cdisfruta-orange);
+}
+
+.qty-number-v {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--cdisfruta-black);
+}
+
+/* Botón de agregar ancho completo */
+.add-to-cart-btn-full {
+  width: 100%;
+  padding: 12px;
+  background: var(--cdisfruta-orange);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-to-cart-btn-full:hover {
+  background: var(--cdisfruta-orange-hover);
+}
+
+.add-to-cart-btn-full:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.price-container-main {
+  margin-top: 8px;
+}

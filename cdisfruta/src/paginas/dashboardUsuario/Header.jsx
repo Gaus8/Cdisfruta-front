@@ -8,6 +8,7 @@ import '../../assets/styles/dashboardUsuario/header_usuario.css';
 export default function HeaderDashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0); // Nuevo estado para el contador
   const containerRef = useRef(null);
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
@@ -24,6 +25,29 @@ export default function HeaderDashboard() {
   };
 
   const handleCancelLogout = () => setLogoutModalOpen(false);
+
+  // Lógica para actualizar el badge del carrito
+  useEffect(() => {
+    const updateBadge = () => {
+      const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
+      // Sumamos todas las cantidades de los productos en el carrito
+      const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+      setCartCount(totalItems);
+    };
+
+    updateBadge(); // Carga inicial al montar el componente
+
+    // Escuchamos el evento personalizado 'cartUpdate' que lanzamos desde ProductosTienda
+    window.addEventListener('cartUpdate', updateBadge);
+    
+    // También escuchamos 'storage' por si se cambia en otra pestaña
+    window.addEventListener('storage', updateBadge);
+
+    return () => {
+      window.removeEventListener('cartUpdate', updateBadge);
+      window.removeEventListener('storage', updateBadge);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -42,7 +66,6 @@ export default function HeaderDashboard() {
 
   return (
     <>
-      {/* BARRA DE ANUNCIO SUPERIOR */}
       {/* BARRA DE ANUNCIO SUPERIOR */}
         <div className="top-announcement-bar">
           <div className="announcement-track">
@@ -71,7 +94,8 @@ export default function HeaderDashboard() {
             {/* Carrito */}
             <div className="icon-wrapper">
               <FaShoppingCart className="icon-btn-large" />
-              <span className="notification-badge">0</span>
+              {/* Mostramos el contador dinámico aquí */}
+              <span className="notification-badge">{cartCount}</span>
             </div>
 
             {/* Perfil */}
