@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { 
   FaShoppingCart, FaSearch, FaUserCircle, FaCog, 
-  FaSignOutAlt, FaBox, FaExclamationTriangle, FaCheck, FaShoppingBag 
+  FaSignOutAlt, FaExclamationTriangle, FaShoppingBag 
 } from "react-icons/fa";
+import CartModal from "./CartModal"; // Asegúrate de crear este componente en la misma carpeta
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 
 export default function HeaderDashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0); // Nuevo estado para el contador
+  const [cartModalOpen, setCartModalOpen] = useState(false); // Estado para abrir/cerrar el carrito
+  const [cartCount, setCartCount] = useState(0);
   const containerRef = useRef(null);
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
@@ -20,7 +22,7 @@ export default function HeaderDashboard() {
 
   const handleConfirmLogout = () => {
     setLogoutModalOpen(false);
-    // Tu lógica de logout aquí: clearToken(), navigate('/login'), etc.
+    // Lógica de logout (limpiar tokens, etc.)
     console.log("Sesión cerrada");
   };
 
@@ -30,17 +32,13 @@ export default function HeaderDashboard() {
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
-      // Sumamos todas las cantidades de los productos en el carrito
       const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
       setCartCount(totalItems);
     };
 
-    updateBadge(); // Carga inicial al montar el componente
+    updateBadge();
 
-    // Escuchamos el evento personalizado 'cartUpdate' que lanzamos desde ProductosTienda
     window.addEventListener('cartUpdate', updateBadge);
-    
-    // También escuchamos 'storage' por si se cambia en otra pestaña
     window.addEventListener('storage', updateBadge);
 
     return () => {
@@ -49,6 +47,7 @@ export default function HeaderDashboard() {
     };
   }, []);
 
+  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -59,25 +58,30 @@ export default function HeaderDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Bloquear scroll cuando hay modales abiertos
   useEffect(() => {
-    document.body.style.overflow = logoutModalOpen ? "hidden" : "";
+    if (logoutModalOpen || cartModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => { document.body.style.overflow = ""; };
-  }, [logoutModalOpen]);
+  }, [logoutModalOpen, cartModalOpen]);
 
   return (
     <>
       {/* BARRA DE ANUNCIO SUPERIOR */}
-        <div className="top-announcement-bar">
-          <div className="announcement-track">
-            <p>
-              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
-              ✨ <strong>Calidad Premium</strong> Garantizada  
-              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-              ✨ <strong>Calidad Premium</strong> Garantizada  
-              🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
-            </p>
-          </div>
+      <div className="top-announcement-bar">
+        <div className="announcement-track">
+          <p>
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
+            ✨ <strong>Calidad Premium</strong> Garantizada  
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
+            ✨ <strong>Calidad Premium</strong> Garantizada  
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
+          </p>
         </div>
+      </div>
 
       <header className="user-header">
         <div className="header-content">
@@ -91,14 +95,17 @@ export default function HeaderDashboard() {
 
           <div className="header-actions">
 
-            {/* Carrito */}
-            <div className="icon-wrapper">
+            {/* Icono del Carrito con Trigger para abrir el Modal */}
+            <div 
+              className="icon-wrapper" 
+              onClick={() => setCartModalOpen(true)} 
+              style={{ cursor: 'pointer' }}
+            >
               <FaShoppingCart className="icon-btn-large" />
-              {/* Mostramos el contador dinámico aquí */}
               <span className="notification-badge">{cartCount}</span>
             </div>
 
-            {/* Perfil */}
+            {/* Perfil y Dropdown */}
             <div className="dropdown-container" ref={containerRef}>
               <div className="user-profile" onClick={toggleDropdown}>
                 <FaUserCircle size={30} />
@@ -127,7 +134,13 @@ export default function HeaderDashboard() {
         </div>
       </header>
 
-      {/* Modal de confirmación */}
+      {/* MODAL DEL CARRITO (Lógica y Formulario de pedido) */}
+      <CartModal 
+        isOpen={cartModalOpen} 
+        onClose={() => setCartModalOpen(false)} 
+      />
+
+      {/* MODAL DE CONFIRMACIÓN DE LOGOUT */}
       {logoutModalOpen && (
         <div className="modal-overlay-logout" onClick={handleCancelLogout}>
           <div className="logout-modal-content" onClick={(e) => e.stopPropagation()}>
