@@ -1,18 +1,37 @@
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus } from "react-icons/fa";
 import { URL_SERVER } from "../../funciones/conexion";
-import '../../assets/styles/dashboardUsuario/productos_usuario.css'
+import '../../assets/styles/dashboardUsuario/productos_usuario.css';
 
-export default function ProductosTienda ({ categoria }) {
+export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
 
+  // Estado inicial del carrito desde localStorage
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart_cdisfruta');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  // Escuchar cambios externos (desde el Modal o Header)
+  useEffect(() => {
+    const syncCart = () => {
+      const savedCart = localStorage.getItem('cart_cdisfruta');
+      const parsedCart = savedCart ? JSON.parse(savedCart) : [];
+      setCart(parsedCart);
+    };
+
+    window.addEventListener('cartUpdate', syncCart);
+    window.addEventListener('storage', syncCart);
+
+    return () => {
+      window.removeEventListener('cartUpdate', syncCart);
+      window.removeEventListener('storage', syncCart);
+    };
+  }, []);
+
+  // Carga de productos desde el servidor
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -34,11 +53,6 @@ export default function ProductosTienda ({ categoria }) {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('cart_cdisfruta', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdate'));
-  }, [cart]);
-
   const handleIncrease = (id, stock) => {
     setQuantities(prev => ({
       ...prev,
@@ -53,19 +67,28 @@ export default function ProductosTienda ({ categoria }) {
     }));
   };
 
+  // Función de agregar mejorada: Maneja Storage y Evento en un solo paso
   const addToCart = (product) => {
     const quantityToAdd = quantities[product._id] || 1;
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item._id === product._id);
-      if (existingItem) {
-        return prevCart.map(item =>
-          item._id === product._id 
-            ? { ...item, quantity: item.quantity + quantityToAdd } 
-            : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: quantityToAdd }];
-    });
+    
+    // Leemos el storage actual para evitar "fantasmas" de items borrados
+    const currentStorageCart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
+    const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
+    
+    let updatedCart;
+    if (existingItemIndex !== -1) {
+      updatedCart = [...currentStorageCart];
+      updatedCart[existingItemIndex].quantity += quantityToAdd;
+    } else {
+      updatedCart = [...currentStorageCart, { ...product, quantity: quantityToAdd }];
+    }
+
+    // Actualizamos estado, storage y disparamos evento
+    setCart(updatedCart);
+    localStorage.setItem('cart_cdisfruta', JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event('cartUpdate'));
+    
+    // Resetear cantidad visual a 1
     setQuantities(prev => ({ ...prev, [product._id]: 1 }));
   };
 
@@ -112,8 +135,6 @@ export default function ProductosTienda ({ categoria }) {
                   <span className="product-price">
                     ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
                   </span>
-                  
-                  {/* Stock con el estilo de texto sutil que propusiste */}
                   <span className="product-stock-text">
                     {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
                   </span>

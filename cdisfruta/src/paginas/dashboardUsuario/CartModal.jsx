@@ -18,17 +18,26 @@ export default function CartModal({ isOpen, onClose }) {
     compromiso: false
   });
 
+  // Sincronizar el contenido del carrito al abrir o cambiar
   useEffect(() => {
-    if (isOpen) {
+    const handleSync = () => {
       const savedCart = JSON.parse(localStorage.getItem("cart_cdisfruta") || "[]");
       setCartItems(savedCart);
+    };
+
+    if (isOpen) {
+      handleSync();
+      window.addEventListener('cartUpdate', handleSync);
     }
+    return () => window.removeEventListener('cartUpdate', handleSync);
   }, [isOpen]);
 
   const total = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0);
 
   const removeItem = (id) => {
-    const newCart = cartItems.filter(item => item._id !== id);
+    const currentCart = JSON.parse(localStorage.getItem("cart_cdisfruta") || "[]");
+    const newCart = currentCart.filter(item => item._id !== id);
+    
     setCartItems(newCart);
     localStorage.setItem("cart_cdisfruta", JSON.stringify(newCart));
     window.dispatchEvent(new Event('cartUpdate'));
@@ -49,23 +58,18 @@ export default function CartModal({ isOpen, onClose }) {
       return;
     }
 
-    const mensaje = `*Nuevo Pedido CDISFRUTA*\n\n` +
+    const mensaje = 
+      `*NUEVO PEDIDO - CDISFRUTA*\n\n` +
       `*Cliente:* ${formData.nombres} ${formData.apellidos}\n` +
       `*WhatsApp:* ${formData.whatsapp}\n` +
-      `*Dirección:* ${formData.direccion} - ${formData.barrio}\n` +
-      `*Nota:* ${formData.nota || 'Ninguna'}\n\n` +
-      `*Productos:*\n${cartItems.map(i => `- ${i.nombre} (x${i.quantity})`).join('\n')}\n\n` +
-      `*Total a pagar: $${total.toLocaleString()}*`;
+      `*Ubicación:* ${formData.direccion}, Barrio ${formData.barrio}\n` +
+      `*Nota:* ${formData.nota || 'Sin observaciones'}\n\n` +
+      `*PRODUCTOS:*\n${cartItems.map(i => `• ${i.nombre} (x${i.quantity})`).join('\n')}\n\n` +
+      `*TOTAL A PAGAR: $${total.toLocaleString()}*`;
 
     const miNumero = "573112865361";
-    // Usamos la variable miNumero dentro del template string
     const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;
     window.open(whatsappUrl, '_blank');
-    
-    // Opcional: Limpiar carrito después de pedir
-    // localStorage.removeItem("cart_cdisfruta");
-    // window.dispatchEvent(new Event('cartUpdate'));
-    // onClose();
   };
 
   if (!isOpen) return null;
@@ -74,27 +78,30 @@ export default function CartModal({ isOpen, onClose }) {
     <div className="cart-modal-overlay" onClick={onClose}>
       <div className="cart-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="cart-header">
-            <h2><FaCheckCircle style={{color: '#ff7a5c'}} /> Tu Carrito</h2>
-            {/* Botón de cerrar estilizado */}
-            <button className="close-cart-btn" onClick={onClose} aria-label="Cerrar carrito">
-                <FaTimes />
-            </button>
-            </div>
+          <h2><FaCheckCircle style={{color: '#ff7a5c'}} /> Tu Carrito</h2>
+          <button className="close-cart-btn" onClick={onClose} aria-label="Cerrar carrito">
+            <FaTimes />
+          </button>
+        </div>
 
         <div className="cart-body">
           <div className="cart-items-section">
-            {cartItems.map((item) => (
-              <div key={item._id} className="cart-item-professional">
-                <img src={item.imagen} alt={item.nombre} />
-                <div className="item-info">
-                  <h4>{item.nombre}</h4>
-                  <p>{item.quantity} x <span>${item.precio.toLocaleString()}</span></p>
+            {cartItems.length === 0 ? (
+              <p className="empty-cart-msg">Tu carrito está vacío</p>
+            ) : (
+              cartItems.map((item) => (
+                <div key={item._id} className="cart-item-professional">
+                  <img src={item.imagen} alt={item.nombre} />
+                  <div className="item-info">
+                    <h4>{item.nombre}</h4>
+                    <p>{item.quantity} x <span>${item.precio.toLocaleString()}</span></p>
+                  </div>
+                  <button className="remove-btn-minimal" onClick={() => removeItem(item._id)}>
+                    <FaTrash />
+                  </button>
                 </div>
-                <button className="remove-btn-minimal" onClick={() => removeItem(item._id)}>
-                  <FaTrash />
-                </button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <form className="checkout-form-professional" onSubmit={handleCheckout}>
@@ -159,15 +166,9 @@ export default function CartModal({ isOpen, onClose }) {
             </div>
 
             <div className="checkbox-container">
-              <input 
-                type="checkbox" 
-                id="compromiso" 
-                name="compromiso" 
-                required 
-                onChange={handleInputChange} 
-              />
+              <input type="checkbox" id="compromiso" name="compromiso" required onChange={handleInputChange} />
               <label htmlFor="compromiso">
-                Me comprometo a pagar al recibir mi producto (si elegí pago al recibir) y confirmo que mis datos son correctos.
+                Me comprometo a pagar al recibir mi producto y confirmo que mis datos son correctos.
               </label>
             </div>
 
@@ -176,7 +177,7 @@ export default function CartModal({ isOpen, onClose }) {
                 <span>Total a pagar</span>
                 <strong>${total.toLocaleString()}</strong>
               </div>
-              <button type="submit" className="btn-confirm-whatsapp">
+              <button type="submit" className="btn-confirm-whatsapp" disabled={cartItems.length === 0}>
                 Confirmar Pedido <FaWhatsapp size={20} />
               </button>
             </div>
