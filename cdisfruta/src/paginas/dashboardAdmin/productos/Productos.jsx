@@ -164,7 +164,7 @@ function Productos() {
 
       setUploadStatus('success');
       setShowModal(false);
-      alert('¡Operación realizada con éxito en CDISFRUTA!');
+      alert('¡Producto agregado exitosamente!');
     } catch (error) {
       setUploadStatus('error');
       console.error(error);
