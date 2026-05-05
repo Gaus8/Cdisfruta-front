@@ -8,6 +8,7 @@ import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
 import CartModal from "./paginas/dashboardUsuario/CartModal";
+import DashboardMain from "./paginas/dashboardMain/DashboardMain";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,6 +49,10 @@ function App() {
     {
       path: '/dashboard_usuario',
       element: <DashboardUsuario />,
+    },
+     {
+      path: '/dashboard_main',
+      element: <DashboardMain />,
     },
   ]);
 

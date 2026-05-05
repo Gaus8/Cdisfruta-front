@@ -68,7 +68,7 @@ export default function Header() {
             <button 
               className="hdr-btn hdr-btn--solid"
               onClick={() => {
-                navigate('/dashboard_usuario'); // Redirige a la vitrina
+                navigate('/dashboard_main'); // Redirige a la vitrina
                 closeMenu(); // Cierra el menú en móvil
               }}
             >
