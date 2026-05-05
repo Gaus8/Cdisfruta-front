@@ -264,3 +264,94 @@
   .car-btn { padding: 0.65rem 1.25rem; font-size: 0.8rem; }
   .carrusel-actions { gap: 0.6rem; }
 }
+
+/* Overlay del Modal */
+.car-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Caja de contenido */
+.car-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+  position: relative;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.car-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.car-modal-close:hover { color: #ff7a5c; }
+
+.car-modal-icon {
+  font-size: 3rem;
+  color: #ff7a5c;
+  margin-bottom: 20px;
+}
+
+.car-modal-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  color: #ff7a5c;
+  font-weight: 700;
+}
+
+.car-modal-body h3 {
+  font-size: 2rem;
+  margin: 10px 0 20px;
+  color: #2d3436;
+}
+
+.car-modal-detail {
+  line-height: 1.8;
+  color: #636e72;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.car-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.car-modal-tag {
+  font-weight: 600;
+  color: #b2bec3;
+  font-size: 0.9rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { 
+  from { opacity: 0; transform: translateY(30px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
