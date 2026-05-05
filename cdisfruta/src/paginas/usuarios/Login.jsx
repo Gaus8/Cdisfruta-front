@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { URL_SERVER } from '../../funciones/conexion';
+import { api, URL_SERVER } from '../../funciones/conexion';
 import LoginGoogle from './LoginGoogle';
 
 function Login({ cerrar, irRegistro }) {
@@ -32,8 +32,9 @@ function Login({ cerrar, irRegistro }) {
     }
 
     try {
-      const res = await axios.post(`${URL_SERVER}/login`, data, { withCredentials: true });
+      const res = await api.post('/login', data);
       if (res.status === 200) {
+        sessionStorage.setItem('token', res.data.token); 
         cerrar();
         if (res.data?.rol === 'admin') navigate("/dashboard_admin");
         else navigate("/dashboard_usuario");

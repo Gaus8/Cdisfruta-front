@@ -5,8 +5,11 @@ import ProductosTienda from "./ProductosTienda";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 
 export default function DashboardUsuario() {
+
   const { userData, loading } = useAuth();
-  
+
+  if (loading) return <div>Cargando...</div>;
+  if (!userData || userData.rol !== 'admin') return <div>Acceso denegado</div>;
   // 1. Estado inicial en "Todos los productos"
   const [categoriaActiva, setCategoriaActiva] = useState("Todos los productos");
 
@@ -26,16 +29,17 @@ export default function DashboardUsuario() {
       </div>
     );
   }
+  if (!userData || userData.rol !== 'admin') return <div>Acceso denegado</div>;
   return (
     <div className="userpage-container">
       <HeaderDashboard />
-      
+
       <div className="content-wrapper">
         <aside className="filters-sidebar">
           <h3>Categorías</h3>
           <ul className="category-list">
             {categorias.map((cat) => (
-              <li 
+              <li
                 key={cat}
                 className={categoriaActiva === cat ? "active" : ""}
                 /* 3. Al hacer click, enviamos el nombre exacto de la categoría */
@@ -54,7 +58,7 @@ export default function DashboardUsuario() {
                 <span className="hero-subtitle">100% Natural • Artesanal</span>
                 <h1>Sabor Real, Energía de nuestra Tierra</h1>
                 <p>
-                  Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas 
+                  Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas
                   y deshidratadas con amor para acompañar tu estilo de vida saludable.
                 </p>
                 <div className="hero-features">
@@ -65,8 +69,8 @@ export default function DashboardUsuario() {
               </div>
               <div className="hero-visual">
                 <div className="hero-badge-premium">
-                    <span className="star">★</span>
-                    <span>Calidad Premium</span>
+                  <span className="star">★</span>
+                  <span>Calidad Premium</span>
                 </div>
               </div>
             </div>

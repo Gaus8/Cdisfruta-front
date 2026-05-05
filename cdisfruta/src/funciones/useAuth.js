@@ -9,8 +9,11 @@ export const useAuth = () => {
 
   const verifyToken = async () => {
     try {
+      const token = sessionStorage.getItem('token'); // 👈 obtén el token
+
       const res = await axios.get(`${URL_SERVER}/verify-token`, {
         withCredentials: true,
+        headers: token ? { Authorization: `Bearer ${token}` } : {} // 👈 envíalo
       });
 
       if (res.data.valid) {
@@ -34,6 +37,5 @@ export const useAuth = () => {
     verifyToken();
   }, []);
 
-  // Retornamos los estados y la función por si quieres re-verificar manualmente
   return { userData, loading, authenticated };
 };
