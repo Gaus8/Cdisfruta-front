@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; 
-import { 
-  FaShoppingCart, FaSearch, FaUserCircle, FaCog, 
+import { useNavigate } from "react-router-dom";
+import {
+  FaShoppingCart, FaSearch, FaUserCircle, FaCog,
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
   FaSignInAlt, FaUserPlus // Nuevos iconos para invitados
 } from "react-icons/fa";
 import { useAuth } from "../../funciones/useAuth"; // Importamos el hook de autenticación
 import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
+import axios from "axios";
+import { URL_SERVER } from "../../funciones/conexion";
 
 export default function HeaderDashboard() {
   const { userData, loading } = useAuth(); // Obtenemos el estado del usuario
@@ -16,8 +18,8 @@ export default function HeaderDashboard() {
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const containerRef = useRef(null);
-  
-  const navigate = useNavigate(); 
+
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
 
@@ -25,15 +27,21 @@ export default function HeaderDashboard() {
     setDropdownOpen(false);
     setLogoutModalOpen(true);
   };
-
-  const handleConfirmLogout = () => {
+  
+  const handleConfirmLogout = async () => {
     setLogoutModalOpen(false);
-    localStorage.removeItem('token'); 
-    localStorage.removeItem('user_cdisfruta');
-    // Forzamos un refresco o redirigimos para limpiar el estado de la app
-    window.location.href = '/'; 
-  };
 
+    try {
+      const response = await axios.post(`${URL_SERVER}/logout`);
+      if (response.status === 200) {
+        sessionStorage.removeItem('token');
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    } finally {
+      window.location.href = '/';
+    }
+  };
   const handleCancelLogout = () => setLogoutModalOpen(false);
 
   // Efecto para el badge del carrito
@@ -78,18 +86,18 @@ export default function HeaderDashboard() {
       <div className="top-announcement-bar">
         <div className="announcement-track">
           <p>
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
-            ✨ <strong>Calidad Premium</strong> Garantizada   
             🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada   
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
+            ✨ <strong>Calidad Premium</strong> Garantizada
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
+            ✨ <strong>Calidad Premium</strong> Garantizada
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong>
           </p>
         </div>
       </div>
 
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
+          <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop">.shop</span>
           </h1>
 
@@ -99,9 +107,9 @@ export default function HeaderDashboard() {
           </div>
 
           <div className="header-actions">
-            <div 
-              className="icon-wrapper" 
-              onClick={() => setCartModalOpen(true)} 
+            <div
+              className="icon-wrapper"
+              onClick={() => setCartModalOpen(true)}
               style={{ cursor: 'pointer' }}
             >
               <FaShoppingCart className="icon-btn-large" />
@@ -154,9 +162,9 @@ export default function HeaderDashboard() {
         </div>
       </header>
 
-      <CartModal 
-        isOpen={cartModalOpen} 
-        onClose={() => setCartModalOpen(false)} 
+      <CartModal
+        isOpen={cartModalOpen}
+        onClose={() => setCartModalOpen(false)}
       />
 
       {logoutModalOpen && (

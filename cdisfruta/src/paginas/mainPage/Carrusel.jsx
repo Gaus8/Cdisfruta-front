@@ -4,11 +4,12 @@ import '../../assets/styles/mainPage/carrusel.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import { FaTimes, FaGlobeAmericas, FaLeaf, FaMapMarkerAlt } from 'react-icons/fa'; // Iconos decorativos
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+import Registro from '../usuarios/Registro';
+import Login from '../usuarios/Login';
 
 const productos = [
   {
@@ -43,6 +44,8 @@ const productos = [
 const CarruselProductos = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [abrirRegistro, setAbrirRegistro] = useState(false)
+  const [abrirLogin, setAbrirLogin] = useState(false)
   const navigate = useNavigate();
   const current = productos[activeIndex];
 
@@ -56,9 +59,12 @@ const CarruselProductos = () => {
     document.body.style.overflow = ''; // Libera el scroll
   };
 
+
+
+
   return (
     <section className="carrusel-section" id="carrusel">
-      
+
       {/* ── Columna de texto ── */}
       <div className="carrusel-text">
         <div className="carrusel-text-inner">
@@ -70,15 +76,28 @@ const CarruselProductos = () => {
             {current.desc}
           </p>
           <div className="carrusel-actions">
-            <button 
-              className="car-btn car-btn--fill" 
-              onClick={() => navigate('/dashboard_usuario')} 
+            <button
+              className="car-btn car-btn--fill"
+              onClick={() => setAbrirRegistro(true)}
             >
               Comprar ahora
             </button>
-            
-            <button 
-              className="car-btn car-btn--line" 
+            {
+              abrirRegistro && (
+                <Registro
+                  cerrar={() => setAbrirRegistro(false)}
+                  irLogin={() => { setAbrirRegistro(false); setAbrirLogin(true); }}
+                />
+              )
+            }
+            {abrirLogin && (
+              <Login
+                cerrar={() => setAbrirLogin(false)}
+                irRegistro={() => { setAbrirLogin(false); setAbrirRegistro(true); }}
+              />
+            )}
+            <button
+              className="car-btn car-btn--line"
               onClick={openModal} // Abre el modal
             >
               Más información →
@@ -127,7 +146,7 @@ const CarruselProductos = () => {
         <div className="car-modal-overlay" onClick={closeModal}>
           <div className="car-modal-content" onClick={e => e.stopPropagation()}>
             <button className="car-modal-close" onClick={closeModal}><FaTimes /></button>
-            
+
             <div className="car-modal-body">
               <div className="car-modal-icon">{current.icon}</div>
               <span className="car-modal-eyebrow">{current.eyebrow}</span>
@@ -135,8 +154,8 @@ const CarruselProductos = () => {
               <p className="car-modal-detail">{current.detalle}</p>
               <div className="car-modal-footer">
                 <span className="car-modal-tag">{current.tag}</span>
-                <button 
-                  className="car-btn car-btn--fill" 
+                <button
+                  className="car-btn car-btn--fill"
                   onClick={() => { closeModal(); navigate('/dashboard_usuario'); }}
                 >
                   Ver en la tienda

@@ -1,18 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; 
-import { 
-  FaShoppingCart, FaSearch, FaUserCircle, FaCog, 
+import { useNavigate } from "react-router-dom";
+import {
+  FaShoppingCart, FaSearch, FaUserCircle, FaCog,
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
   FaSignInAlt, FaUserPlus // Nuevos iconos para invitados
 } from "react-icons/fa";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
+import Login from "../usuarios/Login";
+import Registro from "../usuarios/Registro";
 
 export default function HeaderDashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const containerRef = useRef(null);
-  
-  const navigate = useNavigate(); 
+  const [abrirRegistro, setAbrirRegistro] = useState(false);
+  const [abrirLogin, setAbrirLogin] = useState(false);
+
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
 
@@ -53,18 +57,18 @@ export default function HeaderDashboard() {
       <div className="top-announcement-bar">
         <div className="announcement-track">
           <p>
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -   
-            ✨ <strong>Calidad Premium</strong> Garantizada   
             🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada   
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> 
+            ✨ <strong>Calidad Premium</strong> Garantizada
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
+            ✨ <strong>Calidad Premium</strong> Garantizada
+            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong>
           </p>
         </div>
       </div>
 
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
+          <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop">.shop</span>
           </h1>
 
@@ -74,9 +78,9 @@ export default function HeaderDashboard() {
           </div>
 
           <div className="header-actions">
-            <div 
-              className="icon-wrapper" 
-              onClick={() => setCartModalOpen(true)} 
+            <div
+              className="icon-wrapper"
+              onClick={() => setCartModalOpen(true)}
               style={{ cursor: 'pointer' }}
             >
               <FaShoppingCart className="icon-btn-large" />
@@ -90,21 +94,37 @@ export default function HeaderDashboard() {
               </div>
 
               {dropdownOpen && (
-            
-                    // VISTA PARA VISITANTES / INVITADOS
-                    <>
-                      <div className="dropdown-header">Bienvenido</div>
-                      <ul className="dropdown-list">
-                        <li onClick={() => { setDropdownOpen(false); navigate('/'); }}>
-                          <FaSignInAlt /> Iniciar Sesión
-                        </li>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/'); }}>
-                          <FaUserPlus /> Crear Cuenta
-                        </li>
-                      </ul>
-                    </>
+
+                // VISTA PARA VISITANTES / INVITADOS
+                <>
+                  <div className="dropdown-header">Bienvenido</div>
+                  <ul className="dropdown-list">
+                    <li onClick={() => setAbrirLogin(true)}>
+                      <FaSignInAlt /> Iniciar Sesión
+                    </li>
+                    <li onClick={() => setAbrirRegistro(true)}>
+                      <FaUserPlus /> Crear Cuenta
+                    </li>
+                  </ul>
+
+                  {abrirLogin && (
+                    <Login
+                      cerrar={() => setAbrirLogin(false)}
+                      irRegistro={() => { setAbrirLogin(false); setAbrirRegistro(true); }}
+                    />
                   )}
-              
+
+                  {abrirRegistro && (
+                    <Registro
+                      cerrar={() => setAbrirRegistro(false)}
+                      irLogin={() => { setAbrirRegistro(false); setAbrirLogin(true); }}
+                    />
+                  )}
+                </>
+              )}
+
+
+
             </div>
           </div>
         </div>
