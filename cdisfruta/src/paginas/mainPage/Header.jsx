@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import '../../assets/styles/mainPage/header.css';
 import '../../assets/styles/mainPage/headerResponsive.css';
-import { IoPersonOutline, IoMenuOutline, IoCloseOutline } from "react-icons/io5";
+import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
+// 1. Importar useNavigate para la navegación
+import { useNavigate } from "react-router-dom";
 
-// 1. Importamos el componente de Registro
 import Registro from '../usuarios/Registro';
 import Login from '../usuarios/Login';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  // 2. Estado para controlar la visibilidad del modal
   const [abrirRegistro, setAbrirRegistro] = useState(false);
   const [abrirLogin, setAbrirLogin] = useState(false);
+
+  // 2. Inicializar el navegador
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -23,18 +25,12 @@ export default function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  // Función para cerrar el registro y el menú al mismo tiempo
-  const cerrarModal = () => {
-    setAbrirRegistro(false);
-    setMenuOpen(false);
-  };
-
   return (
     <>
       <header className={`hdr${scrolled ? ' hdr--scrolled' : ''}`}>
 
         {/* ── Logo + Marca ── */}
-        <a href="#" className="hdr-brand" onClick={closeMenu}>
+        <a href="#" className="hdr-brand" onClick={(e) => { e.preventDefault(); navigate('/'); closeMenu(); }}>
           <div className="hdr-logo-ring">
             <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
           </div>
@@ -44,7 +40,6 @@ export default function Header() {
           </div>
         </a>
 
-        {/* ── Menú hamburguesa (solo móvil) ── */}
         <button
           className="hdr-hamburger"
           onClick={() => setMenuOpen(v => !v)}
@@ -53,26 +48,32 @@ export default function Header() {
           {menuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
         </button>
 
-        {/* ── Nav ── */}
         <nav className={`hdr-nav${menuOpen ? ' hdr-nav--open' : ''}`}>
           <div className="hdr-actions">
-
             <a href="#contacto" onClick={closeMenu}>Contacto</a>
           </div>
 
-
-          {/* Botones */}
           <div className="hdr-actions">
             <button
               className="hdr-btn hdr-btn--ghost"
               onClick={() => {
                 setAbrirLogin(true);
-                setMenuOpen(false); // Cerramos el menú móvil al abrir el registro
+                setMenuOpen(false);
               }}
             >
               Ingresar
             </button>
-            <button className="hdr-btn hdr-btn--solid">Tienda →</button>
+            
+            {/* 3. Acción del botón Tienda corregida */}
+            <button 
+              className="hdr-btn hdr-btn--solid"
+              onClick={() => {
+                navigate('/dashboard_usuario'); // Redirige a la vitrina
+                closeMenu(); // Cierra el menú en móvil
+              }}
+            >
+              Tienda
+            </button>
           </div>
         </nav>
       </header>
