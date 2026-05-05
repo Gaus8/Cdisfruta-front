@@ -1,21 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-// 1. Importar useNavigate para la redirección
 import { useNavigate } from "react-router-dom"; 
 import { 
   FaShoppingCart, FaSearch, FaUserCircle, FaCog, 
-  FaSignOutAlt, FaExclamationTriangle, FaShoppingBag 
+  FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
+  FaSignInAlt, FaUserPlus // Nuevos iconos para invitados
 } from "react-icons/fa";
+import { useAuth } from "../../funciones/useAuth"; // Importamos el hook de autenticación
 import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 
 export default function HeaderDashboard() {
+  const { userData, loading } = useAuth(); // Obtenemos el estado del usuario
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const containerRef = useRef(null);
   
-  // 2. Inicializar el navegador
   const navigate = useNavigate(); 
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
@@ -25,26 +26,17 @@ export default function HeaderDashboard() {
     setLogoutModalOpen(true);
   };
 
-  // 3. Función de confirmación corregida
   const handleConfirmLogout = () => {
-    // A. Cerramos el modal
     setLogoutModalOpen(false);
-
-    // B. Limpiamos la sesión (ajusta las llaves según uses 'token', 'user', etc.)
     localStorage.removeItem('token'); 
     localStorage.removeItem('user_cdisfruta');
-    // Nota: El carrito ('cart_cdisfruta') usualmente se deja para que no se pierda la compra
-    
-    console.log("Sesión cerrada");
-
-    // C. Redirigimos a la página principal o login
-    navigate('/'); 
+    // Forzamos un refresco o redirigimos para limpiar el estado de la app
+    window.location.href = '/'; 
   };
 
   const handleCancelLogout = () => setLogoutModalOpen(false);
 
-  // --- El resto del código se mantiene igual ---
-
+  // Efecto para el badge del carrito
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
@@ -60,6 +52,7 @@ export default function HeaderDashboard() {
     };
   }, []);
 
+  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -70,6 +63,7 @@ export default function HeaderDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Bloquear scroll cuando hay modales abiertos
   useEffect(() => {
     if (logoutModalOpen || cartModalOpen) {
       document.body.style.overflow = "hidden";
@@ -116,24 +110,43 @@ export default function HeaderDashboard() {
 
             <div className="dropdown-container" ref={containerRef}>
               <div className="user-profile" onClick={toggleDropdown}>
-                <FaUserCircle size={30} />
+                {/* Si hay usuario, podrías poner su inicial o foto, por ahora el icono */}
+                <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />
               </div>
 
               {dropdownOpen && (
                 <div className="dropdown-menu profile-menu">
-                  <div className="dropdown-header">Mi Cuenta</div>
-                  <ul className="dropdown-list">
-                    <li onClick={() => { setDropdownOpen(false); navigate('/configuracion'); }}>
-                      <FaCog /> Configuración
-                    </li>
-                    <li onClick={() => { setDropdownOpen(false); navigate('/pedidos'); }}>
-                      <FaShoppingBag /> Mis Pedidos
-                    </li>
-                    <hr />
-                    <li className="logout-opt" onClick={handleLogoutClick}>
-                      <FaSignOutAlt /> Cerrar Sesión
-                    </li>
-                  </ul>
+                  {userData ? (
+                    // VISTA PARA USUARIOS REGISTRADOS
+                    <>
+                      <div className="dropdown-header">Hola, {userData.nombre.split(' ')[0]}</div>
+                      <ul className="dropdown-list">
+                        <li onClick={() => { setDropdownOpen(false); navigate('/configuracion'); }}>
+                          <FaCog /> Configuración
+                        </li>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/pedidos'); }}>
+                          <FaShoppingBag /> Mis Pedidos
+                        </li>
+                        <hr />
+                        <li className="logout-opt" onClick={handleLogoutClick}>
+                          <FaSignOutAlt /> Cerrar Sesión
+                        </li>
+                      </ul>
+                    </>
+                  ) : (
+                    // VISTA PARA VISITANTES / INVITADOS
+                    <>
+                      <div className="dropdown-header">Bienvenido</div>
+                      <ul className="dropdown-list">
+                        <li onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
+                          <FaSignInAlt /> Iniciar Sesión
+                        </li>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/registro'); }}>
+                          <FaUserPlus /> Crear Cuenta
+                        </li>
+                      </ul>
+                    </>
+                  )}
                 </div>
               )}
             </div>

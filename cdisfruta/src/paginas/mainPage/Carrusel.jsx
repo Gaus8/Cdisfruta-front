@@ -55,14 +55,14 @@ const CarruselProductos = () => {
           {/* CORRECCIÓN: Usa el path de la URL, no la ruta del archivo */}
           <button 
             className="car-btn car-btn--fill" 
-            onClick={() => navigate('/dashboard_usuario')}
+            onClick={() => navigate('/dashboard_usuario')} 
           >
             Comprar ahora
           </button>
           
           <button 
             className="car-btn car-btn--line" 
-            onClick={() => navigate('/dashboard_usuario')}
+            onClick={() => navigate('/')}
           >
             Más información →
           </button>
