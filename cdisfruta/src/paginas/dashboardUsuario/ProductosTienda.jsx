@@ -73,8 +73,6 @@ export default function ProductosTienda({ categoria, user }) {
   const addToCart = (product) => {
     // 1. VERIFICACIÓN DE SESIÓN
     if (!user) {
-      alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
-      navigate('/login'); // Redirige al login
       return;
     }
 

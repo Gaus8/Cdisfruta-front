@@ -95,10 +95,10 @@ export default function HeaderDashboard() {
                     <>
                       <div className="dropdown-header">Bienvenido</div>
                       <ul className="dropdown-list">
-                        <li onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/'); }}>
                           <FaSignInAlt /> Iniciar Sesión
                         </li>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/registro'); }}>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/'); }}>
                           <FaUserPlus /> Crear Cuenta
                         </li>
                       </ul>

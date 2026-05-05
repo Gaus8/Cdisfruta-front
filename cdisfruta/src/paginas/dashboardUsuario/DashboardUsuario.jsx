@@ -77,7 +77,7 @@ export default function DashboardUsuario() {
           </header>
 
           {/* 4. Pasamos la categoría activa al componente que renderiza los productos */}
-          <ProductosTienda categoria={categoriaActiva} />
+          <ProductosTienda categoria={categoriaActiva} user={userData} />
         </main>
       </div>
     </div>
