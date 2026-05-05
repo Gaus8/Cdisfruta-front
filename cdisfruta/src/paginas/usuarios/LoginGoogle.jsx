@@ -22,7 +22,7 @@ export default function LoginGoogle() {
       if (res.status === 200) {
         // Usamos el rol que viene en tu JSON del backend
         const { rol } = res.data;
-
+        sessionStorage.setItem('token', res.data.token);
         if (rol === 'admin') {
           navigate("/dashboard_admin");
         } else {

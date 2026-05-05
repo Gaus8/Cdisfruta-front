@@ -3,13 +3,13 @@ import { useAuth } from "../../funciones/useAuth";
 import HeaderDashboard from "./Header";
 import ProductosTienda from "./ProductosTienda";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
+import AccesoDenegado from "../usuarios/AccesoDenegado";
 
 export default function DashboardUsuario() {
 
   const { userData, loading } = useAuth();
 
-  if (loading) return <div>Cargando...</div>;
-  if (!userData || userData.rol !== 'user') return <div>Acceso denegado</div>;
+
   // 1. Estado inicial en "Todos los productos"
   const [categoriaActiva, setCategoriaActiva] = useState("Todos los productos");
 
@@ -29,7 +29,7 @@ export default function DashboardUsuario() {
       </div>
     );
   }
-  if (!userData || userData.rol !== 'admin') return <div>Acceso denegado</div>;
+  if (!userData || userData.rol !== 'user') return <AccesoDenegado/>;
   return (
     <div className="userpage-container">
       <HeaderDashboard />
