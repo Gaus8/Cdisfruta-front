@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Importamos para la redirección
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
 
-export default function ProductosTienda({ categoria }) {
+export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
+  const navigate = useNavigate(); // Hook para navegar
 
   // Estado inicial del carrito desde localStorage
   const [cart, setCart] = useState(() => {
@@ -67,8 +69,16 @@ export default function ProductosTienda({ categoria }) {
     }));
   };
 
-  // Función de agregar mejorada: Maneja Storage y Evento en un solo paso
+  // Función de agregar mejorada con validación de Usuario
   const addToCart = (product) => {
+    // 1. VERIFICACIÓN DE SESIÓN
+    if (!user) {
+      alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
+      navigate('/login'); // Redirige al login
+      return;
+    }
+
+    // 2. LÓGICA NORMAL DE CARRITO (Si el usuario existe)
     const quantityToAdd = quantities[product._id] || 1;
     
     // Leemos el storage actual para evitar "fantasmas" de items borrados

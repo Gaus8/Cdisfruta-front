@@ -26,21 +26,6 @@ export default function DashboardUsuario() {
       </div>
     );
   }
-
-  if (!userData || userData.rol !== 'user') {
-    return (
-      <div className="status-container">
-        <div className="error-card">
-          <span className="error-icon">🔒</span>
-          <p>Acceso restringido. Inicia sesión como cliente para continuar.</p>
-          <button onClick={() => window.location.href = '/login'} className="btn-primary">
-            Ir al Login
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="userpage-container">
       <HeaderDashboard />

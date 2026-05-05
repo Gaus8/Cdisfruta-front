@@ -7,6 +7,7 @@ import DashboardUsuario from "./paginas/dashboardUsuario/DashboardUsuario";
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
+import CartModal from "./paginas/dashboardUsuario/CartModal";
 
 function App() {
   const router = createBrowserRouter([

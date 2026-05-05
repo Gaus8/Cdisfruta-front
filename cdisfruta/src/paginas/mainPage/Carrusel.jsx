@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/mainPage/carrusel.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
@@ -34,6 +35,7 @@ const productos = [
  
 const CarruselProductos = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const navigate = useNavigate();
   const current = productos[activeIndex];
  
   return (
@@ -50,9 +52,21 @@ const CarruselProductos = () => {
             {current.desc}
           </p>
           <div className="carrusel-actions">
-            <button className="car-btn car-btn--fill">Comprar ahora</button>
-            <button className="car-btn car-btn--line">Más información →</button>
-          </div>
+          {/* CORRECCIÓN: Usa el path de la URL, no la ruta del archivo */}
+          <button 
+            className="car-btn car-btn--fill" 
+            onClick={() => navigate('/dashboard_usuario')}
+          >
+            Comprar ahora
+          </button>
+          
+          <button 
+            className="car-btn car-btn--line" 
+            onClick={() => navigate('/dashboard_usuario')}
+          >
+            Más información →
+          </button>
+        </div>
  
           {/* Indicadores de slide */}
           <div className="carrusel-indicators">
