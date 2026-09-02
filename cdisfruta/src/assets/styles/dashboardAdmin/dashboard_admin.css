@@ -14,7 +14,7 @@
   overflow: hidden; /* Evita que esta columna se estire más allá de 100vh */
 }
 
-/* Área donde se cargan los productos */
+
 .dashboard-view-port {
   flex: 1;
   overflow-y: auto; /* SOLO esta parte tiene scroll */
