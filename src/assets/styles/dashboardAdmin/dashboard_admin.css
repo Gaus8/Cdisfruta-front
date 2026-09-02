@@ -1,0 +1,23 @@
+/* Contenedor principal */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Evita que el body tenga scroll */
+}
+
+/* Columna derecha (Header + Contenido) */
+.dashboard-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Evita que esta columna se estire más allá de 100vh */
+}
+
+/* Área donde se cargan los productos */
+.dashboard-view-port {
+  flex: 1;
+  overflow-y: auto; /* SOLO esta parte tiene scroll */
+  padding: 25px;
+  background-color: #f1f5f9;
+}
