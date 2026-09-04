@@ -1,17 +1,17 @@
 import React from 'react';
-import '../../assets/styles/usuarios/forms.css';
+import '../usuarios/forms.css';
 
 export default function PoliticaDatos() {
   return (
-    <div className="legal-container">
-      <div className="legal-content">
+    <div className="legal-page-container">
+      <div className="legal-box">
         <h1>Política de Tratamiento de Datos Personales</h1>
         <p className="legal-updated">Última actualización: 31 de agosto de 2026</p>
 
         <section>
           <h2>1. Identificación del Responsable del Tratamiento</h2>
           <p>
-            En cumplimiento de la Ley Estatutaria 1581 de 2012 y el Decreto 1377 de 2013, el responsable del tratamiento de sus datos personales es <strong>[Nombre de tu Marca / Empresa S.A.S.]</strong>, con NIT <strong>[000.000.000-0]</strong>, ubicado en <strong>[Ciudad, Colombia]</strong>, con correo electrónico de contacto <strong>servicioalcliente@tudominio.com</strong>.
+            En cumplimiento de la Ley Estatutaria 1581 de 2012 y el Decreto 1377 de 2013, el responsable del tratamiento de sus datos personales es <strong>CDISFRUTA</strong>, con NIT <strong>ffff</strong>, ubicado en <strong>Ubaté, Colombia</strong>, con correo electrónico de contacto <strong>cdisfruta.ubate@gmail.com</strong>.
           </p>
         </section>
 
@@ -39,9 +39,9 @@ export default function PoliticaDatos() {
         </section>
 
         <section>
-          <h2>4. Derechos de los Titularesssss (Habeas Data)</h2>
+          <h2>4. Derechos de los Titulares (Habeas Data)</h2>
           <p>
-            Como titular de los datos, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos personales, así como revocar la autorización otorgada escribiendo a <strong>servicioalcliente@tudominio.com</strong>. Tu solicitud será atendida en un plazo máximo de quince (15) días hábiles.
+            Como titular de los datos, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos personales, así como revocar la autorización otorgada escribiendo a <strong>cdisfruta.ubate@gmail.com</strong>. Tu solicitud será atendida en un plazo máximo de quince (15) días hábiles.
           </p>
         </section>
       </div>

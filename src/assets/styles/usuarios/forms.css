@@ -226,3 +226,70 @@ h3 {
 .separator span {
   padding: 0 10px;
 }
+
+/* --- ESTILOS PROFESIONALES PARA PÁGINAS LEGALES --- */
+
+.legal-page-container {
+  background-color: var(--bg-contrast);
+  min-height: 100vh;
+  padding: 4rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.legal-box {
+  background-color: #ffffff;
+  padding: clamp(2rem, 5vw, 4rem);
+  border-radius: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  width: 100%;
+  color: var(--text-dark);
+}
+
+.legal-box h1 {
+  color: var(--text-dark);
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  border-bottom: 3px solid var(--coral-main);
+  padding-bottom: 1rem;
+}
+
+.legal-box .legal-updated {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.legal-box section {
+  margin-bottom: 2rem;
+}
+
+.legal-box h2 {
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.legal-box p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.legal-box ul {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  list-style-type: disc; /* Fuerza la aparición de viñetas circulares */
+}
+
+.legal-box li {
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

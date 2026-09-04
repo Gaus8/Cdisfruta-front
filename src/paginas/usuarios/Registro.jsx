@@ -1,15 +1,16 @@
 import '../../assets/styles/usuarios/forms.css';
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
 import { URL_SERVER } from '../../funciones/conexion';
 import { GoogleLogin } from '@react-oauth/google';
 import LoginGoogle from './LoginGoogle';
 
-function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
+function Registro({ cerrar, irLogin }) {
   const navigate = useNavigate();
   const [data, setData] = useState({ name: "", email: "", password: "" });
+  const [terminos, setTerminos] = useState(false); 
   const [respuestas, setRespuestas] = useState({ s1: "", s2: "", s3: "" });
 
   const handleChange = (e) => {
@@ -18,8 +19,12 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Limpiar errores previos
     setRespuestas({ s1: "", s2: "", s3: "" });
+
+    if (!terminos) {
+      alert('Debes aceptar los términos y condiciones para registrarte.');
+      return;
+    }
 
     if (!data.name || !data.email || !data.password) {
       alert('Todos los campos son obligatorios');
@@ -27,10 +32,12 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
     }
 
     try {
-      const response = await axios.post(`${URL_SERVER}/registro`, data, { withCredentials: true });
+      const payload = { ...data, terminosAceptados: terminos };
+      const response = await axios.post(`${URL_SERVER}/registro`, payload, { withCredentials: true });
+      
       if (response.status === 201) {
         localStorage.setItem('userEmail', data.email);
-        cerrar(); // Cerramos el modal antes de ir a la validación
+        cerrar(); 
         navigate('/validacion');
       }
     } catch (err) {
@@ -59,7 +66,7 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
         else navigate("/dashboard_user");
       }
     } catch (err) {
-      setRespuestaServer("Error al iniciar sesión con Google.");
+      console.error("Error al iniciar sesión con Google.");
     }
   };
 
@@ -68,7 +75,7 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
       <form
         className="form-container"
         onSubmit={handleSubmit}
-        onClick={(e) => e.stopPropagation()} // Evita cerrar al hacer clic dentro
+        onClick={(e) => e.stopPropagation()}
       >
         <button type="button" className="btn-close-modal" onClick={cerrar}>
           <IoCloseOutline />
@@ -113,13 +120,33 @@ function Registro({ cerrar, irLogin }) { // Recibimos cerrar e irLogin
         </div>
         <p className="error-text">{respuestas.s3}</p>
 
+        {/* Casilla de términos con enlaces a los componentes */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px', fontSize: '0.9rem' }}>
+          <input 
+            type="checkbox" 
+            id="terminos" 
+            checked={terminos}
+            onChange={(e) => setTerminos(e.target.checked)}
+            style={{ cursor: 'pointer' }}
+          />
+          <label htmlFor="terminos" style={{ cursor: 'pointer' }}>
+            Acepto los{' '}
+            <Link to="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+              Términos y Condiciones
+            </Link>{' '}
+            y la{' '}
+            <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+              Política de Tratamiento de Datos
+            </Link>
+          </label>
+        </div>
+
         <button className="button" type="submit">
           <span>Registrarse</span>
           <IoArrowForwardOutline className="icon-btn" />
         </button>
 
-         <LoginGoogle/>
-        {/* Cambiamos la ruta por la función irLogin */}
+        <LoginGoogle/>
         <span className="link-switch" onClick={irLogin}>
           ¿Ya tienes cuenta? Inicia Sesión
         </span>

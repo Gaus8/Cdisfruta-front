@@ -1,11 +1,11 @@
 import React from 'react';
-import '../../assets/styles/usuarios/forms.css';
+import '../usuarios/forms.css';
 
 export default function Terminos() {
   return (
-    <div className="legal-container">
-      <div className="legal-content">
-        <h1>Términos y Condiciones de Uso y Comercio Electrónico</h1>
+    <div className="legal-page-container">
+      <div className="legal-box">
+        <h1>Términos y Condiciones</h1>
         <p className="legal-updated">Última actualización: 31 de agosto de 2026</p>
 
         <section>
@@ -18,7 +18,7 @@ export default function Terminos() {
         <section>
           <h2>2. Calidad, Registro Sanitario e Inocuidad</h2>
           <p>
-            Nuestros productos son procesados y empacados bajo estrictos estándares de inocuidad alimentaria y cuentan con sus correspondientes notificaciones/registros sanitarios expedidos por el <strong>INVIMA</strong> (cuando aplique por norma). El cliente es responsable de conservar el producto en un lugar fresco, seco y protegido de la luz solar una vez recibido el paquete.
+            Nuestros productos son procesados y empacados bajo estrictos estándares de inocuidad alimentaria y cuentan con la Notificación / Registro Sanitario INVIMA No. <strong>NSA-0648-2025</strong>. El cliente es responsable de conservar el producto en un lugar fresco, seco y protegido de la luz solar una vez recibido el paquete.
           </p>
         </section>
 
@@ -47,7 +47,7 @@ export default function Terminos() {
         <section>
           <h2>5. Garantías y Reclamos de Calidad</h2>
           <p>
-            En caso de recibir un producto en malas condiciones, el cliente deberá enviar un correo a <strong>servicioalcliente@tudominio.com</strong> adjuntando fotografías claras del empaque, el número de lote y la fecha de vencimiento impresa. Si la reclamación procede, realizaremos la reposición del producto o la devolución del dinero sin costo adicional.
+            En caso de recibir un producto en malas condiciones, el cliente deberá enviar un correo a <strong>cdisfruta.ubate@gmail.com</strong> adjuntando fotografías claras del empaque, el número de lote y la fecha de vencimiento impresa. Si la reclamación procede, realizaremos la reposición del producto o la devolución del dinero sin costo adicional.
           </p>
         </section>
 

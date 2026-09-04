@@ -9,6 +9,8 @@ import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
 import CartModal from "./paginas/dashboardUsuario/CartModal";
 import DashboardMain from "./paginas/dashboardMain/DashboardMain";
+import Terminos from "./assets/styles/legal/Terminos";
+import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
 
 function App() {
   const router = createBrowserRouter([
@@ -29,15 +31,23 @@ function App() {
       element: <Validacion />,
     },
     {
+      path: '/terminos',
+      element: <Terminos />,
+    },
+    {
+      path: '/politica-datos',
+      element: <PoliticaDatos />,
+    },
+    {
       path: '/dashboard_admin',
       element: <DashboardAdmin />,
       children: [
         {
-          index: true, // Para cuando entras a /dashboard_admin
+          index: true,
           element: <HomeAdmin />,
         },
         {
-          path: 'dashboard', // Esto habilita /dashboard_admin/dashboard
+          path: 'dashboard',
           element: <HomeAdmin />,
         },
         {
@@ -50,7 +60,7 @@ function App() {
       path: '/dashboard_usuario',
       element: <DashboardUsuario />,
     },
-     {
+    {
       path: '/dashboard_main',
       element: <DashboardMain />,
     },
