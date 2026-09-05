@@ -81,7 +81,7 @@ function Registro({ cerrar, irLogin }) {
           <IoCloseOutline />
         </button>
 
-        <img className="logo-empresa" src="/img/logo_siecu.webp" alt="logo" />
+        <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo" />
         <h3>Crear cuenta</h3>
 
         <div className="form-container-input">

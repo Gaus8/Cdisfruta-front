@@ -33,13 +33,15 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #ffffff;
-  padding: clamp(2rem, 8vw, 3rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
   border-radius: 30px;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
   animation: fadeInDown 0.4s ease-out;
 }
@@ -71,7 +73,10 @@
 
 /* --- ESTILOS INTERNOS --- */
 .logo-empresa {
-  width: clamp(80px, 6vw, 110px);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
   margin-bottom: 0.5rem;
 }
 
