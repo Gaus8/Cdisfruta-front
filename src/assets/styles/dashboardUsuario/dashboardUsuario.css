@@ -1,11 +1,11 @@
 /* --- Variables de Tema CDISFRUTA --- */
 :root {
   --primary-orange: #f97316;    
-  --primary-blue: #1e293b;       /* Azul Slate para balance */
-  --accent-blue: #2563eb;        /* Azul de acción */
+  --primary-blue: #1e293b;       
+  --accent-blue: #2563eb;        
   --text-main: #1e293b;
   --text-light: #64748b;
-  --bg-body: #f8fafc;          /* Fondo gris azulado muy sutil */
+  --bg-body: #f8fafc;          
   --white: #ffffff;
 }
 
@@ -24,7 +24,6 @@
 }
 
 /* --- Sidebar Profesional --- */
-
 .filters-sidebar {
   width: 280px;
   background: var(--white);
@@ -84,28 +83,18 @@
 
 /* --- Nueva Hero Section --- */
 .products-hero-section {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  padding: 50px;
+  background: #1e293b;
+  padding: 40px 50px;
   border-radius: 24px;
   margin-bottom: 40px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   color: white;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Elemento decorativo de fondo */
 .products-hero-section::before {
-  content: "";
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 300px;
-  height: 300px;
-  background: var(--primary-orange);
-  filter: blur(100px);
-  opacity: 0.2;
-  border-radius: 50%;
+  display: none; 
 }
 
 .hero-content {
@@ -118,7 +107,7 @@
 }
 
 .hero-text {
-  max-width: 600px;
+  max-width: 550px;
 }
 
 .hero-subtitle {
@@ -150,34 +139,112 @@
   color: white;
 }
 
+/* --- Botón de Explorar en el Banner --- */
+.hero-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--primary-orange);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+}
+
+.hero-explore-btn:hover {
+  background-color: #ea6c0a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.6);
+}
+
+/* Animación sutil de rebote en la flecha */
+.bounce-arrow {
+  animation: bounceDown 1.5s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(4px);
+  }
+  60% {
+    transform: translateY(2px);
+  }
+}
+
 /* --- Visual del Producto Destacado en el Hero --- */
 .hero-visual {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
-  min-width: 220px;
+  min-width: 280px;
+  position: relative;
+}
+
+/* Efecto de resplandor blanco brillante y radiante en escritorio */
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 255, 255, 0.38);
+  filter: blur(55px);
+  border-radius: 50%;
+  z-index: 0;
 }
 
 .hero-product-img {
-  max-width: 280px;
+  max-width: 420px;
   width: 100%;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.5));
-  animation: floatEffect 4s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.7));
 }
 
-@keyframes floatEffect {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
+/* --- Botón Flotante de Volver Arriba --- */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* --- Responsive para el Hero y Layout --- */
+.scroll-to-top-btn:hover {
+  background-color: var(--primary-orange);
+  transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive para Tablets (max-width: 1024px) --- */
 @media (max-width: 1024px) {
   .content-wrapper { 
     flex-direction: column; 
@@ -196,14 +263,16 @@
   }
 }
 
+/* --- Responsive para Móviles (max-width: 768px) --- */
 @media (max-width: 768px) {
   .products-hero-section {
-    padding: 30px;
+    padding: 30px 20px;
     text-align: center;
   }
 
   .hero-content {
-    flex-direction: column-reverse;
+    flex-direction: column; 
+    gap: 20px;
   }
 
   .hero-text h1 {
@@ -211,10 +280,24 @@
   }
 
   .hero-visual {
-    margin-bottom: 1rem;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* Resplandor blanco intenso optimizado también para móvil */
+  .hero-visual::before {
+    width: 260px;
+    height: 260px;
+    background: rgba(255, 255, 255, 0.42);
+    filter: blur(45px);
   }
 
   .hero-product-img {
-    max-width: 200px;
+    max-width: 320px; 
+    width: 100%;
+  }
+
+  .hero-explore-btn {
+    margin: 20px auto 0 auto;
   }
 }
