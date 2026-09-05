@@ -4,6 +4,7 @@ import Login from './paginas/usuarios/Login';
 import Registro from './paginas/usuarios/Registro';
 import Validacion from "./paginas/usuarios/Validacion";
 import DashboardUsuario from "./paginas/dashboardUsuario/DashboardUsuario";
+import ConfiguracionUsuario from "./paginas/usuarios/ConfiguracionUsuario";
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
@@ -59,6 +60,10 @@ function App() {
     {
       path: '/dashboard_usuario',
       element: <DashboardUsuario />,
+    },
+    {
+      path: '/configuracion', 
+      element: <ConfiguracionUsuario />,
     },
     {
       path: '/dashboard_main',
