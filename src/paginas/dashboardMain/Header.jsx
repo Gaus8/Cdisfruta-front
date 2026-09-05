@@ -56,20 +56,16 @@ export default function HeaderDashboard() {
     <>
       <div className="top-announcement-bar">
         <div className="announcement-track">
-          <p>
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong>
-          </p>
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </div>
       </div>
 
       <header className="user-header">
         <div className="header-content">
           <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            CDISFRUTA<span className="dot-shop">.shop</span>
+            CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
           <div className="search-bar">

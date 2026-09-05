@@ -6,18 +6,16 @@ import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import AccesoDenegado from "../usuarios/AccesoDenegado";
 
 export default function DashboardMain() {
-
   // 1. Estado inicial en "Todos los productos"
   const [categoriaActiva, setCategoriaActiva] = useState("Todos los productos");
 
-  // 2. Definimos las nuevas categorías solicitadas
+  // 2. Definimos las categorías
   const categorias = [
     "Todos los productos",
     "Infusiones y Aromáticas",
     "Snacks Saludables",
     "Promociones"
   ];
-
 
   return (
     <div className="userpage-container">
@@ -31,7 +29,6 @@ export default function DashboardMain() {
               <li
                 key={cat}
                 className={categoriaActiva === cat ? "active" : ""}
-                /* 3. Al hacer click, enviamos el nombre exacto de la categoría */
                 onClick={() => setCategoriaActiva(cat)}
               >
                 {cat}
@@ -50,22 +47,18 @@ export default function DashboardMain() {
                   Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas
                   y deshidratadas con amor para acompañar tu estilo de vida saludable.
                 </p>
-                <div className="hero-features">
-                  <span>🍃 Sin Conservantes</span>
-                  <span>☀️ Cosecha de Origen</span>
-                  <span>📍 Origen Local</span>
-                </div>
               </div>
               <div className="hero-visual">
-                <div className="hero-badge-premium">
-                  <span className="star">★</span>
-                  <span>Calidad Premium</span>
-                </div>
+                <img 
+                  src="/img/productos_destacados.webp" 
+                  alt="Frutas deshidratadas Cdisfruta" 
+                  className="hero-product-img"
+                />
               </div>
             </div>
           </header>
 
-          {/* 4. Pasamos la categoría activa al componente que renderiza los productos */}
+          {/* Pasamos la categoría activa al componente que renderiza los productos */}
           <ProductosTienda categoria={categoriaActiva} />
         </main>
       </div>
