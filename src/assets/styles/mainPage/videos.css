@@ -8,6 +8,7 @@
 .card {
   max-width: 300px;
   margin: 0 auto;
+  cursor: pointer;
 }
 
 .card-img-box {
@@ -15,19 +16,10 @@
   width: 300px;
   height: 390px;
   border-radius: 5px;
+  overflow: hidden;
 }
 
-.card-img-box img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(65%);
-  transition: opacity 0.5s ease-in-out;
-}
-
+.card-img-box img,
 .card-img-box video {
   position: absolute;
   top: 0;
@@ -37,6 +29,63 @@
   object-fit: cover;
   filter: brightness(65%);
   transition: opacity 0.5s ease-in-out;
+}
+
+/* Capa superpuesta con el botón */
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  transition: opacity 0.4s ease, background 0.3s ease;
+  z-index: 2;
+  opacity: 1; /* Visible cuando está detenido */
+}
+
+/* Oscurece ligeramente en hover cuando no se está reproduciendo */
+.card:hover .play-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Desvanece el overlay completamente al reproducir */
+.play-overlay.is-playing {
+  opacity: 0;
+  pointer-events: none; /* Permite interacción directa con el contenedor si se necesita */
+}
+
+/* Reaparece si pasas el cursor sobre el video en reproducción */
+.card:hover .play-overlay.is-playing {
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Círculo del icono */
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #111;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.card:hover .icon-wrapper {
+  transform: scale(1.1);
+  background: #ffffff;
+}
+
+.play-icon {
+  margin-left: 2px; /* Ajuste óptico para centrar la flecha de play */
 }
 
 .card-text-box {
@@ -51,13 +100,12 @@
   color: #0e163f !important; 
 }
 
-
-@media screen and (max-width:760px) {
+@media screen and (max-width: 760px) {
   .section-videos {
     padding: 20px;
     display: grid;
     justify-content: center;
     align-items: center;
-    grid-template-columns: repeat(1,1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 }
