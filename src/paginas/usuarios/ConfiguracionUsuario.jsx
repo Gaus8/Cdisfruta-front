@@ -67,6 +67,15 @@ export default function ConfiguracionUsuario() {
 
   return (
     <div className="userpage-container">
+      {/* Barra de anuncios superior deslizante */}
+      <div className="top-announcement-bar">
+        <div className="announcement-track">
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+        </div>
+      </div>
+
       <HeaderDashboard />
 
       <div className="content-wrapper" style={{ justifyContent: 'center', padding: '40px 20px' }}>
