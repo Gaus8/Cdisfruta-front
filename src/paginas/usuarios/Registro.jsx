@@ -1,6 +1,5 @@
 import '../../assets/styles/usuarios/forms.css';
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import { 
   IoPersonOutline, 
@@ -9,7 +8,7 @@ import {
   IoArrowForwardOutline, 
   IoCloseOutline 
 } from "react-icons/io5";
-import { URL_SERVER } from '../../funciones/conexion';
+import { registrarUsuario, procesarErroresRegistro } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 
 function Registro({ cerrar, irLogin }) {
@@ -40,40 +39,16 @@ function Registro({ cerrar, irLogin }) {
     setLoading(true);
 
     try {
-      const payload = { ...data, terminosAceptados: terminos };
-      const response = await axios.post(`${URL_SERVER}/registro`, payload, { withCredentials: true });
+      const response = await registrarUsuario(data, terminos);
       
       if (response.status === 201) {
         localStorage.setItem('userEmail', data.email);
         cerrar(); 
         navigate('/validacion');
       }
-    } catch (err) {
-      const errorData = err.response?.data;
-      let nuevosErrores = { s1: "", s2: "", s3: "" };
-
-      // Errores de formato (Zod)
-      if (errorData?.error && Array.isArray(errorData.error)) {
-        errorData.error.forEach((e) => {
-          if (e.message === "error1") {
-            nuevosErrores.s1 = "Mínimo 6 letras (solo caracteres alfabéticos).";
-          } else if (e.message === "error2") {
-            nuevosErrores.s2 = "Ingresa un correo electrónico válido (ej. usuario@dominio.com).";
-          } else if (e.message === "error3") {
-            nuevosErrores.s3 = "Debe tener 8-16 caracteres, una mayúscula, una minúscula, un número y un símbolo (.!@#$%^&*).";
-          }
-        });
-      } 
-      // Errores del servidor/negocio (ej. Correo duplicado)
-      else if (errorData?.message) {
-        if (errorData.message.includes("CORREO YA REGISTRADO")) {
-          nuevosErrores.s2 = "Este correo electrónico ya se encuentra registrado.";
-        } else {
-          alert(errorData.message); 
-        }
-      }
-
-      setRespuestas(nuevosErrores);
+    } catch (errorData) {
+      const erroresFormateados = procesarErroresRegistro(errorData);
+      setRespuestas(erroresFormateados);
     } finally {
       setLoading(false);
     }
@@ -132,7 +107,7 @@ function Registro({ cerrar, irLogin }) {
         </div>
         <p className="error-text">{respuestas.s3}</p>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px', fontSize: '0.9rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.5rem', fontSize: '0.9rem' }}>
           <input 
             type="checkbox" 
             id="terminos" 
@@ -172,7 +147,8 @@ function Registro({ cerrar, irLogin }) {
           )}
         </button>
 
-        <LoginGoogle />
+        <LoginGoogle cerrarModal={cerrar} />
+        
         <span className="link-switch" onClick={!loading ? irLogin : undefined} style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
           ¿Ya tienes cuenta? Inicia Sesión
         </span>
@@ -181,4 +157,4 @@ function Registro({ cerrar, irLogin }) {
   );
 }
 
-export default Registro;
+export default Registro;  

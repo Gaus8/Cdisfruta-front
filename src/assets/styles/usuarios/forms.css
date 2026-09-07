@@ -305,6 +305,7 @@ h3 {
   font-weight: 700;
   border-bottom: 3px solid var(--coral-main);
   padding-bottom: 0.8rem;
+
 }
 
 .legal-box .legal-updated {
@@ -322,6 +323,7 @@ h3 {
   color: var(--text-dark);
   margin-bottom: 0.5rem;
   font-weight: 600;
+  margin-top: 0.2rem;
 }
 
 .legal-box p, .legal-box li {
