@@ -1,15 +1,23 @@
 import '../../assets/styles/usuarios/forms.css';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { api, URL_SERVER } from '../../funciones/conexion';
+import { 
+  IoMailOutline, 
+  IoLockClosedOutline, 
+  IoArrowForwardOutline, 
+  IoCloseOutline, 
+  IoEyeOutline, 
+  IoEyeOffOutline 
+} from "react-icons/io5";
+import { iniciarSesion} from '../../funciones/usuarioAuth'
 import LoginGoogle from './LoginGoogle';
 
 function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
   const [respuestaServer, setRespuestaServer] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [data, setData] = useState({
     email: "",
     password: ""
@@ -31,21 +39,24 @@ function Login({ cerrar, irRegistro }) {
       return;
     }
 
+    setLoading(true);
+
     try {
-      const res = await api.post('/login', data);
-      if (res.status === 200) {
-        sessionStorage.setItem('token', res.data.token); 
-        cerrar();
-        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
-        else navigate("/dashboard_usuario");
+      const dataUsuario = await iniciarSesion(data);
+      cerrar();
+
+      if (dataUsuario?.rol === 'admin') {
+        navigate("/dashboard_admin");
+      } else {
+        navigate("/dashboard_usuario");
       }
     } catch (err) {
-      const errorData = err.response?.data;
-      setRespuestaServer(errorData?.message || "Error al iniciar sesión.");
+      setRespuestaServer(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 2. El RENDER va al final
   return (
     <div className="modal-overlay" onClick={cerrar}>
       <form
@@ -53,7 +64,12 @@ function Login({ cerrar, irRegistro }) {
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="btn-close-modal" onClick={cerrar}>
+        <button 
+          type="button" 
+          className="btn-close-modal" 
+          onClick={cerrar}
+          disabled={loading}
+        >
           <IoCloseOutline />
         </button>
 
@@ -69,11 +85,12 @@ function Login({ cerrar, irRegistro }) {
             name="email"
             value={data.email}
             onChange={handleChange}
+            disabled={loading}
             required
           />
         </div>
 
-        {/* Campo Contraseña con el OJO */}
+        {/* Campo Contraseña con Ojo */}
         <div className="form-container-input">
           <IoLockClosedOutline className="icon-react" />
           <input
@@ -82,13 +99,14 @@ function Login({ cerrar, irRegistro }) {
             name="password"
             value={data.password}
             onChange={handleChange}
+            disabled={loading}
             required
           />
           <button
             type="button"
             className="btn-eye"
             onClick={() => setMostrarPassword(!mostrarPassword)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}
+            disabled={loading}
           >
             {mostrarPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
           </button>
@@ -96,13 +114,32 @@ function Login({ cerrar, irRegistro }) {
 
         <p className="error-text">{respuestaServer}</p>
 
-        <button className="button" type="submit">
-          <span>Iniciar Sesión</span>
-          <IoArrowForwardOutline className="icon-btn" />
+        <button
+          className="button"
+          type="submit"
+          disabled={loading}
+          style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+        >
+          {loading ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span className="spinner-css"></span>
+              <span>Iniciando Sesión...</span>
+            </span>
+          ) : (
+            <>
+              <span>Iniciar Sesión</span>
+              <IoArrowForwardOutline className="icon-btn" />
+            </>
+          )}
         </button>
 
-        <LoginGoogle />
-        <span className="link-switch" onClick={irRegistro}>
+        <LoginGoogle cerrarModal={cerrar} />
+
+        <span 
+          className="link-switch" 
+          onClick={!loading ? irRegistro : undefined}
+          style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+        >
           ¿No tienes cuenta? Regístrate aquí
         </span>
       </form>

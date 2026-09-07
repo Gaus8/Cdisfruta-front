@@ -9,10 +9,13 @@
   --input-border: #b4afaf;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 /* Capa de fondo que cubre toda la pantalla */
 .modal-overlay {
   margin: 0;
-  box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   position: fixed;
   top: 0;
@@ -28,30 +31,40 @@
   padding: 1rem;
 }
 
-/* Contenedor del Formulario */
+/* Contenedor del Formulario (Sin barra de desplazamiento visible) */
 .form-container {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: flex-start;
   background-color: #ffffff;
-  padding: clamp(1.5rem, 5vw, 2.5rem);
-  border-radius: 30px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  padding: clamp(1.2rem, 4vw, 2.2rem);
+  border-radius: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden; /* Evita cualquier desplazamiento horizontal */
   position: relative;
-  animation: fadeInDown 0.4s ease-out;
+  animation: fadeInDown 0.35s ease-out;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
+/* Ocultar barra de desplazamiento en Chrome, Safari y Opera */
+.form-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* Botón X de cerrar */
 .btn-close-modal {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: #f0f2f5;
+  top: 15px;
+  right: 15px;
+  background: var(--bg-contrast);
   border: none;
   width: 35px;
   height: 35px;
@@ -59,22 +72,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
+  z-index: 10;
 }
 
 .btn-close-modal:hover {
   background-color: var(--coral-main);
-  color: white;
+  color: #ffffff;
   transform: rotate(90deg);
 }
 
 /* --- ESTILOS INTERNOS --- */
 .logo-empresa {
-  width: 90px;
-  height: 90px;
+  width: clamp(70px, 15vw, 85px);
+  height: clamp(70px, 15vw, 85px);
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
@@ -82,9 +96,10 @@
 
 h3 {
   color: var(--coral-main);
-  font-size: clamp(1.5rem, 4vw, 1.8rem);
-  margin-bottom: 1.5rem;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  margin-bottom: 0.8rem;
   font-weight: 700;
+  text-align: center;
 }
 
 .form-container-input {
@@ -92,88 +107,104 @@ h3 {
   display: flex;
   align-items: center;
   border: 2px solid var(--input-border);
-  border-radius: 18px;
-  padding: 0.8rem 1.2rem;
-  margin-bottom: 15px;
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.3rem;
   width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.form-container-input:focus-within {
+  border-color: var(--coral-main);
 }
 
 .form-container-input input {
   border: none;
   outline: none;
   width: 100%;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background: transparent;
+  font-family: inherit;
 }
 
 .icon-react {
   color: var(--coral-main);
-  margin-right: 12px;
+  margin-right: 10px;
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .error-text {
   color: #e63946;
   font-size: 0.75rem;
   text-align: left;
-  margin: -10px 0 15px 10px;
-  min-height: 14px;
+  width: 100%;
+  margin: 2px 0 8px 8px;
+  min-height: 15px;
+  line-height: 1.2;
 }
 
 .button {
   background-color: var(--coral-main);
   color: white;
   border: none;
-  padding: 1rem;
+  padding: 0.85rem;
   width: 100%;
   border-radius: 50px;
   font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: 0.4s;
-  margin-bottom: 1rem;
+  gap: 8px;
+  transition: all 0.3s ease;
+  margin-bottom: 0.8rem;
 }
 
-.button:hover {
+.button:hover:not(:disabled) {
   background-color: var(--coral-hover);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 121, 97, 0.3);
 }
 
 .google-btn-container {
   width: 100%;
-
 }
 
 .button-google {
-  color:var(--text-muted);
+  color: var(--text-muted);
   border: 2px solid var(--input-border);
-  padding: 0.5rem;
+  background: transparent;
+  padding: 0.65rem;
   border-radius: 50px;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   display: flex;
-  width: inherit;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: 0.4s;
-  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  margin-bottom: 0.8rem;
 }
 
 .button-google img {
-  width: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
-.button-google:hover {
-  transform: translateY(-3px);
-  box-shadow: 2px 2px 5px var(--text-muted);
+.button-google:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #888;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
-
 
 .btn-eye {
   position: absolute;
-  right: 10px;
+  right: 12px;
   background: none;
   border: none;
   cursor: pointer;
@@ -181,16 +212,18 @@ h3 {
   display: flex;
   align-items: center;
   font-size: 1.2rem;
+  padding: 0;
 }
-
 
 .link-switch {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: block;
+  text-align: center;
   transition: color 0.3s;
+  margin-top: 0.4rem;
 }
 
 .link-switch:hover {
@@ -198,55 +231,67 @@ h3 {
   text-decoration: underline;
 }
 
-/* Asegúrate de que .modal-overlay y .form-container sean los mismos del Registro */
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .separator {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 20px 0;
+  width: 100%;
+  margin: 12px 0;
   color: #888;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .separator::before,
 .separator::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .separator span {
   padding: 0 10px;
 }
 
-/* --- ESTILOS PROFESIONALES PARA PÁGINAS LEGALES --- */
+/* --- SPINNER DE CARGA --- */
+.spinner-css {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- ESTILOS PARA PÁGINAS LEGALES --- */
 .legal-page-container {
   background-color: var(--bg-contrast);
   min-height: 100vh;
-  padding: 4rem 1.5rem;
+  padding: clamp(1.5rem, 5vw, 4rem) 1rem;
   display: flex;
   justify-content: center;
-  box-sizing: border-box;
 }
 
 .legal-box {
   background-color: #ffffff;
-  padding: clamp(2rem, 5vw, 4rem);
-  border-radius: 30px;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border-radius: 24px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   max-width: 900px;
   width: 100%;
@@ -255,46 +300,56 @@ h3 {
 
 .legal-box h1 {
   color: var(--text-dark);
-  font-size: clamp(1.8rem, 3vw, 2.2rem);
-  margin-bottom: 0.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 0.2rem;
   font-weight: 700;
   border-bottom: 3px solid var(--coral-main);
-  padding-bottom: 1rem;
+  padding-bottom: 0.8rem;
+
 }
 
 .legal-box .legal-updated {
   color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 2.5rem;
-}
-
-.legal-box section {
+  font-size: 0.85rem;
   margin-bottom: 2rem;
 }
 
-.legal-box h2 {
-  font-size: 1.15rem;
-  color: var(--text-dark);
-  margin-bottom: 0.75rem;
-  font-weight: 600;
+.legal-box section {
+  margin-bottom: 1rem;
 }
 
-.legal-box p {
+.legal-box h2 {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.legal-box p, .legal-box li {
   color: var(--text-muted);
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 .legal-box ul {
   margin-bottom: 1rem;
-  padding-left: 1.5rem;
-  list-style-type: disc; /* Fuerza la aparición de viñetas circulares */
+  padding-left: 1.2rem;
+  list-style-type: disc;
 }
 
-.legal-box li {
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
+/* --- AJUSTES EN PANTALLAS MOVILES PEQUEÑAS --- */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 1.2rem 1rem;
+    border-radius: 20px;
+  }
+
+  .form-container-input {
+    padding: 0.65rem 0.8rem;
+  }
+
+  .button, .button-google {
+    padding: 0.75rem;
+  }
 }

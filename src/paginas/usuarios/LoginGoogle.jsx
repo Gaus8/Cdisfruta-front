@@ -1,28 +1,34 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
-import axios from 'axios'; // No olvides importar axios
+import axios from 'axios';
 import { URL_SERVER } from '../../funciones/conexion';
-import { useNavigate } from 'react-router';
-export default function LoginGoogle() {
+import { useNavigate } from 'react-router-dom';
+
+export default function LoginGoogle({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");
-  const navigate = useNavigate()
-  // 1. Inicializamos el hook
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => handleGoogleSuccess(codeResponse),
-    onError: (error) => setRespuestaServer("Error en la autenticación con Google"),
-    flow: 'auth-code', // Recomendado para mayor seguridad con Express
+    onError: () => setRespuestaServer("Error en la autenticación con Google"),
+    flow: 'auth-code',
   });
 
   const handleGoogleSuccess = async (codeResponse) => {
+    setLoading(true);
+    setRespuestaServer("");
     try {
       const res = await axios.post(`${URL_SERVER}/auth/google`, {
         code: codeResponse.code
-      }, { withCredentials: true }); // Crucial para que el navegador guarde la cookie
+      }, { withCredentials: true });
 
       if (res.status === 200) {
-        // Usamos el rol que viene en tu JSON del backend
-        const { rol } = res.data;
-        sessionStorage.setItem('token', res.data.token);
+        const { rol, token } = res.data;
+        sessionStorage.setItem('token', token);
+        
+        if (cerrarModal) cerrarModal();
+
         if (rol === 'admin') {
           navigate("/dashboard_admin");
         } else {
@@ -30,17 +36,26 @@ export default function LoginGoogle() {
         }
       }
     } catch (err) {
-      setRespuestaServer("Error al iniciar sesión con Google." + err);
+      const msg = err.response?.data?.message || "Error al iniciar sesión con Google.";
+      setRespuestaServer(msg);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="google-btn-container">
-      {/* 3. El onClick llama a 'login()', que es la función del hook */}
-      <button className="button-google" type="button" onClick={() => login()}>
+      <button 
+        className="button-google" 
+        type="button" 
+        onClick={() => login()}
+        disabled={loading}
+        style={{ opacity: loading ? 0.7 : 1 }}
+      >
         <img src="/img/google_logo.webp" alt="Google" />
-        <span>Acceder con Google</span>
+        <span>{loading ? "Autenticando..." : "Acceder con Google"}</span>
       </button>
-      {respuestaServer && <p className="error-msg">{respuestaServer}</p>}
+      {respuestaServer && <p className="error-text" style={{ textAlign: 'center' }}>{respuestaServer}</p>}
     </div>
   );
 }
