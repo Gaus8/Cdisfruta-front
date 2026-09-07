@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import '../../assets/styles/mainPage/header.css';
 import '../../assets/styles/mainPage/headerResponsive.css';
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
-// 1. Importar useNavigate para la navegación
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Importar useLocation
 
 import Registro from '../usuarios/Registro';
 import Login from '../usuarios/Login';
@@ -11,11 +10,12 @@ import Login from '../usuarios/Login';
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [abrirRegistro, setAbrirRegistro] = useState(false);
-  const [abrirLogin, setAbrirLogin] = useState(false);
-
-  // 2. Inicializar el navegador
   const navigate = useNavigate();
+  const location = useLocation(); // Hook para leer la URL actual
+
+  // Sincronizar modales con la URL del navegador
+  const abrirLogin = location.pathname === '/login';
+  const abrirRegistro = location.pathname === '/registro';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -25,11 +25,14 @@ export default function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  // Funciones para cerrar modales cambiando la URL a la página principal
+  const cerrarModal = () => navigate('/');
+  const irARegistro = () => navigate('/registro');
+  const irALogin = () => navigate('/login');
+
   return (
     <>
       <header className={`hdr${scrolled ? ' hdr--scrolled' : ''}`}>
-
-        {/* ── Logo + Marca ── */}
         <a href="#" className="hdr-brand" onClick={(e) => { e.preventDefault(); navigate('/'); closeMenu(); }}>
           <div className="hdr-logo-ring">
             <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
@@ -57,19 +60,18 @@ export default function Header() {
             <button
               className="hdr-btn hdr-btn--ghost"
               onClick={() => {
-                setAbrirLogin(true);
-                setMenuOpen(false);
+                irALogin();
+                closeMenu();
               }}
             >
               Ingresar
             </button>
             
-            {/* 3. Acción del botón Tienda corregida */}
             <button 
               className="hdr-btn hdr-btn--solid"
               onClick={() => {
-                navigate('/dashboard_main'); // Redirige a la vitrina
-                closeMenu(); // Cierra el menú en móvil
+                navigate('/dashboard_main');
+                closeMenu();
               }}
             >
               Tienda
@@ -80,15 +82,15 @@ export default function Header() {
 
       {abrirLogin && (
         <Login
-          cerrar={() => setAbrirLogin(false)}
-          irRegistro={() => { setAbrirLogin(false); setAbrirRegistro(true); }}
+          cerrar={cerrarModal}
+          irRegistro={irARegistro}
         />
       )}
 
       {abrirRegistro && (
         <Registro
-          cerrar={() => setAbrirRegistro(false)}
-          irLogin={() => { setAbrirRegistro(false); setAbrirLogin(true); }}
+          cerrar={cerrarModal}
+          irLogin={irALogin}
         />
       )}
     </>

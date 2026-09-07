@@ -2,9 +2,14 @@ import '../../assets/styles/usuarios/forms.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import { IoPersonOutline, IoMailOutline, IoLockClosedOutline, IoArrowForwardOutline, IoCloseOutline } from "react-icons/io5";
+import { 
+  IoPersonOutline, 
+  IoMailOutline, 
+  IoLockClosedOutline, 
+  IoArrowForwardOutline, 
+  IoCloseOutline 
+} from "react-icons/io5";
 import { URL_SERVER } from '../../funciones/conexion';
-import { GoogleLogin } from '@react-oauth/google';
 import LoginGoogle from './LoginGoogle';
 
 function Registro({ cerrar, irLogin }) {
@@ -12,6 +17,7 @@ function Registro({ cerrar, irLogin }) {
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [terminos, setTerminos] = useState(false); 
   const [respuestas, setRespuestas] = useState({ s1: "", s2: "", s3: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -31,6 +37,8 @@ function Registro({ cerrar, irLogin }) {
       return;
     }
 
+    setLoading(true);
+
     try {
       const payload = { ...data, terminosAceptados: terminos };
       const response = await axios.post(`${URL_SERVER}/registro`, payload, { withCredentials: true });
@@ -42,31 +50,32 @@ function Registro({ cerrar, irLogin }) {
       }
     } catch (err) {
       const errorData = err.response?.data;
+      let nuevosErrores = { s1: "", s2: "", s3: "" };
+
+      // Errores de formato (Zod)
       if (errorData?.error && Array.isArray(errorData.error)) {
-        let nuevosErrores = { s1: "", s2: "", s3: "" };
         errorData.error.forEach((e) => {
-          if (e.message === "error1") nuevosErrores.s1 = "El nombre solo puede tener caracteres alfabéticos";
-          else if (e.message === "error2") nuevosErrores.s2 = "El email debe ser válido";
-          else if (e.message === "error3") nuevosErrores.s3 = "La contraseña no cumple los requisitos";
+          if (e.message === "error1") {
+            nuevosErrores.s1 = "Mínimo 6 letras (solo caracteres alfabéticos).";
+          } else if (e.message === "error2") {
+            nuevosErrores.s2 = "Ingresa un correo electrónico válido (ej. usuario@dominio.com).";
+          } else if (e.message === "error3") {
+            nuevosErrores.s3 = "Debe tener 8-16 caracteres, una mayúscula, una minúscula, un número y un símbolo (.!@#$%^&*).";
+          }
         });
-        setRespuestas(nuevosErrores);
+      } 
+      // Errores del servidor/negocio (ej. Correo duplicado)
+      else if (errorData?.message) {
+        if (errorData.message.includes("CORREO YA REGISTRADO")) {
+          nuevosErrores.s2 = "Este correo electrónico ya se encuentra registrado.";
+        } else {
+          alert(errorData.message); 
+        }
       }
-    }
-  };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const res = await axios.post(`${URL_SERVER}/auth/google`, {
-        token: credentialResponse.credential
-      }, { withCredentials: true });
-
-      if (res.status === 200) {
-        cerrar();
-        if (res.data?.rol === 'admin') navigate("/dashboard_admin");
-        else navigate("/dashboard_user");
-      }
-    } catch (err) {
-      console.error("Error al iniciar sesión con Google.");
+      setRespuestas(nuevosErrores);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +86,7 @@ function Registro({ cerrar, irLogin }) {
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="btn-close-modal" onClick={cerrar}>
+        <button type="button" className="btn-close-modal" onClick={cerrar} disabled={loading}>
           <IoCloseOutline />
         </button>
 
@@ -92,6 +101,7 @@ function Registro({ cerrar, irLogin }) {
             name="name"
             value={data.name}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
         <p className="error-text">{respuestas.s1}</p>
@@ -104,6 +114,7 @@ function Registro({ cerrar, irLogin }) {
             name="email"
             value={data.email}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
         <p className="error-text">{respuestas.s2}</p>
@@ -116,20 +127,21 @@ function Registro({ cerrar, irLogin }) {
             name="password"
             value={data.password}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
         <p className="error-text">{respuestas.s3}</p>
 
-        {/* Casilla de términos con enlaces a los componentes */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px', fontSize: '0.9rem' }}>
           <input 
             type="checkbox" 
             id="terminos" 
             checked={terminos}
             onChange={(e) => setTerminos(e.target.checked)}
-            style={{ cursor: 'pointer' }}
+            disabled={loading}
+            style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
           />
-          <label htmlFor="terminos" style={{ cursor: 'pointer' }}>
+          <label htmlFor="terminos" style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
             Acepto los{' '}
             <Link to="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
               Términos y Condiciones
@@ -141,13 +153,27 @@ function Registro({ cerrar, irLogin }) {
           </label>
         </div>
 
-        <button className="button" type="submit">
-          <span>Registrarse</span>
-          <IoArrowForwardOutline className="icon-btn" />
+        <button 
+          className="button" 
+          type="submit" 
+          disabled={loading} 
+          style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+        >
+          {loading ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span className="spinner-css"></span>
+              <span>Registrando...</span>
+            </span>
+          ) : (
+            <>
+              <span>Registrarse</span>
+              <IoArrowForwardOutline className="icon-btn" />
+            </>
+          )}
         </button>
 
-        <LoginGoogle/>
-        <span className="link-switch" onClick={irLogin}>
+        <LoginGoogle />
+        <span className="link-switch" onClick={!loading ? irLogin : undefined} style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
           ¿Ya tienes cuenta? Inicia Sesión
         </span>
       </form>
