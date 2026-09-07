@@ -86,11 +86,10 @@ export default function HeaderDashboard() {
       <div className="top-announcement-bar">
         <div className="announcement-track">
           <p>
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong> -
-            ✨ <strong>Calidad Premium</strong> Garantizada
-            🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong>
+            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
+
           </p>
         </div>
       </div>

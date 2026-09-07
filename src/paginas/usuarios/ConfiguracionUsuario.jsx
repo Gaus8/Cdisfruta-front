@@ -1,21 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../funciones/useAuth";
 import HeaderDashboard from "../dashboardUsuario/Header";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaUser, FaLock, FaEnvelope, FaShieldAlt, FaCamera, FaSave, FaCheckCircle } from "react-icons/fa";
+import axios from 'axios';
+import { URL_SERVER } from '../../funciones/conexion';
+
+// Lista de avatares predefinidos (URLs de DiceBear)
+const AVATAR_OPTIONS = [
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Gordi1",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Gordi2",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
+  "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile",
+  "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Cool"
+];
 
 export default function ConfiguracionUsuario() {
   const { userData } = useAuth();
-  const [nombre, setNombre] = useState(userData?.nombre || "Gordi");
-  const [email] = useState(userData?.email || "cdisfruta.ubate@gmail.com");
-  const [telefono, setTelefono] = useState(userData?.telefono || "+57 300 123 4567");
+  
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [avatarSeleccionado, setAvatarSeleccionado] = useState("");
+  const [mostrarSelector, setMostrarSelector] = useState(false); // Controla el tablero de opciones
+  
   const [activeTab, setActiveTab] = useState("perfil");
   const [mensaje, setMensaje] = useState("");
 
-  const handleUpdate = (e) => {
+  useEffect(() => {
+    if (userData) {
+      setNombre(userData.nombre || "");
+      setEmail(userData.email || "");
+      setTelefono(userData.telefono || "");
+      setAvatarSeleccionado(userData.avatar || AVATAR_OPTIONS[0]);
+    }
+  }, [userData]);
+
+  // Enviar los datos actualizados incluyendo el avatar seleccionado al backend
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setMensaje("¡Cambios guardados correctamente!");
-    setTimeout(() => setMensaje(""), 3500);
+    try {
+      const token = localStorage.getItem('token');
+
+      const res = await axios.put(`${URL_SERVER}/usuario/actualizar`, {
+        nombre,
+        telefono,
+        avatar: avatarSeleccionado
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        withCredentials: true
+      });
+
+      if (res.status === 200) {
+        setMensaje("¡Perfil y avatar actualizados correctamente!");
+        setMostrarSelector(false);
+        setTimeout(() => setMensaje(""), 3500);
+      }
+    } catch (err) {
+      console.error("Error al actualizar:", err);
+      setMensaje("Error al guardar los cambios en el servidor.");
+    }
   };
 
   return (
@@ -25,19 +72,29 @@ export default function ConfiguracionUsuario() {
       <div className="content-wrapper" style={{ justifyContent: 'center', padding: '40px 20px' }}>
         <div style={{ width: '100%', maxWidth: '900px' }}>
           
-          {/* Tarjeta Principal de Configuración */}
           <div style={{ background: 'var(--white)', borderRadius: '24px', border: '1px solid #e2e8f0', boxShadow: '0 15px 30px -5px rgba(30, 41, 59, 0.08)', overflow: 'hidden' }}>
             
             {/* Banner superior de perfil */}
             <div style={{ background: 'linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%)', padding: '35px 40px', color: 'white', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
               <div style={{ position: 'relative' }}>
-                <div style={{ width: '85px', height: '85px', borderRadius: '50%', background: 'var(--primary-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', color: 'white', boxShadow: '0 8px 20px rgba(249, 115, 22, 0.4)' }}>
-                  {nombre.charAt(0).toUpperCase()}
+                <div style={{ width: '85px', height: '85px', borderRadius: '50%', background: 'var(--primary-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', color: 'white', overflow: 'hidden', boxShadow: '0 8px 20px rgba(249, 115, 22, 0.4)' }}>
+                  {avatarSeleccionado ? (
+                    <img src={avatarSeleccionado} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', background: 'white' }} />
+                  ) : (
+                    <span>{nombre ? nombre.charAt(0).toUpperCase() : "👤"}</span>
+                  )}
                 </div>
-                <button style={{ position: 'absolute', bottom: '0', right: '0', background: 'white', border: 'none', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }} title="Cambiar foto">
+
+                <button 
+                  type="button"
+                  onClick={() => setMostrarSelector(!mostrarSelector)} 
+                  style={{ position: 'absolute', bottom: '0', right: '0', background: 'white', border: 'none', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }} 
+                  title="Elegir estilo de avatar"
+                >
                   <FaCamera size={12} color="var(--primary-blue)" />
                 </button>
               </div>
+
               <div>
                 <span style={{ color: 'var(--primary-orange)', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px' }}>Panel de Cliente</span>
                 <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0' }}>{nombre}</h1>
@@ -45,17 +102,46 @@ export default function ConfiguracionUsuario() {
               </div>
             </div>
 
-            {/* Pestañas de Navegación Interna */}
+            {/* Tablero de opciones de Avatares (Se despliega al hacer clic en la cámara) */}
+            {mostrarSelector && (
+              <div style={{ background: '#f8fafc', padding: '20px 40px', borderBottom: '1px solid #e2e8f0' }}>
+                <p style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '12px' }}>Elige tu estilo de avatar favorito:</p>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                  {AVATAR_OPTIONS.map((url, index) => (
+                    <div 
+                      key={index}
+                      onClick={() => setAvatarSeleccionado(url)}
+                      style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        borderRadius: '50%', 
+                        overflow: 'hidden', 
+                        cursor: 'pointer', 
+                        border: avatarSeleccionado === url ? '3px solid var(--primary-orange)' : '2px solid #cbd5e1',
+                        background: 'white',
+                        transition: '0.2s'
+                      }}
+                    >
+                      <img src={url} alt={`Opcion ${index}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Pestañas de Navegación */}
             <div style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', background: '#f8fafc', padding: '0 30px' }}>
               <button 
+                type="button"
                 onClick={() => setActiveTab("perfil")}
-                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'perfil' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem', transition: '0.2s' }}
+                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'perfil' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem' }}
               >
                 Información Personal
               </button>
               <button 
+                type="button"
                 onClick={() => setActiveTab("seguridad")}
-                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'seguridad' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem', transition: '0.2s' }}
+                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'seguridad' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem' }}
               >
                 Seguridad y Contraseña
               </button>
@@ -74,50 +160,28 @@ export default function ConfiguracionUsuario() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
                       <div>
-                        <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                          Nombre Completo
-                        </label>
+                        <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>Nombre Completo</label>
                         <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', borderRadius: '12px', padding: '0 16px', border: '1px solid #cbd5e1' }}>
                           <FaUser color="var(--text-light)" />
-                          <input 
-                            type="text" 
-                            value={nombre} 
-                            onChange={(e) => setNombre(e.target.value)} 
-                            style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem', color: 'var(--text-main)' }}
-                          />
+                          <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }} />
                         </div>
                       </div>
 
                       <div>
-                        <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                          Teléfono de Contacto
-                        </label>
+                        <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>Teléfono de Contacto</label>
                         <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', borderRadius: '12px', padding: '0 16px', border: '1px solid #cbd5e1' }}>
                           <span style={{ fontSize: '1rem', marginRight: '4px' }}>📞</span>
-                          <input 
-                            type="text" 
-                            value={telefono} 
-                            onChange={(e) => setTelefono(e.target.value)} 
-                            style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem', color: 'var(--text-main)' }}
-                          />
+                          <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }} />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                        Correo Electrónico (Principal)
-                      </label>
+                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>Correo Electrónico (Principal)</label>
                       <div style={{ display: 'flex', alignItems: 'center', background: '#f1f5f9', borderRadius: '12px', padding: '0 16px', border: '1px solid #e2e8f0' }}>
                         <FaEnvelope color="#94a3b8" />
-                        <input 
-                          type="email" 
-                          value={email} 
-                          disabled 
-                          style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', color: '#64748b', fontSize: '0.95rem', cursor: 'not-allowed' }}
-                        />
+                        <input type="email" value={email} disabled style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', color: '#64748b', fontSize: '0.95rem', cursor: 'not-allowed' }} />
                       </div>
-                      <small style={{ color: '#64748b', marginTop: '6px', display: 'block' }}>Por seguridad, el correo electrónico registrado no se puede modificar directamente.</small>
                     </div>
                   </div>
                 )}
@@ -125,41 +189,25 @@ export default function ConfiguracionUsuario() {
                 {activeTab === 'seguridad' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '500px' }}>
                     <div>
-                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                        Contraseña Actual
-                      </label>
+                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>Contraseña Actual</label>
                       <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', borderRadius: '12px', padding: '0 16px', border: '1px solid #cbd5e1' }}>
                         <FaLock color="var(--text-light)" />
-                        <input 
-                          type="password" 
-                          placeholder="••••••••" 
-                          style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }}
-                        />
+                        <input type="password" placeholder="••••••••" style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }} />
                       </div>
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                        Nueva Contraseña
-                      </label>
+                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: 'var(--text-main)', fontSize: '0.9rem' }}>Nueva Contraseña</label>
                       <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', borderRadius: '12px', padding: '0 16px', border: '1px solid #cbd5e1' }}>
                         <FaShieldAlt color="var(--text-light)" />
-                        <input 
-                          type="password" 
-                          placeholder="Mínimo 8 caracteres" 
-                          style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }}
-                        />
+                        <input type="password" placeholder="Mínimo 8 caracteres" style={{ width: '100%', padding: '14px 12px', border: 'none', background: 'transparent', outline: 'none', fontSize: '0.95rem' }} />
                       </div>
                     </div>
                   </div>
                 )}
 
                 <div style={{ marginTop: '35px', display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-                  <button 
-                    type="submit" 
-                    className="hero-explore-btn" 
-                    style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 30px', fontSize: '1rem' }}
-                  >
+                  <button type="submit" className="hero-explore-btn" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 30px', fontSize: '1rem' }}>
                     <FaSave /> Guardar Cambios
                   </button>
                 </div>
