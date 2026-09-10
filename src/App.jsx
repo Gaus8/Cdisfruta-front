@@ -9,6 +9,7 @@ import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
 import DashboardMain from "./paginas/dashboardMain/DashboardMain";
 import Terminos from "./assets/styles/legal/Terminos";
 import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
+import { ResetPasswordPage } from "./paginas/usuarios/ResetPasswordPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,6 +24,10 @@ function App() {
     {
       path: '/registro',
       element: <MainPage />, // Muestra la página principal con el modal de Registro abierto
+    },
+    {
+      path: '/reset-password',
+      element: <ResetPasswordPage />, // Procesa el token enviado a la URL desde el correo
     },
     {
       path: '/validacion',
