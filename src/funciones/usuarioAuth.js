@@ -58,3 +58,41 @@ export const registrarUsuario = async (data, terminos) => {
     throw err.response?.data || { message: "Error al registrar el usuario." };
   }
 };
+
+
+/**
+ * Autentica al usuario en el backend enviando el código devuelto por Google.
+ */
+export const loginConGoogle = async (code) => {
+  try {
+    const res = await apiAxios.post('/auth/google', { code });
+    if (res.status === 200) {
+      sessionStorage.setItem('token', res.data.token);
+      return res.data;
+    }
+  } catch (err) {
+    const message = err.response?.data?.message || "Error al iniciar sesión con Google.";
+    throw new Error(message);
+  }
+};
+
+/**
+ * Cambio de Contraseñas
+ */
+export const solicitarRestablecerPassword = async (email) => {
+  try {
+    const response = await apiAxios.post('/usuario/codigo-password', { email });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Error al enviar la solicitud." };
+  }
+};
+
+export const restablecerPasswordConToken = async ({ token, nuevaPassword }) => {
+  try {
+    const response = await apiAxios.post('/usuario/reset-password', { token, nuevaPassword });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Error al actualizar la contraseña." };
+  }
+};
