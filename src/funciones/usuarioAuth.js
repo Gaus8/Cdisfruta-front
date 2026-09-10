@@ -58,3 +58,19 @@ export const registrarUsuario = async (data, terminos) => {
     throw err.response?.data || { message: "Error al registrar el usuario." };
   }
 };
+
+/**
+ * Autentica al usuario en el backend enviando el código devuelto por Google.
+ */
+export const loginConGoogle = async (code) => {
+  try {
+    const res = await apiAxios.post('/auth/google', { code });
+    if (res.status === 200) {
+      sessionStorage.setItem('token', res.data.token);
+      return res.data;
+    }
+  } catch (err) {
+    const message = err.response?.data?.message || "Error al iniciar sesión con Google.";
+    throw new Error(message);
+  }
+};

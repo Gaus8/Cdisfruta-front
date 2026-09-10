@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-//export const URL_SERVER = 'http://localhost:5000/api' 
-export const URL_SERVER = 'https://cdisfruta-back.vercel.app/api'  //URL del backend - producción
+export const URL_SERVER = import.meta.env.VITE_API_URL;
 
 export const apiAxios = axios.create({
   baseURL: URL_SERVER,
