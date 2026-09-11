@@ -127,14 +127,17 @@
   margin-bottom: 6px;
 }
 
+/* Contenedor general de inputs y selectores */
 .input-field {
   display: flex;
   align-items: center;
+  gap: 10px;
   background: #f1f4f8;
-  border-radius: 10px;
-  padding: 0 12px;
   border: 1px solid transparent;
-  transition: 0.3s;
+  border-radius: 12px;
+  padding: 0 14px;
+  height: 48px;
+  transition: all 0.2s ease;
 }
 
 .input-field:focus-within {
@@ -146,26 +149,54 @@
 .input-field svg {
   color: #a0aec0;
   font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-.input-field input, .input-field textarea {
+.input-field input {
   background: none;
   border: none;
   width: 100%;
-  padding: 12px;
+  padding: 0;
   font-size: 0.9rem;
   outline: none;
   color: #2d3748;
 }
 
-.input-field.textarea {
-  align-items: flex-start;
-  padding-top: 10px;
+/* Estilo para los selectores desplegables (Departamento / Municipio) */
+.input-field select.filter-select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: #2d3748;
+  cursor: pointer;
+  padding: 0;
 }
 
-.input-field textarea {
-  height: 80px;
-  resize: none;
+/* Corrección definitiva para el textarea de Nota del pedido */
+.input-field.textarea {
+  height: auto !important;
+  min-height: 90px;
+  align-items: flex-start;
+  padding: 12px 14px;
+}
+
+.input-field.textarea svg {
+  margin-top: 3px;
+}
+
+.input-field.textarea textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #2d3748;
+  min-height: 70px;
+  padding: 0;
 }
 
 /* Checkbox Estilizado */
@@ -238,11 +269,11 @@
 }
 
 .close-cart-btn {
-  background: #f1f4f8; /* Color suave para el fondo */
+  background: #f1f4f8;
   border: none;
   width: 36px;
   height: 36px;
-  border-radius: 50%; /* Lo hace circular */
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,11 +284,11 @@
 }
 
 .close-cart-btn:hover {
-  background: #ff7a5c; /* Cambia al color de tu marca */
+  background: #ff7a5c;
   color: white;
-  transform: rotate(90deg); /* Un pequeño giro al pasar el mouse lo hace ver más dinámico */
+  transform: rotate(90deg);
 }
 
 .close-cart-btn:active {
-  transform: scale(0.9); /* Efecto de "clic" */
+  transform: scale(0.9);
 }
