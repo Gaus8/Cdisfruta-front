@@ -5,7 +5,7 @@
   --accent-blue: #2563eb;        
   --text-main: #1e293b;
   --text-light: #64748b;
-  --bg-body: #f8fafc;          
+  --bg-body: #f8fafc;           
   --white: #ffffff;
 }
 
@@ -15,12 +15,48 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* --- Barra de control del Sidebar (Ocultar/Mostrar) --- */
+.sidebar-toggle-bar {
+  max-width: 1400px;
+  margin: 15px auto 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.toggle-sidebar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--white);
+  color: var(--text-main);
+  border: 1px solid #cbd5e1;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.toggle-sidebar-btn:hover {
+  background-color: #f1f5f9;
+  border-color: var(--primary-orange);
+  color: var(--primary-orange);
+}
+
 .content-wrapper {
   display: flex;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 30px 20px;
+  padding: 20px 20px 30px 20px;
   gap: 30px;
+  transition: all 0.3s ease;
+}
+
+.content-wrapper.sidebar-hidden {
+  display: block; /* Permite que el contenido principal ocupe todo el ancho simétricamente */
 }
 
 /* --- Sidebar Profesional --- */
@@ -34,14 +70,31 @@
   top: 90px;
   box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.05);
   flex-shrink: 0;
+  height: fit-content;
 }
 
-.filters-sidebar h3 {
+.sidebar-header-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header-mobile h3 {
   font-size: 1.2rem;
   color: var(--text-main);
-  margin-bottom: 20px;
   padding-left: 10px;
   border-left: 4px solid var(--primary-orange);
+  margin: 0;
+}
+
+.close-sidebar-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--text-light);
+  cursor: pointer;
+  display: none;
 }
 
 .category-list {
@@ -253,6 +306,9 @@
     width: 100%; 
     position: relative; 
     top: 0; 
+  }
+  .close-sidebar-btn {
+    display: block;
   }
   .category-list {
     display: flex;
