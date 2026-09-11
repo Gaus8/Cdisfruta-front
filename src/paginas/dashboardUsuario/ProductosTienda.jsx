@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck } from "react-icons/fa";
+import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
@@ -10,13 +10,13 @@ export default function ProductosTienda({ categoria, user }) {
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
 
-  // Estados temporales para los filtros
+  // Estados temporales para los filtros de la barra superior
   const [tempCategoria, setTempCategoria] = useState(categoria || "Todos los productos");
   const [tempPrecioMin, setTempPrecioMin] = useState("");
   const [tempPrecioMax, setTempPrecioMax] = useState("");
   const [tempOrden, setTempOrden] = useState("recientes");
 
-  // Estados aplicados reales
+  // Estados aplicados reales que controlan el filtrado
   const [selectedCategoria, setSelectedCategoria] = useState(categoria || "Todos los productos");
   const [precioMin, setPrecioMin] = useState("");
   const [precioMax, setPrecioMax] = useState("");
@@ -24,18 +24,26 @@ export default function ProductosTienda({ categoria, user }) {
   
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Estados para la Paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6; // Cambiar limite para que salga la interfaz de paginacion
+
+  // Sincronizar categoría si cambia por props externas
   useEffect(() => {
     if (categoria) {
       setTempCategoria(categoria);
       setSelectedCategoria(categoria);
+      setCurrentPage(1);
     }
   }, [categoria]);
 
+  // Estado inicial del carrito desde localStorage
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart_cdisfruta');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  // Escuchar cambios externos en el carrito
   useEffect(() => {
     const syncCart = () => {
       const savedCart = localStorage.getItem('cart_cdisfruta');
@@ -52,6 +60,7 @@ export default function ProductosTienda({ categoria, user }) {
     };
   }, []);
 
+  // Carga de productos desde el servidor
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -73,6 +82,7 @@ export default function ProductosTienda({ categoria, user }) {
     fetchProducts();
   }, []);
 
+  // Extraer categorías únicas para el select dinámico
   const categoriasDisponibles = useMemo(() => {
     const cats = products.map(p => p.categoria).filter(Boolean);
     return ["Todos los productos", ...new Set(cats)];
@@ -92,6 +102,7 @@ export default function ProductosTienda({ categoria, user }) {
     }));
   };
 
+  // Formatear números a formato de moneda colombiana en los inputs (ej: 50.000)
   const formatInputCurrency = (value) => {
     const numericValue = value.replace(/\D/g, "");
     if (!numericValue) return "";
@@ -103,14 +114,17 @@ export default function ProductosTienda({ categoria, user }) {
     setter(rawValue);
   };
 
+  // Aplicar filtros y regresar a la página 1
   const aplicarFiltros = () => {
     setSelectedCategoria(tempCategoria);
     setPrecioMin(tempPrecioMin);
     setPrecioMax(tempPrecioMax);
     setOrden(tempOrden);
+    setCurrentPage(1);
     setShowMobileFilters(false);
   };
 
+  // Limpiar filtros y regresar a la página 1
   const limpiarFiltros = () => {
     setTempCategoria("Todos los productos");
     setTempPrecioMin("");
@@ -121,10 +135,13 @@ export default function ProductosTienda({ categoria, user }) {
     setPrecioMin("");
     setPrecioMax("");
     setOrden("recientes");
+    setCurrentPage(1);
   };
 
+  // Función de agregar al carrito con validación de sesión
   const addToCart = (product) => {
     if (!user) {
+      alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
       navigate('/login');
       return;
     }
@@ -148,7 +165,8 @@ export default function ProductosTienda({ categoria, user }) {
     setQuantities(prev => ({ ...prev, [product._id]: 1 }));
   };
 
-  const productosProcesados = useMemo(() => {
+  // Lógica de filtrado y ordenamiento combinada
+  const productosFiltradosYOrdenados = useMemo(() => {
     let resultado = [...products];
 
     if (selectedCategoria && selectedCategoria !== "Todos los productos") {
@@ -181,6 +199,14 @@ export default function ProductosTienda({ categoria, user }) {
     return resultado;
   }, [products, selectedCategoria, precioMin, precioMax, orden]);
 
+  // Cálculos de Paginación
+  const totalPages = Math.ceil(productosFiltradosYOrdenados.length / productsPerPage);
+  
+  const productosPaginados = useMemo(() => {
+    const start = (currentPage - 1) * productsPerPage;
+    return productosFiltradosYOrdenados.slice(start, start + productsPerPage);
+  }, [productosFiltradosYOrdenados, currentPage]);
+
   if (loading) return <div className="loading-state">Cargando delicias...</div>;
 
   return (
@@ -194,7 +220,7 @@ export default function ProductosTienda({ categoria, user }) {
         <FaFilter /> Filtrar y Ordenar
       </button>
 
-      {/* Backdrop para cerrar en móvil */}
+      {/* Overlay para cerrar al hacer clic fuera en móviles */}
       {showMobileFilters && (
         <div 
           className="filters-backdrop-overlay" 
@@ -202,7 +228,7 @@ export default function ProductosTienda({ categoria, user }) {
         />
       )}
 
-      {/* Barra de Filtros Superior Horizontal (Diseño PC) / Drawer (Móvil) */}
+      {/* Barra de Filtros Superior */}
       <div className={`filters-advanced-container ${showMobileFilters ? 'show-mobile' : ''}`}>
         <div className="filters-header-mobile">
           <h3>Filtrar Catálogo</h3>
@@ -277,76 +303,114 @@ export default function ProductosTienda({ categoria, user }) {
         </div>
       </div>
 
-      {/* Listado de Productos (Ocupa todo el ancho en PC) */}
+      {/* Listado de Productos y Paginación */}
       <div className="products-grid-section">
-        {productosProcesados.length === 0 ? (
+        {productosFiltradosYOrdenados.length === 0 ? (
           <div className="no-products">
             No se encontraron productos con los filtros seleccionados.
           </div>
         ) : (
-          <div className="products-grid">
-            {productosProcesados.map(product => (
-              <div key={product._id} className="product-card">
-                {product.stock <= 5 && product.stock > 0 && (
-                  <span className="product-tag alert">¡Últimas unidades!</span>
-                )}
-                {product.stock === 0 && (
-                  <span className="product-tag out">Agotado</span>
-                )}
-
-                <div className="product-image">
-                  {product.imagen ? (
-                    <img src={product.imagen} alt={product.nombre} />
-                  ) : (
-                    <div className="placeholder-img" />
+          <>
+            <div className="products-grid">
+              {productosPaginados.map(product => (
+                <div key={product._id} className="product-card">
+                  {product.stock <= 5 && product.stock > 0 && (
+                    <span className="product-tag alert">¡Últimas unidades!</span>
                   )}
-                </div>
+                  {product.stock === 0 && (
+                    <span className="product-tag out">Agotado</span>
+                  )}
 
-                <div className="product-info">
-                  <span className="product-category-label">{product.categoria}</span>
-                  <h3>{product.nombre}</h3>
-                  <p className="product-description-short">
-                    {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
-                  </p>
-                  
-                  <div className="product-footer">
-                    <div className="price-container">
-                      <span className="price-label">PRECIO</span>
-                      <span className="product-price">
-                        ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
-                      </span>
-                      <span className="product-stock-text">
-                        {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
-                      </span>
-                    </div>
+                  <div className="product-image">
+                    {product.imagen ? (
+                      <img src={product.imagen} alt={product.nombre} />
+                    ) : (
+                      <div className="placeholder-img" />
+                    )}
+                  </div>
 
-                    <div className="product-actions-vertical">
-                      {product.stock > 0 && (
-                        <div className="quantity-selector-full">
-                          <button type="button" onClick={() => handleDecrease(product._id)} className="qty-btn-v">
-                            <FaMinus size={12} />
-                          </button>
-                          <span className="qty-number-v">{quantities[product._id] || 1}</span>
-                          <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className="qty-btn-v">
-                            <FaPlus size={12} />
-                          </button>
-                        </div>
-                      )}
+                  <div className="product-info">
+                    <span className="product-category-label">{product.categoria}</span>
+                    <h3>{product.nombre}</h3>
+                    <p className="product-description-short">
+                      {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
+                    </p>
+                    
+                    <div className="product-footer">
+                      <div className="price-container">
+                        <span className="price-label">PRECIO</span>
+                        <span className="product-price">
+                          ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
+                        </span>
+                        <span className="product-stock-text">
+                          {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
+                        </span>
+                      </div>
 
-                      <button 
-                        className="add-to-cart-btn-full"
-                        onClick={() => addToCart(product)}
-                        disabled={product.stock === 0}
-                      >
-                        <FaShoppingCart />
-                        {product.stock === 0 ? 'Agotado' : 'Agregar'}
-                      </button>
+                      <div className="product-actions-vertical">
+                        {product.stock > 0 && (
+                          <div className="quantity-selector-full">
+                            <button type="button" onClick={() => handleDecrease(product._id)} className="qty-btn-v">
+                              <FaMinus size={12} />
+                            </button>
+                            <span className="qty-number-v">{quantities[product._id] || 1}</span>
+                            <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className="qty-btn-v">
+                              <FaPlus size={12} />
+                            </button>
+                          </div>
+                        )}
+
+                        <button 
+                          className="add-to-cart-btn-full"
+                          onClick={() => addToCart(product)}
+                          disabled={product.stock === 0}
+                        >
+                          <FaShoppingCart />
+                          {product.stock === 0 ? 'Agotado' : 'Agregar'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Controles de Paginación */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button 
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <FaChevronLeft size={12} /> Anterior
+                </button>
+
+                <div className="pagination-numbers">
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const pageNum = index + 1;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`page-number-btn ${currentPage === pageNum ? 'active' : ''}`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button 
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente <FaChevronRight size={12} />
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 

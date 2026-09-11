@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck } from "react-icons/fa";
+import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
@@ -24,11 +24,16 @@ export default function ProductosTienda({ categoria, user }) {
   
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Estados para la Paginación (6 productos por página)
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6;
+
   // Sincronizar categoría si cambia por props externas
   useEffect(() => {
     if (categoria) {
       setTempCategoria(categoria);
       setSelectedCategoria(categoria);
+      setCurrentPage(1);
     }
   }, [categoria]);
 
@@ -109,16 +114,17 @@ export default function ProductosTienda({ categoria, user }) {
     setter(rawValue);
   };
 
-  // Aplicar filtros al hacer clic
+  // Aplicar filtros al hacer clic y regresar a la página 1
   const aplicarFiltros = () => {
     setSelectedCategoria(tempCategoria);
     setPrecioMin(tempPrecioMin);
     setPrecioMax(tempPrecioMax);
     setOrden(tempOrden);
+    setCurrentPage(1);
     setShowMobileFilters(false);
   };
 
-  // Limpiar filtros
+  // Limpiar filtros y regresar a la página 1
   const limpiarFiltros = () => {
     setTempCategoria("Todos los productos");
     setTempPrecioMin("");
@@ -129,6 +135,7 @@ export default function ProductosTienda({ categoria, user }) {
     setPrecioMin("");
     setPrecioMax("");
     setOrden("recientes");
+    setCurrentPage(1);
   };
 
   // Función de agregar con validación estricta de sesión (para invitados)
@@ -159,7 +166,7 @@ export default function ProductosTienda({ categoria, user }) {
   };
 
   // Lógica de filtrado y ordenamiento combinada
-  const productosProcesados = useMemo(() => {
+  const productosFiltradosYOrdenados = useMemo(() => {
     let resultado = [...products];
 
     if (selectedCategoria && selectedCategoria !== "Todos los productos") {
@@ -191,6 +198,14 @@ export default function ProductosTienda({ categoria, user }) {
 
     return resultado;
   }, [products, selectedCategoria, precioMin, precioMax, orden]);
+
+  // Cálculos de Paginación
+  const totalPages = Math.ceil(productosFiltradosYOrdenados.length / productsPerPage);
+  
+  const productosPaginados = useMemo(() => {
+    const start = (currentPage - 1) * productsPerPage;
+    return productosFiltradosYOrdenados.slice(start, start + productsPerPage);
+  }, [productosFiltradosYOrdenados, currentPage]);
 
   if (loading) return <div className="loading-state">Cargando delicias...</div>;
 
@@ -288,76 +303,114 @@ export default function ProductosTienda({ categoria, user }) {
         </div>
       </div>
 
-      {/* Listado de Productos */}
+      {/* Listado de Productos y Paginación */}
       <div className="products-grid-section">
-        {productosProcesados.length === 0 ? (
+        {productosFiltradosYOrdenados.length === 0 ? (
           <div className="no-products">
             No se encontraron productos con los filtros seleccionados.
           </div>
         ) : (
-          <div className="products-grid">
-            {productosProcesados.map(product => (
-              <div key={product._id} className="product-card">
-                {product.stock <= 5 && product.stock > 0 && (
-                  <span className="product-tag alert">¡Últimas unidades!</span>
-                )}
-                {product.stock === 0 && (
-                  <span className="product-tag out">Agotado</span>
-                )}
-
-                <div className="product-image">
-                  {product.imagen ? (
-                    <img src={product.imagen} alt={product.nombre} />
-                  ) : (
-                    <div className="placeholder-img" />
+          <>
+            <div className="products-grid">
+              {productosPaginados.map(product => (
+                <div key={product._id} className="product-card">
+                  {product.stock <= 5 && product.stock > 0 && (
+                    <span className="product-tag alert">¡Últimas unidades!</span>
                   )}
-                </div>
+                  {product.stock === 0 && (
+                    <span className="product-tag out">Agotado</span>
+                  )}
 
-                <div className="product-info">
-                  <span className="product-category-label">{product.categoria}</span>
-                  <h3>{product.nombre}</h3>
-                  <p className="product-description-short">
-                    {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
-                  </p>
-                  
-                  <div className="product-footer">
-                    <div className="price-container">
-                      <span className="price-label">PRECIO</span>
-                      <span className="product-price">
-                        ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
-                      </span>
-                      <span className="product-stock-text">
-                        {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
-                      </span>
-                    </div>
+                  <div className="product-image">
+                    {product.imagen ? (
+                      <img src={product.imagen} alt={product.nombre} />
+                    ) : (
+                      <div className="placeholder-img" />
+                    )}
+                  </div>
 
-                    <div className="product-actions-vertical">
-                      {product.stock > 0 && (
-                        <div className="quantity-selector-full">
-                          <button type="button" onClick={() => handleDecrease(product._id)} className="qty-btn-v">
-                            <FaMinus size={12} />
-                          </button>
-                          <span className="qty-number-v">{quantities[product._id] || 1}</span>
-                          <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className="qty-btn-v">
-                            <FaPlus size={12} />
-                          </button>
-                        </div>
-                      )}
+                  <div className="product-info">
+                    <span className="product-category-label">{product.categoria}</span>
+                    <h3>{product.nombre}</h3>
+                    <p className="product-description-short">
+                      {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
+                    </p>
+                    
+                    <div className="product-footer">
+                      <div className="price-container">
+                        <span className="price-label">PRECIO</span>
+                        <span className="product-price">
+                          ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
+                        </span>
+                        <span className="product-stock-text">
+                          {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
+                        </span>
+                      </div>
 
-                      <button 
-                        className="add-to-cart-btn-full"
-                        onClick={() => addToCart(product)}
-                        disabled={product.stock === 0}
-                      >
-                        <FaShoppingCart />
-                        {product.stock === 0 ? 'Agotado' : 'Agregar'}
-                      </button>
+                      <div className="product-actions-vertical">
+                        {product.stock > 0 && (
+                          <div className="quantity-selector-full">
+                            <button type="button" onClick={() => handleDecrease(product._id)} className="qty-btn-v">
+                              <FaMinus size={12} />
+                            </button>
+                            <span className="qty-number-v">{quantities[product._id] || 1}</span>
+                            <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className="qty-btn-v">
+                              <FaPlus size={12} />
+                            </button>
+                          </div>
+                        )}
+
+                        <button 
+                          className="add-to-cart-btn-full"
+                          onClick={() => addToCart(product)}
+                          disabled={product.stock === 0}
+                        >
+                          <FaShoppingCart />
+                          {product.stock === 0 ? 'Agotado' : 'Agregar'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Controles de Paginación */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button 
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <FaChevronLeft size={12} /> Anterior
+                </button>
+
+                <div className="pagination-numbers">
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const pageNum = index + 1;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`page-number-btn ${currentPage === pageNum ? 'active' : ''}`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button 
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente <FaChevronRight size={12} />
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
