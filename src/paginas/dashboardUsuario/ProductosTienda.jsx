@@ -10,6 +10,9 @@ export default function ProductosTienda({ categoria, user }) {
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
 
+  // Estado para la búsqueda global (sincronizado con la barra del header)
+  const [searchTerm, setSearchTerm] = useState("");
+
   // Estados temporales para los filtros de la barra superior
   const [tempCategoria, setTempCategoria] = useState(categoria || "Todos los productos");
   const [tempPrecioMin, setTempPrecioMin] = useState("");
@@ -24,9 +27,39 @@ export default function ProductosTienda({ categoria, user }) {
   
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Estados para la Paginación
+  // Estados para la Paginación (6 productos por página)
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 6; // Cambiar limite para que salga la interfaz de paginacion
+  const productsPerPage = 6;
+
+  // Escuchar eventos globales de búsqueda desde la barra superior de la app
+  useEffect(() => {
+    const handleSearchEvent = (e) => {
+      setSearchTerm(e.detail || "");
+      setCurrentPage(1);
+    };
+
+    // Si guardas la búsqueda en un evento personalizado o localStorage
+    window.addEventListener('productSearch', handleSearchEvent);
+
+    // Opcional: leer si ya hay un valor previo en sessionStorage/localStorage al cargar
+    const storedSearch = sessionStorage.getItem('search_cdisfruta') || "";
+    if (storedSearch) {
+      setSearchTerm(storedSearch);
+    }
+
+    const handleStorageChange = () => {
+      const currentSearch = sessionStorage.getItem('search_cdisfruta') || "";
+      setSearchTerm(currentSearch);
+      setCurrentPage(1);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('productSearch', handleSearchEvent);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   // Sincronizar categoría si cambia por props externas
   useEffect(() => {
@@ -114,7 +147,7 @@ export default function ProductosTienda({ categoria, user }) {
     setter(rawValue);
   };
 
-  // Aplicar filtros y regresar a la página 1
+  // Aplicar filtros al hacer clic y regresar a la página 1
   const aplicarFiltros = () => {
     setSelectedCategoria(tempCategoria);
     setPrecioMin(tempPrecioMin);
@@ -124,7 +157,7 @@ export default function ProductosTienda({ categoria, user }) {
     setShowMobileFilters(false);
   };
 
-  // Limpiar filtros y regresar a la página 1
+  // Limpiar filtros
   const limpiarFiltros = () => {
     setTempCategoria("Todos los productos");
     setTempPrecioMin("");
@@ -135,10 +168,12 @@ export default function ProductosTienda({ categoria, user }) {
     setPrecioMin("");
     setPrecioMax("");
     setOrden("recientes");
+    setSearchTerm("");
+    sessionStorage.removeItem('search_cdisfruta');
     setCurrentPage(1);
   };
 
-  // Función de agregar al carrito con validación de sesión
+  // Función de agregar al carrito (valida sesión si es invitado)
   const addToCart = (product) => {
     if (!user) {
       alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
@@ -165,14 +200,26 @@ export default function ProductosTienda({ categoria, user }) {
     setQuantities(prev => ({ ...prev, [product._id]: 1 }));
   };
 
-  // Lógica de filtrado y ordenamiento combinada
+  // Lógica combinada de Búsqueda, Filtrado y Ordenamiento
   const productosFiltradosYOrdenados = useMemo(() => {
     let resultado = [...products];
 
+    // 1. Filtrar por Barra de Búsqueda (nombre o descripción)
+    if (searchTerm.trim() !== "") {
+      const termino = searchTerm.toLowerCase();
+      resultado = resultado.filter(p => 
+        (p.nombre && p.nombre.toLowerCase().includes(termino)) || 
+        (p.descripcion && p.descripcion.toLowerCase().includes(termino)) ||
+        (p.categoria && p.categoria.toLowerCase().includes(termino))
+      );
+    }
+
+    // 2. Filtrar por Categoría
     if (selectedCategoria && selectedCategoria !== "Todos los productos") {
       resultado = resultado.filter(p => p.categoria === selectedCategoria);
     }
 
+    // 3. Filtrar por Rango de Precios
     if (precioMin !== "" && !isNaN(precioMin)) {
       resultado = resultado.filter(p => p.precio >= Number(precioMin));
     }
@@ -180,6 +227,7 @@ export default function ProductosTienda({ categoria, user }) {
       resultado = resultado.filter(p => p.precio <= Number(precioMax));
     }
 
+    // 4. Ordenamiento
     resultado.sort((a, b) => {
       if (orden === 'asc') {
         return (a.precio || 0) - (b.precio || 0);
@@ -197,9 +245,9 @@ export default function ProductosTienda({ categoria, user }) {
     });
 
     return resultado;
-  }, [products, selectedCategoria, precioMin, precioMax, orden]);
+  }, [products, searchTerm, selectedCategoria, precioMin, precioMax, orden]);
 
-  // Cálculos de Paginación
+  // Cálculos de Paginación (6 por página)
   const totalPages = Math.ceil(productosFiltradosYOrdenados.length / productsPerPage);
   
   const productosPaginados = useMemo(() => {
@@ -295,7 +343,7 @@ export default function ProductosTienda({ categoria, user }) {
             <FaCheck /> Aplicar
           </button>
 
-          {(selectedCategoria !== "Todos los productos" || precioMin !== "" || precioMax !== "" || orden !== "recientes") && (
+          {(selectedCategoria !== "Todos los productos" || precioMin !== "" || precioMax !== "" || orden !== "recientes" || searchTerm !== "") && (
             <button className="clear-filters-btn" onClick={limpiarFiltros}>
               Limpiar
             </button>
@@ -305,9 +353,15 @@ export default function ProductosTienda({ categoria, user }) {
 
       {/* Listado de Productos y Paginación */}
       <div className="products-grid-section">
+        {searchTerm && (
+          <div className="search-active-indicator" style={{ marginBottom: '15px', fontSize: '0.9rem', color: '#64748b' }}>
+            Resultados de búsqueda para: <strong>"{searchTerm}"</strong>
+          </div>
+        )}
+
         {productosFiltradosYOrdenados.length === 0 ? (
           <div className="no-products">
-            No se encontraron productos con los filtros seleccionados.
+            No se encontraron productos con los filtros o búsqueda seleccionados.
           </div>
         ) : (
           <>

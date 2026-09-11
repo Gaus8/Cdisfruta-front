@@ -3,22 +3,27 @@ import { useNavigate } from "react-router-dom";
 import {
   FaShoppingCart, FaSearch, FaUserCircle, FaCog,
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
-  FaSignInAlt, FaUserPlus // Nuevos iconos para invitados
+  FaSignInAlt, FaUserPlus
 } from "react-icons/fa";
-import { useAuth } from "../../funciones/useAuth"; // Importamos el hook de autenticación
+import { useAuth } from "../../funciones/useAuth";
 import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion";
 
 export default function HeaderDashboard() {
-  const { userData, loading } = useAuth(); // Obtenemos el estado del usuario
+  const { userData, loading } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const containerRef = useRef(null);
+  
+  // Estado para el texto de búsqueda
+  const [searchText, setSearchText] = useState(() => {
+    return sessionStorage.getItem('search_cdisfruta') || "";
+  });
 
+  const containerRef = useRef(null);
   const navigate = useNavigate();
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
@@ -30,7 +35,6 @@ export default function HeaderDashboard() {
   
   const handleConfirmLogout = async () => {
     setLogoutModalOpen(false);
-
     try {
       const response = await axios.post(`${URL_SERVER}/logout`);
       if (response.status === 200) {
@@ -43,6 +47,23 @@ export default function HeaderDashboard() {
     }
   };
   const handleCancelLogout = () => setLogoutModalOpen(false);
+
+  // Función para disparar la búsqueda
+  const executeSearch = (term) => {
+    sessionStorage.setItem('search_cdisfruta', term);
+    window.dispatchEvent(new CustomEvent('productSearch', { detail: term }));
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchText(value);
+    executeSearch(value); // Filtra en tiempo real mientras escribe
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    executeSearch(searchText);
+  };
 
   // Efecto para el badge del carrito
   useEffect(() => {
@@ -89,7 +110,6 @@ export default function HeaderDashboard() {
             <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
             <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
             <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
-
           </p>
         </div>
       </div>
@@ -100,10 +120,16 @@ export default function HeaderDashboard() {
             CDISFRUTA<span className="dot-shop">.shop</span>
           </h1>
 
-          <div className="search-bar">
-            <input type="text" placeholder="Buscar snacks saludables..." />
-            <button className="search-btn"><FaSearch /></button>
-          </div>
+          {/* Formulario de búsqueda conectado */}
+          <form className="search-bar" onSubmit={handleSearchSubmit}>
+            <input 
+              type="text" 
+              placeholder="Buscar snacks saludables..." 
+              value={searchText}
+              onChange={handleSearchChange}
+            />
+            <button type="submit" className="search-btn"><FaSearch /></button>
+          </form>
 
           <div className="header-actions">
             <div
@@ -117,14 +143,12 @@ export default function HeaderDashboard() {
 
             <div className="dropdown-container" ref={containerRef}>
               <div className="user-profile" onClick={toggleDropdown}>
-                {/* Si hay usuario, podrías poner su inicial o foto, por ahora el icono */}
                 <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />
               </div>
 
               {dropdownOpen && (
                 <div className="dropdown-menu profile-menu">
                   {userData ? (
-                    // VISTA PARA USUARIOS REGISTRADOS
                     <>
                       <div className="dropdown-header">Hola, {userData.nombre.split(' ')[0]}</div>
                       <ul className="dropdown-list">
@@ -141,7 +165,6 @@ export default function HeaderDashboard() {
                       </ul>
                     </>
                   ) : (
-                    // VISTA PARA VISITANTES / INVITADOS
                     <>
                       <div className="dropdown-header">Bienvenido</div>
                       <ul className="dropdown-list">
