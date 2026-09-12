@@ -59,7 +59,7 @@
   transform: rotate(90deg);
 }
 
-/* Grid interno del modal (Imagen más grande en PC) */
+/* Grid interno del modal */
 .modal-body-grid {
   display: grid;
   grid-template-columns: 1.1fr 1.2fr;
@@ -68,7 +68,7 @@
 }
 
 .modal-details-container {
-  padding: 28px 32px; /* Padding interno más compacto */
+  padding: 28px 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -79,17 +79,17 @@
 .modal-details-container h2 {
   font-size: 1.5rem;
   color: #1e293b;
-  margin: 4px 0 10px 0; /* Espaciado reducido para juntar */
+  margin: 4px 0 10px 0;
   font-weight: 800;
   line-height: 1.2;
 }
 
 .modal-price-box {
   background: #f8fafc;
-  padding: 12px 18px; /* Compacto */
+  padding: 12px 18px;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  margin-bottom: 14px; /* Más cerca de la descripción */
+  margin-bottom: 14px;
 }
 
 .modal-price-box .product-price {
@@ -101,7 +101,7 @@
 }
 
 .modal-description-box {
-  margin-bottom: 18px; /* Compacto */
+  margin-bottom: 18px;
 }
 
 .modal-description-box h4 {
@@ -118,13 +118,13 @@
   margin: 0;
 }
 
-/* --- Acciones del Modal (Versión Escritorio) --- */
+/* --- Acciones del Modal --- */
 .product-detail-actions {
   display: flex;
   gap: 12px;
   align-items: center;
   width: 100%;
-  margin-top: 5px; /* Más pegado a la descripción */
+  margin-top: 5px;
   box-sizing: border-box;
 }
 
@@ -192,7 +192,7 @@
   transform: translateY(-2px);
 }
 
-/* --- Galería de Múltiples Imágenes y Flechas en el Modal --- */
+/* --- Galería de Múltiples Imágenes y Flechas --- */
 .modal-image-gallery-container {
   background: #f8fafc;
   display: flex;
@@ -209,7 +209,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: relative !important; /* Vital para que las flechas absolutas funcionen */
 }
 
 .modal-main-image-wrapper img {
@@ -218,6 +218,7 @@
   object-fit: contain;
   border-radius: 12px;
   filter: drop-shadow(0 10px 15px rgba(0,0,0,0.08));
+  display: block;
 }
 
 /* Botones de flechas deslizantes sobre la imagen principal */
@@ -225,19 +226,19 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid #cbd5e1;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: #1e293b;
   transition: all 0.2s ease;
-  z-index: 5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 20;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .modal-slider-arrow:hover {
@@ -247,11 +248,11 @@
 }
 
 .modal-prev {
-  left: 8px;
+  left: 10px;
 }
 
 .modal-next {
-  right: 8px;
+  right: 10px;
 }
 
 .modal-thumbnails-grid {
@@ -346,7 +347,6 @@
     margin-bottom: 12px;
   }
 
-  /* Forzamos que el bloque de acciones abarque el 100% absoluto de la tarjeta en móvil */
   .modal-details-container .product-detail-actions {
     display: flex !important;
     flex-direction: column !important;

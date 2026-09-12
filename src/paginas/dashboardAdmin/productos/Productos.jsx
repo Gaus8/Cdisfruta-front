@@ -14,7 +14,6 @@ function Productos() {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   
-  // Modificado: 'imagenes' ahora maneja múltiples archivos (array)
   const [formData, setFormData] = useState({
     nombre: '',
     precio: '',
@@ -59,7 +58,7 @@ function Productos() {
     fetchProducts();
   }, []);
 
-  // 3. MANEJO DE INPUTS Y ARCHIVOS MÚLTIPLES
+  // 3. MANEJO DE INPUTS Y ARCHIVOS MÚLTIPLES ACUMULATIVOS
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -81,8 +80,14 @@ function Productos() {
 
     if (validFiles.length === 0) return;
 
-    setFormData(prev => ({ ...prev, imagenes: validFiles }));
-    setFileName(`${validFiles.length} imagen(es) seleccionada(s)`);
+    // ACUMULAMOS los archivos nuevos con los que ya estaban en formData.imagenes (máximo 5)
+    setFormData(prev => {
+      const currentImages = prev.imagenes || [];
+      const combined = [...currentImages, ...validFiles].slice(0, 5);
+      return { ...prev, imagenes: combined };
+    });
+
+    setFileName(`Imágenes seleccionadas correctamente`);
     setUploadStatus('success');
   };
 
@@ -112,7 +117,7 @@ function Productos() {
       stock: product.stock,
       descripcion: product.descripcion,
       categoria: product.categoria,
-      imagenes: [] // Se dejan vacías si no se quieren sobreescribir las existentes
+      imagenes: [] // Se dejan vacías las nuevas para edición, respetando las existentes en DB
     });
     setFileName(product.imagenes?.length ? `${product.imagenes.length} imagen(es) actual(es) conservada(s)` : (product.imagen ? 'Imagen actual conservada' : ''));
     setUploadStatus('');
@@ -136,7 +141,7 @@ function Productos() {
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria || 'General');
       
-      // Adjuntamos cada archivo seleccionado bajo el mismo campo (ej: 'imagenes' o 'imagen' según soporte tu backend)
+      // Adjuntamos cada archivo seleccionado al FormData
       if (formData.imagenes && formData.imagenes.length > 0) {
         formData.imagenes.forEach((file) => {
           formDataToSend.append('imagenes', file); 
