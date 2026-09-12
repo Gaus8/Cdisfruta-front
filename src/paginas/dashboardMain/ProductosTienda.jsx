@@ -3,6 +3,7 @@ import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, F
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
+import '../../assets/styles/dashboardUsuario/modal_producto.css';
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);

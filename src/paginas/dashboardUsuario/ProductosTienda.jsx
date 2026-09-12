@@ -3,6 +3,7 @@ import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, F
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
+import '../../assets/styles/dashboardUsuario/modal_producto.css';
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -505,33 +506,33 @@ export default function ProductosTienda({ categoria, user }) {
                 </div>
 
                 {productoSeleccionado.stock > 0 && (
-                  <div className="modal-actions-box">
-                    <div className="quantity-selector-full">
+                  <div className="product-detail-actions">
+                    <div className="product-detail-qty-box">
                       <button 
                         type="button" 
                         onClick={() => handleDecrease(productoSeleccionado._id)} 
-                        className="qty-btn-v"
+                        className="product-detail-qty-btn"
                       >
                         <FaMinus size={12} />
                       </button>
-                      <span className="qty-number-v">{quantities[productoSeleccionado._id] || 1}</span>
+                      <span className="product-detail-qty-number">{quantities[productoSeleccionado._id] || 1}</span>
                       <button 
                         type="button" 
                         onClick={() => handleIncrease(productoSeleccionado._id, productoSeleccionado.stock)} 
-                        className="qty-btn-v"
+                        className="product-detail-qty-btn"
                       >
                         <FaPlus size={12} />
                       </button>
                     </div>
 
                     <button 
-                      className="add-to-cart-btn-full"
+                      className="product-detail-submit-btn"
                       onClick={() => {
                         addToCart(productoSeleccionado);
                         setProductoSeleccionado(null);
                       }}
                     >
-                      <FaShoppingCart /> Agregar al Carrito
+                      <FaShoppingCart size={18} /> Agregar al Carrito
                     </button>
                   </div>
                 )}

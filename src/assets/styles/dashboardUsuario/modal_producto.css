@@ -1,0 +1,274 @@
+/* ==========================================================
+   ESTILOS AISLADOS Y PROFESIONALES PARA EL MODAL DE DETALLE
+   ========================================================== */
+
+/* --- Overlay y Contenedor del Modal --- */
+.product-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4000;
+  padding: 15px;
+  animation: fadeInModal 0.3s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.product-modal-content {
+  background: #ffffff;
+  width: 100%;
+  max-width: 850px;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Botón flotante para cerrar el modal */
+.close-modal-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f1f5f9;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  background: #ff7a5c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Grid interno del modal */
+.modal-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.modal-image-container {
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  border-right: 1px solid #f1f5f9;
+}
+
+.modal-image-container img {
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.08));
+}
+
+.modal-details-container {
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.modal-details-container h2 {
+  font-size: 1.6rem;
+  color: #1e293b;
+  margin: 8px 0 16px 0;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.modal-price-box {
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.modal-price-box .product-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ff7a5c;
+  display: block;
+  margin: 4px 0;
+}
+
+.modal-description-box {
+  margin-bottom: 25px;
+}
+
+.modal-description-box h4 {
+  font-size: 0.95rem;
+  color: #334155;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.modal-description-box p {
+  font-size: 0.92rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- Acciones del Modal (Versión Escritorio) --- */
+.product-detail-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+  margin-top: 25px;
+  box-sizing: border-box;
+}
+
+.product-detail-qty-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 8px 14px;
+  flex: 0 0 140px;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+.product-detail-qty-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: var(--cdisfruta-orange, #f97316);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-detail-qty-btn:hover {
+  background: var(--cdisfruta-orange, #f97316);
+  color: white;
+  border-color: var(--cdisfruta-orange, #f97316);
+}
+
+.product-detail-qty-number {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--cdisfruta-black, #0f172a);
+}
+
+.product-detail-submit-btn {
+  flex: 1;
+  height: 52px;
+  padding: 0 24px;
+  background: var(--cdisfruta-orange, #f97316);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+  box-sizing: border-box;
+}
+
+.product-detail-submit-btn:hover {
+  background: var(--cdisfruta-orange-hover, #ea580c);
+  transform: translateY(-2px);
+}
+
+/* --- Adaptabilidad Responsive del Modal en Móviles --- */
+@media (max-width: 768px) {
+  .product-modal-overlay {
+    padding: 10px;
+  }
+
+  .product-modal-content {
+    max-width: 100%;
+    max-height: 96vh;
+    border-radius: 20px;
+  }
+
+  .modal-body-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .modal-image-container {
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .modal-image-container img {
+    max-height: 160px;
+  }
+
+  .modal-details-container {
+    padding: 20px 15px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Forzamos con alta especificidad que el contenedor y el botón abarquen el 100% absoluto */
+  .modal-details-container .product-detail-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px !important;
+    margin-top: 15px !important;
+    box-sizing: border-box !important;
+  }
+
+  .modal-details-container .product-detail-qty-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    height: 48px !important;
+    box-sizing: border-box !important;
+  }
+
+  .modal-details-container .product-detail-submit-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    height: 48px !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+  }
+}
