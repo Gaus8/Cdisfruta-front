@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaTimes, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaTimes, FaCloudUploadAlt, FaExclamationTriangle } from 'react-icons/fa';
 import '../../../assets/styles/productos/form_productos.css';
 
 export default function FormProductos({
@@ -9,11 +9,11 @@ export default function FormProductos({
   handleSaveProduct, setShowModal,
 }) {
   const [previews, setPreviews] = useState([]);
+  const [showConfirmClose, setShowConfirmClose] = useState(false); // Estado para el sub-modal de confirmación
 
   useEffect(() => {
     const newPreviews = [];
 
-    // 1. Imágenes existentes (si se está editando)
     if (editingProduct && editingProduct.imagenes && Array.isArray(editingProduct.imagenes)) {
       editingProduct.imagenes.forEach((imgUrl, idx) => {
         newPreviews.push({ type: 'existing', url: imgUrl, index: idx });
@@ -22,7 +22,6 @@ export default function FormProductos({
       newPreviews.push({ type: 'existing', url: editingProduct.imagen, index: 0 });
     }
 
-    // 2. Archivos nuevos seleccionados
     if (formData.imagenes && formData.imagenes.length > 0) {
       for (let i = 0; i < formData.imagenes.length; i++) {
         const file = formData.imagenes[i];
@@ -41,10 +40,8 @@ export default function FormProductos({
     };
   }, [formData.imagenes, editingProduct]);
 
-  // Función para eliminar cualquier imagen (nueva o existente)
   const handleRemoveImage = (itemToRemove) => {
     if (itemToRemove.type === 'new') {
-      // Eliminar archivo nuevo del array formData.imagenes
       const updatedFiles = formData.imagenes.filter(file => 
         !(file.name === itemToRemove.file.name && file.size === itemToRemove.file.size)
       );
@@ -52,10 +49,8 @@ export default function FormProductos({
         target: { name: 'imagenes', value: updatedFiles }
       });
     } else if (itemToRemove.type === 'existing') {
-      // Eliminar imagen existente del array de edición
       if (editingProduct && editingProduct.imagenes) {
         const updatedExisting = editingProduct.imagenes.filter((_, idx) => idx !== itemToRemove.index);
-        // Actualizamos de forma temporal el objeto editingProduct para reflejar el cambio en la UI
         editingProduct.imagenes = updatedExisting;
         setPreviews(prev => prev.filter(p => !(p.type === 'existing' && p.index === itemToRemove.index)));
       } else if (editingProduct && editingProduct.imagen) {
@@ -71,6 +66,17 @@ export default function FormProductos({
     <div className="modal-overlay">
       <div className="modal modal-lg">
         <h2>{editingProduct ? 'Editar Producto' : 'Agregar Producto'}</h2>
+        
+        {/* Botón X superior */}
+        <button 
+          type="button" 
+          className="close-modal-btn" 
+          onClick={() => setShowConfirmClose(true)}
+          title="Cerrar"
+        >
+          <FaTimes size={16} />
+        </button>
+
         <div className="modal-content scrollable-content">
 
           {/* Sección de Imágenes */}
@@ -78,7 +84,6 @@ export default function FormProductos({
             <label>Imágenes del Producto (Máx. 5)</label>
 
             <div className={`upload-section-wrapper ${hasImagesClass}`}>
-              {/* Contenedor de Miniaturas */}
               <div className="images-preview-container">
                 {previews.map((item, index) => (
                   <div key={index} className="preview-thumbnail">
@@ -95,7 +100,6 @@ export default function FormProductos({
                 ))}
               </div>
 
-              {/* Dropzone para subir más imágenes */}
               {previews.length < 5 && (
                 <div
                   className="image-upload-dropzone"
@@ -195,7 +199,7 @@ export default function FormProductos({
         <div className="form-actions">
           <button 
             className="btn btn-cancel" 
-            onClick={() => setShowModal(false)}
+            onClick={() => setShowConfirmClose(true)}
             disabled={uploadStatus === 'loading'}
           >
             Cancelar
@@ -215,6 +219,34 @@ export default function FormProductos({
             )}
           </button>
         </div>
+
+        {/* Sub-modal interno de confirmación para descartar cambios */}
+        {showConfirmClose && (
+          <div className="submodal-confirm-overlay">
+            <div className="submodal-confirm-content">
+              <FaExclamationTriangle className="submodal-warning-icon" />
+              <h3>¿Descartar cambios?</h3>
+              <p>Si sales ahora, los cambios no guardados se perderán.</p>
+              <div className="submodal-actions">
+                <button 
+                  type="button" 
+                  className="btn-submodal-cancel" 
+                  onClick={() => setShowConfirmClose(false)}
+                >
+                  Continuar editando
+                </button>
+                <button 
+                  type="button" 
+                  className="btn-submodal-confirm" 
+                  onClick={() => setShowModal(false)}
+                >
+                  Sí, descartar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

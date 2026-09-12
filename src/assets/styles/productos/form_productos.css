@@ -13,7 +13,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999; /* Z-index elevado para cubrir el menú flotante */
   padding: 20px;
   box-sizing: border-box;
 }
@@ -29,6 +29,32 @@
   flex-direction: column;
   overflow: hidden;
   animation: fadeIn 0.3s ease-out;
+  position: relative;
+}
+
+/* Botón flotante de cierre (X) */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f1f5f9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.05);
 }
 
 .modal.modal-lg {
@@ -309,4 +335,86 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ==========================================================
+   SUB-MODAL DE CONFIRMACIÓN INTERNO
+   ========================================================== */
+.submodal-confirm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.submodal-confirm-content {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.submodal-warning-icon {
+  font-size: 2.2rem;
+  color: #f59e0b;
+  margin-bottom: 10px;
+}
+
+.submodal-confirm-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  color: #1e293b;
+}
+
+.submodal-confirm-content p {
+  margin: 0 0 20px 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.submodal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-submodal-cancel {
+  background: #e2e8f0;
+  color: #334155;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.btn-submodal-cancel:hover {
+  background: #cbd5e1;
+}
+
+.btn-submodal-confirm {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.btn-submodal-confirm:hover {
+  background: #dc2626;
 }
