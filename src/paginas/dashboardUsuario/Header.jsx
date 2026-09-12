@@ -107,7 +107,7 @@ export default function HeaderDashboard() {
       <header className="user-header">
         <div className="header-content">
           <h1 className="logo" onClick={() => navigate('/dashboard_main')} style={{ cursor: 'pointer' }}>
-            CDISFRUTA<span className="dot-shop">.shop</span>
+            CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
           {/* Formulario de búsqueda conectado */}
