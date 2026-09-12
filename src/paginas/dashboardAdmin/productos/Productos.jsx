@@ -13,6 +13,7 @@ function Productos() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -117,7 +118,7 @@ function Productos() {
       stock: product.stock,
       descripcion: product.descripcion,
       categoria: product.categoria,
-      imagenes: [] // Se dejan vacías las nuevas para edición, respetando las existentes en DB
+      imagenes: [] 
     });
     setFileName(product.imagenes?.length ? `${product.imagenes.length} imagen(es) actual(es) conservada(s)` : (product.imagen ? 'Imagen actual conservada' : ''));
     setUploadStatus('');
@@ -148,6 +149,13 @@ function Productos() {
         });
       }
 
+      // Si se eliminaron imágenes existentes en el modo edición, enviamos las restantes
+      if (editingProduct && editingProduct.imagenes) {
+        editingProduct.imagenes.forEach((imgUrl) => {
+          formDataToSend.append('imagenesExistentes', imgUrl);
+        });
+      }
+
       const url = editingProduct
         ? `${URL_SERVER}/productos/${editingProduct._id}`
         : `${URL_SERVER}/registro-productos`; 
@@ -175,7 +183,7 @@ function Productos() {
 
       setUploadStatus('success');
       setShowModal(false);
-      alert('¡Producto guardado exitosamente!');
+      setSuccessMessage('¡Producto guardado exitosamente!');
     } catch (error) {
       setUploadStatus('error');
       console.error(error);
@@ -232,6 +240,24 @@ function Productos() {
           handleDragOver={handleDragOver}
           handleDragLeave={handleDragLeave}
         />
+      )}
+
+      {/* Modal interno de éxito */}
+      {successMessage && (
+        <div className="submodal-confirm-overlay">
+          <div className="submodal-confirm-content">
+            <h3 style={{ color: '#10b981', marginBottom: '10px' }}>¡Éxito!</h3>
+            <p>{successMessage}</p>
+            <button 
+              type="button" 
+              className="btn-submodal-confirm" 
+              style={{ backgroundColor: '#10b981', width: '100%', marginTop: '10px' }}
+              onClick={() => setSuccessMessage('')}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

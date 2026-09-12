@@ -9,19 +9,31 @@ export default function FormProductos({
   handleSaveProduct, setShowModal,
 }) {
   const [previews, setPreviews] = useState([]);
-  const [showConfirmClose, setShowConfirmClose] = useState(false); // Estado para el sub-modal de confirmación
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
+  
+  // Estado local para manejar las imágenes existentes y permitir su actualización inmediata al eliminarlas
+  const [existingImages, setExistingImages] = useState([]);
+
+  useEffect(() => {
+    if (editingProduct) {
+      const imgs = editingProduct.imagenes && Array.isArray(editingProduct.imagenes)
+        ? [...editingProduct.imagenes]
+        : (editingProduct.imagen ? [editingProduct.imagen] : []);
+      setExistingImages(imgs);
+    } else {
+      setExistingImages([]);
+    }
+  }, [editingProduct]);
 
   useEffect(() => {
     const newPreviews = [];
 
-    if (editingProduct && editingProduct.imagenes && Array.isArray(editingProduct.imagenes)) {
-      editingProduct.imagenes.forEach((imgUrl, idx) => {
-        newPreviews.push({ type: 'existing', url: imgUrl, index: idx });
-      });
-    } else if (editingProduct && editingProduct.imagen && !editingProduct.imagenes) {
-      newPreviews.push({ type: 'existing', url: editingProduct.imagen, index: 0 });
-    }
+    // 1. Imágenes existentes desde el estado local
+    existingImages.forEach((imgUrl, idx) => {
+      newPreviews.push({ type: 'existing', url: imgUrl, index: idx });
+    });
 
+    // 2. Archivos nuevos seleccionados
     if (formData.imagenes && formData.imagenes.length > 0) {
       for (let i = 0; i < formData.imagenes.length; i++) {
         const file = formData.imagenes[i];
@@ -38,7 +50,7 @@ export default function FormProductos({
         }
       });
     };
-  }, [formData.imagenes, editingProduct]);
+  }, [existingImages, formData.imagenes]);
 
   const handleRemoveImage = (itemToRemove) => {
     if (itemToRemove.type === 'new') {
@@ -49,13 +61,12 @@ export default function FormProductos({
         target: { name: 'imagenes', value: updatedFiles }
       });
     } else if (itemToRemove.type === 'existing') {
-      if (editingProduct && editingProduct.imagenes) {
-        const updatedExisting = editingProduct.imagenes.filter((_, idx) => idx !== itemToRemove.index);
+      const updatedExisting = existingImages.filter((_, idx) => idx !== itemToRemove.index);
+      setExistingImages(updatedExisting);
+      
+      // Sincronizamos con el objeto editingProduct para que el backend reciba la lista actualizada
+      if (editingProduct) {
         editingProduct.imagenes = updatedExisting;
-        setPreviews(prev => prev.filter(p => !(p.type === 'existing' && p.index === itemToRemove.index)));
-      } else if (editingProduct && editingProduct.imagen) {
-        editingProduct.imagen = null;
-        setPreviews(prev => prev.filter(p => p.type !== 'existing'));
       }
     }
   };
