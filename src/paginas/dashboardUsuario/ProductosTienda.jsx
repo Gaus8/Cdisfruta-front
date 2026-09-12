@@ -32,8 +32,41 @@ export default function ProductosTienda({ categoria, user }) {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
 
-  // Estado para el Modal de Detalle de Producto
+  // Estado para el Modal de Detalle de Producto y su galería de imágenes
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [imagenActiva, setImagenActiva] = useState("");
+
+  const abrirModalDetalle = (product) => {
+    setProductoSeleccionado(product);
+    // Extrae tanto el array de 'imagenes' como la 'imagen' principal por compatibilidad
+    const listaImagenes = product.imagenes && product.imagenes.length > 0 
+      ? product.imagenes 
+      : [product.imagen].filter(Boolean);
+    setImagenActiva(listaImagenes[0] || "");
+  };
+
+  // Funciones para navegar entre imágenes con flechas
+  const handleNextImage = () => {
+    if (!productoSeleccionado) return;
+    const listaImagenes = productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 0 
+      ? productoSeleccionado.imagenes 
+      : [productoSeleccionado.imagen].filter(Boolean);
+    
+    const currentIndex = listaImagenes.indexOf(imagenActiva);
+    const nextIndex = (currentIndex + 1) % listaImagenes.length;
+    setImagenActiva(listaImagenes[nextIndex]);
+  };
+
+  const handlePrevImage = () => {
+    if (!productoSeleccionado) return;
+    const listaImagenes = productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 0 
+      ? productoSeleccionado.imagenes 
+      : [productoSeleccionado.imagen].filter(Boolean);
+    
+    const currentIndex = listaImagenes.indexOf(imagenActiva);
+    const prevIndex = (currentIndex - 1 + listaImagenes.length) % listaImagenes.length;
+    setImagenActiva(listaImagenes[prevIndex]);
+  };
 
   // Escuchar eventos globales de búsqueda desde la barra superior de la app
   useEffect(() => {
@@ -373,7 +406,7 @@ export default function ProductosTienda({ categoria, user }) {
                     <span className="product-tag out">Agotado</span>
                   )}
 
-                  <div className="product-image" onClick={() => setProductoSeleccionado(product)} style={{ cursor: 'pointer' }} title="Ver detalle">
+                  <div className="product-image" onClick={() => abrirModalDetalle(product)} style={{ cursor: 'pointer' }} title="Ver detalle">
                     {product.imagen ? (
                       <img src={product.imagen} alt={product.nombre} />
                     ) : (
@@ -386,7 +419,7 @@ export default function ProductosTienda({ categoria, user }) {
 
                   <div className="product-info">
                     <span className="product-category-label">{product.categoria}</span>
-                    <h3 onClick={() => setProductoSeleccionado(product)} style={{ cursor: 'pointer' }}>{product.nombre}</h3>
+                    <h3 onClick={() => abrirModalDetalle(product)} style={{ cursor: 'pointer' }}>{product.nombre}</h3>
                     <p className="product-description-short">
                       {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
                     </p>
@@ -469,7 +502,7 @@ export default function ProductosTienda({ categoria, user }) {
         )}
       </div>
 
-      {/* MODAL DE DETALLE DE PRODUCTO */}
+      {/* MODAL DE DETALLE DE PRODUCTO CON GALERÍA Y FLECHAS */}
       {productoSeleccionado && (
         <div className="product-modal-overlay" onClick={() => setProductoSeleccionado(null)}>
           <div className="product-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -478,11 +511,54 @@ export default function ProductosTienda({ categoria, user }) {
             </button>
 
             <div className="modal-body-grid">
-              <div className="modal-image-container">
-                {productoSeleccionado.imagen ? (
-                  <img src={productoSeleccionado.imagen} alt={productoSeleccionado.nombre} />
-                ) : (
-                  <div className="placeholder-img" />
+              
+              {/* CONTENEDOR DE MULTIPLES IMÁGENES, FLECHAS Y MINIATURAS */}
+              <div className="modal-image-gallery-container">
+                <div className="modal-main-image-wrapper" style={{ position: 'relative' }}>
+                  {imagenActiva ? (
+                    <>
+                      <img src={imagenActiva} alt={productoSeleccionado.nombre} />
+                      
+                      {/* Flechas de navegación si hay más de una imagen */}
+                      {((productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 1) || 
+                        (!productoSeleccionado.imagenes && productoSeleccionado.imagen)) && (
+                        <>
+                          <button 
+                            type="button" 
+                            className="modal-slider-arrow modal-prev" 
+                            onClick={handlePrevImage}
+                          >
+                            <FaChevronLeft size={14} />
+                          </button>
+                          <button 
+                            type="button" 
+                            className="modal-slider-arrow modal-next" 
+                            onClick={handleNextImage}
+                          >
+                            <FaChevronRight size={14} />
+                          </button>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div className="placeholder-img" />
+                  )}
+                </div>
+
+                {/* Miniaturas de diferentes ángulos */}
+                {productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 1 && (
+                  <div className="modal-thumbnails-grid">
+                    {productoSeleccionado.imagenes.map((imgUrl, index) => (
+                      <button 
+                        key={index} 
+                        type="button"
+                        className={`thumbnail-btn ${imagenActiva === imgUrl ? 'active' : ''}`}
+                        onClick={() => setImagenActiva(imgUrl)}
+                      >
+                        <img src={imgUrl} alt={`${productoSeleccionado.nombre} vista ${index + 1}`} />
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
 

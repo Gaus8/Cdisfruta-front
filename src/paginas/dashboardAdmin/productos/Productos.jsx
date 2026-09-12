@@ -13,13 +13,15 @@ function Productos() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  
+  // Modificado: 'imagenes' ahora maneja múltiples archivos (array)
   const [formData, setFormData] = useState({
     nombre: '',
     precio: '',
     stock: '',
     descripcion: '',
     categoria: '',
-    imagen: null 
+    imagenes: [] 
   });
   const [uploadStatus, setUploadStatus] = useState('');
   const fileInputRef = useRef(null);
@@ -29,12 +31,10 @@ function Productos() {
   // 1. LÓGICA DE ACCESO RÁPIDO (Desde HomeAdmin)
   useEffect(() => {
     if (location.state?.openModal) {
-      // Agregamos un delay de 100ms para asegurar que el componente esté montado
       const timer = setTimeout(() => {
         handleAddProduct(); 
       }, 100);
 
-      // Limpiamos el estado para evitar reaperturas accidentales al refrescar
       window.history.replaceState({}, document.title);
       
       return () => clearTimeout(timer);
@@ -59,23 +59,30 @@ function Productos() {
     fetchProducts();
   }, []);
 
-  // 3. MANEJO DE INPUTS Y ARCHIVOS
+  // 3. MANEJO DE INPUTS Y ARCHIVOS MÚLTIPLES
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileSelect = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('La imagen es demasiado grande. Máximo 5MB.');
-      return;
+    const validFiles = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`La imagen "${file.name}" es demasiado grande. Máximo 5MB.`);
+        continue;
+      }
+      validFiles.push(file);
     }
-    
-    setFormData(prev => ({ ...prev, imagen: file }));
-    setFileName(file.name);
+
+    if (validFiles.length === 0) return;
+
+    setFormData(prev => ({ ...prev, imagenes: validFiles }));
+    setFileName(`${validFiles.length} imagen(es) seleccionada(s)`);
     setUploadStatus('success');
   };
 
@@ -91,7 +98,7 @@ function Productos() {
   // 4. CONTROL DE MODAL
   const handleAddProduct = () => {
     setEditingProduct(null);
-    setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagen: null });
+    setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagenes: [] });
     setFileName('');
     setUploadStatus('');
     setShowModal(true);
@@ -105,16 +112,15 @@ function Productos() {
       stock: product.stock,
       descripcion: product.descripcion,
       categoria: product.categoria,
-      imagen: null 
+      imagenes: [] // Se dejan vacías si no se quieren sobreescribir las existentes
     });
-    setFileName(product.imagen ? 'Imagen actual conservada' : '');
+    setFileName(product.imagenes?.length ? `${product.imagenes.length} imagen(es) actual(es) conservada(s)` : (product.imagen ? 'Imagen actual conservada' : ''));
     setUploadStatus('');
     setShowModal(true);
   };
 
   // 5. GUARDAR PRODUCTO (POST / PUT)
   const handleSaveProduct = async () => {
-    // Validación preventiva para evitar que el servidor reciba campos vacíos y mande error 500
     if (!formData.nombre || !formData.precio || !formData.stock) {
       alert("Por favor rellena los campos obligatorios (*)");
       return;
@@ -130,9 +136,11 @@ function Productos() {
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('categoria', formData.categoria || 'General');
       
-      // Enviamos la imagen solo si el usuario seleccionó una nueva
-      if (formData.imagen) {
-        formDataToSend.append('imagen', formData.imagen); 
+      // Adjuntamos cada archivo seleccionado bajo el mismo campo (ej: 'imagenes' o 'imagen' según soporte tu backend)
+      if (formData.imagenes && formData.imagenes.length > 0) {
+        formData.imagenes.forEach((file) => {
+          formDataToSend.append('imagenes', file); 
+        });
       }
 
       const url = editingProduct
@@ -141,7 +149,6 @@ function Productos() {
       
       const method = editingProduct ? 'PUT' : 'POST';
 
-      // NOTA: No enviamos Headers de Content-Type, el navegador lo gestiona con FormData
       const response = await fetch(url, { 
         method, 
         body: formDataToSend 
@@ -155,7 +162,6 @@ function Productos() {
 
       const result = await response.json();
 
-      // Actualizar estado local sin recargar página
       if (editingProduct) {
         setProducts(products.map(p => p._id === editingProduct._id ? result.product : p));
       } else {
@@ -164,7 +170,7 @@ function Productos() {
 
       setUploadStatus('success');
       setShowModal(false);
-      alert('¡Producto agregado exitosamente!');
+      alert('¡Producto guardado exitosamente!');
     } catch (error) {
       setUploadStatus('error');
       console.error(error);
