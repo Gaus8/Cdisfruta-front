@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 import '../../assets/styles/dashboardUsuario/productos_usuario.css';
@@ -31,6 +31,9 @@ export default function ProductosTienda({ categoria, user }) {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
 
+  // Estado para el Modal de Detalle de Producto
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+
   // Escuchar eventos globales de búsqueda desde la barra superior de la app
   useEffect(() => {
     const handleSearchEvent = (e) => {
@@ -38,10 +41,8 @@ export default function ProductosTienda({ categoria, user }) {
       setCurrentPage(1);
     };
 
-    // Si guardas la búsqueda en un evento personalizado o localStorage
     window.addEventListener('productSearch', handleSearchEvent);
 
-    // Opcional: leer si ya hay un valor previo en sessionStorage/localStorage al cargar
     const storedSearch = sessionStorage.getItem('search_cdisfruta') || "";
     if (storedSearch) {
       setSearchTerm(storedSearch);
@@ -174,14 +175,14 @@ export default function ProductosTienda({ categoria, user }) {
   };
 
   // Función de agregar al carrito (valida sesión si es invitado)
-  const addToCart = (product) => {
+  const addToCart = (product, customQty = null) => {
     if (!user) {
       alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
       navigate('/login');
       return;
     }
 
-    const quantityToAdd = quantities[product._id] || 1;
+    const quantityToAdd = customQty !== null ? customQty : (quantities[product._id] || 1);
     const currentStorageCart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
     
@@ -204,7 +205,6 @@ export default function ProductosTienda({ categoria, user }) {
   const productosFiltradosYOrdenados = useMemo(() => {
     let resultado = [...products];
 
-    // 1. Filtrar por Barra de Búsqueda (nombre o descripción)
     if (searchTerm.trim() !== "") {
       const termino = searchTerm.toLowerCase();
       resultado = resultado.filter(p => 
@@ -214,12 +214,10 @@ export default function ProductosTienda({ categoria, user }) {
       );
     }
 
-    // 2. Filtrar por Categoría
     if (selectedCategoria && selectedCategoria !== "Todos los productos") {
       resultado = resultado.filter(p => p.categoria === selectedCategoria);
     }
 
-    // 3. Filtrar por Rango de Precios
     if (precioMin !== "" && !isNaN(precioMin)) {
       resultado = resultado.filter(p => p.precio >= Number(precioMin));
     }
@@ -227,7 +225,6 @@ export default function ProductosTienda({ categoria, user }) {
       resultado = resultado.filter(p => p.precio <= Number(precioMax));
     }
 
-    // 4. Ordenamiento
     resultado.sort((a, b) => {
       if (orden === 'asc') {
         return (a.precio || 0) - (b.precio || 0);
@@ -258,7 +255,7 @@ export default function ProductosTienda({ categoria, user }) {
   if (loading) return <div className="loading-state">Cargando delicias...</div>;
 
   return (
-    <div className="tienda-container-wrapper">
+    <div className="tienda-container-wrapper" style={{ width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }}>
       
       {/* Botón flotante para móviles */}
       <button 
@@ -375,17 +372,20 @@ export default function ProductosTienda({ categoria, user }) {
                     <span className="product-tag out">Agotado</span>
                   )}
 
-                  <div className="product-image">
+                  <div className="product-image" onClick={() => setProductoSeleccionado(product)} style={{ cursor: 'pointer' }} title="Ver detalle">
                     {product.imagen ? (
                       <img src={product.imagen} alt={product.nombre} />
                     ) : (
                       <div className="placeholder-img" />
                     )}
+                    <div className="quick-view-overlay">
+                      <FaEye /> Ver Detalle
+                    </div>
                   </div>
 
                   <div className="product-info">
                     <span className="product-category-label">{product.categoria}</span>
-                    <h3>{product.nombre}</h3>
+                    <h3 onClick={() => setProductoSeleccionado(product)} style={{ cursor: 'pointer' }}>{product.nombre}</h3>
                     <p className="product-description-short">
                       {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
                     </p>
@@ -467,6 +467,79 @@ export default function ProductosTienda({ categoria, user }) {
           </>
         )}
       </div>
+
+      {/* MODAL DE DETALLE DE PRODUCTO */}
+      {productoSeleccionado && (
+        <div className="product-modal-overlay" onClick={() => setProductoSeleccionado(null)}>
+          <div className="product-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal-btn" onClick={() => setProductoSeleccionado(null)}>
+              <FaTimes size={18} />
+            </button>
+
+            <div className="modal-body-grid">
+              <div className="modal-image-container">
+                {productoSeleccionado.imagen ? (
+                  <img src={productoSeleccionado.imagen} alt={productoSeleccionado.nombre} />
+                ) : (
+                  <div className="placeholder-img" />
+                )}
+              </div>
+
+              <div className="modal-details-container">
+                <span className="product-category-label">{productoSeleccionado.categoria}</span>
+                <h2>{productoSeleccionado.nombre}</h2>
+                
+                <div className="modal-price-box">
+                  <span className="price-label">PRECIO UNITARIO</span>
+                  <span className="product-price">
+                    ${productoSeleccionado.precio ? productoSeleccionado.precio.toLocaleString("es-CO") : "0"}
+                  </span>
+                  <span className="product-stock-text">
+                    {productoSeleccionado.stock > 0 ? `${productoSeleccionado.stock} unidades disponibles` : 'Sin existencias'}
+                  </span>
+                </div>
+
+                <div className="modal-description-box">
+                  <h4>Descripción detallada</h4>
+                  <p>{productoSeleccionado.descripcion || "Este producto artesanal de CDISFRUTA no cuenta con una descripción detallada adicional, pero garantiza el mejor estándar de calidad natural."}</p>
+                </div>
+
+                {productoSeleccionado.stock > 0 && (
+                  <div className="modal-actions-box">
+                    <div className="quantity-selector-full">
+                      <button 
+                        type="button" 
+                        onClick={() => handleDecrease(productoSeleccionado._id)} 
+                        className="qty-btn-v"
+                      >
+                        <FaMinus size={12} />
+                      </button>
+                      <span className="qty-number-v">{quantities[productoSeleccionado._id] || 1}</span>
+                      <button 
+                        type="button" 
+                        onClick={() => handleIncrease(productoSeleccionado._id, productoSeleccionado.stock)} 
+                        className="qty-btn-v"
+                      >
+                        <FaPlus size={12} />
+                      </button>
+                    </div>
+
+                    <button 
+                      className="add-to-cart-btn-full"
+                      onClick={() => {
+                        addToCart(productoSeleccionado);
+                        setProductoSeleccionado(null);
+                      }}
+                    >
+                      <FaShoppingCart /> Agregar al Carrito
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
