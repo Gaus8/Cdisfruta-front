@@ -57,7 +57,7 @@ export default function HeaderDashboard() {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchText(value);
-    executeSearch(value); // Filtra en tiempo real mientras escribe
+    executeSearch(value);
   };
 
   const handleSearchSubmit = (e) => {
@@ -104,19 +104,9 @@ export default function HeaderDashboard() {
 
   return (
     <>
-      <div className="top-announcement-bar">
-        <div className="announcement-track">
-          <p>
-            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
-            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
-            <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$100.000</strong></span>
-          </p>
-        </div>
-      </div>
-
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          <h1 className="logo" onClick={() => navigate('/dashboard_main')} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop">.shop</span>
           </h1>
 

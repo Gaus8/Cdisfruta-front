@@ -7,69 +7,13 @@
   --danger: #d9534f;
 }
 
-/* ===================== BARRA DE ANUNCIO (NUEVA) ===================== */
-.top-announcement-bar {
-  background: #F26522;
-  color: white;
-  padding: 8px 0;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1001;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* ===================== BARRA DE ANUNCIO ===================== */
-.top-announcement-bar {
-  background: #F26522;
-  color: white;
-  padding: 8px 0;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1001;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.announcement-track {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 4s linear infinite; /* Ajusta los segundos si quieres que vaya más rápido o lento */
-}
-
-/* AQUÍ SEPARAS CADA MENSAJE */
-.announcement-track span {
-  display: inline-block;
-  margin-right: 150px; /* Aumenta o disminuye este valor para distanciarlos más o menos */
-}
-
-/* Animación fluida de desplazamiento continuo */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Animación fluida de desplazamiento continuo */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.33%); }
-}
-
-/* ===================== HEADER (STICKY AJUSTADO) ===================== */
+/* ===================== HEADER ===================== */
 .user-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   padding: 0.8rem 2rem;
   position: sticky;
-  top: 35px; /* IMPORTANTE: Baja el header para que no tape la barra naranja */
+  top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   overflow: visible !important;
@@ -85,12 +29,6 @@
   gap: 2rem;
 }
 
-/* Ajuste para móvil (donde la barra suele ser un poco más alta) */
-@media (max-width: 768px) {
-  .user-header {
-    top: 31px; 
-  }
-}
 /* --- Logo --- */
 .logo {
   font-size: 1.6rem;
@@ -334,24 +272,21 @@
   }
 
   .header-content {
-    flex-wrap: wrap; /* Permite que el buscador baje */
+    flex-wrap: wrap;
     gap: 10px;
     padding: 5px 0;
   }
 
-  /* El logo se queda a la izquierda */
   .logo {
     font-size: 1.2rem;
     order: 1;
   }
 
-  /* Los iconos se quedan a la derecha */
   .header-actions {
     order: 2;
     gap: 15px;
   }
 
-  /* El buscador baja y ocupa todo el ancho */
   .search-bar {
     order: 3;
     width: 100%;
@@ -364,7 +299,6 @@
     padding: 6px 12px;
   }
 
-  /* Ajuste del menú desplegable en móvil */
   .dropdown-menu.profile-menu {
     position: absolute;
     top: 40px; 
@@ -375,7 +309,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   }
 
-  /* Modal responsive */
   .modal-actions {
     flex-direction: column;
   }

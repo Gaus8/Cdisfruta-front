@@ -52,7 +52,7 @@ export default function DashboardUsuario() {
             <div className="hero-content">
               <div className="hero-text">
                 <span className="hero-subtitle">100% Natural • Artesanal</span>
-                <h1>Sabor Real, Energía de nuestra Tierra</h1>
+                <h1>Sabor real, Energía de nuestra tierra</h1>
                 <p>
                   Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas
                   y deshidratadas con amor para acompañar tu estilo de vida saludable.

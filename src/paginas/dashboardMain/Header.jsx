@@ -5,7 +5,7 @@ import {
   FaSignInAlt, FaUserPlus
 } from "react-icons/fa";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
-import CartModal from "./CartModal"; // Asegúrate de importar tu modal de carrito si lo usas aquí
+import CartModal from "./CartModal";
 import Login from "../usuarios/Login";
 import Registro from "../usuarios/Registro";
 
@@ -72,17 +72,9 @@ export default function HeaderDashboard() {
 
   return (
     <>
-      <div className="top-announcement-bar">
-        <div className="announcement-track">
-          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span>🚚 <strong>¡Envío Gratis!</strong> por compras mayores a <strong>$50.000</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        </div>
-      </div>
-
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          <h1 className="logo" onClick={() => navigate('/dashboard_main')} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
