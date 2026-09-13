@@ -8,17 +8,15 @@ import {
 import { useAuth } from "../../funciones/useAuth";
 import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
-import axios from "axios";
-import { URL_SERVER } from "../../funciones/conexion";
+import { apiAxios } from "../../funciones/conexion"; // Usar instancia configurada con withCredentials
 
 export default function HeaderDashboard() {
-  const { userData, loading } = useAuth();
+  const { userData, verifyToken } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  
-  // Estado para el texto de búsqueda
+
   const [searchText, setSearchText] = useState(() => {
     return sessionStorage.getItem('search_cdisfruta') || "";
   });
@@ -32,23 +30,26 @@ export default function HeaderDashboard() {
     setDropdownOpen(false);
     setLogoutModalOpen(true);
   };
-  
+
   const handleConfirmLogout = async () => {
     setLogoutModalOpen(false);
     try {
-      const response = await axios.post(`${URL_SERVER}/logout`);
-      if (response.status === 200) {
-        sessionStorage.removeItem('token');
-      }
+      // Petición al endpoint /logout (la cookie access_token se elimina automáticamente)
+      await apiAxios.post('/logout');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     } finally {
-      window.location.href = '/';
+      // Re-verificar estado de autenticación en el Context/Hook global
+      if (typeof verifyToken === 'function') {
+        await verifyToken();
+      }
+      // Redirección SPA suave
+      navigate('/');
     }
   };
+
   const handleCancelLogout = () => setLogoutModalOpen(false);
 
-  // Función para disparar la búsqueda
   const executeSearch = (term) => {
     sessionStorage.setItem('search_cdisfruta', term);
     window.dispatchEvent(new CustomEvent('productSearch', { detail: term }));
@@ -65,7 +66,6 @@ export default function HeaderDashboard() {
     executeSearch(searchText);
   };
 
-  // Efecto para el badge del carrito
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
@@ -81,7 +81,6 @@ export default function HeaderDashboard() {
     };
   }, []);
 
-  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -92,7 +91,6 @@ export default function HeaderDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Bloquear scroll cuando hay modales abiertos
   useEffect(() => {
     if (logoutModalOpen || cartModalOpen) {
       document.body.style.overflow = "hidden";
@@ -110,7 +108,6 @@ export default function HeaderDashboard() {
             CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
-          {/* Formulario de búsqueda conectado */}
           <form className="search-bar" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
@@ -140,7 +137,7 @@ export default function HeaderDashboard() {
                 <div className="dropdown-menu profile-menu">
                   {userData ? (
                     <>
-                      <div className="dropdown-header">Hola, {userData.nombre.split(' ')[0]}</div>
+                      <div className="dropdown-header">Hola, {userData.nombre ? userData.nombre.split(' ')[0] : 'Usuario'}</div>
                       <ul className="dropdown-list">
                         <li onClick={() => { setDropdownOpen(false); navigate('/configuracion'); }}>
                           <FaCog /> Configuración

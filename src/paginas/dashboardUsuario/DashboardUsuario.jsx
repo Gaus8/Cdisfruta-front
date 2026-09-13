@@ -4,7 +4,6 @@ import HeaderDashboard from "./Header";
 import ProductosTienda from "./ProductosTienda";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaChevronUp } from "react-icons/fa";
-import AccesoDenegado from "../usuarios/AccesoDenegado";
 
 export default function DashboardUsuario() {
   const { userData, loading } = useAuth();
@@ -39,8 +38,6 @@ export default function DashboardUsuario() {
       </div>
     );
   }
-
-  if (!userData || userData.rol !== 'user') return <AccesoDenegado />;
 
   return (
     <div className="userpage-container">

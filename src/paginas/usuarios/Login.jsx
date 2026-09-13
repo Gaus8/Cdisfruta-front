@@ -1,13 +1,14 @@
 import '../../assets/styles/usuarios/forms.css';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   IoMailOutline,
   IoLockClosedOutline,
   IoArrowForwardOutline,
   IoCloseOutline,
   IoEyeOutline,
-  IoEyeOffOutline
+  IoEyeOffOutline,
+  IoTimeOutline
 } from "react-icons/io5";
 import { iniciarSesion } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
@@ -15,7 +16,9 @@ import { ResetPasswordModal } from './ResetPasswordModal';
 
 function Login({ cerrar, irRegistro }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [respuestaServer, setRespuestaServer] = useState("");
+  const [mensajeExpirado, setMensajeExpirado] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isResetOpen, setIsResetOpen] = useState(false);
@@ -24,6 +27,13 @@ function Login({ cerrar, irRegistro }) {
     email: "",
     password: ""
   });
+
+  // Detectar si fue redirigido por expiración de token
+  useEffect(() => {
+    if (searchParams.get('expired') === 'true') {
+      setMensajeExpirado('Tu sesión ha expirado por inactividad. Ingresa nuevamente.');
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     setData({
@@ -35,6 +45,7 @@ function Login({ cerrar, irRegistro }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRespuestaServer("");
+    setMensajeExpirado(""); // Limpia la alerta de expiración al intentar ingresar
 
     if (!data.email || !data.password) {
       alert('Todos los campos son obligatorios');
@@ -78,6 +89,28 @@ function Login({ cerrar, irRegistro }) {
 
           <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
           <h3>Inicio de Sesión</h3>
+
+          {/* Banner de alerta si la sesión expiró */}
+          {mensajeExpirado && (
+            <div 
+              style={{
+                backgroundColor: '#fff3cd',
+                color: '#856404',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                marginBottom: '15px',
+                border: '1px solid #ffeeba',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '0.88rem',
+                textAlign: 'left'
+              }}
+            >
+              <IoTimeOutline size={20} style={{ flexShrink: 0 }} />
+              <span>{mensajeExpirado}</span>
+            </div>
+          )}
 
           {/* Campo Email */}
           <div className="form-container-input">

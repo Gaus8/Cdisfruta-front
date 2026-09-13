@@ -3,13 +3,12 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import '../../assets/styles/dashboardAdmin/dashboard_admin.css'
 import { useAuth } from '../../funciones/useAuth';
-import AccesoDenegado from "../usuarios/AccesoDenegado";
+
 
 export default function DashboardAdmin() {
   const { userData, loading } = useAuth();
 
   if (loading) return <div>Cargando...</div>;
-  if (!userData || userData.rol !== 'admin') return <AccesoDenegado/>;
 
   return (
     <div className="dashboard-container">
@@ -18,7 +17,7 @@ export default function DashboardAdmin() {
         <Header userName={userData.nombre} />
         <main className="dashboard-view-port">
           {/* Aquí es donde se renderizará Productos, Home, etc. */}
-          <Outlet /> 
+          <Outlet />
         </main>
       </div>
     </div>

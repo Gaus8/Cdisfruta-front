@@ -10,7 +10,8 @@ export const iniciarSesion = async (credentials) => {
   try {
     const res = await apiAxios.post('/login', credentials);
     if (res.status === 200) {
-      sessionStorage.setItem('token', res.data.token);
+      // La cookie httpOnly se guarda automáticamente en el navegador.
+      // Retornamos la respuesta (res.data.user, res.data.rol, etc.)
       return res.data;
     }
   } catch (err) {
@@ -18,7 +19,6 @@ export const iniciarSesion = async (credentials) => {
     throw new Error(message);
   }
 };
-
 export const procesarErroresRegistro = (errorData) => {
   let nuevosErrores = { s1: "", s2: "", s3: "" };
 
