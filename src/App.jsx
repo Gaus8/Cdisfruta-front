@@ -1,18 +1,18 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { useAuth } from "./funciones/useAuth";
-import { RutaProtegida } from "./paginas/usuarios/RutaProtegida";
+import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
 
-import MainPage from './paginas/mainPage/MainPage';
-import Validacion from "./paginas/usuarios/Validacion";
-import DashboardUsuario from "./paginas/dashboardUsuario/DashboardUsuario";
-import ConfiguracionUsuario from "./paginas/usuarios/ConfiguracionUsuario";
+import MainPage from './paginas/landingPage/MainPage';
+import Validacion from "./paginas/usuariosAuth/Validacion";
+import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
+import ConfiguracionUsuario from "./paginas/usuariosAuth/ConfiguracionUsuario";
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
-import DashboardMain from "./paginas/dashboardMain/DashboardMain";
+import Tienda from "./paginas/paginaTienda/Tienda";
 import Terminos from "./assets/styles/legal/Terminos";
 import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
-import { ResetPasswordPage } from "./paginas/usuarios/ResetPasswordPage";
+import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
 
 // 1. Componente Layout para rutas de Usuarios Autenticados
 function LayoutUsuario() {
@@ -41,33 +41,34 @@ function LayoutAdmin() {
   );
 }
 
-// 3. Objeto router estático (se instancia solo UNA vez fuera de la renderización de App)
+// 3. Objeto router estático
 const router = createBrowserRouter([
   // --- RUTAS PÚBLICAS ---
   { path: '/', element: <MainPage /> },
   { path: '/login', element: <MainPage /> },
   { path: '/registro', element: <MainPage /> },
+  { path: '/tienda', element: <Tienda /> }, // 👈 Vista pública de catálogo (sin login)
   { path: '/reset-password', element: <ResetPasswordPage /> },
   { path: '/validacion', element: <Validacion /> },
   { path: '/terminos', element: <Terminos /> },
   { path: '/politica-datos', element: <PoliticaDatos /> },
 
-  // --- RUTAS PROTEGIDAS (Cualquier usuario autenticado) ---
+  // --- RUTAS PROTEGIDAS (Cliente Autenticado) ---
   {
     element: <LayoutUsuario />,
     children: [
-      { path: '/dashboard_usuario', element: <DashboardUsuario /> },
-      { path: '/configuracion', element: <ConfiguracionUsuario /> },
-      { path: '/dashboard_main', element: <DashboardMain /> },
+      { path: '/cliente/tienda', element: <DashboardUsuario /> }, // 👈 Panel del cliente autenticado
+      { path: '/cliente/perfil', element: <DashboardUsuario /> },
+      { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
     ],
   },
 
-  // --- RUTAS PROTEGIDAS (Solo Administradores) ---
+  // --- RUTAS PROTEGIDAS (Administrador) ---
   {
     element: <LayoutAdmin />,
     children: [
       {
-        path: '/dashboard_admin',
+        path: '/admin',
         element: <DashboardAdmin />,
         children: [
           { index: true, element: <HomeAdmin /> },

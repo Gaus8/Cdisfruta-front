@@ -1,41 +1,51 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { URL_SERVER } from './conexion';
+import { useState, useEffect, useCallback } from 'react';
+import { apiAxios } from './conexion';
 
 export const useAuth = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
-  const verifyToken = async () => {
+  const verifyToken = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem('token'); // 👈 obtén el token
-
-      const res = await axios.get(`${URL_SERVER}/verify-token`, {
-        withCredentials: true,
-        headers: token ? { Authorization: `Bearer ${token}` } : {} // 👈 envíalo
-      });
+      // Usamos apiAxios: las cookies httpOnly se envían automáticamente
+      const res = await apiAxios.get('/verify-token');
 
       if (res.data.valid) {
         setUserData(res.data.user);
         setAuthenticated(true);
         return res.data;
       } else {
+        setUserData(null);
         setAuthenticated(false);
         return null;
       }
     } catch (error) {
+      setUserData(null);
       setAuthenticated(false);
-      console.error("Error de autenticación:", error.response?.data?.message || error.message);
       return null;
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    verifyToken();
   }, []);
 
-  return { userData, loading, authenticated };
+  useEffect(() => {
+    // 1. Verificar token al cargar el hook
+    verifyToken();
+
+    // 2. Escuchar cuando el interceptor detecte un 401/403
+    const handleSessionExpired = () => {
+      setUserData(null);
+      setAuthenticated(false);
+      setLoading(false);
+    };
+
+    window.addEventListener('session-expired', handleSessionExpired);
+
+    return () => {
+      window.removeEventListener('session-expired', handleSessionExpired);
+    };
+  }, [verifyToken]);
+
+  return { userData, loading, authenticated, verifyToken };
 };

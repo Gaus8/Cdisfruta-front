@@ -4,8 +4,8 @@ import '../../assets/styles/mainPage/headerResponsive.css';
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom"; // Importar useLocation
 
-import Registro from '../usuarios/Registro';
-import Login from '../usuarios/Login';
+import Registro from '../usuariosAuth/Registro';
+import Login from '../usuariosAuth/Login';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,7 +70,7 @@ export default function Header() {
             <button 
               className="hdr-btn hdr-btn--solid"
               onClick={() => {
-                navigate('/dashboard_main');
+                navigate('/tienda');
                 closeMenu();
               }}
             >

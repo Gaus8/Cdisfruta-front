@@ -1,5 +1,5 @@
 import '../../assets/styles/usuarios/forms.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   IoMailOutline,
@@ -14,7 +14,7 @@ import { iniciarSesion } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
 
-function Login({ cerrar, irRegistro }) {
+function Login({ cerrar, irRegistro, verifyToken }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [respuestaServer, setRespuestaServer] = useState("");
@@ -28,12 +28,27 @@ function Login({ cerrar, irRegistro }) {
     password: ""
   });
 
-  // Detectar si fue redirigido por expiración de token
-  useEffect(() => {
+  const evaluarExpiracion = useCallback(() => {
+    // Solo verifica el query param ?expired=true que envía RutaProtegida
     if (searchParams.get('expired') === 'true') {
       setMensajeExpirado('Tu sesión ha expirado por inactividad. Ingresa nuevamente.');
+    } else {
+      setMensajeExpirado('');
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    evaluarExpiracion();
+
+    const handleSessionExpired = () => {
+      setMensajeExpirado('Tu sesión ha expirado. Debes ingresar nuevamente.');
+    };
+
+    window.addEventListener('session-expired', handleSessionExpired);
+    return () => {
+      window.removeEventListener('session-expired', handleSessionExpired);
+    };
+  }, [evaluarExpiracion]);
 
   const handleChange = (e) => {
     setData({
@@ -45,10 +60,9 @@ function Login({ cerrar, irRegistro }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRespuestaServer("");
-    setMensajeExpirado(""); // Limpia la alerta de expiración al intentar ingresar
 
     if (!data.email || !data.password) {
-      alert('Todos los campos son obligatorios');
+      setRespuestaServer('Todos los campos son obligatorios.');
       return;
     }
 
@@ -56,12 +70,18 @@ function Login({ cerrar, irRegistro }) {
 
     try {
       const dataUsuario = await iniciarSesion(data);
+
+      if (verifyToken) {
+        await verifyToken();
+      }
+
+      setMensajeExpirado("");
       cerrar();
 
       if (dataUsuario?.rol === 'admin') {
-        navigate("/dashboard_admin");
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/dashboard_usuario");
+        navigate("/cliente/tienda", { replace: true });
       }
     } catch (err) {
       setRespuestaServer(err.message);
@@ -90,9 +110,8 @@ function Login({ cerrar, irRegistro }) {
           <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
           <h3>Inicio de Sesión</h3>
 
-          {/* Banner de alerta si la sesión expiró */}
           {mensajeExpirado && (
-            <div 
+            <div
               style={{
                 backgroundColor: '#fff3cd',
                 color: '#856404',
@@ -112,7 +131,6 @@ function Login({ cerrar, irRegistro }) {
             </div>
           )}
 
-          {/* Campo Email */}
           <div className="form-container-input">
             <IoMailOutline className="icon-react" />
             <input
@@ -126,7 +144,6 @@ function Login({ cerrar, irRegistro }) {
             />
           </div>
 
-          {/* Campo Contraseña con Ojo */}
           <div className="form-container-input">
             <IoLockClosedOutline className="icon-react" />
             <input
@@ -148,7 +165,7 @@ function Login({ cerrar, irRegistro }) {
             </button>
           </div>
 
-          <p className="error-text">{respuestaServer}</p>
+          {respuestaServer && <p className="error-text">{respuestaServer}</p>}
 
           <button
             className="button"
@@ -190,7 +207,6 @@ function Login({ cerrar, irRegistro }) {
         </form>
       </div>
 
-      {/* Modal renderizado fuera de la jerarquía del form */}
       <ResetPasswordModal
         isOpen={isResetOpen}
         onClose={() => setIsResetOpen(false)}

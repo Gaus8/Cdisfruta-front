@@ -6,10 +6,12 @@ import {
 } from "react-icons/fa";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import CartModal from "./CartModal";
-import Login from "../usuarios/Login";
-import Registro from "../usuarios/Registro";
+import Login from "../usuariosAuth/Login";
+import Registro from "../usuariosAuth/Registro";
+import { useAuth } from "../../funciones/useAuth";
 
-export default function HeaderDashboard() {
+export default function HeaderTienda() {
+  const { verifyToken, authenticated } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [cartModalOpen, setCartModalOpen] = useState(false);
@@ -17,7 +19,6 @@ export default function HeaderDashboard() {
   const [abrirRegistro, setAbrirRegistro] = useState(false);
   const [abrirLogin, setAbrirLogin] = useState(false);
 
-  // Estado para el texto de búsqueda sincronizado
   const [searchText, setSearchText] = useState(() => {
     return sessionStorage.getItem('search_cdisfruta') || "";
   });
@@ -26,7 +27,6 @@ export default function HeaderDashboard() {
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
 
-  // Funciones para la barra de búsqueda en tiempo real
   const executeSearch = (term) => {
     sessionStorage.setItem('search_cdisfruta', term);
     window.dispatchEvent(new CustomEvent('productSearch', { detail: term }));
@@ -43,7 +43,22 @@ export default function HeaderDashboard() {
     executeSearch(searchText);
   };
 
-  // Efecto para el badge del carrito
+  // Solo abrimos el login si el usuario estaba explícitamente autenticado y la sesión expiró
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      if (authenticated) {
+        setAbrirRegistro(false);
+        setAbrirLogin(true);
+      }
+    };
+
+    window.addEventListener('session-expired', handleSessionExpired);
+    return () => {
+      window.removeEventListener('session-expired', handleSessionExpired);
+    };
+  }, [authenticated]);
+
+  // Badge del carrito
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
@@ -59,7 +74,7 @@ export default function HeaderDashboard() {
     };
   }, []);
 
-  // Cerrar dropdown al hacer click fuera
+  // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -70,19 +85,26 @@ export default function HeaderDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleLogoClick = () => {
+    if (authenticated) {
+      navigate('/cliente/tienda');
+    } else {
+      navigate('/tienda');
+    }
+  };
+
   return (
     <>
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/dashboard_main')} style={{ cursor: 'pointer' }}>
+          <h1 className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
-          {/* Barra de búsqueda conectada */}
           <form className="search-bar" onSubmit={handleSearchSubmit}>
-            <input 
-              type="text" 
-              placeholder="Buscar snacks saludables..." 
+            <input
+              type="text"
+              placeholder="Buscar snacks saludables..."
               value={searchText}
               onChange={handleSearchChange}
             />
@@ -121,7 +143,11 @@ export default function HeaderDashboard() {
               {abrirLogin && (
                 <Login
                   cerrar={() => setAbrirLogin(false)}
-                  irRegistro={() => { setAbrirLogin(false); setAbrirRegistro(true); }}
+                  irRegistro={() => {
+                    setAbrirLogin(false);
+                    setAbrirRegistro(true);
+                  }}
+                  verifyToken={verifyToken}
                 />
               )}
 

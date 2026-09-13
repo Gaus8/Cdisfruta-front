@@ -3,15 +3,13 @@ import { apiAxios } from "./conexion";
 /**
  * Inicia sesión con credenciales de email y contraseña.
  * @param {Object} credentials - Objeto con { email, password }
- * @returns {Promise<Object>} Datos de respuesta del servidor (token, rol, etc.)
+ * @returns {Promise<Object>} Datos de respuesta del servidor (rol, usuario, etc.)
  */
-
 export const iniciarSesion = async (credentials) => {
   try {
     const res = await apiAxios.post('/login', credentials);
     if (res.status === 200) {
-      // La cookie httpOnly se guarda automáticamente en el navegador.
-      // Retornamos la respuesta (res.data.user, res.data.rol, etc.)
+      // La cookie httpOnly se guarda automáticamente vía apiAxios (withCredentials: true)
       return res.data;
     }
   } catch (err) {
@@ -19,6 +17,10 @@ export const iniciarSesion = async (credentials) => {
     throw new Error(message);
   }
 };
+
+/**
+ * Procesa y asigna los errores de validación provenientes del backend.
+ */
 export const procesarErroresRegistro = (errorData) => {
   let nuevosErrores = { s1: "", s2: "", s3: "" };
 
@@ -59,15 +61,15 @@ export const registrarUsuario = async (data, terminos) => {
   }
 };
 
-
 /**
- * Autentica al usuario en el backend enviando el código devuelto por Google.
+ * Autentica al usuario con Google enviando el código de autorización devuelto por OAuth.
  */
 export const loginConGoogle = async (code) => {
   try {
     const res = await apiAxios.post('/auth/google', { code });
     if (res.status === 200) {
-      sessionStorage.setItem('token', res.data.token);
+      // CORREGIDO: Se eliminó sessionStorage.setItem('token', res.data.token)
+      // La cookie access_token httpOnly es establecida por el backend
       return res.data;
     }
   } catch (err) {
@@ -77,7 +79,7 @@ export const loginConGoogle = async (code) => {
 };
 
 /**
- * Cambio de Contraseñas
+ * Restablecimiento de contraseña
  */
 export const solicitarRestablecerPassword = async (email) => {
   try {

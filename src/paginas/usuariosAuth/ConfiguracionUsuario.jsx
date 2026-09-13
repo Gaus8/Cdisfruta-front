@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../funciones/useAuth";
-import HeaderDashboard from "../dashboardUsuario/Header";
+import HeaderDashboard from "../paginaClientes/Header";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaUser, FaLock, FaEnvelope, FaShieldAlt, FaCamera, FaSave, FaCheckCircle } from "react-icons/fa";
 import axios from 'axios';

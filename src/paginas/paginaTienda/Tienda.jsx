@@ -1,14 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../funciones/useAuth";
-import HeaderDashboard from "./Header";
+import HeaderTienda from "./HeaderTienda";
 import ProductosTienda from "./ProductosTienda";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaChevronUp } from "react-icons/fa";
 
-export default function DashboardUsuario() {
+export default function Tienda() {
   const { userData, loading } = useAuth();
 
-  // Mantenemos la categoría inicial por defecto para el componente de productos
   const [categoriaActiva] = useState("Todos los productos");
   const [mostrarBotonSubir, setMostrarBotonSubir] = useState(false);
 
@@ -22,13 +21,15 @@ export default function DashboardUsuario() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-      setMostrarBotonSubir(true);
-    } else {
-      setMostrarBotonSubir(false);
-    }
-  });
+  // Manejo correcto de event listeners en React
+  useEffect(() => {
+    const handleScroll = () => {
+      setMostrarBotonSubir(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (loading) {
     return (
@@ -41,7 +42,7 @@ export default function DashboardUsuario() {
 
   return (
     <div className="userpage-container">
-      <HeaderDashboard />
+      <HeaderTienda />
 
       <div className="content-wrapper" style={{ display: 'block' }}>
         <main className="main-products-content" style={{ width: '100%' }}>

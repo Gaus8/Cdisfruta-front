@@ -8,8 +8,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import Registro from '../usuarios/Registro';
-import Login from '../usuarios/Login';
+import Registro from '../usuariosAuth/Registro';
+import Login from '../usuariosAuth/Login';
 
 const productos = [
   {

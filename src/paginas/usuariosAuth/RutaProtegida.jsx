@@ -22,9 +22,9 @@ export const RutaProtegida = ({
     return <Navigate to={`${redirectTo}?expired=true`} replace />;
   }
 
-  // 3. Validación de rol
+  // 3. Validación de rol: Redirige a la vista principal del cliente si intenta acceder a /admin sin permisos
   if (requiredRole && user?.rol !== requiredRole) {
-    return <Navigate to="/dashboard_usuario" replace />;
+    return <Navigate to="/cliente/tienda" replace />;
   }
 
   // 4. Render de rutas hijas

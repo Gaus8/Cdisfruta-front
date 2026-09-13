@@ -5,10 +5,10 @@ import {
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
   FaSignInAlt, FaUserPlus
 } from "react-icons/fa";
-import { useAuth } from "../../funciones/useAuth";
 import CartModal from "./CartModal";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import { apiAxios } from "../../funciones/conexion"; // Usar instancia configurada con withCredentials
+import { useAuth } from "../../funciones/useAuth";
 
 export default function HeaderDashboard() {
   const { userData, verifyToken } = useAuth();
@@ -104,7 +104,7 @@ export default function HeaderDashboard() {
     <>
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/dashboard_main')} style={{ cursor: 'pointer' }}>
+          <h1 className="logo" onClick={() => navigate('/cliente/tienda')} style={{ cursor: 'pointer' }}>
             CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
@@ -139,10 +139,10 @@ export default function HeaderDashboard() {
                     <>
                       <div className="dropdown-header">Hola, {userData.nombre ? userData.nombre.split(' ')[0] : 'Usuario'}</div>
                       <ul className="dropdown-list">
-                        <li onClick={() => { setDropdownOpen(false); navigate('/configuracion'); }}>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/configuracion'); }}>
                           <FaCog /> Configuración
                         </li>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/pedidos'); }}>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/pedidos'); }}>
                           <FaShoppingBag /> Mis Pedidos
                         </li>
                         <hr />
