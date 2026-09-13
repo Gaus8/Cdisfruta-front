@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { IoLockClosedOutline, IoLogInOutline, IoHomeOutline } from 'react-icons/io5';
-import '../../assets/styles/usuarios/acceso_denegado.css'
+import '../../assets/styles/usuarios/acceso_denegado.css';
 
 function AccesoDenegado() {
   const navigate = useNavigate();
@@ -24,13 +24,15 @@ function AccesoDenegado() {
         <div className="acceso-divider" />
 
         <div className="acceso-actions">
-          <button className="btn-primary" onClick={() => navigate('/')}>
-            <IoLogInOutline size={16} />
-            Iniciar sesión
+          {/* Redirige a la ruta /login para abrir la vista/modal de inicio de sesión */}
+          <button className="btn-primary" onClick={() => navigate('/login')}>
+            <IoLogInOutline size={18} />
+            <span>Iniciar sesión</span>
           </button>
+          
           <button className="btn-ghost" onClick={() => navigate('/')}>
-            <IoHomeOutline size={16} />
-            Volver al inicio
+            <IoHomeOutline size={18} />
+            <span>Volver al inicio</span>
           </button>
         </div>
 
