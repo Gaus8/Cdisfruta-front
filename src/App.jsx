@@ -11,7 +11,7 @@ import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
 import MainPage from './paginas/landingPage/MainPage';
 import Validacion from "./paginas/usuariosAuth/Validacion";
 import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
-import ConfiguracionUsuario from "./paginas/usuariosAuth/ConfiguracionUsuario";
+import ConfiguracionUsuario from "./paginas/paginaClientes/ConfiguracionUsuario";
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
@@ -32,7 +32,7 @@ function LoginWrapper() {
 // Debe ser MENOR al tiempo de vida del token para detectarlo antes de que
 // el usuario haga cualquier otra cosa. Con tokens de 1 minuto (pruebas),
 // 15s es razonable; en producción con tokens más largos, súbelo (ej. 60000).
-const SESSION_CHECK_INTERVAL_MS = 15000;
+const SESSION_CHECK_INTERVAL_MS = 120000;
 
 // Hook que combina useAuth con re-verificación al navegar Y con un chequeo
 // periódico (polling) mientras el usuario permanece inactivo en la misma
