@@ -1,4 +1,10 @@
-import { createBrowserRouter, RouterProvider } from "react-router";
+﻿import { 
+  createBrowserRouter, 
+  RouterProvider, 
+  Navigate,
+  useLocation
+} from "react-router-dom";
+import { useEffect, useRef, useCallback } from "react";
 import { useAuth } from "./funciones/useAuth";
 import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
 
@@ -13,10 +19,72 @@ import Tienda from "./paginas/paginaTienda/Tienda";
 import Terminos from "./assets/styles/legal/Terminos";
 import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
 import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
+import Login from "./paginas/usuariosAuth/Login";
+import Registro from "./paginas/usuariosAuth/Registro";
 
-// 1. Componente Layout para rutas de Usuarios Autenticados
+// Componente Wrapper para pasar verifyToken al Login standalone
+function LoginWrapper() {
+  const { verifyToken } = useAuth();
+  return <Login verifyToken={verifyToken} />;
+}
+
+// Cada cuánto se revisa la sesión mientras el usuario está quieto en una página.
+// Debe ser MENOR al tiempo de vida del token para detectarlo antes de que
+// el usuario haga cualquier otra cosa. Con tokens de 1 minuto (pruebas),
+// 15s es razonable; en producción con tokens más largos, súbelo (ej. 60000).
+const SESSION_CHECK_INTERVAL_MS = 15000;
+
+// Hook que combina useAuth con re-verificación al navegar Y con un chequeo
+// periódico (polling) mientras el usuario permanece inactivo en la misma
+// página. Detecta expiración real (hubo sesión válida antes y ya no la hay)
+// sin disparar falsos positivos en logout o en visitas sin sesión previa.
+function useGuardedAuth() {
+  const { userData, loading, authenticated, verifyToken } = useAuth();
+  const location = useLocation();
+  const wasAuthenticated = useRef(false);
+  const isFirstCheck = useRef(true);
+
+  // Recordamos si en algún momento SÍ estuvo autenticado
+  useEffect(() => {
+    if (authenticated) {
+      wasAuthenticated.current = true;
+    }
+  }, [authenticated]);
+
+  // Verificación reutilizable: si había sesión antes y ya no la hay, marcamos expiración real
+  const checkAndFlagExpiration = useCallback(async () => {
+    const data = await verifyToken();
+    if (!data && wasAuthenticated.current) {
+      sessionStorage.setItem('session_was_expired', 'true');
+    }
+  }, [verifyToken]);
+
+  // 1. Re-verifica la sesión cada vez que cambia de ruta (dentro del área protegida)
+  useEffect(() => {
+    // La primera verificación ya la hace useAuth al montar; evitamos duplicarla
+    if (isFirstCheck.current) {
+      isFirstCheck.current = false;
+      return;
+    }
+    checkAndFlagExpiration();
+  }, [location.pathname, checkAndFlagExpiration]);
+
+  // 2. Chequeo periódico: detecta la expiración aunque el usuario no navegue
+  //    ni haga ninguna acción, solo esté quieto viendo una página protegida.
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      checkAndFlagExpiration();
+    }, SESSION_CHECK_INTERVAL_MS);
+
+    return () => clearInterval(intervalId);
+  }, [checkAndFlagExpiration]);
+
+  return { userData, loading, authenticated };
+}
+
+// Layouts de Seguridad
 function LayoutUsuario() {
-  const { userData, loading, authenticated } = useAuth();
+  const { userData, loading, authenticated } = useGuardedAuth();
   return (
     <RutaProtegida 
       authenticated={authenticated} 
@@ -27,9 +95,8 @@ function LayoutUsuario() {
   );
 }
 
-// 2. Componente Layout para rutas exclusivas de Administrador
 function LayoutAdmin() {
-  const { userData, loading, authenticated } = useAuth();
+  const { userData, loading, authenticated } = useGuardedAuth();
   return (
     <RutaProtegida 
       authenticated={authenticated} 
@@ -41,29 +108,29 @@ function LayoutAdmin() {
   );
 }
 
-// 3. Objeto router estático
+// Definición de las Rutas de la Aplicación
 const router = createBrowserRouter([
-  // --- RUTAS PÚBLICAS ---
+  // Rutas públicas independientes
   { path: '/', element: <MainPage /> },
-  { path: '/login', element: <MainPage /> },
-  { path: '/registro', element: <MainPage /> },
-  { path: '/tienda', element: <Tienda /> }, // 👈 Vista pública de catálogo (sin login)
+  { path: '/tienda', element: <Tienda /> },
+  { path: '/login', element: <LoginWrapper /> },
+  { path: '/registro', element: <Registro /> },
   { path: '/reset-password', element: <ResetPasswordPage /> },
   { path: '/validacion', element: <Validacion /> },
   { path: '/terminos', element: <Terminos /> },
   { path: '/politica-datos', element: <PoliticaDatos /> },
 
-  // --- RUTAS PROTEGIDAS (Cliente Autenticado) ---
+  // Rutas protegidas (Clientes)
   {
     element: <LayoutUsuario />,
     children: [
-      { path: '/cliente/tienda', element: <DashboardUsuario /> }, // 👈 Panel del cliente autenticado
+      { path: '/cliente/tienda', element: <DashboardUsuario /> },
       { path: '/cliente/perfil', element: <DashboardUsuario /> },
       { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
     ],
   },
 
-  // --- RUTAS PROTEGIDAS (Administrador) ---
+  // Rutas protegidas (Administración)
   {
     element: <LayoutAdmin />,
     children: [
@@ -78,10 +145,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  { path: '*', element: <Navigate to="/" replace /> }
 ]);
 
-function App() {
+export default function App() {
   return <RouterProvider router={router} />;
 }
-
-export default App;

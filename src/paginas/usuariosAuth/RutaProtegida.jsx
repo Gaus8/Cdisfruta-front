@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export const RutaProtegida = ({ 
   authenticated, 
@@ -7,8 +7,9 @@ export const RutaProtegida = ({
   requiredRole, 
   redirectTo = '/login' 
 }) => {
+  const location = useLocation();
 
-  // 1. Carga inicial
+  // 1. Estado de carga inicial mientras se verifica la sesión o los datos de usuario
   if (loading || (authenticated && !user)) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -17,16 +18,16 @@ export const RutaProtegida = ({
     );
   }
 
-  // 2. Si no está autenticado, redirigir al Login agregando expired=true
+  // 2. Si no está autenticado, redirigir al login guardando la ubicación original
   if (!authenticated) {
-    return <Navigate to={`${redirectTo}?expired=true`} replace />;
+    return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // 3. Validación de rol: Redirige a la vista principal del cliente si intenta acceder a /admin sin permisos
+  // 3. Validación de rol: Redirige al cliente si intenta acceder a rutas administrativas sin rol de admin
   if (requiredRole && user?.rol !== requiredRole) {
     return <Navigate to="/cliente/tienda" replace />;
   }
 
-  // 4. Render de rutas hijas
+  // 4. Renderizar rutas protegidas hijas
   return <Outlet />;
 };

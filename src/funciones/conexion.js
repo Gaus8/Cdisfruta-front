@@ -10,15 +10,24 @@ export const apiAxios = axios.create({
 apiAxios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const isAuthRoute = error.config?.url?.includes('/login');
+    const url = error.config?.url || '';
+    // Evitamos interceptar las rutas explícitas de autenticación
+    const isAuthRoute = 
+      url.includes('/login') || 
+      url.includes('/registro') || 
+      url.includes('/logout') ||
+      url.includes('/verify-token'); // 👈 un 401 aquí es normal para visitantes sin sesión
 
     if (
       error.response && 
       (error.response.status === 401 || error.response.status === 403) &&
       !isAuthRoute
     ) {
-      // Disparar evento global para reaccionar al instante en React
-      window.dispatchEvent(new CustomEvent('session-expired'));
+      // Guardamos la marca de que la sesión venció mientras el usuario usaba la app
+      sessionStorage.setItem('session_was_expired', 'true');
+      
+      // Redirigimos al login
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

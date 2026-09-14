@@ -1,31 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaShoppingCart, FaSearch, FaUserCircle,
-  FaSignInAlt, FaUserPlus
-} from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt } from "react-icons/fa";
 import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import CartModal from "./CartModal";
-import Login from "../usuariosAuth/Login";
-import Registro from "../usuariosAuth/Registro";
 import { useAuth } from "../../funciones/useAuth";
 
 export default function HeaderTienda() {
-  const { verifyToken, authenticated } = useAuth();
+  const { authenticated, logout, userData } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const containerRef = useRef(null);
-  const [abrirRegistro, setAbrirRegistro] = useState(false);
-  const [abrirLogin, setAbrirLogin] = useState(false);
 
-  const [searchText, setSearchText] = useState(() => {
-    return sessionStorage.getItem('search_cdisfruta') || "";
-  });
+  const [searchText, setSearchText] = useState(() => sessionStorage.getItem('search_cdisfruta') || "");
 
   const navigate = useNavigate();
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
+
+  // Navegación limpia a páginas completas de auth
+  const handleAbrirLogin = () => {
+    setDropdownOpen(false);
+    navigate('/login');
+  };
+
+  const handleAbrirRegistro = () => {
+    setDropdownOpen(false);
+    navigate('/registro');
+  };
+
+  const handleCerrarSesion = () => {
+    setDropdownOpen(false);
+    logout();
+    navigate('/login');
+  };
 
   const executeSearch = (term) => {
     sessionStorage.setItem('search_cdisfruta', term);
@@ -33,9 +41,8 @@ export default function HeaderTienda() {
   };
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchText(value);
-    executeSearch(value);
+    setSearchText(e.target.value);
+    executeSearch(e.target.value);
   };
 
   const handleSearchSubmit = (e) => {
@@ -43,27 +50,22 @@ export default function HeaderTienda() {
     executeSearch(searchText);
   };
 
-  // Solo abrimos el login si el usuario estaba explícitamente autenticado y la sesión expiró
+  // Manejo de expiración de sesión (redirección directa)
   useEffect(() => {
     const handleSessionExpired = () => {
       if (authenticated) {
-        setAbrirRegistro(false);
-        setAbrirLogin(true);
+        navigate('/login');
       }
     };
-
     window.addEventListener('session-expired', handleSessionExpired);
-    return () => {
-      window.removeEventListener('session-expired', handleSessionExpired);
-    };
-  }, [authenticated]);
+    return () => window.removeEventListener('session-expired', handleSessionExpired);
+  }, [authenticated, navigate]);
 
   // Badge del carrito
   useEffect(() => {
     const updateBadge = () => {
       const cart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
-      const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-      setCartCount(totalItems);
+      setCartCount(cart.reduce((acc, item) => acc + item.quantity, 0));
     };
     updateBadge();
     window.addEventListener('cartUpdate', updateBadge);
@@ -74,7 +76,7 @@ export default function HeaderTienda() {
     };
   }, []);
 
-  // Cerrar dropdown al hacer clic fuera
+  // Cerrar menú desplegable al hacer clic afuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -85,19 +87,15 @@ export default function HeaderTienda() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogoClick = () => {
-    if (authenticated) {
-      navigate('/cliente/tienda');
-    } else {
-      navigate('/tienda');
-    }
-  };
-
   return (
     <>
       <header className="user-header">
         <div className="header-content">
-          <h1 className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          <h1 
+            className="logo" 
+            onClick={() => navigate(authenticated ? '/cliente/tienda' : '/tienda')} 
+            style={{ cursor: 'pointer' }}
+          >
             CDISFRUTA<span className="dot-shop"> SHOP</span>
           </h1>
 
@@ -112,60 +110,46 @@ export default function HeaderTienda() {
           </form>
 
           <div className="header-actions">
-            <div
-              className="icon-wrapper"
-              onClick={() => setCartModalOpen(true)}
-              style={{ cursor: 'pointer' }}
-            >
+            <div className="icon-wrapper" onClick={() => setCartModalOpen(true)} style={{ cursor: 'pointer' }}>
               <FaShoppingCart className="icon-btn-large" />
               <span className="notification-badge">{cartCount}</span>
             </div>
 
             <div className="dropdown-container" ref={containerRef}>
-              <div className="user-profile" onClick={toggleDropdown}>
+              <div className="user-profile" onClick={toggleDropdown} style={{ cursor: 'pointer' }}>
                 <FaUserCircle size={30} />
               </div>
 
               {dropdownOpen && (
                 <div className="dropdown-menu profile-menu">
-                  <div className="dropdown-header">Bienvenido</div>
+                  <div className="dropdown-header">
+                    {authenticated ? `Hola, ${userData?.nombre || 'Usuario'}` : 'Bienvenido'}
+                  </div>
                   <ul className="dropdown-list">
-                    <li onClick={() => { setDropdownOpen(false); setAbrirLogin(true); }}>
-                      <FaSignInAlt /> Iniciar Sesión
-                    </li>
-                    <li onClick={() => { setDropdownOpen(false); setAbrirRegistro(true); }}>
-                      <FaUserPlus /> Crear Cuenta
-                    </li>
+                    {authenticated ? (
+                      <>
+                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/perfil'); }}>
+                          <FaUser /> Mi Perfil
+                        </li>
+                        <li onClick={handleCerrarSesion}>
+                          <FaSignOutAlt /> Cerrar Sesión
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li onClick={handleAbrirLogin}><FaSignInAlt /> Iniciar Sesión</li>
+                        <li onClick={handleAbrirRegistro}><FaUserPlus /> Crear Cuenta</li>
+                      </>
+                    )}
                   </ul>
                 </div>
-              )}
-
-              {abrirLogin && (
-                <Login
-                  cerrar={() => setAbrirLogin(false)}
-                  irRegistro={() => {
-                    setAbrirLogin(false);
-                    setAbrirRegistro(true);
-                  }}
-                  verifyToken={verifyToken}
-                />
-              )}
-
-              {abrirRegistro && (
-                <Registro
-                  cerrar={() => setAbrirRegistro(false)}
-                  irLogin={() => { setAbrirRegistro(false); setAbrirLogin(true); }}
-                />
               )}
             </div>
           </div>
         </div>
       </header>
 
-      <CartModal
-        isOpen={cartModalOpen}
-        onClose={() => setCartModalOpen(false)}
-      />
+      <CartModal isOpen={cartModalOpen} onClose={() => setCartModalOpen(false)} />
     </>
   );
 }

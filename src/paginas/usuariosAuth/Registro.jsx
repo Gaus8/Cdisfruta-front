@@ -6,12 +6,12 @@ import {
   IoMailOutline, 
   IoLockClosedOutline, 
   IoArrowForwardOutline, 
-  IoCloseOutline 
+  IoArrowBackOutline 
 } from "react-icons/io5";
 import { registrarUsuario, procesarErroresRegistro } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 
-function Registro({ cerrar, irLogin }) {
+export default function Registro() {
   const navigate = useNavigate();
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [terminos, setTerminos] = useState(false); 
@@ -43,7 +43,6 @@ function Registro({ cerrar, irLogin }) {
       
       if (response.status === 201) {
         localStorage.setItem('userEmail', data.email);
-        cerrar(); 
         navigate('/validacion');
       }
     } catch (errorData) {
@@ -55,14 +54,19 @@ function Registro({ cerrar, irLogin }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={cerrar}>
+    <div className="auth-page-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
       <form
         className="form-container"
         onSubmit={handleSubmit}
-        onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="btn-close-modal" onClick={cerrar} disabled={loading}>
-          <IoCloseOutline />
+        <button 
+          type="button" 
+          className="btn-close-modal" 
+          onClick={() => navigate('/')} 
+          disabled={loading}
+          title="Volver a la tienda"
+        >
+          <IoArrowBackOutline />
         </button>
 
         <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo" />
@@ -147,14 +151,16 @@ function Registro({ cerrar, irLogin }) {
           )}
         </button>
 
-        <LoginGoogle cerrarModal={cerrar} />
+        <LoginGoogle />
         
-        <span className="link-switch" onClick={!loading ? irLogin : undefined} style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
+        <span 
+          className="link-switch" 
+          onClick={() => !loading && navigate('/login')} 
+          style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+        >
           ¿Ya tienes cuenta? Inicia Sesión
         </span>
       </form>
     </div>
   );
 }
-
-export default Registro;  

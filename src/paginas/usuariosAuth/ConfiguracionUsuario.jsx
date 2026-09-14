@@ -3,8 +3,7 @@ import { useAuth } from "../../funciones/useAuth";
 import HeaderDashboard from "../paginaClientes/Header";
 import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaUser, FaLock, FaEnvelope, FaShieldAlt, FaCamera, FaSave, FaCheckCircle } from "react-icons/fa";
-import axios from 'axios';
-import { URL_SERVER } from '../../funciones/conexion';
+import { apiAxios } from '../../funciones/conexion';
 
 // Lista de avatares predefinidos (URLs de DiceBear)
 const AVATAR_OPTIONS = [
@@ -41,17 +40,12 @@ export default function ConfiguracionUsuario() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-
-      const res = await axios.put(`${URL_SERVER}/usuario/actualizar`, {
+      // apiAxios ya trae baseURL, withCredentials (cookie httpOnly) y el
+      // interceptor de sesión expirada configurados en conexion.js
+      const res = await apiAxios.put('/usuario/actualizar', {
         nombre,
         telefono,
         avatar: avatarSeleccionado
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        withCredentials: true
       });
 
       if (res.status === 200) {

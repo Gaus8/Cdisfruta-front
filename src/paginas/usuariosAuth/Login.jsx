@@ -1,22 +1,21 @@
 import '../../assets/styles/usuarios/forms.css';
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   IoMailOutline,
   IoLockClosedOutline,
   IoArrowForwardOutline,
-  IoCloseOutline,
   IoEyeOutline,
   IoEyeOffOutline,
-  IoTimeOutline
+  IoTimeOutline,
+  IoArrowBackOutline
 } from "react-icons/io5";
 import { iniciarSesion } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
 
-function Login({ cerrar, irRegistro, verifyToken }) {
+export default function Login({ verifyToken }) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [respuestaServer, setRespuestaServer] = useState("");
   const [mensajeExpirado, setMensajeExpirado] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
@@ -28,28 +27,24 @@ function Login({ cerrar, irRegistro, verifyToken }) {
     password: ""
   });
 
-  const evaluarExpiracion = useCallback(() => {
-    // Solo verifica el query param ?expired=true que envía RutaProtegida
-    if (searchParams.get('expired') === 'true') {
-      setMensajeExpirado('Tu sesión ha expirado por inactividad. Ingresa nuevamente.');
-    } else {
-      setMensajeExpirado('');
-    }
-  }, [searchParams]);
+  // Evita que el doble-render de StrictMode (solo en desarrollo) borre
+  // el mensaje justo después de mostrarlo
+  const yaVerificoExpiracion = useRef(false);
 
   useEffect(() => {
-    evaluarExpiracion();
+    if (yaVerificoExpiracion.current) return;
+    yaVerificoExpiracion.current = true;
 
-    const handleSessionExpired = () => {
-      setMensajeExpirado('Tu sesión ha expirado. Debes ingresar nuevamente.');
-    };
+    // Verificamos si existe la marca de expiración
+    const wasExpired = sessionStorage.getItem('session_was_expired');
 
-    window.addEventListener('session-expired', handleSessionExpired);
-    return () => {
-      window.removeEventListener('session-expired', handleSessionExpired);
-    };
-  }, [evaluarExpiracion]);
-
+    if (wasExpired === 'true') {
+      setMensajeExpirado('Tu sesión ha expirado por inactividad. Debes ingresar nuevamente.');
+      // Consumimos y eliminamos la marca para que NO vuelva a aparecer
+      sessionStorage.removeItem('session_was_expired');
+    }
+  }, []);
+  
   const handleChange = (e) => {
     setData({
       ...data,
@@ -76,15 +71,15 @@ function Login({ cerrar, irRegistro, verifyToken }) {
       }
 
       setMensajeExpirado("");
-      cerrar();
 
+      // Redirección limpia a las rutas protegidas según el rol
       if (dataUsuario?.rol === 'admin') {
         navigate("/admin", { replace: true });
       } else {
         navigate("/cliente/tienda", { replace: true });
       }
     } catch (err) {
-      setRespuestaServer(err.message);
+      setRespuestaServer(err.message || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }
@@ -92,19 +87,19 @@ function Login({ cerrar, irRegistro, verifyToken }) {
 
   return (
     <>
-      <div className="modal-overlay" onClick={cerrar}>
+      <div className="auth-page-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
         <form
           className="form-container"
           onSubmit={handleSubmit}
-          onClick={(e) => e.stopPropagation()}
         >
           <button
             type="button"
             className="btn-close-modal"
-            onClick={cerrar}
+            onClick={() => navigate('/')}
             disabled={loading}
+            title="Volver a la tienda"
           >
-            <IoCloseOutline />
+            <IoArrowBackOutline />
           </button>
 
           <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
@@ -186,7 +181,7 @@ function Login({ cerrar, irRegistro, verifyToken }) {
             )}
           </button>
 
-          <LoginGoogle cerrarModal={cerrar} />
+          <LoginGoogle />
 
           <button
             type="button"
@@ -199,7 +194,7 @@ function Login({ cerrar, irRegistro, verifyToken }) {
 
           <span
             className="link-switch"
-            onClick={!loading ? irRegistro : undefined}
+            onClick={() => !loading && navigate('/registro')}
             style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
           >
             ¿No tienes cuenta? Regístrate aquí
@@ -214,5 +209,3 @@ function Login({ cerrar, irRegistro, verifyToken }) {
     </>
   );
 }
-
-export default Login;
