@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { URL_SERVER } from '../../funciones/conexion'; 
 import { useAuth } from '../../funciones/useAuth'; // 1. Importa useAuth
 import { FaBoxOpen, FaClock, FaCheckCircle, FaTruck, FaHome } from 'react-icons/fa';
-import '../../assets/styles/usuario/mis_pedidos.css';
+import '../../assets/styles/usuarios/mis_pedidos.css';
 
 export default function MisPedidos() {
   const { userData } = useAuth(); 
