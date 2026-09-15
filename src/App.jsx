@@ -127,6 +127,7 @@ const router = createBrowserRouter([
       { path: '/cliente/tienda', element: <DashboardUsuario /> },
       { path: '/cliente/perfil', element: <DashboardUsuario /> },
       { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
+      { path: '/cliente/pedidos', element: <MisPedidos /> },
     ],
   },
 
