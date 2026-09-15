@@ -3,6 +3,8 @@ import {
   FaTrash, FaTimes, FaWhatsapp, FaUser, FaEnvelope, 
   FaPhone, FaMapMarkerAlt, FaHome, FaStickyNote, FaCheckCircle, FaGlobeAmericas, FaCity 
 } from "react-icons/fa";
+import { URL_SERVER, apiAxios } from "../../funciones/conexion";
+import { useAuth } from "../../funciones/useAuth";
 import "../../assets/styles/dashboardUsuario/cart_modal.css";
 
 const COLOMBIA_GEO = {
@@ -46,6 +48,7 @@ export default function CartModal({ isOpen, onClose }) {
   const [cartItems, setCartItems] = useState([]);
   const [municipiosDisponibles, setMunicipiosDisponibles] = useState([]);
   const formRef = useRef(null);
+  const { userData } = useAuth();
   
   const [formData, setFormData] = useState({
     nombres: "",
@@ -102,44 +105,86 @@ export default function CartModal({ isOpen, onClose }) {
     });
   };
 
-  const handleConfirmarPedido = () => {
-    // 1. Validar los campos requeridos mediante el formulario nativo del navegador
+  const handleConfirmarPedido = async () => {
     if (formRef.current && !formRef.current.checkValidity()) {
-      formRef.current.reportValidity(); // Esto despliega la alerta nativa señalando el campo faltante
+      formRef.current.reportValidity();
       return;
     }
 
-    // 2. Validar explícitamente el checkbox de compromiso
     if (!formData.compromiso) {
       alert("⚠️ Debes aceptar el compromiso de pago contra entrega para poder confirmar tu pedido en CDISFRUTA.shop.");
       return;
     }
 
-    // 3. Generar el mensaje y abrir WhatsApp si todo es correcto
-    const mensaje = 
-      `🍃 *CDISFRUTA.SHOP - NUEVO PEDIDO* 🍃\n` +
-      `✨ _¡Gracias por elegirnos para tus momentos saludables!_ ✨\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `👤 *CLIENTE*\n` +
-      `• Nombre: ${formData.nombres} ${formData.apellidos}\n` +
-      `• WhatsApp: ${formData.whatsapp}\n` +
-      `• Correo: ${formData.correo || 'No especificado'}\n\n` +
-      `📍 *ENTREGAS*\n` +
-      `• Departamento: ${formData.departamento}\n` +
-      `• Ciudad / Municipio: ${formData.municipio}\n` +
-      `• Dirección: ${formData.direccion}\n` +
-      `• Barrio / Sector: ${formData.barrio}\n` +
-      `• Observaciones: ${formData.nota || 'Ninguna'}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-      `🛒 *RESUMEN DE PRODUCTOS:*\n` +
-      cartItems.map(i => `  ▪️ *${i.nombre}* \n    Cantidad: ${i.quantity} | Subtotal: *$${(i.precio * i.quantity).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `💳 *TOTAL A PAGAR: *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
-      `✅ _Pedido verificado y respaldado por el cliente._`;
+    const userId = userData?._id || userData?.id;
+    if (!userId) {
+      alert("⚠️ Debes iniciar sesión para confirmar tu pedido.");
+      return;
+    }
 
-    const miNumero = "573229683625";
-    const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;
-    window.open(whatsappUrl, '_blank');
+    // 1. Estructura del pedido para enviar al backend
+    const nuevoPedido = {
+      clienteId: userId,
+      productos: cartItems.map(i => ({
+        productoId: i._id,
+        nombre: i.nombre,
+        precio: i.precio,
+        cantidad: i.quantity
+      })),
+      total: total,
+      datosEnvio: {
+        nombres: formData.nombres,
+        apellidos: formData.apellidos,
+        whatsapp: formData.whatsapp,
+        departamento: formData.departamento,
+        municipio: formData.municipio,
+        direccion: formData.direccion,
+        barrio: formData.barrio,
+        correo: formData.correo,
+        nota: formData.nota
+      }
+    };
+
+    try {
+      // 2. Guardar pedido en MongoDB mediante la API
+      await apiAxios.post('/pedidos', nuevoPedido);
+
+      // 3. Generar mensaje de WhatsApp
+      const mensaje = 
+        `🍃 *CDISFRUTA.SHOP - NUEVO PEDIDO* 🍃\n` +
+        `✨ _¡Gracias por elegirnos para tus momentos saludables!_ ✨\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `👤 *CLIENTE*\n` +
+        `• Nombre: ${formData.nombres} ${formData.apellidos}\n` +
+        `• WhatsApp: ${formData.whatsapp}\n` +
+        `• Correo: ${formData.correo || 'No especificado'}\n\n` +
+        `📍 *ENTREGAS*\n` +
+        `• Departamento: ${formData.departamento}\n` +
+        `• Ciudad / Municipio: ${formData.municipio}\n` +
+        `• Dirección: ${formData.direccion}\n` +
+        `• Barrio / Sector: ${formData.barrio}\n` +
+        `• Observaciones: ${formData.nota || 'Ninguna'}\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+        `🛒 *RESUMEN DE PRODUCTOS:*\n` +
+        cartItems.map(i => `  ▪️ *${i.nombre}* \n    Cantidad: ${i.quantity} | Subtotal: *$${(i.precio * i.quantity).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `💳 *TOTAL A PAGAR: *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
+        `✅ _Pedido verificado y respaldado por el cliente._`;
+
+      const miNumero = "573229683625"; // Puedes cambiarlo si usas otro número aquí
+      const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;
+      window.open(whatsappUrl, '_blank');
+
+      // 4. LIMPIAR CARRITO Y CERRAR MODAL AUTOMÁTICAMENTE
+      localStorage.removeItem("cart_cdisfruta");
+      setCartItems([]);
+      window.dispatchEvent(new Event('cartUpdate'));
+      onClose();
+
+    } catch (error) {
+      console.error("Error al guardar el pedido:", error);
+      alert("Hubo un error al registrar tu pedido en el sistema. Inténtalo de nuevo.");
+    }
   };
 
   if (!isOpen) return null;
