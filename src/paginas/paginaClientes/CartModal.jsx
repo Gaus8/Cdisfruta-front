@@ -137,7 +137,7 @@ export default function CartModal({ isOpen, onClose }) {
       `💳 *TOTAL A PAGAR: *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
       `✅ _Pedido verificado y respaldado por el cliente._`;
 
-    const miNumero = "573125029352";
+    const miNumero = "573229683625";
     const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;
     window.open(whatsappUrl, '_blank');
   };

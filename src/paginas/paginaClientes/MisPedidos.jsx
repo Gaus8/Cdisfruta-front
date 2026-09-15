@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { URL_SERVER } from '../../funciones/conexion'; 
-import { useAuth } from '../../funciones/useAuth'; // 1. Importa useAuth
-import { FaBoxOpen, FaClock, FaCheckCircle, FaTruck, FaHome } from 'react-icons/fa';
+import { URL_SERVER, apiAxios } from '../../funciones/conexion'; 
+import { useAuth } from '../../funciones/useAuth'; 
+import { FaBoxOpen, FaClock, FaCheckCircle, FaTruck, FaHome, FaTimesCircle, FaTimes } from 'react-icons/fa';
 import '../../assets/styles/usuarios/mis_pedidos.css';
 
 export default function MisPedidos() {
@@ -9,32 +9,75 @@ export default function MisPedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Estados para controlar el Modal de Cancelación
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [pedidoACancelar, setPedidoACancelar] = useState(null);
+  const [motivoSeleccionado, setMotivoSeleccionado] = useState('Me equivoqué de productos');
+  const [motivoPersonalizado, setMotivoPersonalizado] = useState('');
+
+  const fetchMisPedidos = async () => {
+    const userId = userData?._id || userData?.id;
+    if (!userId) return;
+
+    try {
+      setLoading(true);
+      const response = await fetch(`${URL_SERVER}/mis-pedidos/${userId}`);
+      if (!response.ok) throw new Error('No se pudieron cargar los pedidos');
+      const data = await response.json();
+      setPedidos(data);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMisPedidos = async () => {
-      // Usamos el ID del usuario autenticado (puede ser _id en Mongoose)
-      const userId = userData?._id || userData?.id;
-      if (!userId) return;
-
-      try {
-        setLoading(true);
-        // Ojo: Asegúrate de que el endpoint coincida con tus rutas del backend
-        const response = await fetch(`${URL_SERVER}/mis-pedidos/${userId}`);
-        if (!response.ok) throw new Error('No se pudieron cargar los pedidos');
-        const data = await response.json();
-        setPedidos(data);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (userData) {
       fetchMisPedidos();
     }
   }, [userData]);
 
-  // Función para asignar un icono y color según el estado del pedido
+  // Abre el modal para un pedido específico
+  const abrirModalCancelacion = (pedido) => {
+    setPedidoACancelar(pedido);
+    setMotivoSeleccionado('Me equivoqué de productos');
+    setMotivoPersonalizado('');
+    setModalAbierto(true);
+  };
+
+  // Cierra el modal
+  const cerrarModalCancelacion = () => {
+    setModalAbierto(false);
+    setPedidoACancelar(null);
+  };
+
+  // Confirma la cancelación procesando la BD y el WhatsApp
+  const confirmarCancelacion = async (e) => {
+    e.preventDefault();
+    if (!pedidoACancelar) return;
+
+    const motivoFinal = motivoSeleccionado === 'Otro' ? motivoPersonalizado : motivoSeleccionado;
+
+    try {
+      // 1. Actualiza el estado en la base de datos
+      await apiAxios.patch(`/pedidos/${pedidoACancelar._id}/estado`, { estado: 'Cancelado' });
+
+      // 2. Prepara y abre el enlace de WhatsApp con el motivo
+      const telefonoEmpresa = "573000000000"; // Reemplaza con tu número real
+      const mensaje = encodeURIComponent(`Hola, cancelé mi pedido ID: ${pedidoACancelar._id}.\nMotivo: ${motivoFinal}`);
+      window.open(`https://wa.me/${telefonoEmpresa}?text=${mensaje}`, '_blank');
+
+      // 3. Cierra modal y recarga la lista
+      cerrarModalCancelacion();
+      fetchMisPedidos();
+    } catch (error) {
+      console.error("Error al cancelar el pedido:", error);
+      alert("No se pudo cancelar el pedido. Intenta de nuevo.");
+    }
+  };
+
+  // Función para asignar badges de estado
   const getStatusBadge = (estado) => {
     switch (estado) {
       case 'Pendiente':
@@ -45,6 +88,8 @@ export default function MisPedidos() {
         return <span className="badge badge-enviado"><FaTruck /> Enviado</span>;
       case 'Entregado':
         return <span className="badge badge-entregado"><FaHome /> Entregado</span>;
+      case 'Cancelado':
+        return <span className="badge badge-cancelado"><FaTimesCircle /> Cancelado</span>;
       default:
         return <span className="badge">{estado}</span>;
     }
@@ -91,9 +136,70 @@ export default function MisPedidos() {
                     {getStatusBadge(pedido.estado)}
                   </div>
                 </div>
+
+                {pedido.estado === 'Pendiente' && (
+                  <div className="order-actions">
+                    <button 
+                      className="btn-cancelar-pedido"
+                      onClick={() => abrirModalCancelacion(pedido)}
+                    >
+                      Cancelar Pedido
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Modal de Cancelación */}
+      {modalAbierto && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Cancelar Pedido</h3>
+              <button className="modal-close" onClick={cerrarModalCancelacion}><FaTimes /></button>
+            </div>
+            
+            <form onSubmit={confirmarCancelacion}>
+              <p className="modal-subtitle">Por favor, selecciona el motivo de la cancelación:</p>
+              
+              <div className="form-group">
+                <select 
+                  value={motivoSeleccionado} 
+                  onChange={(e) => setMotivoSeleccionado(e.target.value)}
+                  className="modal-select"
+                >
+                  <option value="Me equivoqué de productos">Me equivoqué de productos</option>
+                  <option value="Ya no necesito la compra">Ya no necesito la compra</option>
+                  <option value="Encontré otro medio / mejor precio">Encontré otro medio / mejor precio</option>
+                  <option value="Otro">Otro motivo...</option>
+                </select>
+              </div>
+
+              {motivoSeleccionado === 'Otro' && (
+                <div className="form-group" style={{ marginTop: '12px' }}>
+                  <textarea 
+                    placeholder="Especifica tu motivo..."
+                    value={motivoPersonalizado}
+                    onChange={(e) => setMotivoPersonalizado(e.target.value)}
+                    required
+                    className="modal-textarea"
+                  />
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button type="button" className="btn-secundario" onClick={cerrarModalCancelacion}>
+                  Volver
+                </button>
+                <button type="submit" className="btn-peligro">
+                  Confirmar Cancelación
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
