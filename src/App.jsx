@@ -12,6 +12,7 @@ import MainPage from './paginas/landingPage/MainPage';
 import Validacion from "./paginas/usuariosAuth/Validacion";
 import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
 import ConfiguracionUsuario from "./paginas/paginaClientes/ConfiguracionUsuario";
+import MisPedidos from "./paginas/paginaClientes/MisPedidos"; 
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
