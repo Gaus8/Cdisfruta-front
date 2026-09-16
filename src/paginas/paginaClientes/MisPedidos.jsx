@@ -22,6 +22,9 @@ export default function MisPedidos() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
+  // Estado para el modal de éxito de cancelación
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const { userData } = useAuth();
   const navigate = useNavigate();
 
@@ -43,7 +46,7 @@ export default function MisPedidos() {
 
   const handleCancelarPedido = async () => {
     if (!motivoCancelacion) {
-      alert("⚠️ Por favor selecciona o escribe un motivo de cancelación.");
+      alert("⚠️ Por favor selecciona un motivo de cancelación.");
       return;
     }
 
@@ -57,10 +60,12 @@ export default function MisPedidos() {
       setPedidoACancelar(null);
       setMotivoCancelacion("");
       fetchMisPedidos();
-      alert("✅ Tu pedido ha sido cancelado con éxito.");
+      
+      // Mostrar modal visual de éxito
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Error al cancelar el pedido:", error);
-      alert("No se pudo cancelar el pedido.");
+      alert("No se pudo cancelar el pedido. Verifica la conexión con el servidor.");
     }
   };
 
@@ -69,7 +74,6 @@ export default function MisPedidos() {
     const idCorto = pedido._id.slice(-8).toUpperCase();
     const totalFormateado = pedido.total.toLocaleString('es-CO');
     
-    // Extraemos los nombres y cantidades de los productos del pedido
     const listaProductos = pedido.productos
       .map(item => `• ${item.nombre} (Cant: ${item.quantity || item.cantidad})`)
       .join('\n');
@@ -168,7 +172,7 @@ export default function MisPedidos() {
                         </span>
                       </div>
 
-                      {/* Timeline / Línea de Progreso */}
+                      {/* Timeline / Línea de Progreso o Banner de Cancelado */}
                       {pedido.estado !== 'Cancelado' ? (
                         <div className="order-timeline">
                           {PASOS_ESTADO.map((paso, idx) => {
@@ -195,7 +199,6 @@ export default function MisPedidos() {
                       {/* Lista de Productos con la Foto Real del Producto */}
                       <div className="order-products-summary">
                         {pedido.productos.map((item, idx) => {
-                          // Buscamos la imagen en cualquiera de las propiedades posibles del producto
                           const fotoUrl = item.imagen || item.img || item.url || item.foto;
 
                           return (
@@ -283,6 +286,11 @@ export default function MisPedidos() {
                 <h4>💳 Método de Pago</h4>
                 <p className="payment-method-tag">Pago Contra Entrega 🤝</p>
               </div>
+
+              <div className="detail-group">
+                <h4>📌 Estado Actual</h4>
+                <p><strong>{pedidoSeleccionado.estado}</strong></p>
+              </div>
             </div>
 
             <div className="modal-actions">
@@ -321,6 +329,27 @@ export default function MisPedidos() {
           </div>
         </div>
       )}
+
+      {/* Modal de Éxito de Cancelación */}
+      {showSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ textAlign: 'center', padding: '30px' }}>
+            <FaTimesCircle size={45} style={{ color: '#e53935', marginBottom: '15px' }} />
+            <h3 style={{ color: '#2c3e50', marginBottom: '10px' }}>¡Pedido Cancelado!</h3>
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+              Tu pedido ha sido cancelado con éxito y ahora aparece reflejado como cancelado en tu historial.
+            </p>
+            <button 
+              className="btn-ir-tienda" 
+              style={{ width: '100%', marginTop: '0' }}
+              onClick={() => setShowSuccessModal(false)}
+            >
+              Entendido
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
