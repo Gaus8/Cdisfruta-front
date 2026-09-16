@@ -53,6 +53,11 @@ export default function Sidebar() {
           <Link title="Usuarios" to="/dashboard_admin/usuarios" onClick={() => setIsOpen(false)}>
             <FaUsers /> <span>Usuarios</span>
           </Link>
+
+          <Link title="Pedidos" to="/dashboard_admin/pedidos" onClick={() => setIsOpen(false)}>
+            <FaBoxes /> <span>Pedidos</span>
+          </Link>
+          
           <Link title="Reportes" to="/dashboard_admin/reportes" onClick={() => setIsOpen(false)}>
             <FaChartLine /> <span>Reportes</span>
           </Link>

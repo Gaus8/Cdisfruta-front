@@ -22,6 +22,7 @@ import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
 import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
 import Login from "./paginas/usuariosAuth/Login";
 import Registro from "./paginas/usuariosAuth/Registro";
+import GestionPedidos from "./paginas/dashboardAdmin/GestionPedidos";
 
 // Componente Wrapper para pasar verifyToken al Login standalone
 function LoginWrapper() {
@@ -143,6 +144,7 @@ const router = createBrowserRouter([
           { index: true, element: <HomeAdmin /> },
           { path: 'dashboard', element: <HomeAdmin /> },
           { path: 'productos', element: <Productos /> },
+          { path: 'pedidos', element: <GestionPedidos /> },
         ],
       },
     ],
