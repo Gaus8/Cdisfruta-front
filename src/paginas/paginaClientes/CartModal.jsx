@@ -128,12 +128,13 @@ export default function CartModal({ isOpen, onClose }) {
     // 4. Estructura del pedido para enviar al Backend y guardar en MongoDB
     // Estructura correcta que coincide con el esquema actualizado
     const nuevoPedido = {
-      usuario: userId, // <--- Cambiado de clienteId a usuario
+      usuario: userId,
       productos: cartItems.map(i => ({
         productoId: i._id,
         nombre: i.nombre,
         precio: i.precio,
-        cantidad: i.quantity
+        cantidad: i.quantity,
+        imagen: i.imagen || i.img || i.url || i.foto // 👈 Incluimos la imagen aquí
       })),
       total: total,
       datosEnvio: {
