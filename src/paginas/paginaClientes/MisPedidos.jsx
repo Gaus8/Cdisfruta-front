@@ -66,8 +66,14 @@ export default function MisPedidos() {
 
   const abrirWhatsAppSoporte = (pedido) => {
     const nombresCliente = pedido.datosEnvio ? `${pedido.datosEnvio.nombres} ${pedido.datosEnvio.apellidos}` : "Cliente";
-    const idCorto = pedido._id.slice(-6).toUpperCase();
-    const mensaje = `Hola, necesito soporte con mi pedido *#${idCorto}* a nombre de ${nombresCliente}.`;
+    const idCorto = pedido._id.slice(-8).toUpperCase();
+    const totalFormateado = pedido.total.toLocaleString('es-CO');
+    
+    const mensaje = 
+      `Hola, necesito soporte con mi pedido *#${idCorto}* ` +
+      `a nombre de *${nombresCliente}* ` +
+      `por un valor total de *$${totalFormateado}*.`;
+
     const miNumero = "573229683625";
     window.open(`https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`, '_blank');
   };
