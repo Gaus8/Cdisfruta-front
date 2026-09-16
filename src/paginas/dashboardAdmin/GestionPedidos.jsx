@@ -1,17 +1,29 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { URL_SERVER, apiAxios } from '../../funciones/conexion';
-import { FaClipboardList, FaClock, FaCheckCircle, FaTruck, FaHome, FaTimesCircle } from 'react-icons/fa';
+import { FaClipboardList, FaArrowLeft, FaSave, FaCheckCircle, FaTimes } from 'react-icons/fa';
+import '../../assets/styles/dashboardAdmin/gestion_pedidos.css'; // 👈 Importamos los estilos limpios
 
 export default function GestionPedidos() {
+  const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const [estadosSeleccionados, setEstadosSeleccionados] = useState({});
+  const [actualizandoId, setActualizandoId] = useState(null);
+  const [mensajeFeedback, setMensajeFeedback] = useState(null);
 
-  // Obtener todos los pedidos del backend
   const fetchTodosLosPedidos = async () => {
     try {
       setLoading(true);
-      const response = await apiAxios.get('/pedidos'); // Asegúrate de que esta ruta exista en tu backend
+      const response = await apiAxios.get('/admin/pedidos');
       setPedidos(response.data);
+      
+      const initialStates = {};
+      response.data.forEach(p => {
+        initialStates[p._id] = p.estado;
+      });
+      setEstadosSeleccionados(initialStates);
     } catch (error) {
       console.error("Error al cargar los pedidos:", error);
     } finally {
@@ -23,87 +35,133 @@ export default function GestionPedidos() {
     fetchTodosLosPedidos();
   }, []);
 
-  // Cambiar el estado del pedido desde el select del admin
-  const handleCambiarEstado = async (pedidoId, nuevoEstado) => {
+  const handleSelectChange = (pedidoId, nuevoEstado) => {
+    setEstadosSeleccionados(prev => ({
+      ...prev,
+      [pedidoId]: nuevoEstado
+    }));
+  };
+
+  const handleGuardarEstado = async (pedidoId) => {
+    const estadoAEjecutar = estadosSeleccionados[pedidoId];
     try {
-      await apiAxios.patch(`/pedidos/${pedidoId}/estado`, { estado: nuevoEstado });
-      // Recargamos la lista para actualizar los datos en pantalla
-      fetchTodosLosPedidos();
+      setActualizandoId(pedidoId);
+      await apiAxios.patch(`/admin/pedidos/${pedidoId}/estado`, { estado: estadoAEjecutar });
+      
+      setPedidos(prev => prev.map(p => p._id === pedidoId ? { ...p, estado: estadoAEjecutar } : p));
+      
+      setMensajeFeedback({ texto: '¡Estado del pedido actualizado con éxito!', tipo: 'success' });
+      setTimeout(() => setMensajeFeedback(null), 4000);
+
     } catch (error) {
       console.error("Error al actualizar el estado:", error);
-      alert("No se pudo actualizar el estado del pedido.");
+      setMensajeFeedback({ texto: 'No se pudo actualizar el estado del pedido.', tipo: 'error' });
+      setTimeout(() => setMensajeFeedback(null), 4000);
+    } finally {
+      setActualizandoId(null);
     }
   };
 
   if (loading) return <div className="loading-state">Cargando pedidos de la tienda...</div>;
 
   return (
-    <div className="gestion-pedidos-container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h2><FaClipboardList /> Gestión de Pedidos</h2>
-      <p>Administra los pedidos de los clientes y actualiza su estado de seguimiento.</p>
+    <div className="gestion-pedidos-container">
+      
+      {mensajeFeedback && (
+        <div className={`admin-toast-notification ${mensajeFeedback.tipo}`}>
+          {mensajeFeedback.tipo === 'success' ? <FaCheckCircle size={18} /> : <FaTimes size={18} />}
+          <span>{mensajeFeedback.texto}</span>
+        </div>
+      )}
+
+      {/* Cabecera */}
+      <div className="gestion-pedidos-header">
+        <div>
+          <h2><FaClipboardList /> Gestión de Pedidos</h2>
+          <p>Administra los pedidos de los clientes y actualiza su estado de seguimiento.</p>
+        </div>
+        <button 
+          onClick={() => navigate('/admin')}
+          className="btn-volver-admin"
+        >
+          <FaArrowLeft /> Volver al Inicio
+        </button>
+      </div>
 
       {pedidos.length === 0 ? (
-        <p>No hay pedidos registrados en el sistema.</p>
+        <div className="empty-state">
+          <p>No hay pedidos registrados en el sistema.</p>
+        </div>
       ) : (
-        <div className="admin-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
-          {pedidos.map((pedido) => (
-            <div key={pedido._id} style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '15px' }}>
-                <div>
-                  <strong>Pedido ID:</strong> {pedido._id} <br />
-                  <span style={{ fontSize: '13px', color: '#666' }}>Fecha: {new Date(pedido.fechaCreacion).toLocaleString()}</span>
-                </div>
-                <div>
-                  {/* Selector rápido de Estado */}
-                  <label style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '8px' }}>Estado:</label>
-                  <select 
-                    value={pedido.estado} 
-                    onChange={(e) => handleCambiarEstado(pedido._id, e.target.value)}
-                    style={{ padding: '6px 10px', borderRadius: '5px', border: '1px solid #ccc', fontWeight: '600' }}
-                  >
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Comprobado">Comprobado</option>
-                    <option value="Enviado">Enviado</option>
-                    <option value="Entregado">Entregado</option>
-                    <option value="Cancelado">Cancelado</option>
-                  </select>
-                </div>
-              </div>
+        <div className="admin-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {pedidos.map((pedido) => {
+            const estadoActualModificado = estadosSeleccionados[pedido._id] !== pedido.estado;
 
-              {/* Información del Cliente y Envío */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px', fontSize: '14px', background: '#f9f9f9', padding: '12px', borderRadius: '6px' }}>
-                <div>
-                  <p><strong>Cliente:</strong> {pedido.datosEnvio?.nombres} {pedido.datosEnvio?.apellidos}</p>
-                  <p><strong>WhatsApp:</strong> {pedido.datosEnvio?.whatsapp}</p>
-                  <p><strong>Correo:</strong> {pedido.datosEnvio?.correo || 'No registrado'}</p>
+            return (
+              <div key={pedido._id} className="admin-order-card">
+                <div className="admin-order-top">
+                  <div>
+                    <span style={{ fontSize: '0.85rem', color: '#555', wordBreak: 'break-all' }}><strong>ID:</strong> {pedido._id}</span><br />
+                    <span style={{ fontSize: '0.82rem', color: '#888' }}>Fecha: {new Date(pedido.fechaCreacion).toLocaleString()}</span>
+                  </div>
+
+                  <div className="admin-order-actions">
+                    <label style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#444' }}>Estado:</label>
+                    <select 
+                      value={estadosSeleccionados[pedido._id] || pedido.estado} 
+                      onChange={(e) => handleSelectChange(pedido._id, e.target.value)}
+                      className="admin-order-select"
+                    >
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Comprobado">Comprobado</option>
+                      <option value="Enviado">Enviado</option>
+                      <option value="Entregado">Entregado</option>
+                      <option value="Cancelado">Cancelado</option>
+                    </select>
+
+                    <button
+                      onClick={() => handleGuardarEstado(pedido._id)}
+                      disabled={!estadoActualModificado || actualizandoId === pedido._id}
+                      className={`btn-guardar-estado ${estadoActualModificado ? 'active' : 'disabled'}`}
+                      title={estadoActualModificado ? "Guardar nuevo estado" : "Selecciona un estado diferente para guardar"}
+                    >
+                      <FaSave /> {actualizandoId === pedido._id ? 'Guardando...' : 'Actualizar'}
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <p><strong>Dirección:</strong> {pedido.datosEnvio?.direccion}, {pedido.datosEnvio?.barrio}</p>
-                  <p><strong>Ciudad / Depto:</strong> {pedido.datosEnvio?.municipio}, {pedido.datosEnvio?.departamento}</p>
-                  <p><strong>Nota:</strong> {pedido.datosEnvio?.nota || 'Ninguna'}</p>
+
+                <div className="admin-order-grid">
+                  <div>
+                    <p><strong>Cliente:</strong> {pedido.datosEnvio?.nombres} {pedido.datosEnvio?.apellidos}</p>
+                    <p><strong>WhatsApp:</strong> {pedido.datosEnvio?.whatsapp}</p>
+                    <p><strong>Correo:</strong> {pedido.datosEnvio?.correo || 'No registrado'}</p>
+                  </div>
+                  <div>
+                    <p><strong>Dirección:</strong> {pedido.datosEnvio?.direccion}, {pedido.datosEnvio?.barrio}</p>
+                    <p><strong>Ciudad / Depto:</strong> {pedido.datosEnvio?.municipio}, {pedido.datosEnvio?.departamento}</p>
+                    <p><strong>Nota:</strong> {pedido.datosEnvio?.nota || 'Ninguna'}</p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Productos del pedido */}
-              <div style={{ fontSize: '14px' }}>
-                <strong>Productos solicitados:</strong>
-                <ul style={{ margin: '5px 0 0 20px', padding: 0 }}>
-                  {pedido.productos.map((item, idx) => (
-                    <li key={idx} style={{ margin: '4px 0' }}>
-                      {item.nombre} — Cantidad: <strong>{item.quantity || item.cantidad}</strong> — Subtotal: <strong>${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}</strong>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <div className="admin-order-products">
+                  <strong>Productos solicitados:</strong>
+                  <ul>
+                    {pedido.productos.map((item, idx) => (
+                      <li key={idx}>
+                        {item.nombre} — Cant.: <strong>{item.quantity || item.cantidad}</strong> — Subtotal: <strong style={{ color: '#2c3e50' }}>${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-              <div style={{ textAlign: 'right', marginTop: '15px', fontSize: '16px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-                <strong>Total del Pedido: </strong> 
-                <span style={{ color: '#27ae60', fontSize: '18px' }}>${pedido.total?.toLocaleString('es-CO')}</span>
-              </div>
+                <div className="admin-order-footer">
+                  <span style={{ fontWeight: '600', color: '#555' }}>Total del Pedido:</span> 
+                  <span style={{ color: '#27ae60', fontSize: '1.2rem', fontWeight: 'bold' }}>${pedido.total?.toLocaleString('es-CO')}</span>
+                </div>
 
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -1,0 +1,194 @@
+/* Contenedor principal de la vista */
+.gestion-pedidos-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+.gestion-pedidos-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 15px;
+}
+
+.gestion-pedidos-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.gestion-pedidos-header p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Botón Volver */
+.btn-volver-admin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2c3e50;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+
+.btn-volver-admin:hover {
+  background: #34495e;
+}
+
+/* Tarjeta de Pedido Individual */
+.admin-order-card {
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow-x: auto;
+}
+
+.admin-order-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.admin-order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-order-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-weight: 600;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+/* Botón Actualizar Estado */
+.btn-guardar-estado {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-guardar-estado.active {
+  background: #2ecc71;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-guardar-estado.active:hover {
+  background: #27ae60;
+}
+
+.btn-guardar-estado.disabled {
+  background: #e0e0e0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Grid de Envío y Cliente */
+.admin-order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.admin-order-grid p {
+  margin: 4px 0;
+}
+
+/* Productos y Totales */
+.admin-order-products {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.admin-order-products ul {
+  margin: 8px 0 0 20px;
+  padding: 0;
+  color: #555;
+}
+
+.admin-order-products li {
+  margin: 5px 0;
+}
+
+.admin-order-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+  font-size: 1rem;
+}
+
+/* Toast de Notificación Flotante */
+.admin-toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  zIndex: 1000;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.admin-toast-notification.success {
+  background: #2ecc71;
+}
+
+.admin-toast-notification.error {
+  background: #e74c3c;
+}
+
+.loading-state, .empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
