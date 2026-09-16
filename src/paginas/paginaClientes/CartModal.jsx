@@ -156,24 +156,21 @@ export default function CartModal({ isOpen, onClose }) {
 
       // 6. Generar el mensaje y abrir WhatsApp
       const mensaje = 
-        `🍃 *CDISFRUTA.SHOP - NUEVO PEDIDO* 🍃\n` +
-        `✨ _¡Gracias por elegirnos para tus momentos saludables!_ ✨\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `👤 *CLIENTE*\n` +
+        `*CDISFRUTA SHOP - NUEVO PEDIDO*\n` +
+        `_¡Gracias por elegirnos para tus momentos saludables!_\n\n` +
+        `👤 *DATOS DEL CLIENTE*\n` +
         `• Nombre: ${formData.nombres} ${formData.apellidos}\n` +
         `• WhatsApp: ${formData.whatsapp}\n` +
         `• Correo: ${formData.correo || 'No especificado'}\n\n` +
-        `📍 *ENTREGAS*\n` +
+        `📍 *INFORMACIÓN DE ENTREGA*\n` +
         `• Departamento: ${formData.departamento}\n` +
-        `• Ciudad / Municipio: ${formData.municipio}\n` +
+        `• Municipio: ${formData.municipio}\n` +
         `• Dirección: ${formData.direccion}\n` +
-        `• Barrio / Sector: ${formData.barrio}\n` +
-        `• Observaciones: ${formData.nota || 'Ninguna'}\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `🛒 *RESUMEN DE PRODUCTOS:*\n` +
-        cartItems.map(i => `  ▪️ *${i.nombre}* \n    Cantidad: ${i.quantity} | Subtotal: *$${(i.precio * i.quantity).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `💳 *TOTAL A PAGAR: *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
+        `• Barrio: ${formData.barrio}\n` +
+        `• Observaciones: ${formData.nota || 'Ninguna'}\n\n` +
+        `🛍️ *PRODUCTOS SOLICITADOS*\n` +
+        cartItems.map(i => `• *${i.nombre}*\n  Cantidad: ${i.quantity} | Subtotal: *$${(i.precio * i.quantity).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
+        `💳 *TOTAL A PAGAR:* *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
         `✅ _Pedido verificado y respaldado por el cliente._`;
 
       const miNumero = "573229683625";
