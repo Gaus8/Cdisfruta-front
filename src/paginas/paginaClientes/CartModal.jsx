@@ -158,20 +158,20 @@ export default function CartModal({ isOpen, onClose }) {
       const mensaje = 
         `*CDISFRUTA SHOP - NUEVO PEDIDO*\n` +
         `_¡Gracias por elegirnos para tus momentos saludables!_\n\n` +
-        `👤 *DATOS DEL CLIENTE*\n` +
+        ` *DATOS DEL CLIENTE*\n` +
         `• Nombre: ${formData.nombres} ${formData.apellidos}\n` +
         `• WhatsApp: ${formData.whatsapp}\n` +
         `• Correo: ${formData.correo || 'No especificado'}\n\n` +
-        `📍 *INFORMACIÓN DE ENTREGA*\n` +
+        `*INFORMACIÓN DE ENTREGA*\n` +
         `• Departamento: ${formData.departamento}\n` +
         `• Municipio: ${formData.municipio}\n` +
         `• Dirección: ${formData.direccion}\n` +
         `• Barrio: ${formData.barrio}\n` +
         `• Observaciones: ${formData.nota || 'Ninguna'}\n\n` +
-        `🛍️ *PRODUCTOS SOLICITADOS*\n` +
+        `*PRODUCTOS SOLICITADOS*\n` +
         cartItems.map(i => `• *${i.nombre}*\n  Cantidad: ${i.quantity} | Subtotal: *$${(i.precio * i.quantity).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
-        `💳 *TOTAL A PAGAR:* *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
-        `✅ _Pedido verificado y respaldado por el cliente._`;
+        `*TOTAL A PAGAR:* *$${total.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
+        `_Pedido verificado y respaldado por el cliente._`;
 
       const miNumero = "573229683625";
       const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;

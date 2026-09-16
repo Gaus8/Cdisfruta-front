@@ -101,7 +101,7 @@ export default function MisPedidos() {
       
       <div className="mis-pedidos-nav-top">
         <button className="btn-volver-pro" onClick={() => navigate('/cliente/tienda')}>
-          <FaArrowLeft /> Seguir Comprando en la Tienda
+          <FaArrowLeft /> Seguir Comprando
         </button>
       </div>
 
