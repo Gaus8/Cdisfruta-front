@@ -14,15 +14,14 @@ export default function MisPedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Estados para modales
+  // Estados para modales de cancelación
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [pedidoACancelar, setPedidoACancelar] = useState(null);
   const [motivoCancelacion, setMotivoCancelacion] = useState("");
+  const [otroMotivoTexto, setOtroMotivoTexto] = useState(""); // 👈 Estado para el texto personalizado
 
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
-
-  // Estado para el modal de éxito de cancelación
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { userData } = useAuth();
@@ -45,27 +44,28 @@ export default function MisPedidos() {
   }, [userData]);
 
   const handleCancelarPedido = async () => {
-    if (!motivoCancelacion) {
-      alert("⚠️ Por favor selecciona un motivo de cancelación.");
+    const motivoFinal = motivoCancelacion === "Otro motivo" ? otroMotivoTexto : motivoCancelacion;
+
+    if (!motivoFinal) {
+      alert("⚠️ Por favor selecciona o escribe un motivo de cancelación.");
       return;
     }
 
     try {
       await apiAxios.patch(`/pedidos/${pedidoACancelar}/estado`, { 
         estado: 'Cancelado',
-        motivo: motivoCancelacion 
+        motivo: motivoFinal 
       });
 
       setShowCancelModal(false);
       setPedidoACancelar(null);
       setMotivoCancelacion("");
+      setOtroMotivoTexto("");
       fetchMisPedidos();
-      
-      // Mostrar modal visual de éxito
       setShowSuccessModal(true);
     } catch (error) {
       console.error("Error al cancelar el pedido:", error);
-      alert("No se pudo cancelar el pedido. Verifica la conexión con el servidor.");
+      alert("No se pudo cancelar el pedido.");
     }
   };
 
@@ -99,7 +99,6 @@ export default function MisPedidos() {
   return (
     <div className="mis-pedidos-container">
       
-      {/* Botón de Retorno con Flecha a la Izquierda */}
       <div className="mis-pedidos-nav-top">
         <button className="btn-volver-pro" onClick={() => navigate('/cliente/tienda')}>
           <FaArrowLeft /> Seguir Comprando en la Tienda
@@ -132,7 +131,6 @@ export default function MisPedidos() {
             return (
               <div key={pedido._id} className="order-card">
                 
-                {/* Cabecera Estilo Amazon */}
                 <div className="order-header-amazon">
                   <div className="header-col">
                     <span className="col-label">PEDIDO REALIZADO</span>
@@ -157,8 +155,6 @@ export default function MisPedidos() {
                 </div>
 
                 <div className="order-body">
-                  
-                  {/* Estado y Acciones Lateral */}
                   <div className="order-main-grid">
                     <div className="order-products-section">
                       <div className="status-badge-row">
@@ -172,7 +168,6 @@ export default function MisPedidos() {
                         </span>
                       </div>
 
-                      {/* Timeline / Línea de Progreso o Banner de Cancelado */}
                       {pedido.estado !== 'Cancelado' ? (
                         <div className="order-timeline">
                           {PASOS_ESTADO.map((paso, idx) => {
@@ -192,11 +187,11 @@ export default function MisPedidos() {
                         </div>
                       ) : (
                         <div className="canceled-banner">
-                          <FaTimesCircle /> Este pedido fue cancelado.
+                          <FaTimesCircle /> Este pedido fue cancelado. 
+                          {pedido.motivoCancelacion && <span style={{display: 'block', fontSize: '12px', marginTop: '4px'}}>Motivo: {pedido.motivoCancelacion}</span>}
                         </div>
                       )}
 
-                      {/* Lista de Productos con la Foto Real del Producto */}
                       <div className="order-products-summary">
                         {pedido.productos.map((item, idx) => {
                           const fotoUrl = item.imagen || item.img || item.url || item.foto;
@@ -222,7 +217,6 @@ export default function MisPedidos() {
                       </div>
                     </div>
 
-                    {/* Botones de Acción Estilo Amazon (Derecha) */}
                     <div className="order-actions-sidebar">
                       <button 
                         className="btn-amazon-action primary"
@@ -251,7 +245,6 @@ export default function MisPedidos() {
                       )}
                     </div>
                   </div>
-
                 </div>
 
               </div>
@@ -290,6 +283,9 @@ export default function MisPedidos() {
               <div className="detail-group">
                 <h4>📌 Estado Actual</h4>
                 <p><strong>{pedidoSeleccionado.estado}</strong></p>
+                {pedidoSeleccionado.motivoCancelacion && (
+                  <p style={{marginTop: '5px', color: '#c62828'}}><strong>Motivo de cancelación:</strong> {pedidoSeleccionado.motivoCancelacion}</p>
+                )}
               </div>
             </div>
 
@@ -300,7 +296,7 @@ export default function MisPedidos() {
         </div>
       )}
 
-      {/* Modal de Cancelación */}
+      {/* Modal de Cancelación con campo condicional para "Otro motivo" */}
       {showCancelModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -314,6 +310,7 @@ export default function MisPedidos() {
               value={motivoCancelacion} 
               onChange={(e) => setMotivoCancelacion(e.target.value)}
               className="modal-select"
+              style={{ marginBottom: '15px' }}
             >
               <option value="">Seleccione un motivo...</option>
               <option value="Me equivoqué de productos">Me equivoqué de productos</option>
@@ -322,8 +319,20 @@ export default function MisPedidos() {
               <option value="Otro motivo">Otro motivo</option>
             </select>
 
+            {/* Campo de texto que aparece únicamente si selecciona "Otro motivo" */}
+            {motivoCancelacion === "Otro motivo" && (
+              <textarea 
+                value={otroMotivoTexto}
+                onChange={(e) => setOtroMotivoTexto(e.target.value)}
+                placeholder="Escribe aquí el motivo detallado..."
+                className="modal-textarea"
+                style={{ marginBottom: '15px' }}
+                required
+              />
+            )}
+
             <div className="modal-actions">
-              <button className="btn-secundario" onClick={() => setShowCancelModal(false)}>Regresar</button>
+              <button className="btn-secundario" onClick={() => { setShowCancelModal(false); setOtroMotivoTexto(""); }}>Regresar</button>
               <button className="btn-peligro" onClick={handleCancelarPedido}>Confirmar Cancelación</button>
             </div>
           </div>
@@ -337,7 +346,7 @@ export default function MisPedidos() {
             <FaTimesCircle size={45} style={{ color: '#e53935', marginBottom: '15px' }} />
             <h3 style={{ color: '#2c3e50', marginBottom: '10px' }}>¡Pedido Cancelado!</h3>
             <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
-              Tu pedido ha sido cancelado con éxito y ahora aparece reflejado como cancelado en tu historial.
+              Tu pedido ha sido cancelado con éxito y el motivo fue registrado para el administrador.
             </p>
             <button 
               className="btn-ir-tienda" 
