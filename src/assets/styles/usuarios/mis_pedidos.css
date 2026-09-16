@@ -18,6 +18,26 @@
   margin-bottom: 24px;
 }
 
+/* Botón Volver a la Tienda */
+.btn-volver-tienda {
+  background: none;
+  border: none;
+  color: #ff7a5c;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 15px;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.btn-volver-tienda:hover {
+  color: #e06548;
+}
+
 /* Estado de carga y contenedor vacío */
 .loading-state, .empty-orders {
   text-align: center;
@@ -31,32 +51,48 @@
   margin-bottom: 15px;
 }
 
+.btn-ir-tienda {
+  background-color: #ff7a5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ir-tienda:hover {
+  background-color: #e06548;
+}
+
 /* Listado de tarjetas de pedidos */
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* Tarjeta individual de pedido */
 .order-card {
   background: #ffffff;
   border: 1px solid #e1e8ed;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* Encabezado de la tarjeta */
 .order-header {
   background: #f8f9fa;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border-bottom: 1px solid #e1e8ed;
   display: flex;
   justify-content: space-between;
@@ -64,13 +100,11 @@
   font-size: 14px;
 }
 
-.order-id {
-  font-weight: 600;
-  color: #555;
-}
-
 .order-date {
   color: #888;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Cuerpo de la tarjeta */
@@ -78,20 +112,116 @@
   padding: 20px;
 }
 
+/* Timeline / Línea de Progreso Gráfica */
+.order-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin: 15px 10px 25px 10px;
+  padding: 0 10px;
+}
+
+.order-timeline::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 30px;
+  right: 30px;
+  height: 4px;
+  background: #e0e0e0;
+  z-index: 1;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  color: #b0bec5;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.step-bullet {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+}
+
+.timeline-step.active .step-bullet {
+  background: #ff7a5c;
+  box-shadow: 0 0 0 4px rgba(255, 122, 92, 0.15);
+}
+
+.timeline-step.active span {
+  color: #2c3e50;
+}
+
+.canceled-banner {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  margin: 10px 0 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+/* Lista de Productos con Imagen */
 .order-products-summary {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 15px;
+  gap: 12px;
+  margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #f1f1f1;
 }
 
 .order-product-item {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.order-product-thumbnail {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.order-product-info h4 {
+  font-size: 14px;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+}
+
+.order-product-info p {
+  font-size: 13px;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.order-product-subtotal {
+  margin-left: auto;
+  font-weight: 600;
   font-size: 15px;
-  color: #444;
+  color: #2c3e50;
 }
 
 /* Información inferior y total */
@@ -102,8 +232,14 @@
 }
 
 .order-total {
-  font-size: 16px;
-  color: #2c3e50;
+  font-size: 14px;
+  color: #666;
+}
+
+.order-total strong {
+  font-size: 18px;
+  color: #27ae60;
+  margin-left: 6px;
 }
 
 /* Estilos para los badges de estado */
@@ -111,56 +247,57 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
 }
 
 .badge-pendiente {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #fff8e1;
+  color: #f39c12;
 }
 
 .badge-comprobado {
-  background-color: #d1ecf1;
-  color: #0c5460;
+  background-color: #e3f2fd;
+  color: #2196f3;
 }
 
 .badge-enviado {
-  background-color: #cce5ff;
-  color: #004085;
+  background-color: #e8f5e9;
+  color: #4caf50;
 }
 
 .badge-entregado {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #ede7f6;
+  color: #673ab7;
 }
 
 .badge-cancelado {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: #ffebee;
+  color: #e53935;
 }
 
 .order-actions {
-  margin-top: 15px;
+  margin-top: 0;
   text-align: right;
 }
 
 .btn-cancelar-pedido {
-  background-color: #ffe3e3;
-  color: #c92a2a;
+  background-color: #fff;
+  color: #e53935;
   border: 1px solid #ffc9c9;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-cancelar-pedido:hover {
-  background-color: #ffc9c9;
+  background-color: #e53935;
+  color: #fff;
 }
 
 /* Estilos para el Modal de Cancelación */
@@ -224,7 +361,7 @@
 }
 
 .modal-select:focus, .modal-textarea:focus {
-  border-color: #3498db;
+  border-color: #ff7a5c;
 }
 
 .modal-textarea {

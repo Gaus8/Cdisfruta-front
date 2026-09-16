@@ -1,204 +1,208 @@
-import { useState, useEffect } from 'react';
-import { URL_SERVER, apiAxios } from '../../funciones/conexion'; 
-import { useAuth } from '../../funciones/useAuth'; 
-import { FaBoxOpen, FaClock, FaCheckCircle, FaTruck, FaHome, FaTimesCircle, FaTimes } from 'react-icons/fa';
-import '../../assets/styles/usuarios/mis_pedidos.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { 
+  FaArrowLeft, FaBoxOpen, FaClock, FaCheckCircle, 
+  FaTruck, FaHome, FaTimesCircle, FaShoppingBag 
+} from "react-icons/fa";
+import { apiAxios } from "../../funciones/conexion";
+import "../../assets/styles/usuarios/mis_pedidos.css";
+
+const PASOS_ESTADO = ["Pendiente", "Comprobado", "Enviado", "Entregado"];
 
 export default function MisPedidos() {
-  const { userData } = useAuth(); 
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Estados para controlar el Modal de Cancelación
-  const [modalAbierto, setModalAbierto] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [pedidoACancelar, setPedidoACancelar] = useState(null);
-  const [motivoSeleccionado, setMotivoSeleccionado] = useState('Me equivoqué de productos');
-  const [motivoPersonalizado, setMotivoPersonalizado] = useState('');
+  const [motivoCancelacion, setMotivoCancelacion] = useState("");
+  const navigate = useNavigate();
 
   const fetchMisPedidos = async () => {
-    const userId = userData?._id || userData?.id;
-    if (!userId) return;
-
     try {
       setLoading(true);
-      const response = await fetch(`${URL_SERVER}/mis-pedidos/${userId}`);
-      if (!response.ok) throw new Error('No se pudieron cargar los pedidos');
-      const data = await response.json();
-      setPedidos(data);
+      const response = await apiAxios.get('/pedidos/mis-pedidos');
+      setPedidos(response.data);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error al obtener los pedidos:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (userData) {
-      fetchMisPedidos();
+    fetchMisPedidos();
+  }, []);
+
+  const handleCancelarPedido = async () => {
+    if (!motivoCancelacion) {
+      alert("⚠️ Por favor selecciona o escribe un motivo de cancelación.");
+      return;
     }
-  }, [userData]);
-
-  // Abre el modal para un pedido específico
-  const abrirModalCancelacion = (pedido) => {
-    setPedidoACancelar(pedido);
-    setMotivoSeleccionado('Me equivoqué de productos');
-    setMotivoPersonalizado('');
-    setModalAbierto(true);
-  };
-
-  // Cierra el modal
-  const cerrarModalCancelacion = () => {
-    setModalAbierto(false);
-    setPedidoACancelar(null);
-  };
-
-  // Confirma la cancelación procesando la BD y el WhatsApp
-  const confirmarCancelacion = async (e) => {
-    e.preventDefault();
-    if (!pedidoACancelar) return;
-
-    const motivoFinal = motivoSeleccionado === 'Otro' ? motivoPersonalizado : motivoSeleccionado;
 
     try {
-      // 1. Actualiza el estado en la base de datos
-      await apiAxios.patch(`/pedidos/${pedidoACancelar._id}/estado`, { estado: 'Cancelado' });
+      await apiAxios.patch(`/pedidos/${pedidoACancelar}/estado`, { 
+        estado: 'Cancelado',
+        motivo: motivoCancelacion 
+      });
 
-      // 2. Prepara y abre el enlace de WhatsApp con el motivo
-      const telefonoEmpresa = "573000000000"; // Reemplaza con tu número real
-      const mensaje = encodeURIComponent(`Hola, cancelé mi pedido ID: ${pedidoACancelar._id}.\nMotivo: ${motivoFinal}`);
-      window.open(`https://wa.me/${telefonoEmpresa}?text=${mensaje}`, '_blank');
-
-      // 3. Cierra modal y recarga la lista
-      cerrarModalCancelacion();
+      setShowCancelModal(false);
+      setPedidoACancelar(null);
+      setMotivoCancelacion("");
       fetchMisPedidos();
+      alert("✅ Tu pedido ha sido cancelado con éxito.");
     } catch (error) {
       console.error("Error al cancelar el pedido:", error);
-      alert("No se pudo cancelar el pedido. Intenta de nuevo.");
+      alert("No se pudo cancelar el pedido.");
     }
   };
 
-  // Función para asignar badges de estado
-  const getStatusBadge = (estado) => {
-    switch (estado) {
-      case 'Pendiente':
-        return <span className="badge badge-pendiente"><FaClock /> Pendiente</span>;
-      case 'Comprobado':
-        return <span className="badge badge-comprobado"><FaCheckCircle /> Comprobado</span>;
-      case 'Enviado':
-        return <span className="badge badge-enviado"><FaTruck /> Enviado</span>;
-      case 'Entregado':
-        return <span className="badge badge-entregado"><FaHome /> Entregado</span>;
-      case 'Cancelado':
-        return <span className="badge badge-cancelado"><FaTimesCircle /> Cancelado</span>;
-      default:
-        return <span className="badge">{estado}</span>;
-    }
+  // Función para calcular el paso activo en la barra de progreso
+  const obtenerIndicePaso = (estado) => {
+    if (estado === "Cancelado") return -1;
+    const index = PASOS_ESTADO.indexOf(estado);
+    return index !== -1 ? index : 0;
   };
 
-  if (loading) return <div className="loading-state">Cargando tus pedidos...</div>;
+  if (loading) return <div className="loading-state">Cargando tus compras...</div>;
 
   return (
-    <div className="mis-pedidos-container">
-      <h2>Mis Pedidos</h2>
-      <p>Consulta el historial y seguimiento de tus compras en CDISFRUTA.</p>
+    <div className="mis-pedidos-page">
+      {/* Botón de Retorno a la Tienda */}
+      <div className="mis-pedidos-header">
+        <button className="btn-volver-tienda" onClick={() => navigate('/cliente/tienda')}>
+          <FaArrowLeft /> Volver a la Tienda
+        </button>
+        <h2>Mis Pedidos</h2>
+        <p>Consulta el historial, estado y seguimiento en tiempo real de tus compras en CDISFRUTA.</p>
+      </div>
 
-      {pedidos.length === 0 ? (
-        <div className="empty-orders">
-          <FaBoxOpen size={40} />
-          <p>Aún no has realizado ningún pedido.</p>
-        </div>
-      ) : (
-        <div className="orders-list">
-          {pedidos.map((pedido) => (
-            <div key={pedido._id} className="order-card">
-              <div className="order-header">
-                <span className="order-id">Pedido ID: {pedido._id}</span>
-                <span className="order-date">
-                  {new Date(pedido.fechaCreacion).toLocaleDateString()}
-                </span>
-              </div>
+      <div className="pedidos-container">
+        {pedidos.length === 0 ? (
+          <div className="empty-orders">
+            <FaBoxOpen size={50} style={{ color: '#ccc', marginBottom: '10px' }} />
+            <p>Aún no has realizado ningún pedido.</p>
+            <button className="btn-ir-tienda" onClick={() => navigate('/cliente/tienda')}>
+              Explorar productos
+            </button>
+          </div>
+        ) : (
+          pedidos.map((pedido) => {
+            const pasoActual = obtenerIndicePaso(pedido.estado);
+            const fechaFormateada = new Date(pedido.fechaCreacion).toLocaleDateString('es-CO', {
+              day: 'numeric', month: 'long', year: 'numeric'
+            });
 
-              <div className="order-body">
-                <div className="order-products-summary">
+            return (
+              <div key={pedido._id} className="pedido-card-pro">
+                
+                {/* Cabecera de la Tarjeta */}
+                <div className="card-top-info">
+                  <span className="pedido-fecha">
+                    <FaClock /> Realizado el {fechaFormateada}
+                  </span>
+                  <span className={`status-badge-pro ${pedido.estado.toLowerCase()}`}>
+                    {pedido.estado === 'Pendiente' && <FaClock />}
+                    {pedido.estado === 'Comprobado' && <FaCheckCircle />}
+                    {pedido.estado === 'Enviado' && <FaTruck />}
+                    {pedido.estado === 'Entregado' && <FaHome />}
+                    {pedido.estado === 'Cancelado' && <FaTimesCircle />}
+                    {pedido.estado}
+                  </span>
+                </div>
+
+                {/* Línea de Progreso Visual (Timeline) */}
+                {pedido.estado !== 'Cancelado' ? (
+                  <div className="order-timeline">
+                    {PASOS_ESTADO.map((paso, idx) => {
+                      const completado = idx <= pasoActual;
+                      return (
+                        <div key={idx} className={`timeline-step ${completado ? 'active' : ''}`}>
+                          <div className="step-bullet">
+                            {idx === 0 && <FaClock size={10} />}
+                            {idx === 1 && <FaCheckCircle size={10} />}
+                            {idx === 2 && <FaTruck size={10} />}
+                            {idx === 3 && <FaHome size={10} />}
+                          </div>
+                          <span>{paso}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="canceled-banner">
+                    <FaTimesCircle /> Este pedido fue cancelado.
+                  </div>
+                )}
+
+                {/* Lista de Productos con Imagen */}
+                <div className="pedido-productos-list">
                   {pedido.productos.map((item, idx) => (
-                    <div key={idx} className="order-product-item">
-                      <span>{item.nombre} (x{item.cantidad})</span>
-                      <span>${item.precio * item.cantidad}</span>
+                    <div key={idx} className="product-row-item">
+                      <img 
+                        src={item.imagen || "https://via.placeholder.com/60"} 
+                        alt={item.nombre} 
+                        className="product-thumbnail" 
+                      />
+                      <div className="product-details-info">
+                        <h4>{item.nombre}</h4>
+                        <p>Cantidad: <strong>{item.quantity || item.cantidad}</strong></p>
+                      </div>
+                      <div className="product-subtotal">
+                        ${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}
+                      </div>
                     </div>
                   ))}
                 </div>
-                
-                <div className="order-footer-info">
-                  <div className="order-total">
-                    <strong>Total: </strong> ${pedido.total}
-                  </div>
-                  <div className="order-status-wrapper">
-                    {getStatusBadge(pedido.estado)}
-                  </div>
-                </div>
 
-                {pedido.estado === 'Pendiente' && (
-                  <div className="order-actions">
+                {/* Pie de la Tarjeta (Total y Botón de Cancelar) */}
+                <div className="card-footer-pro">
+                  <div className="total-box-pro">
+                    <span>Total Pagado:</span>
+                    <strong>${pedido.total.toLocaleString('es-CO')}</strong>
+                  </div>
+
+                  {pedido.estado === 'Pendiente' && (
                     <button 
-                      className="btn-cancelar-pedido"
-                      onClick={() => abrirModalCancelacion(pedido)}
+                      className="btn-cancelar-pro"
+                      onClick={() => {
+                        setPedidoACancelar(pedido._id);
+                        setShowCancelModal(true);
+                      }}
                     >
                       Cancelar Pedido
                     </button>
-                  </div>
-                )}
+                  )}
+                </div>
+
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            );
+          })
+        )}
+      </div>
 
       {/* Modal de Cancelación */}
-      {modalAbierto && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3>Cancelar Pedido</h3>
-              <button className="modal-close" onClick={cerrarModalCancelacion}><FaTimes /></button>
-            </div>
+      {showCancelModal && (
+        <div className="modal-overlay-cancel">
+          <div className="modal-content-cancel">
+            <h3>¿Por qué deseas cancelar tu pedido?</h3>
+            <p>Selecciona un motivo para ayudarnos a mejorar:</p>
             
-            <form onSubmit={confirmarCancelacion}>
-              <p className="modal-subtitle">Por favor, selecciona el motivo de la cancelación:</p>
-              
-              <div className="form-group">
-                <select 
-                  value={motivoSeleccionado} 
-                  onChange={(e) => setMotivoSeleccionado(e.target.value)}
-                  className="modal-select"
-                >
-                  <option value="Me equivoqué de productos">Me equivoqué de productos</option>
-                  <option value="Ya no necesito la compra">Ya no necesito la compra</option>
-                  <option value="Encontré otro medio / mejor precio">Encontré otro medio / mejor precio</option>
-                  <option value="Otro">Otro motivo...</option>
-                </select>
-              </div>
+            <select 
+              value={motivoCancelacion} 
+              onChange={(e) => setMotivoCancelacion(e.target.value)}
+              className="cancel-select"
+            >
+              <option value="">Seleccione un motivo...</option>
+              <option value="Me equivoqué de productos">Me equivoqué de productos</option>
+              <option value="Ya no necesito el pedido">Ya no necesito el pedido</option>
+              <option value="Encontré un mejor precio">Encontré un mejor precio</option>
+              <option value="Otro motivo">Otro motivo</option>
+            </select>
 
-              {motivoSeleccionado === 'Otro' && (
-                <div className="form-group" style={{ marginTop: '12px' }}>
-                  <textarea 
-                    placeholder="Especifica tu motivo..."
-                    value={motivoPersonalizado}
-                    onChange={(e) => setMotivoPersonalizado(e.target.value)}
-                    required
-                    className="modal-textarea"
-                  />
-                </div>
-              )}
-
-              <div className="modal-actions">
-                <button type="button" className="btn-secundario" onClick={cerrarModalCancelacion}>
-                  Volver
-                </button>
-                <button type="submit" className="btn-peligro">
-                  Confirmar Cancelación
-                </button>
-              </div>
-            </form>
+            <div className="modal-buttons">
+              <button className="btn-close-modal" onClick={() => setShowCancelModal(false)}>Regresar</button>
+              <button className="btn-confirm-cancel" onClick={handleCancelarPedido}>Confirmar Cancelación</button>
+            </div>
           </div>
         </div>
       )}
