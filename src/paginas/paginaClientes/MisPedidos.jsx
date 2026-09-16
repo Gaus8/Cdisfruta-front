@@ -69,10 +69,16 @@ export default function MisPedidos() {
     const idCorto = pedido._id.slice(-8).toUpperCase();
     const totalFormateado = pedido.total.toLocaleString('es-CO');
     
+    // Extraemos los nombres y cantidades de los productos del pedido
+    const listaProductos = pedido.productos
+      .map(item => `• ${item.nombre} (Cant: ${item.quantity || item.cantidad})`)
+      .join('\n');
+
     const mensaje = 
       `Hola, necesito soporte con mi pedido *#${idCorto}* ` +
-      `a nombre de *${nombresCliente}* ` +
-      `por un valor total de *$${totalFormateado}*.`;
+      `a nombre de *${nombresCliente}*.\n\n` +
+      `*Productos:* \n${listaProductos}\n\n` +
+      `*Valor Total:* *$${totalFormateado}*.`;
 
     const miNumero = "573229683625";
     window.open(`https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`, '_blank');
