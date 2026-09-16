@@ -34,11 +34,12 @@
 }
 
 /* Botón Volver */
+
 .btn-volver-admin {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #2c3e50;
+  background: #ff7f50; 
   border: none;
   padding: 10px 18px;
   border-radius: 6px;
@@ -50,7 +51,7 @@
 }
 
 .btn-volver-admin:hover {
-  background: #34495e;
+  background: #e06d43;
 }
 
 /* Tarjeta de Pedido Individual */

@@ -77,7 +77,7 @@ export default function GestionPedidos() {
       {/* Cabecera */}
       <div className="gestion-pedidos-header">
         <div>
-          <h2><FaClipboardList /> Gestión de Pedidos</h2>
+          <h2> Gestión de Pedidos</h2>
           <p>Administra los pedidos de los clientes y actualiza su estado de seguimiento.</p>
         </div>
         <button 
