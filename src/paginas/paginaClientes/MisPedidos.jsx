@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FaArrowLeft, FaBoxOpen, FaClock, FaCheckCircle, 
-  FaTruck, FaHome, FaTimesCircle, FaShoppingBag 
+  FaTruck, FaHome, FaTimesCircle, FaStore 
 } from "react-icons/fa";
 import { apiAxios } from "../../funciones/conexion";
+import { useAuth } from "../../funciones/useAuth";
 import "../../assets/styles/usuarios/mis_pedidos.css";
 
 const PASOS_ESTADO = ["Pendiente", "Comprobado", "Enviado", "Entregado"];
@@ -15,11 +16,13 @@ export default function MisPedidos() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [pedidoACancelar, setPedidoACancelar] = useState(null);
   const [motivoCancelacion, setMotivoCancelacion] = useState("");
+  const { userData } = useAuth();
   const navigate = useNavigate();
 
   const fetchMisPedidos = async () => {
     try {
       setLoading(true);
+      // Hacemos la petición; el backend filtrará por la sesión activa o el ID del usuario
       const response = await apiAxios.get('/pedidos/mis-pedidos');
       setPedidos(response.data);
     } catch (error) {
@@ -31,7 +34,7 @@ export default function MisPedidos() {
 
   useEffect(() => {
     fetchMisPedidos();
-  }, []);
+  }, [userData]);
 
   const handleCancelarPedido = async () => {
     if (!motivoCancelacion) {
@@ -56,7 +59,6 @@ export default function MisPedidos() {
     }
   };
 
-  // Función para calcular el paso activo en la barra de progreso
   const obtenerIndicePaso = (estado) => {
     if (estado === "Cancelado") return -1;
     const index = PASOS_ESTADO.indexOf(estado);
@@ -66,21 +68,25 @@ export default function MisPedidos() {
   if (loading) return <div className="loading-state">Cargando tus compras...</div>;
 
   return (
-    <div className="mis-pedidos-page">
-      {/* Botón de Retorno a la Tienda */}
-      <div className="mis-pedidos-header">
-        <button className="btn-volver-tienda" onClick={() => navigate('/cliente/tienda')}>
-          <FaArrowLeft /> Volver a la Tienda
+    <div className="mis-pedidos-container">
+      
+      {/* Botón de Retorno Profesional estilo píldora */}
+      <div className="mis-pedidos-nav-top">
+        <button className="btn-volver-pro" onClick={() => navigate('/cliente/tienda')}>
+          <FaArrowLeft /> Seguir Comprando en la Tienda
         </button>
+      </div>
+
+      <div className="mis-pedidos-header">
         <h2>Mis Pedidos</h2>
         <p>Consulta el historial, estado y seguimiento en tiempo real de tus compras en CDISFRUTA.</p>
       </div>
 
-      <div className="pedidos-container">
+      <div className="orders-list">
         {pedidos.length === 0 ? (
           <div className="empty-orders">
-            <FaBoxOpen size={50} style={{ color: '#ccc', marginBottom: '10px' }} />
-            <p>Aún no has realizado ningún pedido.</p>
+            <FaBoxOpen size={50} style={{ color: '#ccc', marginBottom: '15px' }} />
+            <p>Aún no has realizado ningún pedido o tu sesión necesita recargar el historial.</p>
             <button className="btn-ir-tienda" onClick={() => navigate('/cliente/tienda')}>
               Explorar productos
             </button>
@@ -93,14 +99,14 @@ export default function MisPedidos() {
             });
 
             return (
-              <div key={pedido._id} className="pedido-card-pro">
+              <div key={pedido._id} className="order-card">
                 
                 {/* Cabecera de la Tarjeta */}
-                <div className="card-top-info">
-                  <span className="pedido-fecha">
+                <div className="order-header">
+                  <span className="order-date">
                     <FaClock /> Realizado el {fechaFormateada}
                   </span>
-                  <span className={`status-badge-pro ${pedido.estado.toLowerCase()}`}>
+                  <span className={`badge badge-${pedido.estado.toLowerCase()}`}>
                     {pedido.estado === 'Pendiente' && <FaClock />}
                     {pedido.estado === 'Comprobado' && <FaCheckCircle />}
                     {pedido.estado === 'Enviado' && <FaTruck />}
@@ -110,68 +116,72 @@ export default function MisPedidos() {
                   </span>
                 </div>
 
-                {/* Línea de Progreso Visual (Timeline) */}
-                {pedido.estado !== 'Cancelado' ? (
-                  <div className="order-timeline">
-                    {PASOS_ESTADO.map((paso, idx) => {
-                      const completado = idx <= pasoActual;
-                      return (
-                        <div key={idx} className={`timeline-step ${completado ? 'active' : ''}`}>
-                          <div className="step-bullet">
-                            {idx === 0 && <FaClock size={10} />}
-                            {idx === 1 && <FaCheckCircle size={10} />}
-                            {idx === 2 && <FaTruck size={10} />}
-                            {idx === 3 && <FaHome size={10} />}
+                <div className="order-body">
+                  {/* Línea de Progreso Visual (Timeline) */}
+                  {pedido.estado !== 'Cancelado' ? (
+                    <div className="order-timeline">
+                      {PASOS_ESTADO.map((paso, idx) => {
+                        const completado = idx <= pasoActual;
+                        return (
+                          <div key={idx} className={`timeline-step ${completado ? 'active' : ''}`}>
+                            <div className="step-bullet">
+                              {idx === 0 && <FaClock size={10} />}
+                              {idx === 1 && <FaCheckCircle size={10} />}
+                              {idx === 2 && <FaTruck size={10} />}
+                              {idx === 3 && <FaHome size={10} />}
+                            </div>
+                            <span>{paso}</span>
                           </div>
-                          <span>{paso}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="canceled-banner">
-                    <FaTimesCircle /> Este pedido fue cancelado.
-                  </div>
-                )}
-
-                {/* Lista de Productos con Imagen */}
-                <div className="pedido-productos-list">
-                  {pedido.productos.map((item, idx) => (
-                    <div key={idx} className="product-row-item">
-                      <img 
-                        src={item.imagen || "https://via.placeholder.com/60"} 
-                        alt={item.nombre} 
-                        className="product-thumbnail" 
-                      />
-                      <div className="product-details-info">
-                        <h4>{item.nombre}</h4>
-                        <p>Cantidad: <strong>{item.quantity || item.cantidad}</strong></p>
-                      </div>
-                      <div className="product-subtotal">
-                        ${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}
-                      </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    <div className="canceled-banner">
+                      <FaTimesCircle /> Este pedido fue cancelado.
+                    </div>
+                  )}
 
-                {/* Pie de la Tarjeta (Total y Botón de Cancelar) */}
-                <div className="card-footer-pro">
-                  <div className="total-box-pro">
-                    <span>Total Pagado:</span>
-                    <strong>${pedido.total.toLocaleString('es-CO')}</strong>
+                  {/* Lista de Productos */}
+                  <div className="order-products-summary">
+                    {pedido.productos.map((item, idx) => (
+                      <div key={idx} className="order-product-item">
+                        <img 
+                          src={item.imagen || "https://via.placeholder.com/60"} 
+                          alt={item.nombre} 
+                          className="order-product-thumbnail" 
+                        />
+                        <div className="order-product-info">
+                          <h4>{item.nombre}</h4>
+                          <p>Cantidad: <strong>{item.quantity || item.cantidad}</strong></p>
+                        </div>
+                        <div className="order-product-subtotal">
+                          ${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  {pedido.estado === 'Pendiente' && (
-                    <button 
-                      className="btn-cancelar-pro"
-                      onClick={() => {
-                        setPedidoACancelar(pedido._id);
-                        setShowCancelModal(true);
-                      }}
-                    >
-                      Cancelar Pedido
-                    </button>
-                  )}
+                  {/* Footer de la Tarjeta */}
+                  <div className="order-footer-info">
+                    <div className="order-total">
+                      <span>Total Pagado:</span>
+                      <strong>${pedido.total.toLocaleString('es-CO')}</strong>
+                    </div>
+
+                    {pedido.estado === 'Pendiente' && (
+                      <div className="order-actions">
+                        <button 
+                          className="btn-cancelar-pedido"
+                          onClick={() => {
+                            setPedidoACancelar(pedido._id);
+                            setShowCancelModal(true);
+                          }}
+                        >
+                          Cancelar Pedido
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
               </div>
@@ -182,15 +192,18 @@ export default function MisPedidos() {
 
       {/* Modal de Cancelación */}
       {showCancelModal && (
-        <div className="modal-overlay-cancel">
-          <div className="modal-content-cancel">
-            <h3>¿Por qué deseas cancelar tu pedido?</h3>
-            <p>Selecciona un motivo para ayudarnos a mejorar:</p>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Cancelar Pedido</h3>
+              <button className="modal-close" onClick={() => setShowCancelModal(false)}>✕</button>
+            </div>
+            <p className="modal-subtitle">Selecciona un motivo para ayudarnos a mejorar:</p>
             
             <select 
               value={motivoCancelacion} 
               onChange={(e) => setMotivoCancelacion(e.target.value)}
-              className="cancel-select"
+              className="modal-select"
             >
               <option value="">Seleccione un motivo...</option>
               <option value="Me equivoqué de productos">Me equivoqué de productos</option>
@@ -199,9 +212,9 @@ export default function MisPedidos() {
               <option value="Otro motivo">Otro motivo</option>
             </select>
 
-            <div className="modal-buttons">
-              <button className="btn-close-modal" onClick={() => setShowCancelModal(false)}>Regresar</button>
-              <button className="btn-confirm-cancel" onClick={handleCancelarPedido}>Confirmar Cancelación</button>
+            <div className="modal-actions">
+              <button className="btn-secundario" onClick={() => setShowCancelModal(false)}>Regresar</button>
+              <button className="btn-peligro" onClick={handleCancelarPedido}>Confirmar Cancelación</button>
             </div>
           </div>
         </div>
