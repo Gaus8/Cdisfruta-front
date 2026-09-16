@@ -9,6 +9,9 @@ export const RutaProtegida = ({
 }) => {
   const location = useLocation();
 
+  // 🔍 Inspeccionamos qué datos trae el usuario y su rol en la consola
+  console.log("RutaProtegida - User data:", user, "Rol requerido:", requiredRole);
+
   // 1. Estado de carga inicial mientras se verifica la sesión o los datos de usuario
   if (loading || (authenticated && !user)) {
     return (
