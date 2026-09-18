@@ -9,7 +9,7 @@ export const useAuth = () => {
   const verifyToken = useCallback(async () => {
     try {
       // Usamos apiAxios: las cookies httpOnly se envían automáticamente
-      const res = await apiAxios.get('/verify-token');
+      const res = await apiAxios.get('/auth/verify-token');
 
       if (res.data.valid) {
         setUserData(res.data.user);

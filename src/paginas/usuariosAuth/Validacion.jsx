@@ -53,7 +53,7 @@ function Validacion() {
     setCargando(true);
     try {
       const email = localStorage.getItem('userEmail')
-      const res = await axios.post(`${URL_SERVER}/validacion`, { 
+      const res = await axios.post(`${URL_SERVER}/auth/verificar-cuenta`, { 
         email,
         codigo: codigoCompleto 
       });

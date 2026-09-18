@@ -7,7 +7,7 @@ import { apiAxios } from "./conexion";
  */
 export const iniciarSesion = async (credentials) => {
   try {
-    const res = await apiAxios.post('/login', credentials);
+    const res = await apiAxios.post('/auth/login', credentials);
     if (res.status === 200) {
       // La cookie httpOnly se guarda automáticamente vía apiAxios (withCredentials: true)
       return res.data;
@@ -54,7 +54,7 @@ export const procesarErroresRegistro = (errorData) => {
 export const registrarUsuario = async (data, terminos) => {
   try {
     const payload = { ...data, terminosAceptados: terminos };
-    const response = await apiAxios.post('/registro', payload);
+    const response = await apiAxios.post('/auth/registro', payload);
     return response;
   } catch (err) {
     throw err.response?.data || { message: "Error al registrar el usuario." };
@@ -83,7 +83,7 @@ export const loginConGoogle = async (code) => {
  */
 export const solicitarRestablecerPassword = async (email) => {
   try {
-    const response = await apiAxios.post('/usuario/codigo-password', { email });
+    const response = await apiAxios.post('/auth/codigo-password', { email });
     return response.data;
   } catch (err) {
     throw err.response?.data || { message: "Error al enviar la solicitud." };
@@ -92,7 +92,7 @@ export const solicitarRestablecerPassword = async (email) => {
 
 export const restablecerPasswordConToken = async ({ token, nuevaPassword }) => {
   try {
-    const response = await apiAxios.post('/usuario/reset-password', { token, nuevaPassword });
+    const response = await apiAxios.post('/auth/reset-password', { token, nuevaPassword });
     return response.data;
   } catch (err) {
     throw err.response?.data || { message: "Error al actualizar la contraseña." };
