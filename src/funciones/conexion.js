@@ -16,7 +16,7 @@ apiAxios.interceptors.response.use(
       url.includes('/login') || 
       url.includes('/registro') || 
       url.includes('/logout') ||
-      url.includes('/verify-token'); // 👈 un 401 aquí es normal para visitantes sin sesión
+      url.includes('/verificar-token'); // 👈 un 401 aquí es normal para visitantes sin sesión
 
     if (
       error.response && 
