@@ -126,7 +126,7 @@ function MainPage() {
               
               {/* Enlace a WhatsApp */}
               <a 
-                href="https://wa.me/573112865361" 
+                href="https://wa.me/573229683625" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="social-pill"
@@ -168,7 +168,7 @@ function MainPage() {
               </li>
               <li>
                 <span className="footer-contact-icon"><BsTelephone /></span>
-                <span>+57 321 451 2250</span>
+                <span>+57 322 968 3625</span>
               </li>
               <li>
                 <span className="footer-contact-icon"><MdOutlineMail /></span>

@@ -12,6 +12,7 @@ import MainPage from './paginas/landingPage/MainPage';
 import Validacion from "./paginas/usuariosAuth/Validacion";
 import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
 import ConfiguracionUsuario from "./paginas/paginaClientes/ConfiguracionUsuario";
+import MisPedidos from "./paginas/paginaClientes/MisPedidos"; 
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
@@ -21,6 +22,7 @@ import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
 import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
 import Login from "./paginas/usuariosAuth/Login";
 import Registro from "./paginas/usuariosAuth/Registro";
+import GestionPedidos from "./paginas/dashboardAdmin/GestionPedidos";
 
 // Componente Wrapper para pasar verifyToken al Login standalone
 function LoginWrapper() {
@@ -127,6 +129,7 @@ const router = createBrowserRouter([
       { path: '/cliente/tienda', element: <DashboardUsuario /> },
       { path: '/cliente/perfil', element: <DashboardUsuario /> },
       { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
+      { path: '/cliente/pedidos', element: <MisPedidos /> },
     ],
   },
 
@@ -141,6 +144,7 @@ const router = createBrowserRouter([
           { index: true, element: <HomeAdmin /> },
           { path: 'dashboard', element: <HomeAdmin /> },
           { path: 'productos', element: <Productos /> },
+          { path: 'pedidos', element: <GestionPedidos /> },
         ],
       },
     ],

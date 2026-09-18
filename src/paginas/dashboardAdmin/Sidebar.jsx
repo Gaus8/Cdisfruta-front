@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaSignOutAlt, FaExclamationTriangle, FaBars, FaTimes } from "react-icons/fa";
-import { Link, useNavigate } from "react-router"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
 import '../../assets/styles/dashboardAdmin/sidebar_admin.css';
@@ -38,25 +38,30 @@ export default function Sidebar() {
           <h2>Panel Admin</h2>
         </div>
         <nav className="sidebar-nav">
-          <Link title="Inicio" to="/dashboard_admin/dashboard" onClick={() => setIsOpen(false)}>
+          <Link title="Inicio" to="/admin" onClick={() => setIsOpen(false)}>
             <FaHome /> <span>Inicio</span>
           </Link>
           
-          <Link title="Catálogo" to="/dashboard_admin/productos" onClick={() => setIsOpen(false)}>
+          <Link title="Catálogo" to="/admin/productos" onClick={() => setIsOpen(false)}>
             <FaStore /> <span>Catálogo</span>
           </Link>
           
-          <Link title="Inventario" to="/dashboard_admin/inventario" onClick={() => setIsOpen(false)}>
+          <Link title="Inventario" to="/admin/inventario" onClick={() => setIsOpen(false)}>
             <FaBoxes /> <span>Inventario</span>
           </Link>
 
-          <Link title="Usuarios" to="/dashboard_admin/usuarios" onClick={() => setIsOpen(false)}>
+          <Link title="Usuarios" to="/admin/usuarios" onClick={() => setIsOpen(false)}>
             <FaUsers /> <span>Usuarios</span>
           </Link>
-          <Link title="Reportes" to="/dashboard_admin/reportes" onClick={() => setIsOpen(false)}>
+
+          <Link title="Pedidos" to="/admin/pedidos" onClick={() => setIsOpen(false)}>
+            <FaBoxes /> <span>Pedidos</span>
+          </Link>
+          
+          <Link title="Reportes" to="/admin/reportes" onClick={() => setIsOpen(false)}>
             <FaChartLine /> <span>Reportes</span>
           </Link>
-          <Link title="Configuración" to="/dashboard_admin/config" onClick={() => setIsOpen(false)}>
+          <Link title="Configuración" to="/admin/config" onClick={() => setIsOpen(false)}>
             <FaCog /> <span>Configuración</span>
           </Link>
         </nav>
@@ -67,7 +72,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Modal de Logout se mantiene igual... */}
+      {/* Modal de Logout */}
       {showLogoutModal && (
         <div className="modal-overlay-logout">
           <div className="logout-modal-content">

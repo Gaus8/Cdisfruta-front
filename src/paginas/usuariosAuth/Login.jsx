@@ -64,17 +64,22 @@ export default function Login({ verifyToken }) {
     setLoading(true);
 
     try {
-      const dataUsuario = await iniciarSesion(data);
-
-      if (verifyToken) {
-        await verifyToken();
-      }
+      // 1. Iniciamos sesión (se genera la cookie httpOnly en el navegador)
+      await iniciarSesion(data);
 
       setMensajeExpirado("");
 
-      // Redirección limpia a las rutas protegidas según el rol
-      if (dataUsuario?.rol === 'admin') {
-        navigate("/admin", { replace: true });
+      // 2. Verificamos el token de inmediato para capturar los datos reales del usuario y su rol
+      if (verifyToken) {
+        const tokenData = await verifyToken();
+        const rolUsuario = tokenData?.user?.rol;
+
+        // 3. Redirección dinámica basada exactamente en el rol obtenido
+        if (rolUsuario === 'admin') {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate("/cliente/tienda", { replace: true });
+        }
       } else {
         navigate("/cliente/tienda", { replace: true });
       }
