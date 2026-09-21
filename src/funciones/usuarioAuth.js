@@ -98,3 +98,16 @@ export const cambiarPassword = async (passActual, nuevaPassword) => {
     throw err.response?.data || { message: "Error al actualizar la contraseña." };
   }
 };
+
+export const actualizarPerfil = async (formData) => {
+  try {
+    const response = await apiAxios.patch('/auth/actualizar-perfil', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Error al actualizar el perfil." };
+  }
+};
