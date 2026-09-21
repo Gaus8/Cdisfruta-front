@@ -18,9 +18,6 @@ export const iniciarSesion = async (credentials) => {
   }
 };
 
-/**
- * Procesa y asigna los errores de validación provenientes del backend.
- */
 export const procesarErroresRegistro = (errorData) => {
   let nuevosErrores = { s1: "", s2: "", s3: "" };
 
@@ -48,9 +45,6 @@ export const procesarErroresRegistro = (errorData) => {
   return nuevosErrores;
 };
 
-/**
- * Registra un nuevo usuario en la aplicación.
- */
 export const registrarUsuario = async (data, terminos) => {
   try {
     const payload = { ...data, terminosAceptados: terminos };
@@ -61,9 +55,6 @@ export const registrarUsuario = async (data, terminos) => {
   }
 };
 
-/**
- * Autentica al usuario con Google enviando el código de autorización devuelto por OAuth.
- */
 export const loginConGoogle = async (code) => {
   try {
     const res = await apiAxios.post('/auth/google', { code });
@@ -78,9 +69,6 @@ export const loginConGoogle = async (code) => {
   }
 };
 
-/**
- * Restablecimiento de contraseña
- */
 export const solicitarRestablecerPassword = async (email) => {
   try {
     const response = await apiAxios.post('/auth/codigo-password', { email });
@@ -93,6 +81,18 @@ export const solicitarRestablecerPassword = async (email) => {
 export const restablecerPasswordConToken = async ({ token, nuevaPassword }) => {
   try {
     const response = await apiAxios.post('/auth/reset-password', { token, nuevaPassword });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Error al actualizar la contraseña." };
+  }
+};
+
+export const cambiarPassword = async (passActual, nuevaPassword) => {
+  try {
+    const response = await apiAxios.patch('/auth/cambiar-password', { 
+      passActual, 
+      nuevaPassword 
+    });
     return response.data;
   } catch (err) {
     throw err.response?.data || { message: "Error al actualizar la contraseña." };
