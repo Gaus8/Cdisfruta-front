@@ -85,8 +85,19 @@ function useGuardedAuth() {
 }
 
 // Layouts de Seguridad
+// Layouts de Seguridad con control de carga previo
 function LayoutUsuario() {
   const { userData, loading, authenticated } = useGuardedAuth();
+
+  // 👇 Mientras verifica la sesión, mostramos un loader limpio en lugar de dejar parpadear la vista
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
     <RutaProtegida 
       authenticated={authenticated} 
@@ -99,6 +110,16 @@ function LayoutUsuario() {
 
 function LayoutAdmin() {
   const { userData, loading, authenticated } = useGuardedAuth();
+
+  // 👇 Mismo comportamiento para el panel de administración
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
     <RutaProtegida 
       authenticated={authenticated} 
