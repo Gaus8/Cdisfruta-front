@@ -1,7 +1,7 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect } from "react";
 import { useAuth } from "../../funciones/useAuth";
 import HeaderDashboard from "./Header";
-import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaSave, FaCheckCircle } from "react-icons/fa";
 import Perfil from "./configuraciones/Perfil";
 import Seguridad from "./configuraciones/Seguridad";
@@ -130,13 +130,13 @@ export default function ConfiguracionUsuario() {
   };
 
   return (
-    <div className="userpage-container">
+    <div className={tw("userpage-container")}>
       <HeaderDashboard />
 
-      <div className="content-wrapper" style={{ justifyContent: 'center', padding: '40px 20px' }}>
-        <div style={{ width: '100%', maxWidth: '900px' }}>
+      <div className={tw(tw("content-wrapper"), "![justify-content:center]", "![padding:40px_20px]")} >
+        <div className={tw("![width:100%]", "![max-width:900px]")}>
 
-          <div style={{ background: 'var(--white)', borderRadius: '24px', border: '1px solid #e2e8f0', boxShadow: '0 15px 30px -5px rgba(30, 41, 59, 0.08)', overflow: 'hidden' }}>
+          <div className={tw("![background:var(--white)]", "![border-radius:24px]", "![border:1px_solid_#e2e8f0]", "![box-shadow:0_15px_30px_-5px_rgba(30,_41,_59,_0.08)]", "![overflow:hidden]")}>
 
             <HeaderPerfil
               nombre={nombre}
@@ -154,37 +154,26 @@ export default function ConfiguracionUsuario() {
             )}
 
             {/* Pestañas de Navegación */}
-            <div style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', background: '#f8fafc', padding: '0 30px' }}>
+            <div className={tw("![display:flex]", "![border-bottom:1px_solid_#e2e8f0]", "![background:#f8fafc]", "![padding:0_30px]")}>
               <button
                 type="button"
                 onClick={() => { setActiveTab("perfil"); setMensaje(""); }}
-                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'perfil' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem' }}
+                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-5919-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-5919-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-5919-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-5919-0": activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-5919-1": activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-5919-2": activeTab === 'perfil' ? '700' : '500' }}
               >
                 Información Personal
               </button>
               <button
                 type="button"
                 onClick={() => { setActiveTab("seguridad"); setMensaje(""); }}
-                style={{ padding: '16px 24px', background: 'transparent', border: 'none', borderBottom: activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', color: activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', fontWeight: activeTab === 'seguridad' ? '700' : '500', cursor: 'pointer', fontSize: '0.95rem' }}
+                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-6485-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-6485-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-6485-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-6485-0": activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-6485-1": activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-6485-2": activeTab === 'seguridad' ? '700' : '500' }}
               >
                 Cambiar Contraseña
               </button>
             </div>
 
-            <div style={{ padding: '40px' }}>
+            <div className={tw("![padding:40px]")}>
               {mensaje && (
-                <div style={{
-                  background: tipoMensaje === 'success' ? '#ecfdf5' : '#fee2e2',
-                  border: `1px solid ${tipoMensaje === 'success' ? '#a7f3d0' : '#fecaca'}`,
-                  color: tipoMensaje === 'success' ? '#065f46' : '#991b1b',
-                  padding: '14px 20px',
-                  borderRadius: '12px',
-                  marginBottom: '25px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  fontWeight: '500'
-                }}>
+                <div className={tw("![background:var(--tw-inline-ConfiguracionUsuario-7157-0)]", "![border:var(--tw-inline-ConfiguracionUsuario-7157-1)]", "![color:var(--tw-inline-ConfiguracionUsuario-7157-2)]", "![padding:14px_20px]", "![border-radius:12px]", "![margin-bottom:25px]", "![display:flex]", "![align-items:center]", "![gap:10px]", "![font-weight:500]")} style={{ "--tw-inline-ConfiguracionUsuario-7157-0": tipoMensaje === 'success' ? '#ecfdf5' : '#fee2e2', "--tw-inline-ConfiguracionUsuario-7157-1": `1px solid ${tipoMensaje === 'success' ? '#a7f3d0' : '#fecaca'}`, "--tw-inline-ConfiguracionUsuario-7157-2": tipoMensaje === 'success' ? '#065f46' : '#991b1b' }}>
                   <FaCheckCircle color={tipoMensaje === 'success' ? '#10b981' : '#ef4444'} size={18} /> {mensaje}
                 </div>
               )}
@@ -199,8 +188,8 @@ export default function ConfiguracionUsuario() {
                     setTelefono={setTelefono}
                     email={email}
                   />
-                  <div style={{ marginTop: '35px', display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-                    <button type="submit" className="hero-explore-btn" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 30px', fontSize: '1rem' }}>
+                  <div className={tw("![margin-top:35px]", "![display:flex]", "![justify-content:flex-end]", "![border-top:1px_solid_#e2e8f0]", "![padding-top:20px]")}>
+                    <button type="submit" className={tw(tw("hero-explore-btn"), "![margin:0]", "![display:flex]", "![align-items:center]", "![gap:10px]", "![padding:14px_30px]", "![font-size:1rem]")} >
                       <FaSave /> Guardar Cambios de Perfil
                     </button>
                   </div>
@@ -215,8 +204,8 @@ export default function ConfiguracionUsuario() {
                     passConfirmar={passConfirmar}
                     setPassConfirmar={setPassConfirmar}
                   />
-                  <div style={{ marginTop: '35px', display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-                    <button type="submit" className="hero-explore-btn" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 30px', fontSize: '1rem' }}>
+                  <div className={tw("![margin-top:35px]", "![display:flex]", "![justify-content:flex-end]", "![border-top:1px_solid_#e2e8f0]", "![padding-top:20px]")}>
+                    <button type="submit" className={tw(tw("hero-explore-btn"), "![margin:0]", "![display:flex]", "![align-items:center]", "![gap:10px]", "![padding:14px_30px]", "![font-size:1rem]")} >
                       <FaSave /> Actualizar Contraseña
                     </button>
                   </div>

@@ -1,8 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../funciones/useAuth";
 import HeaderTienda from "./HeaderTienda";
 import ProductosTienda from "./ProductosTienda";
-import '../../assets/styles/dashboardUsuario/dashboardUsuario.css';
 import { FaChevronUp } from "react-icons/fa";
 
 export default function Tienda() {
@@ -33,39 +33,39 @@ export default function Tienda() {
 
   if (loading) {
     return (
-      <div className="status-container">
-        <div className="spinner-auth"></div>
+      <div className={tw("status-container")}>
+        <div className={tw("spinner-auth")}></div>
         <p>Cargando tu experiencia saludable...</p>
       </div>
     );
   }
 
   return (
-    <div className="userpage-container">
+    <div className={tw("userpage-container")}>
       <HeaderTienda />
 
-      <div className="content-wrapper" style={{ display: 'block' }}>
-        <main className="main-products-content" style={{ width: '100%' }}>
-          <header className="products-hero-section">
-            <div className="hero-content">
-              <div className="hero-text">
-                <span className="hero-subtitle">100% Natural • Artesanal</span>
+      <div className={tw(tw("content-wrapper"), "![display:block]")} >
+        <main className={tw(tw("main-products-content"), "![width:100%]")} >
+          <header className={tw("products-hero-section")}>
+            <div className={tw("hero-content")}>
+              <div className={tw("hero-text")}>
+                <span className={tw("hero-subtitle")}>100% Natural • Artesanal</span>
                 <h1>Sabor real, Energía de nuestra tierra</h1>
                 <p>
                   Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas
                   y deshidratadas con amor para acompañar tu estilo de vida saludable.
                 </p>
                 
-                <button className="hero-explore-btn" onClick={scrollToProducts}>
+                <button className={tw("hero-explore-btn")} onClick={scrollToProducts}>
                   Ver Productos
                 </button>
               </div>
 
-              <div className="hero-visual">
+              <div className={tw("hero-visual")}>
                 <img 
                   src="/img/productos_destacados.webp" 
                   alt="Frutas deshidratadas Cdisfruta" 
-                  className="hero-product-img"
+                  className={tw("hero-product-img")}
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Tienda() {
       </div>
 
       {mostrarBotonSubir && (
-        <button className="scroll-to-top-btn" onClick={scrollToTop} title="Volver arriba">
+        <button className={tw("scroll-to-top-btn")} onClick={scrollToTop} title="Volver arriba">
           <FaChevronUp />
         </button>
       )}

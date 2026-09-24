@@ -1,3 +1,4 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { 
   FaTrash, FaTimes, FaWhatsapp, FaUser, FaEnvelope, 
@@ -5,7 +6,6 @@ import {
 } from "react-icons/fa";
 import { URL_SERVER, apiAxios } from "../../funciones/conexion";
 import { useAuth } from "../../funciones/useAuth";
-import "../../assets/styles/dashboardUsuario/cart_modal.css";
 
 const COLOMBIA_GEO = {
   "Amazonas": ["El Encanto", "La Chorrera", "La Pedrera", "Leticia", "Mirití-Paraná", "Puerto Alegría", "Puerto Arica", "Puerto Nariño", "Puerto Santander", "Tarapacá"],
@@ -190,28 +190,28 @@ export default function CartModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="cart-modal-overlay" onClick={onClose}>
-      <div className="cart-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="cart-header">
-          <h2><FaCheckCircle style={{color: '#ff7a5c'}} /> Tu Carrito</h2>
-          <button className="close-cart-btn" onClick={onClose} aria-label="Cerrar carrito">
+    <div className={tw("cart-modal-overlay")} onClick={onClose}>
+      <div className={tw("cart-modal-content")} onClick={(e) => e.stopPropagation()}>
+        <div className={tw("cart-header")}>
+          <h2><FaCheckCircle className={tw("![color:#ff7a5c]")} /> Tu Carrito</h2>
+          <button className={tw("close-cart-btn")} onClick={onClose} aria-label="Cerrar carrito">
             <FaTimes />
           </button>
         </div>
 
-        <div className="cart-body">
-          <div className="cart-items-section">
+        <div className={tw("cart-body")}>
+          <div className={tw("cart-items-section")}>
             {cartItems.length === 0 ? (
-              <p className="empty-cart-msg">Tu carrito está vacío</p>
+              <p className={tw("empty-cart-msg")}>Tu carrito está vacío</p>
             ) : (
               cartItems.map((item) => (
-                <div key={item._id} className="cart-item-professional">
+                <div key={item._id} className={tw("cart-item-professional")}>
                   <img src={item.imagen} alt={item.nombre} />
-                  <div className="item-info">
+                  <div className={tw("item-info")}>
                     <h4>{item.nombre}</h4>
                     <p>{item.quantity} x <span>${item.precio.toLocaleString("es-CO")}</span></p>
                   </div>
-                  <button className="remove-btn-minimal" onClick={() => removeItem(item._id)}>
+                  <button className={tw("remove-btn-minimal")} onClick={() => removeItem(item._id)}>
                     <FaTrash />
                   </button>
                 </div>
@@ -219,40 +219,40 @@ export default function CartModal({ isOpen, onClose }) {
             )}
           </div>
 
-          <form ref={formRef} className="checkout-form-professional" onSubmit={(e) => e.preventDefault()}>
+          <form ref={formRef} className={tw("checkout-form-professional")} onSubmit={(e) => e.preventDefault()}>
             <h3>Datos de Entrega</h3>
             
-            <div className="form-grid">
-              <div className="input-box">
+            <div className={tw("form-grid")}>
+              <div className={tw("input-box")}>
                 <label>Nombres *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaUser />
                   <input type="text" name="nombres" required value={formData.nombres} onChange={handleInputChange} placeholder="Ej. Juan" />
                 </div>
               </div>
-              <div className="input-box">
+              <div className={tw("input-box")}>
                 <label>Apellidos *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaUser />
                   <input type="text" name="apellidos" required value={formData.apellidos} onChange={handleInputChange} placeholder="Ej. Pérez" />
                 </div>
               </div>
             </div>
 
-            <div className="input-box">
+            <div className={tw("input-box")}>
               <label>Número de WhatsApp *</label>
-              <div className="input-field">
+              <div className={tw("input-field")}>
                 <FaPhone />
                 <input type="tel" name="whatsapp" required value={formData.whatsapp} onChange={handleInputChange} placeholder="310..." />
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="input-box">
+            <div className={tw("form-grid")}>
+              <div className={tw("input-box")}>
                 <label>Departamento *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaGlobeAmericas />
-                  <select name="departamento" value={formData.departamento} onChange={handleInputChange} className="filter-select" required>
+                  <select name="departamento" value={formData.departamento} onChange={handleInputChange} className={tw("filter-select")} required>
                     <option value="">Seleccione departamento...</option>
                     {DEPARTAMENTOS_ORDENADOS.map((dep, idx) => (
                       <option key={idx} value={dep}>{dep}</option>
@@ -260,15 +260,15 @@ export default function CartModal({ isOpen, onClose }) {
                   </select>
                 </div>
               </div>
-              <div className="input-box">
+              <div className={tw("input-box")}>
                 <label>Municipio / Ciudad *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaCity />
                   <select 
                     name="municipio" 
                     value={formData.municipio} 
                     onChange={handleInputChange} 
-                    className="filter-select" 
+                    className={tw("filter-select")} 
                     required 
                     disabled={!formData.departamento}
                   >
@@ -281,54 +281,54 @@ export default function CartModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="input-box">
+            <div className={tw("form-grid")}>
+              <div className={tw("input-box")}>
                 <label>Dirección *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaMapMarkerAlt />
                   <input type="text" name="direccion" required value={formData.direccion} onChange={handleInputChange} placeholder="Calle/Cra..." />
                 </div>
               </div>
-              <div className="input-box">
+              <div className={tw("input-box")}>
                 <label>Barrio o Sector *</label>
-                <div className="input-field">
+                <div className={tw("input-field")}>
                   <FaHome />
                   <input type="text" name="barrio" required value={formData.barrio} onChange={handleInputChange} placeholder="Ej. Centro" />
                 </div>
               </div>
             </div>
 
-            <div className="input-box">
+            <div className={tw("input-box")}>
               <label>Correo electrónico (Opcional)</label>
-              <div className="input-field">
+              <div className={tw("input-field")}>
                 <FaEnvelope />
                 <input type="email" name="correo" value={formData.correo} onChange={handleInputChange} placeholder="tu@email.com" />
               </div>
             </div>
 
-            <div className="input-box">
+            <div className={tw("input-box")}>
               <label>Nota del pedido</label>
-              <div className="input-field textarea">
+              <div className={tw("input-field textarea")}>
                 <FaStickyNote />
                 <textarea name="nota" value={formData.nota} onChange={handleInputChange} placeholder="Especificar detalles de Casa, Unidad y/o Apartamento"></textarea>
               </div>
             </div>
 
-            <div className="checkbox-container">
+            <div className={tw("checkbox-container")}>
               <input type="checkbox" id="compromiso" name="compromiso" checked={formData.compromiso} onChange={handleInputChange} />
               <label htmlFor="compromiso">
                 Me comprometo a pagar al recibir mi producto y confirmo que mis datos son correctos.
               </label>
             </div>
 
-            <div className="cart-footer-sticky">
-              <div className="total-display">
+            <div className={tw("cart-footer-sticky")}>
+              <div className={tw("total-display")}>
                 <span>Total a pagar</span>
                 <strong>${total.toLocaleString("es-CO")}</strong>
               </div>
               <button 
                 type="button" 
-                className="btn-confirm-whatsapp" 
+                className={tw("btn-confirm-whatsapp")} 
                 onClick={handleConfirmarPedido}
                 disabled={cartItems.length === 0}
               >

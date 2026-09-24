@@ -1,6 +1,5 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect } from 'react';
-import '../../assets/styles/mainPage/header.css';
-import '../../assets/styles/mainPage/headerResponsive.css';
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -24,32 +23,32 @@ export default function Header() {
   };
 
   return (
-    <header className={`hdr${scrolled ? ' hdr--scrolled' : ''}`}>
-      <a href="#" className="hdr-brand" onClick={(e) => { e.preventDefault(); navigate('/'); closeMenu(); }}>
-        <div className="hdr-logo-ring">
+    <header className={tw(`hdr${scrolled ? ' hdr--scrolled' : ''}`)}>
+      <a href="#" className={tw("hdr-brand")} onClick={(e) => { e.preventDefault(); navigate('/'); closeMenu(); }}>
+        <div className={tw("hdr-logo-ring")}>
           <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
         </div>
-        <div className="hdr-brand-text">
-          <span className="hdr-brand-name">CDISFRUTA</span>
-          <span className="hdr-brand-sub">Frutas Deshidratadas · Ubaté</span>
+        <div className={tw("hdr-brand-text")}>
+          <span className={tw("hdr-brand-name")}>CDISFRUTA</span>
+          <span className={tw("hdr-brand-sub")}>Frutas Deshidratadas · Ubaté</span>
         </div>
       </a>
 
-      <button className="hdr-hamburger" onClick={() => setMenuOpen(v => !v)} aria-label="Abrir menú">
+      <button className={tw("hdr-hamburger")} onClick={() => setMenuOpen(v => !v)} aria-label="Abrir menú">
         {menuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
       </button>
 
-      <nav className={`hdr-nav${menuOpen ? ' hdr-nav--open' : ''}`}>
-        <div className="hdr-actions">
+      <nav className={tw(`hdr-nav${menuOpen ? ' hdr-nav--open' : ''}`)}>
+        <div className={tw("hdr-actions")}>
           <a href="#contacto" onClick={closeMenu}>Contacto</a>
         </div>
 
-        <div className="hdr-actions">
-          <button className="hdr-btn hdr-btn--ghost" onClick={handleAbrirLogin}>
+        <div className={tw("hdr-actions")}>
+          <button className={tw("hdr-btn hdr-btn--ghost")} onClick={handleAbrirLogin}>
             Ingresar
           </button>
 
-          <button className="hdr-btn hdr-btn--solid" onClick={() => { navigate('/tienda'); closeMenu(); }}>
+          <button className={tw("hdr-btn hdr-btn--solid")} onClick={() => { navigate('/tienda'); closeMenu(); }}>
             Tienda
           </button>
         </div>

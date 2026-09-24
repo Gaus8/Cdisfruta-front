@@ -1,4 +1,4 @@
-import '../../assets/styles/usuarios/forms.css';
+import { tw } from '../../funciones/tw.js';
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { 
@@ -54,14 +54,14 @@ export default function Registro() {
   };
 
   return (
-    <div className="auth-page-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
+    <div className={tw(tw("auth-page-wrapper"), "![display:flex]", "![justify-content:center]", "![align-items:center]", "![min-height:100vh]", "![padding:20px]")} >
       <form
-        className="form-container"
+        className={tw("form-container")}
         onSubmit={handleSubmit}
       >
         <button 
           type="button" 
-          className="btn-close-modal" 
+          className={tw("btn-close-modal")} 
           onClick={() => navigate('/')} 
           disabled={loading}
           title="Volver a la tienda"
@@ -69,11 +69,11 @@ export default function Registro() {
           <IoArrowBackOutline />
         </button>
 
-        <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo" />
+        <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="logo" />
         <h3>Crear cuenta</h3>
 
-        <div className="form-container-input">
-          <IoPersonOutline className="icon-react" />
+        <div className={tw("form-container-input")}>
+          <IoPersonOutline className={tw("icon-react")} />
           <input
             type="text"
             placeholder="Nombre completo"
@@ -83,10 +83,10 @@ export default function Registro() {
             disabled={loading}
           />
         </div>
-        <p className="error-text">{respuestas.s1}</p>
+        <p className={tw("error-text")}>{respuestas.s1}</p>
 
-        <div className="form-container-input">
-          <IoMailOutline className="icon-react" />
+        <div className={tw("form-container-input")}>
+          <IoMailOutline className={tw("icon-react")} />
           <input
             type="email"
             placeholder="Correo electrónico"
@@ -96,10 +96,10 @@ export default function Registro() {
             disabled={loading}
           />
         </div>
-        <p className="error-text">{respuestas.s2}</p>
+        <p className={tw("error-text")}>{respuestas.s2}</p>
 
-        <div className="form-container-input">
-          <IoLockClosedOutline className="icon-react" />
+        <div className={tw("form-container-input")}>
+          <IoLockClosedOutline className={tw("icon-react")} />
           <input
             type="password"
             placeholder="Contraseña"
@@ -109,44 +109,44 @@ export default function Registro() {
             disabled={loading}
           />
         </div>
-        <p className="error-text">{respuestas.s3}</p>
+        <p className={tw("error-text")}>{respuestas.s3}</p>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.5rem', fontSize: '0.9rem' }}>
+        <div className={tw("![display:flex]", "![align-items:center]", "![gap:8px]", "![margin:0.5rem]", "![font-size:0.9rem]")}>
           <input 
             type="checkbox" 
             id="terminos" 
             checked={terminos}
             onChange={(e) => setTerminos(e.target.checked)}
             disabled={loading}
-            style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+            className={tw("![cursor:var(--tw-inline-Registro-3601-0)]")} style={{ "--tw-inline-Registro-3601-0": loading ? 'not-allowed' : 'pointer' }}
           />
-          <label htmlFor="terminos" style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
+          <label htmlFor="terminos" className={tw("![cursor:var(--tw-inline-Registro-3878-0)]")} style={{ "--tw-inline-Registro-3878-0": loading ? 'not-allowed' : 'pointer' }}>
             Acepto los{' '}
-            <Link to="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+            <Link to="/terminos" target="_blank" rel="noopener noreferrer" className={tw("![color:#007bff]", "![text-decoration:underline]")}>
               Términos y Condiciones
             </Link>{' '}
             y la{' '}
-            <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+            <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" className={tw("![color:#007bff]", "![text-decoration:underline]")}>
               Política de Tratamiento de Datos
             </Link>
           </label>
         </div>
 
         <button 
-          className="button" 
+          className={tw(tw("button"), "![opacity:var(--tw-inline-Registro-4457-0)]", "![cursor:var(--tw-inline-Registro-4457-1)]")} 
           type="submit" 
           disabled={loading} 
-          style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+          style={{ "--tw-inline-Registro-4457-0": loading ? 0.7 : 1, "--tw-inline-Registro-4457-1": loading ? 'not-allowed' : 'pointer' }}
         >
           {loading ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <span className="spinner-css"></span>
+            <span className={tw("![display:flex]", "![align-items:center]", "![justify-content:center]", "![gap:8px]")}>
+              <span className={tw("spinner-css")}></span>
               <span>Registrando...</span>
             </span>
           ) : (
             <>
               <span>Registrarse</span>
-              <IoArrowForwardOutline className="icon-btn" />
+              <IoArrowForwardOutline className={tw("icon-btn")} />
             </>
           )}
         </button>
@@ -154,9 +154,9 @@ export default function Registro() {
         <LoginGoogle />
         
         <span 
-          className="link-switch" 
+          className={tw(tw("link-switch"), "![cursor:var(--tw-inline-Registro-5137-0)]")} 
           onClick={() => !loading && navigate('/login')} 
-          style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+          style={{ "--tw-inline-Registro-5137-0": loading ? 'not-allowed' : 'pointer' }}
         >
           ¿Ya tienes cuenta? Inicia Sesión
         </span>

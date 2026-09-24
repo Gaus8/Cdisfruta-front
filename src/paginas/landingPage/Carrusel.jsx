@@ -1,14 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../assets/styles/mainPage/carrusel.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
-import { FaTimes, FaGlobeAmericas, FaLeaf, FaMapMarkerAlt } from 'react-icons/fa'; // Iconos decorativos
+import { FaTimes, FaGlobeAmericas, FaLeaf, FaMapMarkerAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { URL_SERVER } from '../../funciones/conexion';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
 import Registro from '../usuariosAuth/Registro';
 import Login from '../usuariosAuth/Login';
 
@@ -55,6 +49,10 @@ const CarruselProductos = () => {
   const [abrirLogin, setAbrirLogin] = useState(false)
   const navigate = useNavigate();
   useEffect(() => {
+    const timer = window.setInterval(() => setActiveIndex(index => (index + 1) % productos.length), 4500);
+    return () => window.clearInterval(timer);
+  }, [productos.length]);
+  useEffect(() => {
     fetch(`${URL_SERVER}/portada`)
       .then(response => response.ok ? response.json() : Promise.reject(new Error('No se pudo cargar la portada')))
       .then(slides => { if (Array.isArray(slides) && slides.length) setProductos(slides); })
@@ -77,21 +75,21 @@ const CarruselProductos = () => {
 
 
   return (
-    <section className="carrusel-section" id="carrusel">
+    <section className={tw("carrusel-section")} id="carrusel">
 
       {/* ── Columna de texto ── */}
-      <div className="carrusel-text">
-        <div className="carrusel-text-inner">
-          <span className="carrusel-eyebrow">{current.eyebrow}</span>
-          <h2 className="carrusel-title" key={activeIndex}>
+      <div className={tw("carrusel-text")}>
+        <div className={tw("carrusel-text-inner")}>
+          <span className={tw("carrusel-eyebrow")}>{current.eyebrow}</span>
+          <h2 className={tw("carrusel-title")} key={activeIndex}>
             {current.titulo}
           </h2>
-          <p className="carrusel-desc" key={`d-${activeIndex}`}>
+          <p className={tw("carrusel-desc")} key={`d-${activeIndex}`}>
             {current.desc}
           </p>
-          <div className="carrusel-actions">
+          <div className={tw("carrusel-actions")}>
             <button
-              className="car-btn car-btn--fill"
+              className={tw("car-btn car-btn--fill")}
               onClick={() => setAbrirRegistro(true)}
             >
               Comprar ahora
@@ -111,18 +109,18 @@ const CarruselProductos = () => {
               />
             )}
             <button
-              className="car-btn car-btn--line"
+              className={tw("car-btn car-btn--line")}
               onClick={openModal} // Abre el modal
             >
               Más información →
             </button>
           </div>
 
-          <div className="carrusel-indicators">
+          <div className={tw("carrusel-indicators")}>
             {productos.map((p, i) => (
               <button
                 key={i}
-                className={`car-dot${i === activeIndex ? ' car-dot--active' : ''}`}
+                className={tw(`car-dot${i === activeIndex ? ' car-dot--active' : ''}`)}
                 onClick={() => setActiveIndex(i)} // Opcional: permite saltar de slide
               />
             ))}
@@ -131,45 +129,31 @@ const CarruselProductos = () => {
       </div>
 
       {/* ── Columna de imagen ── */}
-      <div className="carrusel-image">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay, EffectFade]}
-          effect="fade"
-          speed={1000}
-          slidesPerView={1}
-          loop={true}
-          autoplay={{ delay: 4500, disableOnInteraction: false }}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          navigation={true}
-          className="carrusel-swiper"
-        >
-          {productos.map((prod, index) => (
-            <SwiperSlide key={index}>
-              <img src={prod.img} alt={prod.titulo} className="carrusel-img" />
-              <div className="carrusel-img-label">
-              <span className="cil-tag">{prod.etiqueta || prod.eyebrow}</span>
-                <span className="cil-name">{prod.tag}</span>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <div className={tw("carrusel-image")}>
+        <img key={current.img} src={current.img} alt={current.titulo} className="absolute inset-0 block h-full w-full object-cover animate-[fadeIn_1s_ease]" />
+        <div className={tw("carrusel-img-label")}>
+          <span className={tw("cil-tag")}>{current.etiqueta || current.eyebrow}</span>
+          <span className={tw("cil-name")}>{current.tag}</span>
+        </div>
+        <button type="button" aria-label="Diapositiva anterior" onClick={() => setActiveIndex(index => (index - 1 + productos.length) % productos.length)} className="absolute left-5 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-[#E8583A]/75"><FaChevronLeft /></button>
+        <button type="button" aria-label="Diapositiva siguiente" onClick={() => setActiveIndex(index => (index + 1) % productos.length)} className="absolute right-5 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-[#E8583A]/75"><FaChevronRight /></button>
       </div>
 
       {/* ── MODAL DE INFORMACIÓN ── */}
       {showModal && (
-        <div className="car-modal-overlay" onClick={closeModal}>
-          <div className="car-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="car-modal-close" onClick={closeModal}><FaTimes /></button>
+        <div className={tw("car-modal-overlay")} onClick={closeModal}>
+          <div className={tw("car-modal-content")} onClick={e => e.stopPropagation()}>
+            <button className={tw("car-modal-close")} onClick={closeModal}><FaTimes /></button>
 
-            <div className="car-modal-body">
-              <div className="car-modal-icon">{iconos[current.iconKey] || <FaLeaf />}</div>
-              <span className="car-modal-eyebrow">{current.eyebrow}</span>
+            <div className={tw("car-modal-body")}>
+              <div className={tw("car-modal-icon")}>{iconos[current.iconKey] || <FaLeaf />}</div>
+              <span className={tw("car-modal-eyebrow")}>{current.eyebrow}</span>
               <h3>{current.titulo}</h3>
-              <p className="car-modal-detail">{current.detalle}</p>
-              <div className="car-modal-footer">
-                <span className="car-modal-tag">{current.tag}</span>
+              <p className={tw("car-modal-detail")}>{current.detalle}</p>
+              <div className={tw("car-modal-footer")}>
+                <span className={tw("car-modal-tag")}>{current.tag}</span>
                 <button
-                  className="car-btn car-btn--fill"
+                  className={tw("car-btn car-btn--fill")}
                   onClick={() => { closeModal(); navigate('/dashboard_usuario'); }}
                 >
                   Ver en la tienda

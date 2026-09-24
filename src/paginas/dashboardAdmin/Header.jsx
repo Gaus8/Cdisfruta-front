@@ -1,10 +1,10 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router";
 import axios from "axios"; 
 
 import { URL_SERVER } from "../../funciones/conexion"; 
 import { FaBell, FaUserCircle, FaSignOutAlt, FaUserEdit, FaCog, FaExclamationTriangle, FaCheck } from "react-icons/fa";
-import '../../assets/styles/dashboardAdmin/header_admin.css';
 
 export default function Header({ userName }) {
   const navigate = useNavigate();
@@ -71,28 +71,28 @@ export default function Header({ userName }) {
 
   return (
     <>
-      <header className="header-admin">
+      <header className={tw("header-admin")}>
         
     
-        <div className="header-actions">
-          <div className="dropdown-container">
-            <div className="icon-wrapper" onClick={toggleNotifications}>
-              <FaBell className={`icon-btn-large ${showNotifications ? 'active' : ''}`} />
+        <div className={tw("header-actions")}>
+          <div className={tw("dropdown-container")}>
+            <div className={tw("icon-wrapper")} onClick={toggleNotifications}>
+              <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`)} />
               {notifications.length > 0 && (
-                <span className="notification-badge">{notifications.length}</span>
+                <span className={tw("notification-badge")}>{notifications.length}</span>
               )}
             </div>
             
             {showNotifications && (
-              <div className="dropdown-menu notifications-menu">
-                <div className="dropdown-header">Notificaciones</div>
-                <ul className="dropdown-list">
+              <div className={tw("dropdown-menu notifications-menu")}>
+                <div className={tw("dropdown-header")}>Notificaciones</div>
+                <ul className={tw("dropdown-list")}>
                   {notifications.length > 0 ? (
                     notifications.map((notif) => (
-                      <li key={notif._id} className="notification-item">
-                        <span className="notif-text">{notif.mensaje}</span> {/* Clase añadida */}
+                      <li key={notif._id} className={tw("notification-item")}>
+                        <span className={tw("notif-text")}>{notif.mensaje}</span> {/* Clase añadida */}
                         <button 
-                          className="btn-check-read" 
+                          className={tw("btn-check-read")} 
                           onClick={() => markAsRead(notif._id)}
                           title="Marcar como leído"
                         >
@@ -101,11 +101,11 @@ export default function Header({ userName }) {
                       </li>
                     ))
                   ) : (
-                    <li className="no-notifications">No tienes novedades</li>
+                    <li className={tw("no-notifications")}>No tienes novedades</li>
                   )}
                 </ul>
                 {notifications.length > 0 && (
-                  <div className="dropdown-footer" onClick={clearAll} style={{cursor: 'pointer'}}>
+                  <div className={tw(tw("dropdown-footer"), "![cursor:pointer]")} onClick={clearAll} >
                     Limpiar todo
                   </div>
                 )}
@@ -113,19 +113,19 @@ export default function Header({ userName }) {
             )}
           </div>
 
-          <div className="dropdown-container">
-            <div className="user-profile" onClick={toggleUserMenu}>
-              <span className="user-name-text">{userName}</span>
+          <div className={tw("dropdown-container")}>
+            <div className={tw("user-profile")} onClick={toggleUserMenu}>
+              <span className={tw("user-name-text")}>{userName}</span>
               <FaUserCircle size={30} />
             </div>
             {showUserMenu && (
-              <div className="dropdown-menu profile-menu">
-                <div className="dropdown-header">Mi Cuenta</div>
-                <ul className="dropdown-list">
+              <div className={tw("dropdown-menu profile-menu")}>
+                <div className={tw("dropdown-header")}>Mi Cuenta</div>
+                <ul className={tw("dropdown-list")}>
                   <li><FaUserEdit /> Editar Perfil</li>
                   <li><FaCog /> Configuración</li>
                   <hr />
-                  <li className="logout-opt" onClick={() => {
+                  <li className={tw("logout-opt")} onClick={() => {
                     setShowLogoutModal(true);
                     setShowUserMenu(false);
                   }}>
@@ -139,14 +139,14 @@ export default function Header({ userName }) {
       </header>
 
       {showLogoutModal && (
-        <div className="modal-overlay-logout">
-          <div className="logout-modal-content">
-            <FaExclamationTriangle className="warning-icon" />
+        <div className={tw("modal-overlay-logout")}>
+          <div className={tw("logout-modal-content")}>
+            <FaExclamationTriangle className={tw("warning-icon")} />
             <h3>¿Cerrar Sesión?</h3>
             <p>¿Estás seguro de que deseas salir del sistema SIECU?</p>
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowLogoutModal(false)}>Cancelar</button>
-              <button className="btn-confirm" onClick={handleLogout}>Sí, Cerrar Sesión</button>
+            <div className={tw("modal-actions")}>
+              <button className={tw("btn-cancel")} onClick={() => setShowLogoutModal(false)}>Cancelar</button>
+              <button className={tw("btn-confirm")} onClick={handleLogout}>Sí, Cerrar Sesión</button>
             </div>
           </div>
         </div>

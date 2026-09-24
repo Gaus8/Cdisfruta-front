@@ -1,3 +1,4 @@
+import { tw } from '../../funciones/tw.js';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export const RutaProtegida = ({ 
@@ -12,8 +13,8 @@ export const RutaProtegida = ({
   // 1. Estado de carga inicial mientras se verifica la sesión o los datos de usuario
   if (loading || (authenticated && !user)) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: '#7d706e', fontFamily: 'Poppins, sans-serif' }}>Verificando sesión...</p>
+      <div className={tw("![min-height:100vh]", "![display:flex]", "![align-items:center]", "![justify-content:center]")}>
+        <p className={tw("![color:#7d706e]", "![font-family:Poppins,_sans-serif]")}>Verificando sesión...</p>
       </div>
     );
   }

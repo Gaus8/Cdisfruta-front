@@ -1,9 +1,9 @@
+import { tw } from '../../funciones/tw.js';
 import { useState } from "react";
 import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaExclamationTriangle, FaBars, FaTimes, FaPaintBrush } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
-import '../../assets/styles/dashboardAdmin/sidebar_admin.css';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -26,18 +26,18 @@ export default function Sidebar() {
   return (
     <>
       {/* Botón Hamburguesa - Solo visible en móvil */}
-      <button className="mobile-menu-btn" onClick={toggleSidebar}>
+      <button className={tw("mobile-menu-btn")} onClick={toggleSidebar}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
       {/* Overlay para cerrar el menú al hacer clic fuera (solo móvil) */}
-      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+      {isOpen && <div className={tw("sidebar-overlay")} onClick={toggleSidebar}></div>}
 
-      <aside className={`sidebar-admin ${isOpen ? "open" : ""}`}>
-        <div className="sidebar-logo">
+      <aside className={tw(`sidebar-admin ${isOpen ? "open" : ""}`)}>
+        <div className={tw("sidebar-logo")}>
           <h2>Panel Admin</h2>
         </div>
-        <nav className="sidebar-nav">
+        <nav className={tw("sidebar-nav")}>
           <Link title="Inicio" to="/admin" onClick={() => setIsOpen(false)}>
             <FaHome /> <span>Inicio</span>
           </Link>
@@ -68,8 +68,8 @@ export default function Sidebar() {
             <FaCog /> <span>Configuración</span>
           </Link>
         </nav>
-        <div className="sidebar-footer">
-          <button className="btn-logout" onClick={() => setShowLogoutModal(true)}>
+        <div className={tw("sidebar-footer")}>
+          <button className={tw("btn-logout")} onClick={() => setShowLogoutModal(true)}>
             <span>Cerrar Sesión</span>
           </button>
         </div>
@@ -77,14 +77,14 @@ export default function Sidebar() {
 
       {/* Modal de Logout */}
       {showLogoutModal && (
-        <div className="modal-overlay-logout">
-          <div className="logout-modal-content">
-            <FaExclamationTriangle className="warning-icon" />
+        <div className={tw("modal-overlay-logout")}>
+          <div className={tw("logout-modal-content")}>
+            <FaExclamationTriangle className={tw("warning-icon")} />
             <h3>¿Cerrar Sesión?</h3>
             <p>¿Estás seguro de que deseas salir del sistema SIECU?</p>
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowLogoutModal(false)}>Cancelar</button>
-              <button className="btn-confirm" onClick={handleLogout}>Sí, Cerrar Sesión</button>
+            <div className={tw("modal-actions")}>
+              <button className={tw("btn-cancel")} onClick={() => setShowLogoutModal(false)}>Cancelar</button>
+              <button className={tw("btn-confirm")} onClick={handleLogout}>Sí, Cerrar Sesión</button>
             </div>
           </div>
         </div>

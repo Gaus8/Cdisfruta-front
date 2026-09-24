@@ -1,8 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { URL_SERVER, apiAxios } from '../../funciones/conexion';
 import { FaClipboardList, FaArrowLeft, FaSave, FaCheckCircle, FaTimes } from 'react-icons/fa';
-import '../../assets/styles/dashboardAdmin/gestion_pedidos.css'; // 👈 Importamos los estilos limpios
 
 export default function GestionPedidos() {
   const navigate = useNavigate();
@@ -62,55 +62,55 @@ export default function GestionPedidos() {
     }
   };
 
-  if (loading) return <div className="loading-state">Cargando pedidos de la tienda...</div>;
+  if (loading) return <div className={tw("loading-state")}>Cargando pedidos de la tienda...</div>;
 
   return (
-    <div className="gestion-pedidos-container">
+    <div className={tw("gestion-pedidos-container")}>
       
       {mensajeFeedback && (
-        <div className={`admin-toast-notification ${mensajeFeedback.tipo}`}>
+        <div className={tw(`admin-toast-notification ${mensajeFeedback.tipo}`)}>
           {mensajeFeedback.tipo === 'success' ? <FaCheckCircle size={18} /> : <FaTimes size={18} />}
           <span>{mensajeFeedback.texto}</span>
         </div>
       )}
 
       {/* Cabecera */}
-      <div className="gestion-pedidos-header">
+      <div className={tw("gestion-pedidos-header")}>
         <div>
           <h2> Gestión de Pedidos</h2>
           <p>Administra los pedidos de los clientes y actualiza su estado de seguimiento.</p>
         </div>
         <button 
           onClick={() => navigate('/admin')}
-          className="btn-volver-admin"
+          className={tw("btn-volver-admin")}
         >
           <FaArrowLeft /> Volver al Inicio
         </button>
       </div>
 
       {pedidos.length === 0 ? (
-        <div className="empty-state">
+        <div className={tw("empty-state")}>
           <p>No hay pedidos registrados en el sistema.</p>
         </div>
       ) : (
-        <div className="admin-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className={tw(tw("admin-orders-list"), "![display:flex]", "![flex-direction:column]", "![gap:20px]")} >
           {pedidos.map((pedido) => {
             const estadoActualModificado = estadosSeleccionados[pedido._id] !== pedido.estado;
 
             return (
-              <div key={pedido._id} className="admin-order-card">
-                <div className="admin-order-top">
+              <div key={pedido._id} className={tw("admin-order-card")}>
+                <div className={tw("admin-order-top")}>
                   <div>
-                    <span style={{ fontSize: '0.85rem', color: '#555', wordBreak: 'break-all' }}><strong>ID:</strong> {pedido._id}</span><br />
-                    <span style={{ fontSize: '0.82rem', color: '#888' }}>Fecha: {new Date(pedido.fechaCreacion).toLocaleString()}</span>
+                    <span className={tw("![font-size:0.85rem]", "![color:#555]", "![word-break:break-all]")}><strong>ID:</strong> {pedido._id}</span><br />
+                    <span className={tw("![font-size:0.82rem]", "![color:#888]")}>Fecha: {new Date(pedido.fechaCreacion).toLocaleString()}</span>
                   </div>
 
-                  <div className="admin-order-actions">
-                    <label style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#444' }}>Estado:</label>
+                  <div className={tw("admin-order-actions")}>
+                    <label className={tw("![font-size:0.9rem]", "![font-weight:bold]", "![color:#444]")}>Estado:</label>
                     <select 
                       value={estadosSeleccionados[pedido._id] || pedido.estado} 
                       onChange={(e) => handleSelectChange(pedido._id, e.target.value)}
-                      className="admin-order-select"
+                      className={tw("admin-order-select")}
                     >
                       <option value="Pendiente">Pendiente</option>
                       <option value="Comprobado">Comprobado</option>
@@ -122,7 +122,7 @@ export default function GestionPedidos() {
                     <button
                       onClick={() => handleGuardarEstado(pedido._id)}
                       disabled={!estadoActualModificado || actualizandoId === pedido._id}
-                      className={`btn-guardar-estado ${estadoActualModificado ? 'active' : 'disabled'}`}
+                      className={tw(`btn-guardar-estado ${estadoActualModificado ? 'active' : 'disabled'}`)}
                       title={estadoActualModificado ? "Guardar nuevo estado" : "Selecciona un estado diferente para guardar"}
                     >
                       <FaSave /> {actualizandoId === pedido._id ? 'Guardando...' : 'Actualizar'}
@@ -130,7 +130,7 @@ export default function GestionPedidos() {
                   </div>
                 </div>
 
-                <div className="admin-order-grid">
+                <div className={tw("admin-order-grid")}>
                   <div>
                     <p><strong>Cliente:</strong> {pedido.datosEnvio?.nombres} {pedido.datosEnvio?.apellidos}</p>
                     <p><strong>WhatsApp:</strong> {pedido.datosEnvio?.whatsapp}</p>
@@ -143,20 +143,20 @@ export default function GestionPedidos() {
                   </div>
                 </div>
 
-                <div className="admin-order-products">
+                <div className={tw("admin-order-products")}>
                   <strong>Productos solicitados:</strong>
                   <ul>
                     {pedido.productos.map((item, idx) => (
                       <li key={idx}>
-                        {item.nombre} — Cant.: <strong>{item.quantity || item.cantidad}</strong> — Subtotal: <strong style={{ color: '#2c3e50' }}>${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}</strong>
+                        {item.nombre} — Cant.: <strong>{item.quantity || item.cantidad}</strong> — Subtotal: <strong className={tw("![color:#2c3e50]")}>${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}</strong>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="admin-order-footer">
-                  <span style={{ fontWeight: '600', color: '#555' }}>Total del Pedido:</span> 
-                  <span style={{ color: '#27ae60', fontSize: '1.2rem', fontWeight: 'bold' }}>${pedido.total?.toLocaleString('es-CO')}</span>
+                <div className={tw("admin-order-footer")}>
+                  <span className={tw("![font-weight:600]", "![color:#555]")}>Total del Pedido:</span> 
+                  <span className={tw("![color:#27ae60]", "![font-size:1.2rem]", "![font-weight:bold]")}>${pedido.total?.toLocaleString('es-CO')}</span>
                 </div>
 
               </div>

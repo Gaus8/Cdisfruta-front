@@ -1,9 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
-import '../../assets/styles/dashboardUsuario/productos_usuario.css';
-import '../../assets/styles/dashboardUsuario/modal_producto.css';
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -256,14 +255,14 @@ export default function ProductosTienda({ categoria, user }) {
     return productosFiltradosYOrdenados.slice(start, start + productsPerPage);
   }, [productosFiltradosYOrdenados, currentPage]);
 
-  if (loading) return <div className="loading-state">Cargando delicias...</div>;
+  if (loading) return <div className={tw("loading-state")}>Cargando delicias...</div>;
 
   return (
-    <div className="tienda-container-wrapper">
+    <div className={tw("tienda-container-wrapper")}>
       
       {/* Botón flotante para móviles */}
       <button 
-        className="mobile-filter-toggle-btn"
+        className={tw("mobile-filter-toggle-btn")}
         onClick={() => setShowMobileFilters(true)}
       >
         <FaFilter /> Filtrar y Ordenar
@@ -272,26 +271,26 @@ export default function ProductosTienda({ categoria, user }) {
       {/* Overlay para cerrar al hacer clic fuera en móviles */}
       {showMobileFilters && (
         <div 
-          className="filters-backdrop-overlay" 
+          className={tw("filters-backdrop-overlay")} 
           onClick={() => setShowMobileFilters(false)} 
         />
       )}
 
       {/* Barra de Filtros Superior */}
-      <div className={`filters-advanced-container ${showMobileFilters ? 'show-mobile' : ''}`}>
-        <div className="filters-header-mobile">
+      <div className={tw(`filters-advanced-container ${showMobileFilters ? 'show-mobile' : ''}`)}>
+        <div className={tw("filters-header-mobile")}>
           <h3>Filtrar Catálogo</h3>
-          <button className="close-filter-btn" onClick={() => setShowMobileFilters(false)}>
+          <button className={tw("close-filter-btn")} onClick={() => setShowMobileFilters(false)}>
             <FaTimes size={18} />
           </button>
         </div>
 
-        <div className="filter-group">
+        <div className={tw("filter-group")}>
           <label>Categoría</label>
           <select 
             value={tempCategoria} 
             onChange={(e) => setTempCategoria(e.target.value)}
-            className="filter-select"
+            className={tw("filter-select")}
           >
             {categoriasDisponibles.map((cat, idx) => (
               <option key={idx} value={cat}>{cat}</option>
@@ -299,39 +298,39 @@ export default function ProductosTienda({ categoria, user }) {
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className={tw("filter-group")}>
           <label>Rango de Precios</label>
-          <div className="price-inputs-wrapper">
-            <div className="price-input-container">
-              <span className="currency-symbol">$</span>
+          <div className={tw("price-inputs-wrapper")}>
+            <div className={tw("price-input-container")}>
+              <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
                 placeholder="Mínimo" 
                 value={formatInputCurrency(tempPrecioMin)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMin)}
-                className="price-input-colombia"
+                className={tw("price-input-colombia")}
               />
             </div>
-            <span className="price-dash">-</span>
-            <div className="price-input-container">
-              <span className="currency-symbol">$</span>
+            <span className={tw("price-dash")}>-</span>
+            <div className={tw("price-input-container")}>
+              <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
                 placeholder="Máximo" 
                 value={formatInputCurrency(tempPrecioMax)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMax)}
-                className="price-input-colombia"
+                className={tw("price-input-colombia")}
               />
             </div>
           </div>
         </div>
 
-        <div className="filter-group">
+        <div className={tw("filter-group")}>
           <label><FaSortAmountDown /> Ordenar por</label>
           <select 
             value={tempOrden} 
             onChange={(e) => setTempOrden(e.target.value)}
-            className="filter-select"
+            className={tw("filter-select")}
           >
             <option value="recientes">Más recientes</option>
             <option value="asc">Precio: menor a mayor</option>
@@ -339,13 +338,13 @@ export default function ProductosTienda({ categoria, user }) {
           </select>
         </div>
 
-        <div className="filter-actions-group">
-          <button className="apply-filters-btn" onClick={aplicarFiltros}>
+        <div className={tw("filter-actions-group")}>
+          <button className={tw("apply-filters-btn")} onClick={aplicarFiltros}>
             <FaCheck /> Aplicar
           </button>
 
           {(selectedCategoria !== "Todos los productos" || precioMin !== "" || precioMax !== "" || orden !== "recientes" || searchTerm !== "") && (
-            <button className="clear-filters-btn" onClick={limpiarFiltros}>
+            <button className={tw("clear-filters-btn")} onClick={limpiarFiltros}>
               Limpiar
             </button>
           )}
@@ -353,70 +352,70 @@ export default function ProductosTienda({ categoria, user }) {
       </div>
 
       {/* Listado de Productos y Paginación */}
-      <div className="products-grid-section">
+      <div className={tw("products-grid-section")}>
         {searchTerm && (
-          <div className="search-active-indicator" style={{ marginBottom: '15px', fontSize: '0.9rem', color: '#64748b' }}>
+          <div className={tw(tw("search-active-indicator"), "![margin-bottom:15px]", "![font-size:0.9rem]", "![color:#64748b]")} >
             Resultados de búsqueda para: <strong>"{searchTerm}"</strong>
           </div>
         )}
 
         {productosFiltradosYOrdenados.length === 0 ? (
-          <div className="no-products">
+          <div className={tw("no-products")}>
             No se encontraron productos con los filtros o búsqueda seleccionados.
           </div>
         ) : (
           <>
-            <div className="products-grid">
+            <div className={tw("products-grid")}>
               {productosPaginados.map(product => (
-                <div key={product._id} className="product-card">
+                <div key={product._id} className={tw("product-card")}>
                   {product.stock <= 5 && product.stock > 0 && (
-                    <span className="product-tag alert">¡Últimas unidades!</span>
+                    <span className={tw("product-tag alert")}>¡Últimas unidades!</span>
                   )}
                   {product.stock === 0 && (
-                    <span className="product-tag out">Agotado</span>
+                    <span className={tw("product-tag out")}>Agotado</span>
                   )}
 
-                  <div className="product-image">
+                  <div className={tw("product-image")}>
                     {product.imagen ? (
                       <img src={product.imagen} alt={product.nombre} />
                     ) : (
-                      <div className="placeholder-img" />
+                      <div className={tw("placeholder-img")} />
                     )}
                   </div>
 
-                  <div className="product-info">
-                    <span className="product-category-label">{product.categoria}</span>
+                  <div className={tw("product-info")}>
+                    <span className={tw("product-category-label")}>{product.categoria}</span>
                     <h3>{product.nombre}</h3>
-                    <p className="product-description-short">
+                    <p className={tw("product-description-short")}>
                       {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
                     </p>
                     
-                    <div className="product-footer">
-                      <div className="price-container">
-                        <span className="price-label">PRECIO</span>
-                        <span className="product-price">
+                    <div className={tw("product-footer")}>
+                      <div className={tw("price-container")}>
+                        <span className={tw("price-label")}>PRECIO</span>
+                        <span className={tw("product-price")}>
                           ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
                         </span>
-                        <span className="product-stock-text">
+                        <span className={tw("product-stock-text")}>
                           {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
                         </span>
                       </div>
 
-                      <div className="product-actions-vertical">
+                      <div className={tw("product-actions-vertical")}>
                         {product.stock > 0 && (
-                          <div className="quantity-selector-full">
-                            <button type="button" onClick={() => handleDecrease(product._id)} className="qty-btn-v">
+                          <div className={tw("quantity-selector-full")}>
+                            <button type="button" onClick={() => handleDecrease(product._id)} className={tw("qty-btn-v")}>
                               <FaMinus size={12} />
                             </button>
-                            <span className="qty-number-v">{quantities[product._id] || 1}</span>
-                            <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className="qty-btn-v">
+                            <span className={tw("qty-number-v")}>{quantities[product._id] || 1}</span>
+                            <button type="button" onClick={() => handleIncrease(product._id, product.stock)} className={tw("qty-btn-v")}>
                               <FaPlus size={12} />
                             </button>
                           </div>
                         )}
 
                         <button 
-                          className="add-to-cart-btn-full"
+                          className={tw("add-to-cart-btn-full")}
                           onClick={() => addToCart(product)}
                           disabled={product.stock === 0}
                         >
@@ -432,23 +431,23 @@ export default function ProductosTienda({ categoria, user }) {
 
             {/* Controles de Paginación */}
             {totalPages > 1 && (
-              <div className="pagination-container">
+              <div className={tw("pagination-container")}>
                 <button 
-                  className="pagination-btn"
+                  className={tw("pagination-btn")}
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
                   <FaChevronLeft size={12} /> Anterior
                 </button>
 
-                <div className="pagination-numbers">
+                <div className={tw("pagination-numbers")}>
                   {Array.from({ length: totalPages }, (_, index) => {
                     const pageNum = index + 1;
                     return (
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`page-number-btn ${currentPage === pageNum ? 'active' : ''}`}
+                        className={tw(`page-number-btn ${currentPage === pageNum ? 'active' : ''}`)}
                       >
                         {pageNum}
                       </button>
@@ -457,7 +456,7 @@ export default function ProductosTienda({ categoria, user }) {
                 </div>
 
                 <button 
-                  className="pagination-btn"
+                  className={tw("pagination-btn")}
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                 >

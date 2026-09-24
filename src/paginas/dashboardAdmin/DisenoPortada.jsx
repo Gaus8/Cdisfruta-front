@@ -1,8 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import { useEffect, useRef, useState } from 'react';
 import { FaCloudUploadAlt, FaSave } from 'react-icons/fa';
 import { useBlocker } from 'react-router-dom';
 import { apiAxios } from '../../funciones/conexion';
-import '../../assets/styles/dashboardAdmin/diseno_portada.css';
 
 const initialSlides = [
   { eyebrow: 'Presencia internacional', etiqueta: 'Presencia internacional', titulo: 'CDISFRUTA en Australia', desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.', tag: 'Australia · Melbourne', detalle: 'Nuestra expansión internacional comenzó con el sueño de llevar el sabor de Ubaté al mundo. Hoy, nuestras infusiones se disfrutan en Melbourne por diversas familias, destacando por su origen natural y procesos artesanales.', img: '/img/cdisfruta_01.webp', iconKey: 'globe' },
@@ -12,7 +12,16 @@ const initialSlides = [
 
 const fieldLimits = { eyebrow: 32, etiqueta: 26, titulo: 64, desc: 180, tag: 28, detalle: 500 };
 const makeSnapshot = (slides) => JSON.stringify(slides.map(({ eyebrow, etiqueta, titulo, desc, tag, detalle, img, iconKey }) => ({ eyebrow, etiqueta, titulo, desc, tag, detalle, img, iconKey })));
-const cleanSlides = (slides) => slides.map(({ _id, __v, ...slide }) => ({ ...slide, etiqueta: slide.etiqueta || slide.eyebrow }));
+const cleanSlides = (slides) => slides.map((slide) => ({
+  eyebrow: slide.eyebrow,
+  etiqueta: slide.etiqueta || slide.eyebrow,
+  titulo: slide.titulo,
+  desc: slide.desc,
+  tag: slide.tag,
+  detalle: slide.detalle,
+  img: slide.img,
+  iconKey: slide.iconKey
+}));
 
 export default function DisenoPortada() {
   const [slides, setSlides] = useState(initialSlides);
@@ -92,45 +101,45 @@ export default function DisenoPortada() {
     } finally { setSaving(false); }
   };
 
-  if (loading) return <div className="cover-editor-loading">Cargando contenido de portada…</div>;
+  if (loading) return <div className={tw("cover-editor-loading")}>Cargando contenido de portada…</div>;
 
   return (
-    <form className="cover-editor" onSubmit={save}>
-      <header className="cover-editor-header">
-        <div><span className="cover-editor-kicker">Experiencia de marca</span><h1>Diseño de portada</h1><p>Administra las imágenes y los mensajes del carrusel principal de CDISFRUTA.</p></div>
+    <form className={tw("cover-editor")} onSubmit={save}>
+      <header className={tw("cover-editor-header")}>
+        <div><span className={tw("cover-editor-kicker")}>Experiencia de marca</span><h1>Diseño de portada</h1><p>Administra las imágenes y los mensajes del carrusel principal de CDISFRUTA.</p></div>
       </header>
-      <div className="cover-guidance"><strong>Guía de imágenes</strong><span>JPG, PNG o WebP · Máximo 5 MB · Mínimo 1200 × 800 px · Recomendado 1600 × 1000 px.</span></div>
-      {message && <div className={`cover-feedback ${message.type}`} role="status">{message.text}</div>}
-      <div className="cover-slide-list">
+      <div className={tw("cover-guidance")}><strong>Guía de imágenes</strong><span>JPG, PNG o WebP · Máximo 5 MB · Mínimo 1200 × 800 px · Recomendado 1600 × 1000 px.</span></div>
+      {message && <div className={tw(`cover-feedback ${message.type}`)} role="status">{message.text}</div>}
+      <div className={tw("cover-slide-list")}>
         {slides.map((slide, index) => (
-          <section className="cover-slide-card" key={index}>
-            <div className="cover-slide-heading"><span className="cover-slide-number">{String(index + 1).padStart(2, '0')}</span><div><h2>Diapositiva {index + 1}</h2><p>Este contenido aparece en el carrusel de inicio.</p></div></div>
-            <div className="cover-slide-body">
-              <div className="cover-image-column">
-                <div className="cover-image-preview"><img src={slide.img} alt={`Vista previa diapositiva ${index + 1}`} /></div>
+          <section className={tw("cover-slide-card")} key={index}>
+            <div className={tw("cover-slide-heading")}><span className={tw("cover-slide-number")}>{String(index + 1).padStart(2, '0')}</span><div><h2>Diapositiva {index + 1}</h2><p>Este contenido aparece en el carrusel de inicio.</p></div></div>
+            <div className={tw("cover-slide-body")}>
+              <div className={tw("cover-image-column")}>
+                <div className={tw("cover-image-preview")}><img src={slide.img} alt={`Vista previa diapositiva ${index + 1}`} /></div>
                 <input ref={element => { refs.current[index] = element; }} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={event => { selectImage(index, event.target.files?.[0]); event.target.value = ''; }} />
-                <button className="cover-image-button" type="button" onClick={() => refs.current[index]?.click()}><FaCloudUploadAlt /> Cambiar imagen</button>
+                <button className={tw("cover-image-button")} type="button" onClick={() => refs.current[index]?.click()}><FaCloudUploadAlt /> Cambiar imagen</button>
                 <small>La imagen se recorta para adaptarse a escritorio y móvil.</small>
               </div>
-              <div className="cover-fields">
-                <div className="cover-field-group">
+              <div className={tw("cover-fields")}>
+                <div className={tw('cover-field-group grid grid-cols-1 gap-3 rounded-xl border border-[#e6ece4] bg-[#fbfcfa] p-4 sm:grid-cols-2 [&>h3]:col-span-full [&>h3]:m-0 [&>h3]:text-base [&>h3]:text-[#344b37] [&>p]:col-span-full [&>p]:m-0 [&>p]:text-sm [&>p]:text-[#7d897e]')}>
                   <h3>Texto principal</h3>
                   <p>Aparece junto a la imagen en la página de inicio.</p>
                   {renderField(index, slide, 'eyebrow', 'Frase superior')}
                   {renderField(index, slide, 'titulo', 'Título principal')}
                   {renderField(index, slide, 'desc', 'Descripción breve')}
                 </div>
-                <details className="cover-collapsible cover-overlay-group">
-                  <summary><span><strong>Cuadro flotante sobre la imagen</strong><small>Editar sus dos textos breves</small></span><span className="cover-expand-label">Desplegar</span></summary>
-                  <div className="cover-collapsible-content">
+                <details className={tw("cover-collapsible cover-overlay-group")}>
+                  <summary><span><strong>Cuadro flotante sobre la imagen</strong><small>Editar sus dos textos breves</small></span><span className={tw("cover-expand-label")}>Desplegar</span></summary>
+                  <div className={tw("cover-collapsible-content")}>
                     <p>Textos cortos para que la etiqueta conserve su tamaño en escritorio y móvil.</p>
                     {renderField(index, slide, 'etiqueta', 'Frase de la etiqueta')}
                     {renderField(index, slide, 'tag', 'Texto inferior del cuadro')}
                   </div>
                 </details>
-                <details className="cover-collapsible cover-detail-group">
-                  <summary><span><strong>Contenido de “Más información”</strong><small>Editar el texto que verá el cliente</small></span><span className="cover-expand-label">Desplegar</span></summary>
-                  <div className="cover-collapsible-content">
+                <details className={tw("cover-collapsible cover-detail-group")}>
+                  <summary><span><strong>Contenido de “Más información”</strong><small>Editar el texto que verá el cliente</small></span><span className={tw("cover-expand-label")}>Desplegar</span></summary>
+                  <div className={tw("cover-collapsible-content")}>
                     <p>Este texto cambia junto con cada diapositiva y aparece al pulsar el botón.</p>
                     {renderField(index, slide, 'detalle', 'Descripción ampliada')}
                   </div>
@@ -140,15 +149,15 @@ export default function DisenoPortada() {
           </section>
         ))}
       </div>
-      <div className="cover-editor-bottom"><span>Los cambios se reflejan en la página principal después de guardar.</span></div>
-      <div className="cover-save-dock"><span className={isDirty ? 'pending' : 'saved'}>{saving ? 'Guardando cambios…' : isDirty ? 'Tienes cambios sin guardar' : 'Todos los cambios están guardados'}</span><button className="cover-save-button" type="submit" disabled={saving || !isDirty}><FaSave /> {saving ? 'Guardando…' : 'Guardar cambios'}</button></div>
-      {blocker.state === 'blocked' && <div className="cover-unsaved-overlay" role="presentation"><section className="cover-unsaved-modal" role="dialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><span className="cover-unsaved-icon">!</span><h2 id="cover-unsaved-title">Tienes cambios sin guardar</h2><p>Si sales ahora, las modificaciones de la portada se perderán.</p><div><button type="button" className="cover-stay-button" onClick={() => blocker.reset()}>Seguir editando</button><button type="button" className="cover-discard-button" onClick={() => blocker.proceed()}>Salir sin guardar</button></div></section></div>}
+      <div className={tw("cover-editor-bottom")}><span>Los cambios se reflejan en la página principal después de guardar.</span></div>
+      <div className={tw("cover-save-dock")}><span className={tw(isDirty ? 'pending' : 'saved')}>{saving ? 'Guardando cambios…' : isDirty ? 'Tienes cambios sin guardar' : 'Todos los cambios están guardados'}</span><button className={tw("cover-save-button")} type="submit" disabled={saving || !isDirty}><FaSave /> {saving ? 'Guardando…' : 'Guardar cambios'}</button></div>
+      {blocker.state === 'blocked' && <div className={tw("cover-unsaved-overlay")} role="presentation"><section className={tw("cover-unsaved-modal")} role="dialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><span className={tw("cover-unsaved-icon")}>!</span><h2 id="cover-unsaved-title">Tienes cambios sin guardar</h2><p>Si sales ahora, las modificaciones de la portada se perderán.</p><div><button type="button" className={tw("cover-stay-button")} onClick={() => blocker.reset()}>Seguir editando</button><button type="button" className={tw("cover-discard-button")} onClick={() => blocker.proceed()}>Salir sin guardar</button></div></section></div>}
     </form>
   );
 
   function renderField(index, slide, key, label) {
     const multiline = ['desc', 'detalle'].includes(key);
     const limit = fieldLimits[key];
-    return <label className="cover-character-field" key={key}>{label}{multiline ? <textarea required maxLength={limit} value={slide[key] || ''} onChange={event => changeField(index, key, event.target.value)} rows={key === 'detalle' ? 4 : 2} /> : <input required maxLength={limit} value={slide[key] || ''} onChange={event => changeField(index, key, event.target.value)} />}<small className="cover-character-count">{(slide[key] || '').length}/{limit} caracteres</small></label>;
+    return <label className={tw("cover-character-field")} key={key}>{label}{multiline ? <textarea required maxLength={limit} value={slide[key] || ''} onChange={event => changeField(index, key, event.target.value)} rows={key === 'detalle' ? 4 : 2} /> : <input required maxLength={limit} value={slide[key] || ''} onChange={event => changeField(index, key, event.target.value)} />}<small className={tw("cover-character-count")}>{(slide[key] || '').length}/{limit} caracteres</small></label>;
   }
 }

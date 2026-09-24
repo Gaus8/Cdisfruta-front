@@ -1,6 +1,6 @@
+import { tw } from '../../funciones/tw.js';
 import React, { useState } from 'react';
 import { FaEnvelope, FaTimes } from 'react-icons/fa';
-import '../../assets/styles/usuarios/reset_password_modal.css';
 import { solicitarRestablecerPassword } from '../../funciones/usuarioAuth';
 
 export const ResetPasswordModal = ({ isOpen, onClose }) => {
@@ -35,21 +35,21 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="form-container" onClick={(e) => e.stopPropagation()}>
-        <button className="btn-close-modal" onClick={onClose} aria-label="Cerrar">
+    <div className={tw("modal-overlay")} onClick={onClose}>
+      <div className={tw("form-container")} onClick={(e) => e.stopPropagation()}>
+        <button className={tw("btn-close-modal")} onClick={onClose} aria-label="Cerrar">
           <FaTimes />
         </button>
 
         <h3>Recuperar Contraseña</h3>
         
-        <p className="modal-description">
+        <p className={tw("modal-description")}>
           Ingresa tu correo electrónico registrado y te enviaremos un enlace para restablecer tu contraseña.
         </p>
 
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <div className="form-container-input">
-            <FaEnvelope className="icon-react" />
+        <form onSubmit={handleSubmit} className={tw("![width:100%]")}>
+          <div className={tw("form-container-input")}>
+            <FaEnvelope className={tw("icon-react")} />
             <input
               type="email"
               placeholder="Correo electrónico"
@@ -59,22 +59,22 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <div className="error-text">
+          <div className={tw("error-text")}>
             {error && <span>{error}</span>}
           </div>
 
           {successMessage && (
-            <div className="success-text">
+            <div className={tw("success-text")}>
               {successMessage}
             </div>
           )}
 
-          <button type="submit" className="button" disabled={loading}>
-            {loading ? <div className="spinner-css" /> : 'Enviar enlace'}
+          <button type="submit" className={tw("button")} disabled={loading}>
+            {loading ? <div className={tw("spinner-css")} /> : 'Enviar enlace'}
           </button>
         </form>
 
-        <span className="link-switch" onClick={onClose}>
+        <span className={tw("link-switch")} onClick={onClose}>
           Volver al inicio de sesión
         </span>
       </div>

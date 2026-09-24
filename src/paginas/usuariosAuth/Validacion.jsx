@@ -1,7 +1,7 @@
+import { tw } from '../../funciones/tw.js';
 import { useNavigate } from 'react-router';
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import '../../assets/styles/usuarios/validacion.css';
 import { URL_SERVER } from '../../funciones/conexion';
 
 function Validacion() {
@@ -70,13 +70,13 @@ function Validacion() {
   };
 
   return (
-    <div className="body-validacion">
-      <form className="form-container-validacion" onSubmit={handleVerify}>
-        <img className="logo-empresa-validacion" src="/img/logo_siecu.webp" alt="logo" />
+    <div className={tw("body-validacion")}>
+      <form className={tw("form-container-validacion")} onSubmit={handleVerify}>
+        <img className={tw("logo-empresa-validacion")} src="/img/logo_siecu.webp" alt="logo" />
         <h3>Verificación de Cuenta</h3>
         <p>Ingresa el código enviado a tu correo.</p>
 
-        <div className="otp-container">
+        <div className={tw("otp-container")}>
           {codigo.map((data, index) => (
             <input
               key={index}
@@ -86,23 +86,23 @@ function Validacion() {
               value={data}
               onChange={(e) => handleChange(e.target, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              className="otp-input"
+              className={tw("otp-input")}
             />
           ))}
         </div>
 
-        {mensaje && <p className="mensaje-ok">{mensaje}</p>}
-        {error && <p className="mensaje-error">{error}</p>}
+        {mensaje && <p className={tw("mensaje-ok")}>{mensaje}</p>}
+        {error && <p className={tw("mensaje-error")}>{error}</p>}
 
         <button 
           type="submit" 
-          className="btn-verificar" 
+          className={tw("btn-verificar")} 
           disabled={cargando || codigo.join("").length < 6}
         >
           {cargando ? 'Verificando...' : 'Verificar Cuenta'}
         </button>
 
-        <div className="footer-links">
+        <div className={tw("footer-links")}>
           <a href="/login">Volver al Inicio de Sesión</a>
         </div>
       </form>

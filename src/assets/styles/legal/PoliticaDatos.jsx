@@ -1,12 +1,12 @@
+import { tw } from '../../../funciones/tw.js';
 import React from 'react';
-import '../usuarios/forms.css';
 
 export default function PoliticaDatos() {
   return (
-    <div className="legal-page-container">
-      <div className="legal-box">
+    <div className={tw("legal-page-container")}>
+      <div className={tw("legal-box")}>
         <h1>Política de Tratamiento de Datos Personales</h1>
-        <p className="legal-updated">Última actualización: 31 de agosto de 2026</p>
+        <p className={tw("legal-updated")}>Última actualización: 31 de agosto de 2026</p>
 
         <section>
           <h2>1. Identificación del Responsable del Tratamiento</h2>

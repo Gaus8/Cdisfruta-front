@@ -1,11 +1,11 @@
-import '../../assets/styles/usuarios/forms.css';
+import { tw } from '../../funciones/tw.js';
 
 export default function Terminos() {
   return (
-    <div className="legal-page-container">
-      <div className="legal-box">
+    <div className={tw("legal-page-container")}>
+      <div className={tw("legal-box")}>
         <h1>Términos y Condiciones</h1>
-        <p className="legal-updated">Última actualización: 31 de agosto de 2026</p>
+        <p className={tw("legal-updated")}>Última actualización: 31 de agosto de 2026</p>
 
         <section>
           <h2>1. Aspectos Generales y Naturaleza del Producto</h2>

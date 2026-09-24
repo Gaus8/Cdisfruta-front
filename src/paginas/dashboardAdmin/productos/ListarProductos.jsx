@@ -1,5 +1,5 @@
+import { tw } from '../../../funciones/tw.js';
 import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
-import '../../../assets/styles/productos/listar_productos.css'
 
 
 export default function ListarProductos({
@@ -7,42 +7,37 @@ export default function ListarProductos({
 })
  {
   return (
-    <div className="products-grid">
+    <div className={tw("products-grid")}>
       {products.length === 0 ? (
-        <div className="no-products">No hay productos registrados</div>
+        <div className={tw("no-products")}>No hay productos registrados</div>
       ) : (
         products.map(product => (
-          <div key={product._id} className="product-card">
-            <div className="product-image">
+          <div key={product._id} className={tw("product-card")}>
+            <div className={tw("product-image")}>
               {product.imagen ? (
                 <img
                   src={product.imagen}
                   alt={product.nombre}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className={tw("![width:100%]", "![height:100%]", "![object-fit:cover]")}
                 />
               ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#f3f4f6',
-                  borderRadius: '6px'
-                }} />
+                <div className={tw("![width:100%]", "![height:100%]", "![background:#f3f4f6]", "![border-radius:6px]")} />
               )}
             </div>
-            <div className="product-info">
+            <div className={tw("product-info")}>
               <h3>{product.nombre}</h3>
-              <div className="product-price">${product.precio}</div>
-              <div className="product-stock">{product.stock} unidades en stock</div>
-              <div className="product-category">Categoría: {product.categoria}</div>
-              <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '12px' }}>
+              <div className={tw("product-price")}>${product.precio}</div>
+              <div className={tw("product-stock")}>{product.stock} unidades en stock</div>
+              <div className={tw("product-category")}>Categoría: {product.categoria}</div>
+              <p className={tw("![color:#6b7280]", "![font-size:14px]", "![margin-bottom:12px]")}>
                 {product.descripcion}
               </p>
-              <div className="product-actions">
-                <button className="btn btn-edit" onClick={() => handleEditProduct(product)}>
-                  <FaEdit style={{ marginRight: '6px' }} /> Editar
+              <div className={tw("product-actions")}>
+                <button className={tw("btn btn-edit")} onClick={() => handleEditProduct(product)}>
+                  <FaEdit className={tw("![margin-right:6px]")} /> Editar
                 </button>
-                <button className="btn btn-delete" onClick={() => handleDeleteProduct(product._id)}>
-                  <FaTrash style={{ marginRight: '6px' }} /> Eliminar
+                <button className={tw("btn btn-delete")} onClick={() => handleDeleteProduct(product._id)}>
+                  <FaTrash className={tw("![margin-right:6px]")} /> Eliminar
                 </button>
               </div>
             </div>

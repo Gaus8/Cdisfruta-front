@@ -1,7 +1,7 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt } from "react-icons/fa";
-import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import CartModal from "./CartModal";
 import { useAuth } from "../../funciones/useAuth";
 
@@ -89,43 +89,43 @@ export default function HeaderTienda() {
 
   return (
     <>
-      <header className="user-header">
-        <div className="header-content">
+      <header className={tw("user-header")}>
+        <div className={tw("header-content")}>
           <h1 
-            className="logo" 
+            className={tw(tw("logo"), "![cursor:pointer]")} 
             onClick={() => navigate(authenticated ? '/cliente/tienda' : '/tienda')} 
-            style={{ cursor: 'pointer' }}
+            
           >
-            CDISFRUTA<span className="dot-shop"> SHOP</span>
+            CDISFRUTA<span className={tw("dot-shop")}> SHOP</span>
           </h1>
 
-          <form className="search-bar" onSubmit={handleSearchSubmit}>
+          <form className={tw("search-bar")} onSubmit={handleSearchSubmit}>
             <input
               type="text"
               placeholder="Buscar snacks saludables..."
               value={searchText}
               onChange={handleSearchChange}
             />
-            <button type="submit" className="search-btn"><FaSearch /></button>
+            <button type="submit" className={tw("search-btn")}><FaSearch /></button>
           </form>
 
-          <div className="header-actions">
-            <div className="icon-wrapper" onClick={() => setCartModalOpen(true)} style={{ cursor: 'pointer' }}>
-              <FaShoppingCart className="icon-btn-large" />
-              <span className="notification-badge">{cartCount}</span>
+          <div className={tw("header-actions")}>
+            <div className={tw(tw("icon-wrapper"), "![cursor:pointer]")} onClick={() => setCartModalOpen(true)} >
+              <FaShoppingCart className={tw("icon-btn-large")} />
+              <span className={tw("notification-badge")}>{cartCount}</span>
             </div>
 
-            <div className="dropdown-container" ref={containerRef}>
-              <div className="user-profile" onClick={toggleDropdown} style={{ cursor: 'pointer' }}>
+            <div className={tw("dropdown-container")} ref={containerRef}>
+              <div className={tw(tw("user-profile"), "![cursor:pointer]")} onClick={toggleDropdown} >
                 <FaUserCircle size={30} />
               </div>
 
               {dropdownOpen && (
-                <div className="dropdown-menu profile-menu">
-                  <div className="dropdown-header">
+                <div className={tw("dropdown-menu profile-menu")}>
+                  <div className={tw("dropdown-header")}>
                     {authenticated ? `Hola, ${userData?.nombre || 'Usuario'}` : 'Bienvenido'}
                   </div>
-                  <ul className="dropdown-list">
+                  <ul className={tw("dropdown-list")}>
                     {authenticated ? (
                       <>
                         <li onClick={() => { setDropdownOpen(false); navigate('/cliente/perfil'); }}>

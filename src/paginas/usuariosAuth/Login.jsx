@@ -1,4 +1,4 @@
-import '../../assets/styles/usuarios/forms.css';
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -92,14 +92,14 @@ export default function Login({ verifyToken }) {
 
   return (
     <>
-      <div className="auth-page-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
+      <div className={tw(tw("auth-page-wrapper"), "![display:flex]", "![justify-content:center]", "![align-items:center]", "![min-height:100vh]", "![padding:20px]")} >
         <form
-          className="form-container"
+          className={tw("form-container")}
           onSubmit={handleSubmit}
         >
           <button
             type="button"
-            className="btn-close-modal"
+            className={tw("btn-close-modal")}
             onClick={() => navigate('/')}
             disabled={loading}
             title="Volver a la tienda"
@@ -107,32 +107,20 @@ export default function Login({ verifyToken }) {
             <IoArrowBackOutline />
           </button>
 
-          <img className="logo-empresa" src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
+          <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
           <h3>Inicio de Sesión</h3>
 
           {mensajeExpirado && (
             <div
-              style={{
-                backgroundColor: '#fff3cd',
-                color: '#856404',
-                padding: '10px 14px',
-                borderRadius: '8px',
-                marginBottom: '15px',
-                border: '1px solid #ffeeba',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '0.88rem',
-                textAlign: 'left'
-              }}
+              className={tw("![background-color:#fff3cd]", "![color:#856404]", "![padding:10px_14px]", "![border-radius:8px]", "![margin-bottom:15px]", "![border:1px_solid_#ffeeba]", "![display:flex]", "![align-items:center]", "![gap:8px]", "![font-size:0.88rem]", "![text-align:left]")}
             >
-              <IoTimeOutline size={20} style={{ flexShrink: 0 }} />
+              <IoTimeOutline size={20} className={tw("![flex-shrink:0]")} />
               <span>{mensajeExpirado}</span>
             </div>
           )}
 
-          <div className="form-container-input">
-            <IoMailOutline className="icon-react" />
+          <div className={tw("form-container-input")}>
+            <IoMailOutline className={tw("icon-react")} />
             <input
               type="email"
               placeholder="Ingrese su email"
@@ -144,8 +132,8 @@ export default function Login({ verifyToken }) {
             />
           </div>
 
-          <div className="form-container-input">
-            <IoLockClosedOutline className="icon-react" />
+          <div className={tw("form-container-input")}>
+            <IoLockClosedOutline className={tw("icon-react")} />
             <input
               type={mostrarPassword ? "text" : "password"}
               placeholder="Ingrese su contraseña"
@@ -157,7 +145,7 @@ export default function Login({ verifyToken }) {
             />
             <button
               type="button"
-              className="btn-eye"
+              className={tw("btn-eye")}
               onClick={() => setMostrarPassword(!mostrarPassword)}
               disabled={loading}
             >
@@ -165,23 +153,23 @@ export default function Login({ verifyToken }) {
             </button>
           </div>
 
-          {respuestaServer && <p className="error-text">{respuestaServer}</p>}
+          {respuestaServer && <p className={tw("error-text")}>{respuestaServer}</p>}
 
           <button
-            className="button"
+            className={tw(tw("button"), "![opacity:var(--tw-inline-Login-5361-0)]", "![cursor:var(--tw-inline-Login-5361-1)]")}
             type="submit"
             disabled={loading}
-            style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            style={{ "--tw-inline-Login-5361-0": loading ? 0.7 : 1, "--tw-inline-Login-5361-1": loading ? 'not-allowed' : 'pointer' }}
           >
             {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <span className="spinner-css"></span>
+              <span className={tw("![display:flex]", "![align-items:center]", "![justify-content:center]", "![gap:8px]")}>
+                <span className={tw("spinner-css")}></span>
                 <span>Iniciando Sesión...</span>
               </span>
             ) : (
               <>
                 <span>Iniciar Sesión</span>
-                <IoArrowForwardOutline className="icon-btn" />
+                <IoArrowForwardOutline className={tw("icon-btn")} />
               </>
             )}
           </button>
@@ -190,17 +178,17 @@ export default function Login({ verifyToken }) {
 
           <button
             type="button"
-            className="link-switch"
+            className={tw(tw("link-switch"), "![background:none]", "![border:none]", "![width:100%]")}
             onClick={() => setIsResetOpen(true)}
-            style={{ background: 'none', border: 'none', width: '100%' }}
+            
           >
             ¿Olvidaste tu contraseña?
           </button>
 
           <span
-            className="link-switch"
+            className={tw(tw("link-switch"), "![cursor:var(--tw-inline-Login-6355-0)]")}
             onClick={() => !loading && navigate('/registro')}
-            style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+            style={{ "--tw-inline-Login-6355-0": loading ? 'not-allowed' : 'pointer' }}
           >
             ¿No tienes cuenta? Regístrate aquí
           </span>

@@ -1,6 +1,6 @@
+import { tw } from '../../../funciones/tw.js';
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCloudUploadAlt, FaExclamationTriangle } from 'react-icons/fa';
-import '../../../assets/styles/productos/form_productos.css';
 
 export default function FormProductos({
   editingProduct, handleDragLeave, handleDragOver,
@@ -74,34 +74,34 @@ export default function FormProductos({
   const hasImagesClass = previews.length > 0 ? 'has-images' : '';
 
   return (
-    <div className="modal-overlay">
-      <div className="modal modal-lg">
+    <div className={tw("modal-overlay")}>
+      <div className={tw("modal modal-lg")}>
         <h2>{editingProduct ? 'Editar Producto' : 'Agregar Producto'}</h2>
         
         {/* Botón X superior */}
         <button 
           type="button" 
-          className="close-modal-btn" 
+          className={tw("close-modal-btn")} 
           onClick={() => setShowConfirmClose(true)}
           title="Cerrar"
         >
           <FaTimes size={16} />
         </button>
 
-        <div className="modal-content scrollable-content">
+        <div className={tw("modal-content scrollable-content")}>
 
           {/* Sección de Imágenes */}
-          <div className="form-group">
+          <div className={tw("form-group")}>
             <label>Imágenes del Producto (Máx. 5)</label>
 
-            <div className={`upload-section-wrapper ${hasImagesClass}`}>
-              <div className="images-preview-container">
+            <div className={tw(`upload-section-wrapper ${hasImagesClass}`)}>
+              <div className={tw("images-preview-container")}>
                 {previews.map((item, index) => (
-                  <div key={index} className="preview-thumbnail">
+                  <div key={index} className={tw("preview-thumbnail")}>
                     <img src={item.url} alt={`Vista previa ${index + 1}`} />
                     <button 
                       type="button" 
-                      className="delete-img-btn" 
+                      className={tw("delete-img-btn")} 
                       onClick={() => handleRemoveImage(item)}
                       title="Eliminar imagen"
                     >
@@ -113,17 +113,17 @@ export default function FormProductos({
 
               {previews.length < 5 && (
                 <div
-                  className="image-upload-dropzone"
+                  className={tw("image-upload-dropzone")}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <FaCloudUploadAlt className="upload-icon" />
-                  <div className="upload-text">
+                  <FaCloudUploadAlt className={tw("upload-icon")} />
+                  <div className={tw("upload-text")}>
                     {previews.length === 0 ? 'Haz click o arrastra imágenes aquí' : 'Agregar'}
                   </div>
-                  <div className="upload-hint">PNG, JPG (Máx. 5MB)</div>
+                  <div className={tw("upload-hint")}>PNG, JPG (Máx. 5MB)</div>
                 </div>
               )}
             </div>
@@ -135,15 +135,15 @@ export default function FormProductos({
               onChange={handleFileSelect}
               accept="image/png, image/jpeg, image/webp"
               name="imagenes"
-              style={{ display: 'none' }}
+              className={tw("![display:none]")}
             />
 
-            {uploadStatus === 'loading' && <div className="upload-loading">📤 Subiendo imágenes...</div>}
-            {uploadStatus === 'error' && <div className="upload-error">❌ Error al subir imágenes</div>}
+            {uploadStatus === 'loading' && <div className={tw("upload-loading")}>📤 Subiendo imágenes...</div>}
+            {uploadStatus === 'error' && <div className={tw("upload-error")}>❌ Error al subir imágenes</div>}
           </div>
 
-          <div className="form-row">
-            <div className="form-group col-md-6">
+          <div className={tw("form-row")}>
+            <div className={tw("form-group col-md-6")}>
               <label>Nombre del Producto *</label>
               <input
                 type="text"
@@ -154,7 +154,7 @@ export default function FormProductos({
                 required
               />
             </div>
-            <div className="form-group col-md-6">
+            <div className={tw("form-group col-md-6")}>
               <label>Categoría *</label>
               <input
                 type="text"
@@ -167,8 +167,8 @@ export default function FormProductos({
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group col-md-6">
+          <div className={tw("form-row")}>
+            <div className={tw("form-group col-md-6")}>
               <label>Precio ($) *</label>
               <input
                 type="number"
@@ -180,7 +180,7 @@ export default function FormProductos({
                 min="0"
               />
             </div>
-            <div className="form-group col-md-6">
+            <div className={tw("form-group col-md-6")}>
               <label>Stock *</label>
               <input
                 type="number"
@@ -194,7 +194,7 @@ export default function FormProductos({
             </div>
           </div>
 
-          <div className="form-group">
+          <div className={tw("form-group")}>
             <label>Descripción *</label>
             <textarea
               name="descripcion"
@@ -207,9 +207,9 @@ export default function FormProductos({
           </div>
         </div>
 
-        <div className="form-actions">
+        <div className={tw("form-actions")}>
           <button 
-            className="btn btn-cancel" 
+            className={tw("btn btn-cancel")} 
             onClick={() => setShowConfirmClose(true)}
             disabled={uploadStatus === 'loading'}
           >
@@ -217,13 +217,13 @@ export default function FormProductos({
           </button>
           
           <button 
-            className="btn btn-save" 
+            className={tw("btn btn-save")} 
             onClick={handleSaveProduct}
             disabled={uploadStatus === 'loading' || !formData.nombre} 
           >
             {uploadStatus === 'loading' ? (
               <>
-                <span className="spinner"></span> Enviando...
+                <span className={tw("spinner")}></span> Enviando...
               </>
             ) : (
               editingProduct ? 'Actualizar' : 'Guardar'
@@ -233,22 +233,22 @@ export default function FormProductos({
 
         {/* Sub-modal interno de confirmación para descartar cambios */}
         {showConfirmClose && (
-          <div className="submodal-confirm-overlay">
-            <div className="submodal-confirm-content">
-              <FaExclamationTriangle className="submodal-warning-icon" />
+          <div className={tw("submodal-confirm-overlay")}>
+            <div className={tw("submodal-confirm-content")}>
+              <FaExclamationTriangle className={tw("submodal-warning-icon")} />
               <h3>¿Descartar cambios?</h3>
               <p>Si sales ahora, los cambios no guardados se perderán.</p>
-              <div className="submodal-actions">
+              <div className={tw("submodal-actions")}>
                 <button 
                   type="button" 
-                  className="btn-submodal-cancel" 
+                  className={tw("btn-submodal-cancel")} 
                   onClick={() => setShowConfirmClose(false)}
                 >
                   Continuar editando
                 </button>
                 <button 
                   type="button" 
-                  className="btn-submodal-confirm" 
+                  className={tw("btn-submodal-confirm")} 
                   onClick={() => setShowModal(false)}
                 >
                   Sí, descartar

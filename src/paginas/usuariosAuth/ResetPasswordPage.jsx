@@ -1,8 +1,8 @@
+import { tw } from '../../funciones/tw.js';
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { restablecerPasswordConToken } from '../../funciones/usuarioAuth';
-import '../../assets/styles/usuarios/reset_password_page.css';
 
 export const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -54,21 +54,21 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="reset-page-container">
-      <div className="form-container">
+    <div className={tw("reset-page-container")}>
+      <div className={tw("form-container")}>
         <img
           src="/img/logo_cdisfruta.webp"
           alt="Logo Cdisfruta"
-          className="reset-page-logo"
+          className={tw("reset-page-logo")}
         />
 
         <h3>Restablecer Contraseña</h3>
-        <p className="modal-description">Ingresa tu nueva contraseña para actualizar la cuenta.</p>
+        <p className={tw("modal-description")}>Ingresa tu nueva contraseña para actualizar la cuenta.</p>
 
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit} className={tw("![width:100%]")}>
           {/* Campo Nueva Contraseña */}
-          <div className="form-container-input">
-            <FaLock className="icon-react" />
+          <div className={tw("form-container-input")}>
+            <FaLock className={tw("icon-react")} />
             <input
               type={showNuevaPassword ? 'text' : 'password'}
               placeholder="Nueva contraseña"
@@ -77,17 +77,17 @@ export const ResetPasswordPage = () => {
               disabled={loading}
             />
             <span
-              className="icon-eye-toggle"
+              className={tw(tw("icon-eye-toggle"), "![cursor:pointer]", "![padding:0_8px]", "![color:#888]")}
               onClick={() => setShowNuevaPassword(!showNuevaPassword)}
-              style={{ cursor: 'pointer', padding: '0 8px', color: '#888' }}
+              
             >
               {showNuevaPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
 
           {/* Campo Confirmar Contraseña */}
-          <div className="form-container-input" style={{ marginTop: '12px' }}>
-            <FaLock className="icon-react" />
+          <div className={tw(tw("form-container-input"), "![margin-top:12px]")} >
+            <FaLock className={tw("icon-react")} />
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Confirmar nueva contraseña"
@@ -96,26 +96,26 @@ export const ResetPasswordPage = () => {
               disabled={loading}
             />
             <span
-              className="icon-eye-toggle"
+              className={tw(tw("icon-eye-toggle"), "![cursor:pointer]", "![padding:0_8px]", "![color:#888]")}
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              style={{ cursor: 'pointer', padding: '0 8px', color: '#888' }}
+              
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
 
-          <div className="error-text">
+          <div className={tw("error-text")}>
             {error && <span>{error}</span>}
           </div>
 
           {successMessage && (
-            <div className="success-text">
+            <div className={tw("success-text")}>
               {successMessage}
             </div>
           )}
 
-          <button type="submit" className="button" disabled={loading}>
-            {loading ? <div className="spinner-css" /> : 'Guardar nueva contraseña'}
+          <button type="submit" className={tw("button")} disabled={loading}>
+            {loading ? <div className={tw("spinner-css")} /> : 'Guardar nueva contraseña'}
           </button>
         </form>
       </div>

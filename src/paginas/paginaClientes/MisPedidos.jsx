@@ -1,3 +1,4 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -6,7 +7,6 @@ import {
 } from "react-icons/fa";
 import { apiAxios } from "../../funciones/conexion";
 import { useAuth } from "../../funciones/useAuth";
-import "../../assets/styles/usuarios/mis_pedidos.css";
 
 const PASOS_ESTADO = ["Pendiente", "Comprobado", "Enviado", "Entregado"];
 
@@ -94,28 +94,28 @@ export default function MisPedidos() {
     return index !== -1 ? index : 0;
   };
 
-  if (loading) return <div className="loading-state">Cargando tus compras...</div>;
+  if (loading) return <div className={tw("loading-state")}>Cargando tus compras...</div>;
 
   return (
-    <div className="mis-pedidos-container">
+    <div className={tw("mis-pedidos-container")}>
       
-      <div className="mis-pedidos-nav-top">
-        <button className="btn-volver-pro" onClick={() => navigate('/cliente/tienda')}>
+      <div className={tw("mis-pedidos-nav-top")}>
+        <button className={tw("btn-volver-pro")} onClick={() => navigate('/cliente/tienda')}>
           <FaArrowLeft /> Seguir Comprando
         </button>
       </div>
 
-      <div className="mis-pedidos-header">
+      <div className={tw("mis-pedidos-header")}>
         <h2>Mis Pedidos</h2>
         <p>Consulta el historial, estado y seguimiento en tiempo real de tus compras en CDISFRUTA.</p>
       </div>
 
-      <div className="orders-list">
+      <div className={tw("orders-list")}>
         {pedidos.length === 0 ? (
-          <div className="empty-orders">
-            <FaBoxOpen size={50} style={{ color: '#ccc', marginBottom: '15px' }} />
+          <div className={tw("empty-orders")}>
+            <FaBoxOpen size={50} className={tw("![color:#ccc]", "![margin-bottom:15px]")} />
             <p>Aún no has realizado ningún pedido o tu sesión necesita recargar el historial.</p>
-            <button className="btn-ir-tienda" onClick={() => navigate('/cliente/tienda')}>
+            <button className={tw("btn-ir-tienda")} onClick={() => navigate('/cliente/tienda')}>
               Explorar productos
             </button>
           </div>
@@ -129,24 +129,24 @@ export default function MisPedidos() {
             const nombreDestinatario = pedido.datosEnvio ? `${pedido.datosEnvio.nombres} ${pedido.datosEnvio.apellidos}` : "Cliente CDISFRUTA";
 
             return (
-              <div key={pedido._id} className="order-card">
+              <div key={pedido._id} className={tw("order-card")}>
                 
-                <div className="order-header-amazon">
-                  <div className="header-col">
-                    <span className="col-label">PEDIDO REALIZADO</span>
-                    <span className="col-value">{fechaFormateada}</span>
+                <div className={tw("order-header-amazon")}>
+                  <div className={tw("header-col")}>
+                    <span className={tw("col-label")}>PEDIDO REALIZADO</span>
+                    <span className={tw("col-value")}>{fechaFormateada}</span>
                   </div>
-                  <div className="header-col">
-                    <span className="col-label">TOTAL</span>
-                    <span className="col-value">${pedido.total.toLocaleString('es-CO')}</span>
+                  <div className={tw("header-col")}>
+                    <span className={tw("col-label")}>TOTAL</span>
+                    <span className={tw("col-value")}>${pedido.total.toLocaleString('es-CO')}</span>
                   </div>
-                  <div className="header-col">
-                    <span className="col-label">ENVIAR A</span>
-                    <span className="col-value highlight-name">{nombreDestinatario}</span>
+                  <div className={tw("header-col")}>
+                    <span className={tw("col-label")}>ENVIAR A</span>
+                    <span className={tw("col-value highlight-name")}>{nombreDestinatario}</span>
                   </div>
-                  <div className="header-col order-id-col">
-                    <span className="col-label">PEDIDO N.° {idCorto}</span>
-                    <span className="col-links">
+                  <div className={tw("header-col order-id-col")}>
+                    <span className={tw("col-label")}>PEDIDO N.° {idCorto}</span>
+                    <span className={tw("col-links")}>
                       <button onClick={() => { setPedidoSeleccionado(pedido); setShowDetailsModal(true); }}>
                         Ver detalles del pedido
                       </button>
@@ -154,11 +154,11 @@ export default function MisPedidos() {
                   </div>
                 </div>
 
-                <div className="order-body">
-                  <div className="order-main-grid">
-                    <div className="order-products-section">
-                      <div className="status-badge-row">
-                        <span className={`badge badge-${pedido.estado.toLowerCase()}`}>
+                <div className={tw("order-body")}>
+                  <div className={tw("order-main-grid")}>
+                    <div className={tw("order-products-section")}>
+                      <div className={tw("status-badge-row")}>
+                        <span className={tw(`badge badge-${pedido.estado.toLowerCase()}`)}>
                           {pedido.estado === 'Pendiente' && <FaClock />}
                           {pedido.estado === 'Comprobado' && <FaCheckCircle />}
                           {pedido.estado === 'Enviado' && <FaTruck />}
@@ -169,12 +169,12 @@ export default function MisPedidos() {
                       </div>
 
                       {pedido.estado !== 'Cancelado' ? (
-                        <div className="order-timeline">
+                        <div className={tw("order-timeline")}>
                           {PASOS_ESTADO.map((paso, idx) => {
                             const completado = idx <= pasoActual;
                             return (
-                              <div key={idx} className={`timeline-step ${completado ? 'active' : ''}`}>
-                                <div className="step-bullet">
+                              <div key={idx} className={tw(`timeline-step ${completado ? 'active' : ''}`)}>
+                                <div className={tw("step-bullet")}>
                                   {idx === 0 && <FaClock size={10} />}
                                   {idx === 1 && <FaCheckCircle size={10} />}
                                   {idx === 2 && <FaTruck size={10} />}
@@ -186,29 +186,29 @@ export default function MisPedidos() {
                           })}
                         </div>
                       ) : (
-                        <div className="canceled-banner">
+                        <div className={tw("canceled-banner")}>
                           <FaTimesCircle /> Este pedido fue cancelado. 
-                          {pedido.motivoCancelacion && <span style={{display: 'block', fontSize: '12px', marginTop: '4px'}}>Motivo: {pedido.motivoCancelacion}</span>}
+                          {pedido.motivoCancelacion && <span className={tw("![display:block]", "![font-size:12px]", "![margin-top:4px]")}>Motivo: {pedido.motivoCancelacion}</span>}
                         </div>
                       )}
 
-                      <div className="order-products-summary">
+                      <div className={tw("order-products-summary")}>
                         {pedido.productos.map((item, idx) => {
                           const fotoUrl = item.imagen || item.img || item.url || item.foto;
 
                           return (
-                            <div key={idx} className="order-product-item">
+                            <div key={idx} className={tw("order-product-item")}>
                               <img 
                                 src={fotoUrl || "https://via.placeholder.com/60"} 
                                 alt={item.nombre} 
-                                className="order-product-thumbnail" 
+                                className={tw("order-product-thumbnail")} 
                                 onError={(e) => { e.target.src = "https://via.placeholder.com/60"; }}
                               />
-                              <div className="order-product-info">
+                              <div className={tw("order-product-info")}>
                                 <h4>{item.nombre}</h4>
                                 <p>Cantidad: <strong>{item.quantity || item.cantidad}</strong></p>
                               </div>
-                              <div className="order-product-subtotal">
+                              <div className={tw("order-product-subtotal")}>
                                 ${(item.precio * (item.quantity || item.cantidad)).toLocaleString('es-CO')}
                               </div>
                             </div>
@@ -217,16 +217,16 @@ export default function MisPedidos() {
                       </div>
                     </div>
 
-                    <div className="order-actions-sidebar">
+                    <div className={tw("order-actions-sidebar")}>
                       <button 
-                        className="btn-amazon-action primary"
+                        className={tw("btn-amazon-action primary")}
                         onClick={() => { setPedidoSeleccionado(pedido); setShowDetailsModal(true); }}
                       >
                         <FaEye /> Ver o editar pedido
                       </button>
 
                       <button 
-                        className="btn-amazon-action secondary"
+                        className={tw("btn-amazon-action secondary")}
                         onClick={() => abrirWhatsAppSoporte(pedido)}
                       >
                         <FaWhatsapp color="#25D366" /> Preguntar sobre este pedido
@@ -234,7 +234,7 @@ export default function MisPedidos() {
 
                       {pedido.estado === 'Pendiente' && (
                         <button 
-                          className="btn-amazon-action danger"
+                          className={tw("btn-amazon-action danger")}
                           onClick={() => {
                             setPedidoACancelar(pedido._id);
                             setShowCancelModal(true);
@@ -255,15 +255,15 @@ export default function MisPedidos() {
 
       {/* Modal de Detalles del Pedido */}
       {showDetailsModal && pedidoSeleccionado && (
-        <div className="modal-overlay">
-          <div className="modal-content details-modal">
-            <div className="modal-header">
+        <div className={tw("modal-overlay")}>
+          <div className={tw("modal-content details-modal")}>
+            <div className={tw("modal-header")}>
               <h3>Detalles del Pedido #{pedidoSeleccionado._id.slice(-8).toUpperCase()}</h3>
-              <button className="modal-close" onClick={() => setShowDetailsModal(false)}>✕</button>
+              <button className={tw("modal-close")} onClick={() => setShowDetailsModal(false)}>✕</button>
             </div>
             
-            <div className="details-body">
-              <div className="detail-group">
+            <div className={tw("details-body")}>
+              <div className={tw("detail-group")}>
                 <h4>👤 Información del Cliente y Envío</h4>
                 <p><strong>Nombre:</strong> {pedidoSeleccionado.datosEnvio?.nombres} {pedidoSeleccionado.datosEnvio?.apellidos}</p>
                 <p><strong>WhatsApp:</strong> {pedidoSeleccionado.datosEnvio?.whatsapp}</p>
@@ -275,22 +275,22 @@ export default function MisPedidos() {
                 )}
               </div>
 
-              <div className="detail-group">
+              <div className={tw("detail-group")}>
                 <h4>💳 Método de Pago</h4>
-                <p className="payment-method-tag">Pago Contra Entrega 🤝</p>
+                <p className={tw("payment-method-tag")}>Pago Contra Entrega 🤝</p>
               </div>
 
-              <div className="detail-group">
+              <div className={tw("detail-group")}>
                 <h4>📌 Estado Actual</h4>
                 <p><strong>{pedidoSeleccionado.estado}</strong></p>
                 {pedidoSeleccionado.motivoCancelacion && (
-                  <p style={{marginTop: '5px', color: '#c62828'}}><strong>Motivo de cancelación:</strong> {pedidoSeleccionado.motivoCancelacion}</p>
+                  <p className={tw("![margin-top:5px]", "![color:#c62828]")}><strong>Motivo de cancelación:</strong> {pedidoSeleccionado.motivoCancelacion}</p>
                 )}
               </div>
             </div>
 
-            <div className="modal-actions">
-              <button className="btn-secundario" onClick={() => setShowDetailsModal(false)}>Cerrar</button>
+            <div className={tw("modal-actions")}>
+              <button className={tw("btn-secundario")} onClick={() => setShowDetailsModal(false)}>Cerrar</button>
             </div>
           </div>
         </div>
@@ -298,19 +298,19 @@ export default function MisPedidos() {
 
       {/* Modal de Cancelación con campo condicional para "Otro motivo" */}
       {showCancelModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
+        <div className={tw("modal-overlay")}>
+          <div className={tw("modal-content")}>
+            <div className={tw("modal-header")}>
               <h3>Cancelar Pedido</h3>
-              <button className="modal-close" onClick={() => setShowCancelModal(false)}>✕</button>
+              <button className={tw("modal-close")} onClick={() => setShowCancelModal(false)}>✕</button>
             </div>
-            <p className="modal-subtitle">Selecciona un motivo para ayudarnos a mejorar:</p>
+            <p className={tw("modal-subtitle")}>Selecciona un motivo para ayudarnos a mejorar:</p>
             
             <select 
               value={motivoCancelacion} 
               onChange={(e) => setMotivoCancelacion(e.target.value)}
-              className="modal-select"
-              style={{ marginBottom: '15px' }}
+              className={tw(tw("modal-select"), "![margin-bottom:15px]")}
+              
             >
               <option value="">Seleccione un motivo...</option>
               <option value="Me equivoqué de productos">Me equivoqué de productos</option>
@@ -325,15 +325,15 @@ export default function MisPedidos() {
                 value={otroMotivoTexto}
                 onChange={(e) => setOtroMotivoTexto(e.target.value)}
                 placeholder="Escribe aquí el motivo detallado..."
-                className="modal-textarea"
-                style={{ marginBottom: '15px' }}
+                className={tw(tw("modal-textarea"), "![margin-bottom:15px]")}
+                
                 required
               />
             )}
 
-            <div className="modal-actions">
-              <button className="btn-secundario" onClick={() => { setShowCancelModal(false); setOtroMotivoTexto(""); }}>Regresar</button>
-              <button className="btn-peligro" onClick={handleCancelarPedido}>Confirmar Cancelación</button>
+            <div className={tw("modal-actions")}>
+              <button className={tw("btn-secundario")} onClick={() => { setShowCancelModal(false); setOtroMotivoTexto(""); }}>Regresar</button>
+              <button className={tw("btn-peligro")} onClick={handleCancelarPedido}>Confirmar Cancelación</button>
             </div>
           </div>
         </div>
@@ -341,16 +341,16 @@ export default function MisPedidos() {
 
       {/* Modal de Éxito de Cancelación */}
       {showSuccessModal && (
-        <div className="modal-overlay">
-          <div className="modal-content" style={{ textAlign: 'center', padding: '30px' }}>
-            <FaTimesCircle size={45} style={{ color: '#e53935', marginBottom: '15px' }} />
-            <h3 style={{ color: '#2c3e50', marginBottom: '10px' }}>¡Pedido Cancelado!</h3>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+        <div className={tw("modal-overlay")}>
+          <div className={tw(tw("modal-content"), "![text-align:center]", "![padding:30px]")} >
+            <FaTimesCircle size={45} className={tw("![color:#e53935]", "![margin-bottom:15px]")} />
+            <h3 className={tw("![color:#2c3e50]", "![margin-bottom:10px]")}>¡Pedido Cancelado!</h3>
+            <p className={tw("![color:#666]", "![font-size:14px]", "![margin-bottom:20px]")}>
               Tu pedido ha sido cancelado con éxito y el motivo fue registrado para el administrador.
             </p>
             <button 
-              className="btn-ir-tienda" 
-              style={{ width: '100%', marginTop: '0' }}
+              className={tw(tw("btn-ir-tienda"), "![width:100%]", "![margin-top:0]")} 
+              
               onClick={() => setShowSuccessModal(false)}
             >
               Entendido

@@ -1,3 +1,4 @@
+import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,7 +7,6 @@ import {
   FaSignInAlt, FaUserPlus
 } from "react-icons/fa";
 import CartModal from "./CartModal";
-import '../../assets/styles/dashboardUsuario/header_usuario.css';
 import { apiAxios } from "../../funciones/conexion"; // Usar instancia configurada con withCredentials
 import { useAuth } from "../../funciones/useAuth";
 
@@ -102,43 +102,43 @@ export default function HeaderDashboard() {
 
   return (
     <>
-      <header className="user-header">
-        <div className="header-content">
-          <h1 className="logo" onClick={() => navigate('/cliente/tienda')} style={{ cursor: 'pointer' }}>
-            CDISFRUTA<span className="dot-shop"> SHOP</span>
+      <header className={tw("user-header")}>
+        <div className={tw("header-content")}>
+          <h1 className={tw(tw("logo"), "![cursor:pointer]")} onClick={() => navigate('/cliente/tienda')} >
+            CDISFRUTA<span className={tw("dot-shop")}> SHOP</span>
           </h1>
 
-          <form className="search-bar" onSubmit={handleSearchSubmit}>
+          <form className={tw("search-bar")} onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
               placeholder="Buscar snacks saludables..." 
               value={searchText}
               onChange={handleSearchChange}
             />
-            <button type="submit" className="search-btn"><FaSearch /></button>
+            <button type="submit" className={tw("search-btn")}><FaSearch /></button>
           </form>
 
-          <div className="header-actions">
+          <div className={tw("header-actions")}>
             <div
-              className="icon-wrapper"
+              className={tw(tw("icon-wrapper"), "![cursor:pointer]")}
               onClick={() => setCartModalOpen(true)}
-              style={{ cursor: 'pointer' }}
+              
             >
-              <FaShoppingCart className="icon-btn-large" />
-              <span className="notification-badge">{cartCount}</span>
+              <FaShoppingCart className={tw("icon-btn-large")} />
+              <span className={tw("notification-badge")}>{cartCount}</span>
             </div>
 
-            <div className="dropdown-container" ref={containerRef}>
-              <div className="user-profile" onClick={toggleDropdown}>
+            <div className={tw("dropdown-container")} ref={containerRef}>
+              <div className={tw("user-profile")} onClick={toggleDropdown}>
                 <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />
               </div>
 
               {dropdownOpen && (
-                <div className="dropdown-menu profile-menu">
+                <div className={tw("dropdown-menu profile-menu")}>
                   {userData ? (
                     <>
-                      <div className="dropdown-header">Hola, {userData.nombre ? userData.nombre.split(' ')[0] : 'Usuario'}</div>
-                      <ul className="dropdown-list">
+                      <div className={tw("dropdown-header")}>Hola, {userData.nombre ? userData.nombre.split(' ')[0] : 'Usuario'}</div>
+                      <ul className={tw("dropdown-list")}>
                         <li onClick={() => { setDropdownOpen(false); navigate('/cliente/configuracion'); }}>
                           <FaCog /> Configuración
                         </li>
@@ -146,15 +146,15 @@ export default function HeaderDashboard() {
                           <FaShoppingBag /> Mis Pedidos
                         </li>
                         <hr />
-                        <li className="logout-opt" onClick={handleLogoutClick}>
+                        <li className={tw("logout-opt")} onClick={handleLogoutClick}>
                           <FaSignOutAlt /> Cerrar Sesión
                         </li>
                       </ul>
                     </>
                   ) : (
                     <>
-                      <div className="dropdown-header">Bienvenido</div>
-                      <ul className="dropdown-list">
+                      <div className={tw("dropdown-header")}>Bienvenido</div>
+                      <ul className={tw("dropdown-list")}>
                         <li onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
                           <FaSignInAlt /> Iniciar Sesión
                         </li>
@@ -177,14 +177,14 @@ export default function HeaderDashboard() {
       />
 
       {logoutModalOpen && (
-        <div className="modal-overlay-logout" onClick={handleCancelLogout}>
-          <div className="logout-modal-content" onClick={(e) => e.stopPropagation()}>
-            <FaExclamationTriangle className="warning-icon" />
+        <div className={tw("modal-overlay-logout")} onClick={handleCancelLogout}>
+          <div className={tw("logout-modal-content")} onClick={(e) => e.stopPropagation()}>
+            <FaExclamationTriangle className={tw("warning-icon")} />
             <h3>¿Cerrar Sesión?</h3>
             <p>¿Estás seguro de que deseas salir de tu cuenta en CDISFRUTA?</p>
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={handleCancelLogout}>Cancelar</button>
-              <button className="btn-confirm" onClick={handleConfirmLogout}>Sí, Cerrar Sesión</button>
+            <div className={tw("modal-actions")}>
+              <button className={tw("btn-cancel")} onClick={handleCancelLogout}>Cancelar</button>
+              <button className={tw("btn-confirm")} onClick={handleConfirmLogout}>Sí, Cerrar Sesión</button>
             </div>
           </div>
         </div>

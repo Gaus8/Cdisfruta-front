@@ -1,3 +1,4 @@
+import { tw } from '../../../funciones/tw.js';
 // Productos.jsx
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from "react-router"; 
@@ -5,7 +6,6 @@ import { FaPlus } from 'react-icons/fa';
 import { URL_SERVER } from '../../../funciones/conexion';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
-import "../../../assets/styles/dashboardAdmin/productos_admin.css";
 
 function Productos() {
   const [fileName, setFileName] = useState("");
@@ -203,21 +203,21 @@ function Productos() {
     }
   };
 
-  if (loading) return <div className="loading-state">Cargando catálogo de CDISFRUTA...</div>;
+  if (loading) return <div className={tw("loading-state")}>Cargando catálogo de CDISFRUTA...</div>;
 
   return (
-    <div className="admin-products-page">
-      <header className="products-header">
-        <div className="header-info">
-          <h2 className="main-title">Catálogo de Productos</h2>
-          <p className="subtitle">Gestiona los artículos de la tienda desde aquí.</p>
+    <div className={tw("admin-products-page")}>
+      <header className={tw("products-header")}>
+        <div className={tw("header-info")}>
+          <h2 className={tw("main-title")}>Catálogo de Productos</h2>
+          <p className={tw("subtitle")}>Gestiona los artículos de la tienda desde aquí.</p>
         </div>
-        <button className="btn-add-product" onClick={handleAddProduct}>
+        <button className={tw("btn-add-product")} onClick={handleAddProduct}>
           <FaPlus /> <span>Registrar Nuevo Producto</span>
         </button>
       </header>
 
-      <main className="products-grid-container">
+      <main className={tw("products-grid-container")}>
         <ListarProductos
           products={products}
           handleDeleteProduct={handleDeleteProduct}
@@ -244,14 +244,14 @@ function Productos() {
 
       {/* Modal interno de éxito */}
       {successMessage && (
-        <div className="submodal-confirm-overlay">
-          <div className="submodal-confirm-content">
-            <h3 style={{ color: '#10b981', marginBottom: '10px' }}>¡Éxito!</h3>
+        <div className={tw("submodal-confirm-overlay")}>
+          <div className={tw("submodal-confirm-content")}>
+            <h3 className={tw("![color:#10b981]", "![margin-bottom:10px]")}>¡Éxito!</h3>
             <p>{successMessage}</p>
             <button 
               type="button" 
-              className="btn-submodal-confirm" 
-              style={{ backgroundColor: '#10b981', width: '100%', marginTop: '10px' }}
+              className={tw(tw("btn-submodal-confirm"), "![background-color:#10b981]", "![width:100%]", "![margin-top:10px]")} 
+              
               onClick={() => setSuccessMessage('')}
             >
               Aceptar

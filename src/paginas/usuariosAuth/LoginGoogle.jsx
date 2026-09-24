@@ -1,3 +1,4 @@
+import { tw } from '../../funciones/tw.js';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -37,19 +38,19 @@ export default function LoginGoogle({ cerrarModal }) {
   };
 
   return (
-    <div className="google-btn-container">
+    <div className={tw("google-btn-container")}>
       <button 
-        className="button-google" 
+        className={tw(tw("button-google"), "![opacity:var(--tw-inline-LoginGoogle-1266-0)]", "![cursor:var(--tw-inline-LoginGoogle-1266-1)]")} 
         type="button" 
         onClick={() => login()}
         disabled={loading}
-        style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+        style={{ "--tw-inline-LoginGoogle-1266-0": loading ? 0.7 : 1, "--tw-inline-LoginGoogle-1266-1": loading ? 'not-allowed' : 'pointer' }}
       >
         <img src="/img/google_logo.webp" alt="Google" />
         <span>{loading ? "Autenticando..." : "Acceder con Google"}</span>
       </button>
       {respuestaServer && (
-        <p className="error-text" style={{ textAlign: 'center' }}>
+        <p className={tw(tw("error-text"), "![text-align:center]")} >
           {respuestaServer}
         </p>
       )}

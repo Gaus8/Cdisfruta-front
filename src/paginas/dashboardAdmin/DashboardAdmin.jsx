@@ -1,7 +1,7 @@
+import { tw } from '../../funciones/tw.js';
 import { Outlet } from "react-router"; // <--- IMPORTANTE
 import Sidebar from './Sidebar';
 import Header from './Header';
-import '../../assets/styles/dashboardAdmin/dashboard_admin.css'
 import { useAuth } from '../../funciones/useAuth';
 
 
@@ -11,11 +11,11 @@ export default function DashboardAdmin() {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <div className="dashboard-container">
+    <div className={tw("dashboard-container")}>
       <Sidebar />
-      <div className="dashboard-main-content">
+      <div className={tw("dashboard-main-content")}>
         <Header userName={userData.nombre} />
-        <main className="dashboard-view-port">
+        <main className={tw("dashboard-view-port")}>
           {/* Aquí es donde se renderizará Productos, Home, etc. */}
           <Outlet />
         </main>
