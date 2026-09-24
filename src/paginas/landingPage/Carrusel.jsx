@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/mainPage/carrusel.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import { FaTimes, FaGlobeAmericas, FaLeaf, FaMapMarkerAlt } from 'react-icons/fa'; // Iconos decorativos
+import { URL_SERVER } from '../../funciones/conexion';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -11,9 +12,10 @@ import 'swiper/css/effect-fade';
 import Registro from '../usuariosAuth/Registro';
 import Login from '../usuariosAuth/Login';
 
-const productos = [
+const contenidoPredeterminado = [
   {
     img: '/img/cdisfruta_01.webp',
+    iconKey: 'globe',
     eyebrow: 'Presencia internacional',
     titulo: 'CDISFRUTA en Australia',
     desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.',
@@ -23,6 +25,7 @@ const productos = [
   },
   {
     img: '/img/cdisfruta_02.webp',
+    iconKey: 'leaf',
     eyebrow: 'Producto destacado',
     titulo: 'Aromáticas frutales',
     desc: 'Infusiones naturales elaboradas con frutas seleccionadas, que brindan sabor, frescura y bienestar en cada taza.',
@@ -32,6 +35,7 @@ const productos = [
   },
   {
     img: '/img/cdisfruta_07.webp',
+    iconKey: 'location',
     eyebrow: 'Nuestra tierra',
     titulo: 'Tradición de Ubaté',
     desc: 'Reflejamos la riqueza de nuestra tierra en cada mezcla, con frutas y hierbas cuidadosamente seleccionadas.',
@@ -41,13 +45,23 @@ const productos = [
   },
 ];
 
+const iconos = { globe: <FaGlobeAmericas />, leaf: <FaLeaf />, location: <FaMapMarkerAlt /> };
+
 const CarruselProductos = () => {
+  const [productos, setProductos] = useState(contenidoPredeterminado);
   const [activeIndex, setActiveIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [abrirRegistro, setAbrirRegistro] = useState(false)
   const [abrirLogin, setAbrirLogin] = useState(false)
   const navigate = useNavigate();
-  const current = productos[activeIndex];
+  useEffect(() => {
+    fetch(`${URL_SERVER}/portada`)
+      .then(response => response.ok ? response.json() : Promise.reject(new Error('No se pudo cargar la portada')))
+      .then(slides => { if (Array.isArray(slides) && slides.length) setProductos(slides); })
+      .catch(error => console.error('Se conservará el contenido local de portada:', error));
+  }, []);
+
+  const current = productos[activeIndex] || productos[0];
 
   const openModal = () => {
     setShowModal(true);
@@ -133,7 +147,7 @@ const CarruselProductos = () => {
             <SwiperSlide key={index}>
               <img src={prod.img} alt={prod.titulo} className="carrusel-img" />
               <div className="carrusel-img-label">
-                <span className="cil-tag">{prod.eyebrow}</span>
+              <span className="cil-tag">{prod.etiqueta || prod.eyebrow}</span>
                 <span className="cil-name">{prod.tag}</span>
               </div>
             </SwiperSlide>
@@ -148,7 +162,7 @@ const CarruselProductos = () => {
             <button className="car-modal-close" onClick={closeModal}><FaTimes /></button>
 
             <div className="car-modal-body">
-              <div className="car-modal-icon">{current.icon}</div>
+              <div className="car-modal-icon">{iconos[current.iconKey] || <FaLeaf />}</div>
               <span className="car-modal-eyebrow">{current.eyebrow}</span>
               <h3>{current.titulo}</h3>
               <p className="car-modal-detail">{current.detalle}</p>

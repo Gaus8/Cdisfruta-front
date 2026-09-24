@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaSignOutAlt, FaExclamationTriangle, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaExclamationTriangle, FaBars, FaTimes, FaPaintBrush } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
@@ -60,6 +60,9 @@ export default function Sidebar() {
           
           <Link title="Reportes" to="/admin/reportes" onClick={() => setIsOpen(false)}>
             <FaChartLine /> <span>Reportes</span>
+          </Link>
+          <Link title="Diseño de portada" to="/admin/diseno-portada" onClick={() => setIsOpen(false)}>
+            <FaPaintBrush /> <span>Diseño de portada</span>
           </Link>
           <Link title="Configuración" to="/admin/config" onClick={() => setIsOpen(false)}>
             <FaCog /> <span>Configuración</span>
