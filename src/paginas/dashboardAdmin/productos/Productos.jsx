@@ -3,7 +3,7 @@ import { tw } from '../../../funciones/tw.js';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from "react-router"; 
 import { FaPlus } from 'react-icons/fa';
-import { URL_SERVER } from '../../../funciones/conexion';
+import { URL_SERVER, apiAxios } from '../../../funciones/conexion';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
 
@@ -46,9 +46,7 @@ function Productos() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${URL_SERVER}/get-productos`);
-        if (!response.ok) throw new Error(`Error ${response.status}`);
-        const data = await response.json();
+        const { data } = await apiAxios.get('/admin/catalogo');
         setProducts(data);
       } catch (error) {
         console.error("Error al cargar productos:", error);
@@ -216,6 +214,10 @@ function Productos() {
           <FaPlus /> <span>Registrar Nuevo Producto</span>
         </button>
       </header>
+
+      {products.some((product) => product.publicarEnTienda === false) && <div className={tw('mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900')}>
+        Hay artículos exportados desde inventario pendientes de completar. Al editar y guardar sus datos comerciales, quedarán publicados en la tienda.
+      </div>}
 
       <main className={tw("products-grid-container")}>
         <ListarProductos

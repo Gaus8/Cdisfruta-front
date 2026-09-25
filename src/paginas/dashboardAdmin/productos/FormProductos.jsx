@@ -77,6 +77,7 @@ export default function FormProductos({
     <div className={tw("modal-overlay")}>
       <div className={tw("modal modal-lg")}>
         <h2>{editingProduct ? 'Editar Producto' : 'Agregar Producto'}</h2>
+        {editingProduct?.publicarEnTienda === false && <p className={tw('mb-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-5 text-amber-900')}>Borrador exportado desde inventario. Completa el precio y la descripción; al guardar se publicará en la tienda.</p>}
         
         {/* Botón X superior */}
         <button 
