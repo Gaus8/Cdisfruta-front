@@ -123,8 +123,8 @@ export const tailwindClassMap = {
     "[width:42px]",
     "[height:42px]",
     "[border-radius:12px]",
-    "[background:#edf5ec]",
-    "[color:#44734d]",
+    "[background:#fff1ec]",
+    "[color:#e06d43]",
     "[font-weight:800]"
   ],
   "cover-slide-body": [
@@ -153,13 +153,13 @@ export const tailwindClassMap = {
     "[gap:8px]",
     "[margin-top:10px]",
     "[padding:10px]",
-    "[border:1px_solid_#dce6da]",
+    "[border:1px_solid_#ffd8cc]",
     "[border-radius:9px]",
     "[background:#fff]",
-    "[color:#44684b]",
+    "[color:#e06d43]",
     "[font-weight:700]",
     "[cursor:pointer]",
-    "[&:hover]:[background:#f4f8f3]"
+    "[&:hover]:[background:#fff5f1]"
   ],
   "cover-image-column": [
     "[&_small]:[display:block]",
@@ -192,9 +192,9 @@ export const tailwindClassMap = {
     "[&_textarea]:[font:inherit]",
     "[&_textarea]:[font-weight:400]",
     "[&_textarea]:[resize:vertical]",
-    "[&_input:focus]:[outline:2px_solid_#98c5a0]",
+    "[&_input:focus]:[outline:2px_solid_#ff9b80]",
     "[&_input:focus]:[border-color:transparent]",
-    "[&_textarea:focus]:[outline:2px_solid_#98c5a0]",
+    "[&_textarea:focus]:[outline:2px_solid_#ff9b80]",
     "[&_textarea:focus]:[border-color:transparent]"
   ],
   "cover-collapsible": [
@@ -213,13 +213,13 @@ export const tailwindClassMap = {
     "[&_summary::after]:[content:'+']",
     "[&_summary::after]:[order:1]",
     "[&_summary::after]:[margin-left:3px]",
-    "[&_summary::after]:[color:#59815e]",
+    "[&_summary::after]:[color:#e06d43]",
     "[&_summary::after]:[font-size:1.3rem]",
     "[&_summary::after]:[font-weight:500]",
     "[&[open]_summary::after]:[content:'−']",
     "[&_summary_>_span:first-child]:[display:grid]",
     "[&_summary_>_span:first-child]:[gap:4px]",
-    "[&_summary_strong]:[color:#344b37]",
+    "[&_summary_strong]:[color:#1e293b]",
     "[&_summary_strong]:[font-size:.94rem]",
     "[&_summary_small]:[color:#7d897e]",
     "[&_summary_small]:[font-size:.8rem]"
@@ -235,7 +235,7 @@ export const tailwindClassMap = {
   "cover-expand-label": [
     "[order:0]",
     "[margin-left:auto]",
-    "[color:#47754f]",
+    "[color:#e06d43]",
     "[font-size:.82rem]",
     "[font-weight:700]"
   ],
@@ -257,7 +257,7 @@ export const tailwindClassMap = {
     "[grid-column:1_/_-1]",
     "[flex-direction:column]",
     "[gap:6px]",
-    "[color:#556257]",
+    "[color:#334155]",
     "[font-size:.86rem]",
     "[font-weight:700]",
     "[.cover-field-group_&:has(input)]:[grid-column:auto]",
