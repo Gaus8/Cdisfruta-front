@@ -1,8 +1,9 @@
 import { tw } from '../../../funciones/tw.js';
 // Productos.jsx
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation } from "react-router"; 
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
 import { URL_SERVER, apiAxios } from '../../../funciones/conexion';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
@@ -14,6 +15,9 @@ function Productos() {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState(null);
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -71,7 +75,7 @@ function Productos() {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.size > 5 * 1024 * 1024) {
-        alert(`La imagen "${file.name}" es demasiado grande. Máximo 5MB.`);
+        setDialogMessage({ title: 'Imagen demasiado grande', message: `La imagen "${file.name}" supera el límite permitido de 5 MB.` });
         continue;
       }
       validFiles.push(file);
@@ -100,13 +104,13 @@ function Productos() {
   const handleDragLeave = (e) => e.preventDefault();
 
   // 4. CONTROL DE MODAL
-  const handleAddProduct = () => {
+  function handleAddProduct() {
     setEditingProduct(null);
     setFormData({ nombre: '', precio: '', stock: '', descripcion: '', categoria: '', imagenes: [] });
     setFileName('');
     setUploadStatus('');
     setShowModal(true);
-  };
+  }
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
@@ -126,7 +130,7 @@ function Productos() {
   // 5. GUARDAR PRODUCTO (POST / PUT)
   const handleSaveProduct = async () => {
     if (!formData.nombre || !formData.precio || !formData.stock) {
-      alert("Por favor rellena los campos obligatorios (*)");
+      setDialogMessage({ title: 'Faltan datos', message: 'Completa los campos obligatorios antes de guardar el producto.' });
       return;
     }
 
@@ -185,19 +189,29 @@ function Productos() {
     } catch (error) {
       setUploadStatus('error');
       console.error(error);
-      alert(error.message);
+      setDialogMessage({ title: 'No se pudo guardar', message: error.message || 'Ocurrió un error al guardar el producto.' });
     }
   };
 
   // 6. ELIMINAR PRODUCTO
-  const handleDeleteProduct = async (productId) => {
-    if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
+  const handleDeleteProduct = (productId) => {
+    const product = products.find((item) => item._id === productId);
+    if (product) setDeleteTarget(product);
+  };
+
+  const confirmDeleteProduct = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await fetch(`${URL_SERVER}/productos/${productId}`, { method: 'DELETE' });
+      setDeleting(true);
+      const response = await fetch(`${URL_SERVER}/productos/${deleteTarget._id}`, { method: 'DELETE', credentials: 'include' });
       if (!response.ok) throw new Error('No se pudo eliminar el producto del servidor.');
-      setProducts(products.filter(p => p._id !== productId));
+      setProducts((current) => current.filter((product) => product._id !== deleteTarget._id));
+      setDeleteTarget(null);
     } catch (error) {
-      alert('Error: ' + error.message);
+      setDeleteTarget(null);
+      setDialogMessage({ title: 'No se pudo eliminar', message: error.message || 'Ocurrió un error al eliminar el producto.' });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -260,6 +274,21 @@ function Productos() {
             </button>
           </div>
         </div>
+      )}
+
+      {(deleteTarget || dialogMessage) && createPortal(
+        <div className={tw('fixed inset-0 z-[3000] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm')} onMouseDown={(event) => { if (event.target === event.currentTarget && !deleting) { setDeleteTarget(null); setDialogMessage(null); } }}>
+          <section role="alertdialog" aria-modal="true" aria-labelledby="catalog-dialog-title" className={tw('w-full max-w-md space-y-4 rounded-2xl bg-white p-5 shadow-2xl sm:p-6')}>
+            <div className={tw('flex items-start gap-3')}>
+              <span className={tw('flex h-11 w-11 shrink-0 items-center justify-center rounded-full', deleteTarget ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600')}>{deleteTarget ? <FaTrash /> : <FaExclamationTriangle />}</span>
+              <div className={tw('min-w-0 flex-1')}><h2 id="catalog-dialog-title" className={tw('text-lg font-bold text-slate-800')}>{deleteTarget ? 'Eliminar producto' : dialogMessage?.title}</h2><p className={tw('mt-1 text-sm leading-6 text-slate-600')}>{deleteTarget ? <>¿Confirmas que deseas eliminar <strong>{deleteTarget.nombre}</strong> del catálogo?</> : dialogMessage?.message}</p></div>
+              {!deleteTarget && <button type="button" aria-label="Cerrar mensaje" onClick={() => setDialogMessage(null)} className={tw('rounded-lg p-2 text-slate-400 hover:bg-slate-100')}><FaTimes /></button>}
+            </div>
+            <div className={tw('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end')}>
+              {deleteTarget ? <><button type="button" disabled={deleting} onClick={() => setDeleteTarget(null)} className={tw('min-h-11 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50')}>Cancelar</button><button type="button" disabled={deleting} onClick={confirmDeleteProduct} className={tw('inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 disabled:opacity-60')}><FaTrash />{deleting ? 'Eliminando…' : 'Eliminar producto'}</button></> : <button type="button" onClick={() => setDialogMessage(null)} className={tw('min-h-11 rounded-xl bg-[#ff7e5f] px-4 py-2 text-sm font-semibold text-white hover:bg-[#e06d43]')}>Entendido</button>}
+            </div>
+          </section>
+        </div>, document.body
       )}
     </div>
   );

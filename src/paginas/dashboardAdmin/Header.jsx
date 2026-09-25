@@ -78,12 +78,12 @@ export default function Header({ userName }) {
     
         <div className={tw("header-actions")}>
           <div className={tw("dropdown-container")}>
-            <div className={tw("icon-wrapper")} onClick={toggleNotifications}>
-              <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`)} />
+            <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper", "![width:42px]", "![height:42px]", "![flex-shrink:0]")} onClick={toggleNotifications}>
+              <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`, "![font-size:20px]")} />
               {notifications.length > 0 && (
                 <span className={tw("notification-badge")}>{notifications.length}</span>
               )}
-            </div>
+            </button>
             
             {showNotifications && (
               <div className={tw("dropdown-menu notifications-menu")}>
