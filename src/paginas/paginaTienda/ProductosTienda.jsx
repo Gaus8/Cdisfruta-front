@@ -95,24 +95,31 @@ export default function ProductosTienda({ categoria, user }) {
 
   // Carga de productos desde el servidor
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (initial = false) => {
       try {
-        setLoading(true);
+        if (initial) setLoading(true);
         const response = await fetch(`${URL_SERVER}/get-productos`);
         if (!response.ok) throw new Error(`Error ${response.status}`);
         const data = await response.json();
         setProducts(data);
-        
-        const initialQtys = {};
-        data.forEach(p => initialQtys[p._id] = 1);
-        setQuantities(initialQtys);
+        setQuantities((previous) => ({
+          ...previous,
+          ...Object.fromEntries(data.map((product) => [product._id, Math.min(previous[product._id] || 1, Math.max(product.stock, 1))]))
+        }));
+        if (initial) {
+          const initialQtys = {};
+          data.forEach(p => initialQtys[p._id] = 1);
+          setQuantities(initialQtys);
+        }
       } catch (error) {
         console.error("Error cargando productos:", error);
       } finally {
-        setLoading(false);
+        if (initial) setLoading(false);
       }
     };
-    fetchProducts();
+    fetchProducts(true);
+    const inventorySync = window.setInterval(() => fetchProducts(), 5000);
+    return () => window.clearInterval(inventorySync);
   }, []);
 
   // Extraer categorías únicas para el select dinámico
@@ -184,6 +191,11 @@ export default function ProductosTienda({ categoria, user }) {
     const quantityToAdd = quantities[product._id] || 1;
     const currentStorageCart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
+    const alreadyInCart = existingItemIndex === -1 ? 0 : currentStorageCart[existingItemIndex].quantity;
+    if (alreadyInCart + quantityToAdd > product.stock) {
+      alert(`Solo quedan ${product.stock} unidades disponibles de ${product.nombre}.`);
+      return;
+    }
     
     let updatedCart;
     if (existingItemIndex !== -1) {

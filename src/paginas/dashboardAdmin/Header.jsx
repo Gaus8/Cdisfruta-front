@@ -25,6 +25,8 @@ export default function Header({ userName }) {
       }
     };
     fetchNotifications();
+    const notificationsSync = window.setInterval(fetchNotifications, 5000);
+    return () => window.clearInterval(notificationsSync);
   }, []);
 
   const toggleUserMenu = () => {
@@ -64,7 +66,7 @@ export default function Header({ userName }) {
       // Quitamos /api de la ruta
       await axios.post(`${URL_SERVER}/logout`, {}, { withCredentials: true });
       navigate("/");
-    } catch (err) {
+    } catch {
       navigate("/"); 
     }
   };
