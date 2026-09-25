@@ -14,31 +14,38 @@ export const tailwindClassMap = {
   "dashboard-view-port": [
     "[flex:1]",
     "[overflow-y:auto]",
-    "[padding:25px]",
-    "[background-color:#f1f5f9]"
+    "[padding:clamp(16px,_2vw,_28px)]",
+    "[background-color:#f1f5f9]",
+    "[font-family:inherit]",
+    "[font-size:14px]",
+    "[line-height:1.5]"
   ],
   "cover-editor": [
-    "[max-width:1180px]",
+    "[width:100%]",
+    "[max-width:1280px]",
     "[margin:0_auto]",
-    "[padding:12px_4px_112px]",
+    "[padding:0_0_112px]",
     "[color:#243126]",
-    "max-[600px]:[padding-top:48px]"
+    "max-[600px]:[padding-bottom:100px]"
   ],
   "cover-editor-header": [
     "[display:flex]",
     "[justify-content:space-between]",
     "[align-items:flex-end]",
     "[gap:24px]",
-    "[margin-bottom:25px]",
+    "[margin-bottom:24px]",
     "[&_h1]:[margin:7px_0]",
-    "[&_h1]:[color:#243126]",
-    "[&_h1]:[font-size:clamp(1.65rem,_3vw,_2.15rem)]",
+    "[&_h1]:[color:#1e293b]",
+    "[&_h1]:[font-size:1.875rem]",
+    "[&_h1]:[font-weight:700]",
+    "[&_h1]:[letter-spacing:-.025em]",
+    "max-[600px]:[&_h1]:[font-size:1.625rem]",
     "[&_p]:[margin:0]",
-    "[&_p]:[color:#718074]"
+    "[&_p]:[color:#64748b]"
   ],
   "cover-editor-kicker": [
-    "[color:#568264]",
-    "[font-size:.76rem]",
+    "[color:#e06d43]",
+    "[font-size:.75rem]",
     "[font-weight:800]",
     "[letter-spacing:.13em]",
     "[text-transform:uppercase]"
@@ -49,15 +56,15 @@ export const tailwindClassMap = {
     "[align-items:center]",
     "[gap:9px]",
     "[border:0]",
-    "[border-radius:10px]",
+    "[border-radius:12px]",
     "[padding:12px_18px]",
-    "[background:#427851]",
+    "[background:#ff7e5f]",
     "[color:white]",
     "[font-weight:700]",
     "[cursor:pointer]",
     "[white-space:nowrap]",
     "[transition:background_.2s,_transform_.2s]",
-    "[&:hover:not(:disabled)]:[background:#326441]",
+    "[&:hover:not(:disabled)]:[background:#e06d43]",
     "[&:hover:not(:disabled)]:[transform:translateY(-1px)]",
     "[&:disabled]:[opacity:.65]",
     "[&:disabled]:[cursor:wait]",
@@ -372,12 +379,15 @@ export const tailwindClassMap = {
     "[&:hover]:[background:#8b372a]"
   ],
   "gestion-pedidos-container": [
-    "[padding:20px]",
-    "[max-width:1200px]",
+    "[width:100%]",
+    "[padding:0]",
+    "[max-width:1280px]",
     "[margin:0_auto]",
     "[box-sizing:border-box]",
     "[position:relative]",
-    "[font-family:'Poppins',_sans-serif]"
+    "[font-family:inherit]",
+    "[font-size:14px]",
+    "[line-height:1.5]"
   ],
   "gestion-pedidos-header": [
     "[display:flex]",
@@ -385,17 +395,20 @@ export const tailwindClassMap = {
     "[justify-content:space-between]",
     "[align-items:center]",
     "[gap:15px]",
-    "[margin-bottom:20px]",
-    "[border-bottom:2px_solid_#eaeaea]",
-    "[padding-bottom:15px]",
+    "[margin-bottom:24px]",
+    "[border-bottom:1px_solid_#e2e8f0]",
+    "[padding-bottom:18px]",
     "[&_h2]:[display:flex]",
     "[&_h2]:[align-items:center]",
     "[&_h2]:[gap:10px]",
-    "[&_h2]:[color:#2c3e50]",
+    "[&_h2]:[color:#1e293b]",
+    "[&_h2]:[font-size:1.875rem]",
+    "[&_h2]:[font-weight:700]",
+    "[&_h2]:[letter-spacing:-.025em]",
     "[&_h2]:[margin:0]",
     "[&_p]:[margin:5px_0_0_0]",
-    "[&_p]:[color:#666]",
-    "[&_p]:[font-size:0.95rem]"
+    "[&_p]:[color:#64748b]",
+    "[&_p]:[font-size:0.875rem]"
   ],
   "btn-volver-admin": [
     "[display:flex]",
@@ -404,7 +417,8 @@ export const tailwindClassMap = {
     "[background:#ff7f50]",
     "[border:none]",
     "[padding:10px_18px]",
-    "[border-radius:6px]",
+    "[border-radius:12px]",
+    "[min-height:44px]",
     "[cursor:pointer]",
     "[font-weight:600]",
     "[color:#fff]",
@@ -415,7 +429,7 @@ export const tailwindClassMap = {
   "admin-order-card": [
     "[background:#fff]",
     "[border:1px_solid_#e1e4e8]",
-    "[border-radius:10px]",
+    "[border-radius:16px]",
     "[padding:20px]",
     "[box-shadow:0_2px_8px_rgba(0,0,0,0.04)]",
     "[overflow-x:auto]"
@@ -437,8 +451,8 @@ export const tailwindClassMap = {
     "[gap:10px]"
   ],
   "admin-order-select": [
-    "[padding:8px_12px]",
-    "[border-radius:6px]",
+    "[padding:10px_12px]",
+    "[border-radius:10px]",
     "[border:1px_solid_#ccc]",
     "[font-weight:600]",
     "[background:#fafafa]",
@@ -983,25 +997,26 @@ export const tailwindClassMap = {
     "[&_td]:[font-size:0.9rem]"
   ],
   "admin-products-page": [
-    "[padding:30px]",
-    "[background-color:#f8fafc]",
-    "[min-height:100vh]",
-    "max-[768px]:[padding:15px]"
+    "[width:100%]",
+    "[max-width:1280px]",
+    "[margin:0_auto]",
+    "[padding:0]",
+    "[background-color:transparent]",
+    "[min-height:0]"
   ],
   "products-header": [
     "[display:flex]",
     "[justify-content:space-between]",
     "[align-items:center]",
-    "[margin-bottom:30px]",
-    "[background:white]",
-    "[padding:20px_30px]",
-    "[border-radius:15px]",
-    "[box-shadow:0_4px_6px_-1px_rgba(0,_0,_0,_0.1)]",
-    "[gap:20px]",
+    "[margin-bottom:24px]",
+    "[background:transparent]",
+    "[padding:0]",
+    "[border-radius:0]",
+    "[box-shadow:none]",
+    "[gap:16px]",
     "max-[768px]:[flex-direction:column]",
     "max-[768px]:[align-items:flex-start]",
-    "max-[768px]:[padding:20px]",
-    "max-[480px]:[padding:15px]"
+    "max-[768px]:[padding:0]"
   ],
   "header-info": [
     "[max-width:65%]",
@@ -1013,13 +1028,13 @@ export const tailwindClassMap = {
     "max-[768px]:[margin-bottom:15px]"
   ],
   "main-title": [
-    "[font-size:1.8rem]",
+    "[font-size:1.875rem]",
     "[color:#1e293b]",
     "[font-weight:700]",
     "[letter-spacing:-0.5px]",
     "[margin:0]",
-    "max-[992px]:[font-size:1.5rem]",
-    "max-[480px]:[font-size:1.3rem]"
+    "max-[992px]:[font-size:1.875rem]",
+    "max-[480px]:[font-size:1.625rem]"
   ],
   "subtitle": [
     "[color:#64748b]",
@@ -1034,7 +1049,8 @@ export const tailwindClassMap = {
     "[color:white]",
     "[border:none]",
     "[padding:12px_24px]",
-    "[border-radius:10px]",
+    "[border-radius:12px]",
+    "[min-height:44px]",
     "[display:flex]",
     "[align-items:center]",
     "[gap:10px]",

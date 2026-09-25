@@ -64,7 +64,7 @@ export default function ConfiguracionAdmin() {
     { key: 'notificarCatalogo', title: 'Catálogo', detail: 'Productos publicados, editados o retirados.' },
   ];
 
-  return <section className={tw('mx-auto w-full max-w-4xl space-y-6 pb-10')}>
+  return <section className={tw('mx-auto w-full max-w-6xl space-y-6 pb-10')}>
     <button type="button" onClick={() => navigate('/admin')} className={tw('inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-[#e06d43]')}><FaArrowLeft /> Volver al panel</button>
     <header><p className={tw('text-sm font-semibold uppercase tracking-[.14em] text-[#e06d43]')}>Administración</p><h1 className={tw('mt-1 text-3xl font-bold tracking-tight text-slate-800')}>Configuración</h1><p className={tw('mt-2 text-sm text-slate-500')}>Gestiona las alertas operativas y la seguridad de tu cuenta administrativa.</p></header>
     {feedback && <div role="status" className={tw('flex items-start gap-2 rounded-xl border px-4 py-3 text-sm', feedback.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-rose-200 bg-rose-50 text-rose-800')}>{feedback.type === 'success' ? <FaCheck className={tw('mt-0.5 shrink-0')} /> : <FaExclamationTriangle className={tw('mt-0.5 shrink-0')} />}{feedback.text}</div>}

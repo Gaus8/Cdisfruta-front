@@ -105,7 +105,7 @@ export default function PerfilCuenta({ adminMode = true }) {
 
   return <div className={tw(!adminMode ? 'min-h-screen bg-slate-50' : '')}>
     {!adminMode && <HeaderDashboard />}
-    <section className={tw('mx-auto w-full max-w-4xl space-y-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10')}>
+    <section className={tw(adminMode ? 'mx-auto w-full max-w-6xl space-y-6 pb-10' : 'mx-auto w-full max-w-4xl space-y-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10')}>
     <button type="button" onClick={() => navigate(adminMode ? '/admin' : '/cliente/tienda')} className={tw('inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-[#e06d43]')}><FaArrowLeft /> Volver {adminMode ? 'al panel' : 'a la tienda'}</button>
     <header><p className={tw('text-sm font-semibold uppercase tracking-[.14em] text-[#e06d43]')}>{adminMode ? 'Cuenta administrativa' : 'Cuenta de cliente'}</p><h1 className={tw('mt-1 text-3xl font-bold tracking-tight text-slate-800')}>Mi perfil</h1><p className={tw('mt-2 text-sm text-slate-500')}>Actualiza la información personal que identifica tu cuenta en CDISFRUTA.</p></header>
     {feedback && <div role="status" className={tw('rounded-xl border px-4 py-3 text-sm', feedback.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-rose-200 bg-rose-50 text-rose-800')}>{feedback.text}</div>}
