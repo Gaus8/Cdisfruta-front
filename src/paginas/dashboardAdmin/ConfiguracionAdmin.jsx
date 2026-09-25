@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaBell, FaCheck, FaLock, FaSave, FaShieldAlt, FaExclamationTriangle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaBell, FaCheck, FaLock, FaSave, FaShieldAlt, FaExclamationTriangle } from 'react-icons/fa';
 import { apiAxios } from '../../funciones/conexion';
 import { cambiarPassword } from '../../funciones/usuarioAuth';
 import { tw } from '../../funciones/tw.js';
@@ -10,7 +9,6 @@ const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3
 const rules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[.!@#$%^&*])[\S]{8,16}$/;
 
 export default function ConfiguracionAdmin() {
-  const navigate = useNavigate();
   const [preferences, setPreferences] = useState(defaults);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -65,7 +63,6 @@ export default function ConfiguracionAdmin() {
   ];
 
   return <section className={tw('mx-auto w-full max-w-6xl space-y-6 pb-10')}>
-    <button type="button" onClick={() => navigate('/admin')} className={tw('inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-[#e06d43]')}><FaArrowLeft /> Volver al panel</button>
     <header><p className={tw('text-sm font-semibold uppercase tracking-[.14em] text-[#e06d43]')}>Administración</p><h1 className={tw('mt-1 text-3xl font-bold tracking-tight text-slate-800')}>Configuración</h1><p className={tw('mt-2 text-sm text-slate-500')}>Gestiona las alertas operativas y la seguridad de tu cuenta administrativa.</p></header>
     {feedback && <div role="status" className={tw('flex items-start gap-2 rounded-xl border px-4 py-3 text-sm', feedback.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-rose-200 bg-rose-50 text-rose-800')}>{feedback.type === 'success' ? <FaCheck className={tw('mt-0.5 shrink-0')} /> : <FaExclamationTriangle className={tw('mt-0.5 shrink-0')} />}{feedback.text}</div>}
 

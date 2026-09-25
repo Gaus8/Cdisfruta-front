@@ -27,6 +27,7 @@ import DisenoPortada from "./paginas/dashboardAdmin/DisenoPortada";
 import Inventario from "./paginas/dashboardAdmin/Inventario";
 import PerfilCuenta from "./paginas/dashboardAdmin/PerfilCuenta";
 import ConfiguracionAdmin from "./paginas/dashboardAdmin/ConfiguracionAdmin";
+import ReportesAdmin from "./paginas/dashboardAdmin/ReportesAdmin";
 
 // Componente Wrapper para pasar verifyToken al Login standalone
 function LoginWrapper() {
@@ -171,6 +172,7 @@ const router = createBrowserRouter([
           { path: 'productos', element: <Productos /> },
           { path: 'inventario', element: <Inventario /> },
           { path: 'pedidos', element: <GestionPedidos /> },
+          { path: 'reportes', element: <ReportesAdmin /> },
           { path: 'diseno-portada', element: <DisenoPortada /> },
           { path: 'perfil', element: <PerfilCuenta /> },
           { path: 'configuracion', element: <ConfiguracionAdmin /> },

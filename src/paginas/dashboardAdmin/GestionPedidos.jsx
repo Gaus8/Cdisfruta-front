@@ -1,17 +1,46 @@
 import { tw } from '../../funciones/tw.js';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { URL_SERVER, apiAxios } from '../../funciones/conexion';
-import { FaClipboardList, FaArrowLeft, FaSave, FaCheckCircle, FaTimes } from 'react-icons/fa';
+import { useState, useEffect, useMemo } from 'react';
+import { apiAxios } from '../../funciones/conexion';
+import { FaSave, FaCheckCircle, FaTimes, FaCalendarAlt, FaChevronDown } from 'react-icons/fa';
 
 export default function GestionPedidos() {
-  const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const [estadosSeleccionados, setEstadosSeleccionados] = useState({});
   const [actualizandoId, setActualizandoId] = useState(null);
   const [mensajeFeedback, setMensajeFeedback] = useState(null);
+  const [periodoFecha, setPeriodoFecha] = useState('todos');
+  const [fechaInicio, setFechaInicio] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
+
+  const pedidosFiltrados = useMemo(() => {
+    const now = new Date();
+    const startOfDay = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    let start = null;
+    let end = null;
+    if (periodoFecha === 'hoy') start = startOfDay(now);
+    if (periodoFecha === 'ayer') {
+      start = startOfDay(now);
+      start.setDate(start.getDate() - 1);
+      end = new Date(start);
+      end.setHours(23, 59, 59, 999);
+    }
+    if (periodoFecha === '7' || periodoFecha === '15') {
+      start = startOfDay(now);
+      start.setDate(start.getDate() - (Number(periodoFecha) - 1));
+    }
+    if (periodoFecha === 'mes') start = new Date(now.getFullYear(), now.getMonth(), 1);
+    if (periodoFecha === 'personalizado' && (!fechaInicio || !fechaFin || fechaInicio > fechaFin)) return [];
+    if (periodoFecha === 'personalizado') {
+      start = new Date(`${fechaInicio}T00:00:00`);
+      end = new Date(`${fechaFin}T23:59:59.999`);
+    }
+    return pedidos.filter((pedido) => {
+      const date = new Date(pedido.fechaCreacion || pedido.createdAt);
+      return !Number.isNaN(date.getTime()) && (!start || date >= start) && (!end || date <= end);
+    });
+  }, [pedidos, periodoFecha, fechaInicio, fechaFin]);
 
   const fetchTodosLosPedidos = async () => {
     try {
@@ -80,21 +109,33 @@ export default function GestionPedidos() {
           <h2> Gestión de Pedidos</h2>
           <p>Administra los pedidos de los clientes y actualiza su estado de seguimiento.</p>
         </div>
-        <button 
-          onClick={() => navigate('/admin')}
-          className={tw("btn-volver-admin")}
-        >
-          <FaArrowLeft /> Volver al Inicio
-        </button>
       </div>
 
-      {pedidos.length === 0 ? (
+      <details className={tw('mb-5 rounded-2xl border border-slate-200 bg-white shadow-sm')}>
+        <summary className={tw('flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-slate-700 marker:hidden sm:px-5')}>
+          <span className={tw('flex items-center gap-2')}><FaCalendarAlt className={tw('text-[#e06d43]')} />Filtrar pedidos por fecha <span className={tw('rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500')}>{pedidosFiltrados.length} de {pedidos.length}</span></span>
+          <FaChevronDown className={tw('shrink-0 text-xs text-slate-400')} />
+        </summary>
+        <div className={tw('grid gap-3 border-t border-slate-100 p-4 sm:grid-cols-[minmax(180px,240px)_1fr] sm:items-end sm:px-5')}>
+          <label className={tw('grid gap-1.5 text-xs font-semibold text-slate-600')}>Periodo
+            <select value={periodoFecha} onChange={(event) => setPeriodoFecha(event.target.value)} className={tw('min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 outline-none focus:border-[#ff7e5f]')}>
+              <option value="todos">Todos los pedidos</option><option value="hoy">Hoy</option><option value="ayer">Ayer</option><option value="7">Últimos 7 días</option><option value="15">Últimos 15 días</option><option value="mes">Este mes</option><option value="personalizado">Rango personalizado</option>
+            </select>
+          </label>
+          {periodoFecha === 'personalizado' && <div className={tw('grid gap-3 sm:grid-cols-2')}>
+            <label className={tw('grid gap-1.5 text-xs font-semibold text-slate-600')}>Desde<input type="date" value={fechaInicio} max={fechaFin || undefined} onChange={(event) => setFechaInicio(event.target.value)} className={tw('min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 outline-none focus:border-[#ff7e5f]')} /></label>
+            <label className={tw('grid gap-1.5 text-xs font-semibold text-slate-600')}>Hasta<input type="date" value={fechaFin} min={fechaInicio || undefined} onChange={(event) => setFechaFin(event.target.value)} className={tw('min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 outline-none focus:border-[#ff7e5f]')} /></label>
+          </div>}
+        </div>
+      </details>
+
+      {pedidosFiltrados.length === 0 ? (
         <div className={tw("empty-state")}>
-          <p>No hay pedidos registrados en el sistema.</p>
+          <p>{pedidos.length === 0 ? 'No hay pedidos registrados en el sistema.' : periodoFecha === 'personalizado' && (!fechaInicio || !fechaFin) ? 'Selecciona una fecha inicial y final para consultar el rango.' : 'No hay pedidos para el periodo seleccionado.'}</p>
         </div>
       ) : (
         <div className={tw(tw("admin-orders-list"), "![display:flex]", "![flex-direction:column]", "![gap:20px]")} >
-          {pedidos.map((pedido) => {
+          {pedidosFiltrados.map((pedido) => {
             const estadoActualModificado = estadosSeleccionados[pedido._id] !== pedido.estado;
 
             return (
