@@ -8,16 +8,22 @@ const statusOrder = ['Pendiente', 'Comprobado', 'Enviado', 'Entregado', 'Cancela
 const statusColors = { Pendiente: '#f59e0b', Comprobado: '#3b82f6', Enviado: '#0ea5e9', Entregado: '#10b981', Cancelado: '#f43f5e' };
 const money = (value) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(value || 0);
 const orderDate = (order) => new Date(order.fechaCreacion || order.createdAt || 0);
-function getRange(period, customStart, customEnd) {
+function getRange(period, customStart, customEnd, orders) {
   const end = new Date();
   end.setHours(23, 59, 59, 999);
   const start = new Date(end);
-  if (period === '7') start.setDate(start.getDate() - 6);
-  else if (period === '30') start.setDate(start.getDate() - 29);
-  else if (period === '90') start.setDate(start.getDate() - 89);
+  if (period === 'today') start.setHours(0, 0, 0, 0);
+  else if (period === 'yesterday') {
+    start.setDate(start.getDate() - 1);
+    start.setHours(0, 0, 0, 0);
+    end.setDate(end.getDate() - 1);
+  } else if (period === '7') start.setDate(start.getDate() - 6);
   else if (period === 'month') start.setDate(1);
-  else if (period === 'custom' && customStart && customEnd) {
+  else if (period === 'range' && customStart && customEnd) {
     return { start: new Date(`${customStart}T00:00:00`), end: new Date(`${customEnd}T23:59:59.999`) };
+  } else if (period === 'max') {
+    const dates = orders.map(orderDate).filter((date) => !Number.isNaN(date.getTime()));
+    return { start: dates.length ? new Date(Math.min(...dates.map((date) => date.getTime()))) : start, end };
   }
   start.setHours(0, 0, 0, 0);
   return { start, end };
@@ -69,7 +75,7 @@ export default function ReportesAdmin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [criticalThreshold, setCriticalThreshold] = useState(5);
-  const [period, setPeriod] = useState('30');
+  const [period, setPeriod] = useState('7');
   const [customStart, setCustomStart] = useState('');
   const [customEnd, setCustomEnd] = useState('');
 
@@ -87,8 +93,8 @@ export default function ReportesAdmin() {
     return () => { active = false; };
   }, []);
 
-  const { start, end } = getRange(period, customStart, customEnd);
-  const rangeValid = period !== 'custom' || (customStart && customEnd && start <= end);
+  const { start, end } = getRange(period, customStart, customEnd, orders);
+  const rangeValid = period !== 'range' || (customStart && customEnd && start <= end);
   const startTime = start.getTime();
   const endTime = end.getTime();
   const filteredOrders = useMemo(() => rangeValid ? orders.filter((order) => {
@@ -122,17 +128,17 @@ export default function ReportesAdmin() {
   const comparisonStart = new Date(start);
   comparisonStart.setDate(comparisonStart.getDate() - Math.max(1, Math.ceil((end - start) / 86400000)));
   const previousRevenue = orders.filter((order) => { const date = orderDate(order); return paidStates.has(order.estado) && date >= comparisonStart && date < start; }).reduce((sum, order) => sum + Number(order.total || 0), 0);
-  const revenueDelta = previousRevenue ? Math.round(((revenue - previousRevenue) / previousRevenue) * 100) : null;
+  const revenueDelta = period !== 'max' && previousRevenue ? Math.round(((revenue - previousRevenue) / previousRevenue) * 100) : null;
 
   return <section className={tw('mx-auto w-full max-w-7xl space-y-6 pb-10')}>
     <header className={tw('flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between')}>
       <div><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#e06d43]')}>Rendimiento de la tienda</p><h1 className={tw('mt-1 text-3xl font-bold tracking-tight text-slate-800')}>Reportes</h1><p className={tw('mt-2 text-sm text-slate-500')}>Entiende tus ventas, pedidos y productos de un vistazo.</p></div>
-      <label className={tw('flex min-h-11 w-full items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-600 shadow-sm sm:w-auto')}><FaCalendarAlt className={tw('shrink-0 text-[#e06d43]')} /><select aria-label="Periodo del reporte" value={period} onChange={(event) => setPeriod(event.target.value)} className={tw('min-w-0 flex-1 bg-transparent py-2 outline-none sm:flex-none')}><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option><option value="month">Este mes</option><option value="custom">Rango personalizado</option></select></label>
+      <label className={tw('flex min-h-11 w-full items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-600 shadow-sm sm:w-auto')}><FaCalendarAlt className={tw('shrink-0 text-[#e06d43]')} /><select aria-label="Periodo del reporte" value={period} onChange={(event) => setPeriod(event.target.value)} className={tw('min-w-0 flex-1 bg-transparent py-2 outline-none sm:flex-none')}><option value="today">Hoy</option><option value="yesterday">Ayer</option><option value="7">Últimos 7 días</option><option value="month">Este mes</option><option value="range">Rango</option><option value="max">Máximo (todo el histórico)</option></select></label>
     </header>
-    {period === 'custom' && <div className={tw('grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end')}><label className={tw('grid gap-1 text-xs font-semibold text-slate-600')}>Desde<input type="date" max={customEnd || undefined} value={customStart} onChange={(event) => setCustomStart(event.target.value)} className={tw('min-h-11 rounded-xl border border-slate-200 px-3 text-sm')} /></label><label className={tw('grid gap-1 text-xs font-semibold text-slate-600')}>Hasta<input type="date" min={customStart || undefined} value={customEnd} onChange={(event) => setCustomEnd(event.target.value)} className={tw('min-h-11 rounded-xl border border-slate-200 px-3 text-sm')} /></label>{!rangeValid && <p role="alert" className={tw('text-xs text-rose-600 sm:col-span-2')}>La fecha inicial debe ser anterior a la final.</p>}</div>}
+    {period === 'range' && <div className={tw('grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end')}><label className={tw('grid gap-1 text-xs font-semibold text-slate-600')}>Desde<input type="date" max={customEnd || undefined} value={customStart} onChange={(event) => setCustomStart(event.target.value)} className={tw('min-h-11 rounded-xl border border-slate-200 px-3 text-sm')} /></label><label className={tw('grid gap-1 text-xs font-semibold text-slate-600')}>Hasta<input type="date" min={customStart || undefined} value={customEnd} onChange={(event) => setCustomEnd(event.target.value)} className={tw('min-h-11 rounded-xl border border-slate-200 px-3 text-sm')} /></label>{!rangeValid && <p role="alert" className={tw('text-xs text-rose-600 sm:col-span-2')}>Selecciona fechas válidas y verifica que la inicial sea anterior a la final.</p>}</div>}
     {error && <div role="alert" className={tw('rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800')}>{error}</div>}
     <div className={tw('grid gap-4 sm:grid-cols-2 xl:grid-cols-4')}>
-      <MetricCard title="Ingresos confirmados" value={loading ? '—' : money(revenue)} hint={revenueDelta === null ? 'En el periodo seleccionado' : `${revenueDelta >= 0 ? '+' : ''}${revenueDelta}% frente al periodo anterior`} icon={FaDollarSign} tone="orange" trend={revenueDelta === null ? null : revenueDelta >= 0 ? 'up' : 'down'} />
+      <MetricCard title="Ingresos confirmados" value={loading ? '—' : money(revenue)} hint={period === 'max' ? 'Total de todo el histórico' : revenueDelta === null ? 'En el periodo seleccionado' : `${revenueDelta >= 0 ? '+' : ''}${revenueDelta}% frente al periodo anterior`} icon={FaDollarSign} tone="orange" trend={revenueDelta === null ? null : revenueDelta >= 0 ? 'up' : 'down'} />
       <MetricCard title="Pedidos recibidos" value={loading ? '—' : filteredOrders.length.toLocaleString('es-CO')} hint={`${statusCounts.Pendiente} pendientes de gestión`} icon={FaShoppingBag} tone="blue" />
       <MetricCard title="Venta promedio" value={loading ? '—' : money(averageOrder)} hint="Por pedido confirmado" icon={FaChartLine} tone="green" />
       <MetricCard title="Unidades vendidas" value={loading ? '—' : salesOrders.reduce((sum, order) => sum + (order.productos || []).reduce((units, item) => units + Number(item.quantity || item.cantidad || 0), 0), 0).toLocaleString('es-CO')} hint={`${criticalStock} artículos con stock crítico`} icon={FaBoxOpen} tone="navy" />
@@ -143,7 +149,7 @@ export default function ReportesAdmin() {
     </div>
     <div className={tw('grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(300px,.8fr)]')}>
       <article className={tw('overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm')}><div className={tw('border-b border-slate-100 p-4 sm:px-6')}><h2 className={tw('text-lg font-bold text-slate-800')}>Productos más vendidos</h2><p className={tw('mt-1 text-sm text-slate-500')}>Unidades en pedidos confirmados.</p></div>{topProducts.length ? <div className={tw('divide-y divide-slate-100')}>{topProducts.map((product, index) => { const max = topProducts[0].quantity || 1; return <div key={product.name} className={tw('grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6')}><span className={tw('flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-xs font-bold text-[#e06d43]')}>{index + 1}</span><div className={tw('min-w-0')}><div className={tw('flex items-center justify-between gap-2')}><strong className={tw('truncate text-sm font-semibold text-slate-700')}>{product.name}</strong><span className={tw('shrink-0 text-xs text-slate-500')}>{product.quantity} uds.</span></div><div className={tw('mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100')}><div className={tw('h-full rounded-full bg-[#ff7e5f]')} style={{ width: `${(product.quantity / max) * 100}%` }} /></div></div><span className={tw('hidden whitespace-nowrap text-xs font-medium text-slate-500 sm:block')}>{money(product.revenue)}</span></div>; })}</div> : <p className={tw('p-8 text-center text-sm text-slate-500')}>Aún no hay productos vendidos en este periodo.</p>}</article>
-      <article className={tw('rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6')}><h2 className={tw('text-lg font-bold text-slate-800')}>Resumen del periodo</h2><p className={tw('mt-1 text-sm text-slate-500')}>{start.toLocaleDateString('es-CO')} — {end.toLocaleDateString('es-CO')}</p><div className={tw('mt-5 divide-y divide-slate-100')}><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Entregados</span><strong className={tw('text-slate-800')}>{delivered}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Cancelados</span><strong className={tw('text-slate-800')}>{canceled}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('flex items-center gap-2 text-slate-500')}><FaExclamationCircle className={tw('text-amber-500')} />Artículos con stock crítico</span><strong className={tw('text-slate-800')}>{criticalStock}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Ingreso confirmado</span><strong className={tw('text-[#e06d43]')}>{money(revenue)}</strong></div></div></article>
+      <article className={tw('rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6')}><h2 className={tw('text-lg font-bold text-slate-800')}>Resumen del periodo</h2><p className={tw('mt-1 text-sm text-slate-500')}>{period === 'max' ? 'Todo el histórico' : `${start.toLocaleDateString('es-CO')} — ${end.toLocaleDateString('es-CO')}`}</p><div className={tw('mt-5 divide-y divide-slate-100')}><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Entregados</span><strong className={tw('text-slate-800')}>{delivered}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Cancelados</span><strong className={tw('text-slate-800')}>{canceled}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('flex items-center gap-2 text-slate-500')}><FaExclamationCircle className={tw('text-amber-500')} />Artículos con stock crítico</span><strong className={tw('text-slate-800')}>{criticalStock}</strong></div><div className={tw('flex justify-between gap-3 py-3 text-sm')}><span className={tw('text-slate-500')}>Ingreso confirmado</span><strong className={tw('text-[#e06d43]')}>{money(revenue)}</strong></div></div></article>
     </div>
     <article className={tw('overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm')}>
       <div className={tw('border-b border-slate-100 p-4 sm:px-6')}><h2 className={tw('text-lg font-bold text-slate-800')}>Ventas recientes</h2><p className={tw('mt-1 text-sm text-slate-500')}>Últimos pedidos con ingreso confirmado en el periodo.</p></div>
