@@ -1,9 +1,10 @@
 import { tw } from '../../funciones/tw.js';
 import { useState } from "react";
-import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaExclamationTriangle, FaBars, FaTimes, FaPaintBrush } from "react-icons/fa";
+import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaBars, FaTimes, FaPaintBrush } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
+import ConfirmModal from './ConfirmModal';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -75,20 +76,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Modal de Logout */}
-      {showLogoutModal && (
-        <div className={tw("modal-overlay-logout")}>
-          <div className={tw("logout-modal-content")}>
-            <FaExclamationTriangle className={tw("warning-icon")} />
-            <h3>¿Cerrar Sesión?</h3>
-            <p>¿Estás seguro de que deseas salir del sistema SIECU?</p>
-            <div className={tw("modal-actions")}>
-              <button className={tw("btn-cancel")} onClick={() => setShowLogoutModal(false)}>Cancelar</button>
-              <button className={tw("btn-confirm")} onClick={handleLogout}>Sí, Cerrar Sesión</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal open={showLogoutModal} title="¿Cerrar sesión?" description="¿Estás seguro de que deseas salir de la administración de CDISFRUTA?" confirmLabel="Sí, cerrar sesión" onCancel={() => setShowLogoutModal(false)} onConfirm={handleLogout} />
     </>
   );
 }

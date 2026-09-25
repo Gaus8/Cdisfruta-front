@@ -23,18 +23,21 @@ export default function HomeAdmin() {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [criticalThreshold, setCriticalThreshold] = useState(5);
 
   useEffect(() => {
     let active = true;
     const loadDashboard = async () => {
       try {
-        const [ordersResponse, inventoryResponse] = await Promise.all([
+        const [ordersResponse, inventoryResponse, settingsResponse] = await Promise.all([
           apiAxios.get('/admin/pedidos'),
           apiAxios.get('/admin/inventario'),
+          apiAxios.get('/auth/admin/configuracion'),
         ]);
         if (!active) return;
         setOrders(Array.isArray(ordersResponse.data) ? ordersResponse.data : []);
         setInventory(Array.isArray(inventoryResponse.data) ? inventoryResponse.data : []);
+        setCriticalThreshold(Number(settingsResponse.data.umbralStockCritico ?? 5));
         setLoadError('');
       } catch (error) {
         if (active) setLoadError(error.response?.data?.message || 'No se pudieron actualizar las métricas. Intenta recargar el panel.');
@@ -44,7 +47,9 @@ export default function HomeAdmin() {
     };
     loadDashboard();
     const timer = window.setInterval(loadDashboard, 30000);
-    return () => { active = false; window.clearInterval(timer); };
+    const updateSettings = (event) => setCriticalThreshold(Number(event.detail?.umbralStockCritico ?? 5));
+    window.addEventListener('admin-settings-updated', updateSettings);
+    return () => { active = false; window.clearInterval(timer); window.removeEventListener('admin-settings-updated', updateSettings); };
   }, []);
 
   const currentMonth = useMemo(() => {
@@ -56,13 +61,13 @@ export default function HomeAdmin() {
   }, [orders]);
   const salesTotal = currentMonth.reduce((total, order) => total + Number(order.total || 0), 0);
   const dispatchCount = orders.filter((order) => dispatchStates.has(order.estado)).length;
-  const criticalItems = inventory.filter((item) => Number(item.stock) <= 5).length;
+  const criticalItems = inventory.filter((item) => Number(item.stock) <= criticalThreshold).length;
   const recentOrders = [...orders].sort((a, b) => orderDate(b) - orderDate(a)).slice(0, 5);
 
   const stats = [
     { title: 'Ventas confirmadas del mes', value: loading ? '—' : money(salesTotal), icon: FaMoneyBillWave, color: 'border-emerald-500 text-emerald-700', hint: 'Pedidos comprobados, enviados o entregados' },
     { title: 'Pedidos por despachar', value: loading ? '—' : dispatchCount.toLocaleString('es-CO'), icon: FaTruckLoading, color: 'border-sky-500 text-sky-700', hint: 'Pendientes de confirmación o despacho' },
-    { title: 'Stock crítico', value: loading ? '—' : `${criticalItems} ${criticalItems === 1 ? 'artículo' : 'artículos'}`, icon: FaExclamationTriangle, color: 'border-rose-500 text-rose-700', hint: 'Existencias de 5 unidades o menos' },
+    { title: 'Stock crítico', value: loading ? '—' : `${criticalItems} ${criticalItems === 1 ? 'artículo' : 'artículos'}`, icon: FaExclamationTriangle, color: 'border-rose-500 text-rose-700', hint: `Existencias de ${criticalThreshold} unidades o menos` },
   ];
 
   return (
