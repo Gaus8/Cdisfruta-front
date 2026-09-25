@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useState, useRef } from 'react';
 import axios from 'axios';
 import { URL_SERVER } from '../../funciones/conexion';
+import AuthBackground from './AuthBackground';
 
 function Validacion() {
   const [codigo, setCodigo] = useState(new Array(6).fill(""));
@@ -70,8 +71,9 @@ function Validacion() {
   };
 
   return (
-    <div className={tw("body-validacion")}>
-      <form className={tw("form-container-validacion")} onSubmit={handleVerify}>
+    <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
+      <AuthBackground />
+      <form className={tw("form-container-validacion", "relative z-10")} onSubmit={handleVerify}>
         <img className={tw("logo-empresa-validacion")} src="/img/logo_siecu.webp" alt="logo" />
         <h3>Verificación de Cuenta</h3>
         <p>Ingresa el código enviado a tu correo.</p>

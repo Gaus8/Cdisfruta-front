@@ -10,6 +10,7 @@ import {
 } from "react-icons/io5";
 import { registrarUsuario, procesarErroresRegistro } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
+import AuthBackground from './AuthBackground';
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -54,9 +55,10 @@ export default function Registro() {
   };
 
   return (
-    <div className={tw(tw("auth-page-wrapper"), "![display:flex]", "![justify-content:center]", "![align-items:center]", "![min-height:100vh]", "![padding:20px]")} >
+    <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
+      <AuthBackground />
       <form
-        className={tw("form-container")}
+        className={tw("form-container", "relative z-10")}
         onSubmit={handleSubmit}
       >
         <button 

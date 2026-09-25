@@ -12,7 +12,6 @@ import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
 import MainPage from './paginas/landingPage/MainPage';
 import Validacion from "./paginas/usuariosAuth/Validacion";
 import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
-import ConfiguracionUsuario from "./paginas/paginaClientes/ConfiguracionUsuario";
 import MisPedidos from "./paginas/paginaClientes/MisPedidos"; 
 import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
@@ -26,7 +25,7 @@ import Registro from "./paginas/usuariosAuth/Registro";
 import GestionPedidos from "./paginas/dashboardAdmin/GestionPedidos";
 import DisenoPortada from "./paginas/dashboardAdmin/DisenoPortada";
 import Inventario from "./paginas/dashboardAdmin/Inventario";
-import PerfilAdmin from "./paginas/dashboardAdmin/PerfilAdmin";
+import PerfilCuenta from "./paginas/dashboardAdmin/PerfilCuenta";
 import ConfiguracionAdmin from "./paginas/dashboardAdmin/ConfiguracionAdmin";
 
 // Componente Wrapper para pasar verifyToken al Login standalone
@@ -154,7 +153,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/cliente/tienda', element: <DashboardUsuario /> },
       { path: '/cliente/perfil', element: <DashboardUsuario /> },
-      { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
+      { path: '/cliente/configuracion', element: <PerfilCuenta adminMode={false} /> },
       { path: '/cliente/pedidos', element: <MisPedidos /> },
     ],
   },
@@ -173,7 +172,7 @@ const router = createBrowserRouter([
           { path: 'inventario', element: <Inventario /> },
           { path: 'pedidos', element: <GestionPedidos /> },
           { path: 'diseno-portada', element: <DisenoPortada /> },
-          { path: 'perfil', element: <PerfilAdmin /> },
+          { path: 'perfil', element: <PerfilCuenta /> },
           { path: 'configuracion', element: <ConfiguracionAdmin /> },
           { path: 'config', element: <ConfiguracionAdmin /> },
         ],

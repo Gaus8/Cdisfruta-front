@@ -16,6 +16,7 @@ export default function HeaderDashboard() {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [avatarOverride, setAvatarOverride] = useState(null);
 
   const [searchText, setSearchText] = useState(() => {
     return sessionStorage.getItem('search_cdisfruta') || "";
@@ -23,6 +24,12 @@ export default function HeaderDashboard() {
 
   const containerRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const updateAvatar = (event) => setAvatarOverride(event.detail?.avatar || '');
+    window.addEventListener('account-profile-updated', updateAvatar);
+    return () => window.removeEventListener('account-profile-updated', updateAvatar);
+  }, []);
 
   const toggleDropdown = () => setDropdownOpen(prev => !prev);
 
@@ -130,7 +137,7 @@ export default function HeaderDashboard() {
 
             <div className={tw("dropdown-container")} ref={containerRef}>
               <div className={tw("user-profile")} onClick={toggleDropdown}>
-                <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />
+                {avatarOverride ?? userData?.avatar ? <img src={avatarOverride ?? userData.avatar} alt="Foto de perfil" className={tw('h-[30px] w-[30px] rounded-full object-cover')} /> : <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />}
               </div>
 
               {dropdownOpen && (

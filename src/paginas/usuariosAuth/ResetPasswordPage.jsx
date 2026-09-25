@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { restablecerPasswordConToken } from '../../funciones/usuarioAuth';
+import AuthBackground from './AuthBackground';
 
 export const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -54,8 +55,9 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <div className={tw("reset-page-container")}>
-      <div className={tw("form-container")}>
+    <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
+      <AuthBackground />
+      <div className={tw("form-container", "relative z-10")}>
         <img
           src="/img/logo_cdisfruta.webp"
           alt="Logo Cdisfruta"

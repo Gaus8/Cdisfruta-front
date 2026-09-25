@@ -1,5 +1,5 @@
 import { tw } from '../../funciones/tw.js';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   IoMailOutline,
@@ -13,11 +13,14 @@ import {
 import { iniciarSesion } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
+import AuthBackground from './AuthBackground';
 
 export default function Login({ verifyToken }) {
   const navigate = useNavigate();
   const [respuestaServer, setRespuestaServer] = useState("");
-  const [mensajeExpirado, setMensajeExpirado] = useState("");
+  const [mensajeExpirado, setMensajeExpirado] = useState(() => sessionStorage.getItem('session_was_expired') === 'true'
+    ? 'Tu sesión ha expirado por inactividad. Debes ingresar nuevamente.'
+    : '');
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isResetOpen, setIsResetOpen] = useState(false);
@@ -27,22 +30,9 @@ export default function Login({ verifyToken }) {
     password: ""
   });
 
-  // Evita que el doble-render de StrictMode (solo en desarrollo) borre
-  // el mensaje justo después de mostrarlo
-  const yaVerificoExpiracion = useRef(false);
-
   useEffect(() => {
-    if (yaVerificoExpiracion.current) return;
-    yaVerificoExpiracion.current = true;
-
-    // Verificamos si existe la marca de expiración
-    const wasExpired = sessionStorage.getItem('session_was_expired');
-
-    if (wasExpired === 'true') {
-      setMensajeExpirado('Tu sesión ha expirado por inactividad. Debes ingresar nuevamente.');
-      // Consumimos y eliminamos la marca para que NO vuelva a aparecer
-      sessionStorage.removeItem('session_was_expired');
-    }
+    // El estado inicial conserva el aviso; solo consumimos el indicador persistido aquí.
+    sessionStorage.removeItem('session_was_expired');
   }, []);
   
   const handleChange = (e) => {
@@ -92,9 +82,10 @@ export default function Login({ verifyToken }) {
 
   return (
     <>
-      <div className={tw(tw("auth-page-wrapper"), "![display:flex]", "![justify-content:center]", "![align-items:center]", "![min-height:100vh]", "![padding:20px]")} >
+      <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
+        <AuthBackground />
         <form
-          className={tw("form-container")}
+          className={tw("form-container", "relative z-10")}
           onSubmit={handleSubmit}
         >
           <button
