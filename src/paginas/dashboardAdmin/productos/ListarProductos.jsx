@@ -3,7 +3,7 @@ import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
 
 
 export default function ListarProductos({
-  products, handleDeleteProduct,handleEditProduct
+  products, handleDeleteProduct, handleEditProduct, readOnly = false
 })
  {
   return (
@@ -32,14 +32,14 @@ export default function ListarProductos({
               <p className={tw("![color:#6b7280]", "![font-size:14px]", "![margin-bottom:12px]")}>
                 {product.descripcion}
               </p>
-              <div className={tw("product-actions")}>
+              {!readOnly && <div className={tw("product-actions")}>
                 <button className={tw("btn btn-edit")} onClick={() => handleEditProduct(product)}>
                   <FaEdit className={tw("![margin-right:6px]")} /> Editar
                 </button>
                 <button className={tw("btn btn-delete")} onClick={() => handleDeleteProduct(product._id)}>
                   <FaTrash className={tw("![margin-right:6px]")} /> Eliminar
                 </button>
-              </div>
+              </div>}
             </div>
           </div>
         ))

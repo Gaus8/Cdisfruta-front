@@ -133,10 +133,21 @@ function LayoutAdmin() {
       authenticated={authenticated} 
       loading={loading} 
       user={userData} 
-      requiredRole="admin" 
+      allowedRoles={['admin', 'logistica', 'catalogo']}
       redirectTo="/login"
     />
   );
+}
+
+function AdminModule({ permission, children }) {
+  const { userData } = useAuth();
+  if (userData?.rol === 'admin' || userData?.permisos?.includes(permission)) return children;
+  const ownModule = userData?.rol === 'logistica' && userData?.permisos?.includes('inventory:read')
+    ? '/admin/inventario'
+    : userData?.rol === 'catalogo' && userData?.permisos?.includes('catalog:read')
+      ? '/admin/productos'
+      : '/';
+  return <Navigate to={ownModule} replace />;
 }
 
 // Definición de las Rutas de la Aplicación
@@ -171,18 +182,18 @@ const router = createBrowserRouter([
         path: '/admin',
         element: <DashboardAdmin />,
         children: [
-          { index: true, element: <HomeAdmin /> },
-          { path: 'dashboard', element: <HomeAdmin /> },
-          { path: 'productos', element: <Productos /> },
-          { path: 'inventario', element: <Inventario /> },
-          { path: 'usuarios', element: <UsuariosAdmin /> },
-          { path: 'analitica-productos', element: <AnaliticaProductosAdmin /> },
-          { path: 'pedidos', element: <GestionPedidos /> },
-          { path: 'reportes', element: <ReportesAdmin /> },
-          { path: 'diseno-portada', element: <DisenoPortada /> },
-          { path: 'perfil', element: <PerfilCuenta /> },
-          { path: 'configuracion', element: <ConfiguracionAdmin /> },
-          { path: 'config', element: <ConfiguracionAdmin /> },
+          { index: true, element: <AdminModule permission="dashboard:read"><HomeAdmin /></AdminModule> },
+          { path: 'dashboard', element: <AdminModule permission="dashboard:read"><HomeAdmin /></AdminModule> },
+          { path: 'productos', element: <AdminModule permission="catalog:read"><Productos /></AdminModule> },
+          { path: 'inventario', element: <AdminModule permission="inventory:read"><Inventario /></AdminModule> },
+          { path: 'usuarios', element: <AdminModule permission="users:read"><UsuariosAdmin /></AdminModule> },
+          { path: 'analitica-productos', element: <AdminModule permission="analytics:read"><AnaliticaProductosAdmin /></AdminModule> },
+          { path: 'pedidos', element: <AdminModule permission="orders:read"><GestionPedidos /></AdminModule> },
+          { path: 'reportes', element: <AdminModule permission="reports:read"><ReportesAdmin /></AdminModule> },
+          { path: 'diseno-portada', element: <AdminModule permission="landing:write"><DisenoPortada /></AdminModule> },
+          { path: 'perfil', element: <AdminModule permission="profile:write"><PerfilCuenta /></AdminModule> },
+          { path: 'configuracion', element: <AdminModule permission="settings:write"><ConfiguracionAdmin /></AdminModule> },
+          { path: 'config', element: <AdminModule permission="settings:write"><ConfiguracionAdmin /></AdminModule> },
         ],
       },
     ],

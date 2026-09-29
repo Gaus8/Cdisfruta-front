@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useLocation } from "react-router"; 
 import { FaPlus, FaTrash, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
 import { URL_SERVER, apiAxios } from '../../../funciones/conexion';
+import { useAuth } from '../../../funciones/useAuth';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
 
@@ -31,10 +32,12 @@ function Productos() {
   const fileInputRef = useRef(null);
 
   const location = useLocation();
+  const { userData } = useAuth();
+  const canWriteCatalog = userData?.rol === 'admin' || userData?.permisos?.includes('catalog:write');
 
   // 1. LÓGICA DE ACCESO RÁPIDO (Desde HomeAdmin)
   useEffect(() => {
-    if (location.state?.openModal) {
+    if (location.state?.openModal && canWriteCatalog) {
       const timer = setTimeout(() => {
         handleAddProduct(); 
       }, 100);
@@ -43,7 +46,7 @@ function Productos() {
       
       return () => clearTimeout(timer);
     }
-  }, [location]);
+  }, [location, canWriteCatalog]);
 
   // 2. CARGA DE PRODUCTOS INICIAL
   useEffect(() => {
@@ -224,9 +227,9 @@ function Productos() {
           <h2 className={tw("main-title")}>Catálogo de Productos</h2>
           <p className={tw("subtitle")}>Gestiona los artículos de la tienda desde aquí.</p>
         </div>
-        <button className={tw("btn-add-product")} onClick={handleAddProduct}>
+        {canWriteCatalog && <button className={tw("btn-add-product")} onClick={handleAddProduct}>
           <FaPlus /> <span>Registrar Nuevo Producto</span>
-        </button>
+        </button>}
       </header>
 
       {products.some((product) => product.publicarEnTienda === false) && <div className={tw('mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900')}>
@@ -238,6 +241,7 @@ function Productos() {
           products={products}
           handleDeleteProduct={handleDeleteProduct}
           handleEditProduct={handleEditProduct} 
+          readOnly={!canWriteCatalog}
         />
       </main>
 

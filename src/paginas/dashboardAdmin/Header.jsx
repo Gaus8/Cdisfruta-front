@@ -8,7 +8,8 @@ import { FaBell, FaUserCircle, FaSignOutAlt, FaUserEdit, FaCog, FaCheck } from "
 import { apiAxios } from '../../funciones/conexion';
 import ConfirmModal from './ConfirmModal';
 
-export default function Header({ userName }) {
+export default function Header({ userName, role = 'admin' }) {
+  const isAdmin = role === 'admin';
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -23,7 +24,7 @@ export default function Header({ userName }) {
     apiAxios.get('/auth/verificar-token').then(({ data }) => {
       if (data.valid) { setProfileOverride(data.user.nombre); setProfileAvatar(data.user.avatar || ''); }
     }).catch(() => {});
-    apiAxios.get('/auth/admin/configuracion').then(({ data }) => setNotificationPreferences((current) => ({ ...current, ...data }))).catch(() => {});
+    if (isAdmin) apiAxios.get('/auth/admin/configuracion').then(({ data }) => setNotificationPreferences((current) => ({ ...current, ...data }))).catch(() => {});
     const updateProfile = (event) => {
       if (event.detail?.nombre) setProfileOverride(event.detail.nombre);
       if (event.detail?.avatar !== undefined) setProfileAvatar(event.detail.avatar || '');
@@ -35,10 +36,11 @@ export default function Header({ userName }) {
       window.removeEventListener('admin-profile-updated', updateProfile);
       window.removeEventListener('admin-settings-updated', updateSettings);
     };
-  }, [userName]);
+  }, [userName, isAdmin]);
 
   // 1. CARGAR NOTIFICACIONES
   useEffect(() => {
+    if (!isAdmin) return undefined;
     const fetchNotifications = async () => {
       try {
         // Quitamos el /api de aquí porque ya está en URL_SERVER
@@ -56,7 +58,7 @@ export default function Header({ userName }) {
     fetchNotifications();
     const notificationsSync = window.setInterval(fetchNotifications, 5000);
     return () => window.clearInterval(notificationsSync);
-  }, [notificationPreferences]);
+  }, [notificationPreferences, isAdmin]);
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
@@ -107,7 +109,7 @@ export default function Header({ userName }) {
         
     
         <div className={tw("header-actions")}>
-          <div className={tw("dropdown-container")}>
+          {isAdmin && <div className={tw("dropdown-container")}>
             <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper", "![width:42px]", "![height:42px]", "![flex-shrink:0]")} onClick={toggleNotifications}>
               <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`, "![font-size:20px]")} />
               {notifications.length > 0 && (
@@ -143,7 +145,7 @@ export default function Header({ userName }) {
                 )}
               </div>
             )}
-          </div>
+          </div>}
 
           <div className={tw("dropdown-container")}>
             <button type="button" aria-expanded={showUserMenu} className={tw("user-profile", "![border:0]", "![background:transparent]", "![font:inherit]")} onClick={toggleUserMenu}>
@@ -154,8 +156,8 @@ export default function Header({ userName }) {
               <div className={tw("dropdown-menu profile-menu")}>
                 <div className={tw("dropdown-header")}>Mi Cuenta</div>
                 <ul className={tw("dropdown-list")}>
-                  <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> Editar perfil</button></li>
-                  <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> Configuración</button></li>
+                  {isAdmin && <><li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> Editar perfil</button></li>
+                  <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> Configuración</button></li></>}
                   <hr />
                   <li className={tw("logout-opt")}><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => {
                     setShowLogoutModal(true);

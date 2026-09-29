@@ -5,9 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
 import ConfirmModal from './ConfirmModal';
+import { useAuth } from '../../funciones/useAuth';
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { userData } = useAuth();
+  const role = userData?.rol;
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
 
@@ -39,6 +42,7 @@ export default function Sidebar() {
           <h2>Panel Admin</h2>
         </div>
         <nav className={tw("sidebar-nav")}>
+          {role === 'admin' && <>
           <Link title="Inicio" to="/admin" onClick={() => setIsOpen(false)}>
             <FaHome /> <span>Inicio</span>
           </Link>
@@ -72,6 +76,9 @@ export default function Sidebar() {
           <Link title="Configuración" to="/admin/config" onClick={() => setIsOpen(false)}>
             <FaCog /> <span>Configuración</span>
           </Link>
+          </>}
+          {role === 'logistica' && userData?.permisos?.includes('inventory:read') && <Link title="Inventario" to="/admin/inventario" onClick={() => setIsOpen(false)}><FaBoxes /> <span>Inventario</span></Link>}
+          {role === 'catalogo' && userData?.permisos?.includes('catalog:read') && <Link title="Catálogo" to="/admin/productos" onClick={() => setIsOpen(false)}><FaStore /> <span>Catálogo</span></Link>}
         </nav>
         <div className={tw("sidebar-footer")}>
           <button className={tw("btn-logout")} onClick={() => setShowLogoutModal(true)}>

@@ -14,7 +14,7 @@ export default function DashboardAdmin() {
     <div className={tw("dashboard-container")}>
       <Sidebar />
       <div className={tw("dashboard-main-content")}>
-        <Header userName={userData.nombre} />
+        <Header userName={userData.nombre} role={userData.rol} />
         <main className={tw("dashboard-view-port")}>
           {/* Aquí es donde se renderizará Productos, Home, etc. */}
           <Outlet />

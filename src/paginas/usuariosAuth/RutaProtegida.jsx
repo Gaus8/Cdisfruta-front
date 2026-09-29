@@ -6,6 +6,7 @@ export const RutaProtegida = ({
   loading, 
   user, 
   requiredRole, 
+  allowedRoles,
   redirectTo = '/login' 
 }) => {
   const location = useLocation();
@@ -25,7 +26,7 @@ export const RutaProtegida = ({
   }
 
   // 3. Validación de rol: Redirige al cliente si intenta acceder a rutas administrativas sin rol de admin
-  if (requiredRole && user?.rol !== requiredRole) {
+  if ((requiredRole && user?.rol !== requiredRole) || (allowedRoles && !allowedRoles.includes(user?.rol))) {
     return <Navigate to="/cliente/tienda" replace />;
   }
 

@@ -5,6 +5,7 @@ import { FaSearch, FaUsers, FaUserCheck, FaUserClock, FaChevronLeft, FaChevronRi
 import { apiAxios } from '../../funciones/conexion';
 import { tw } from '../../funciones/tw.js';
 import ConfirmModal from './ConfirmModal';
+import RolesPermisosAdmin from './RolesPermisosAdmin';
 
 const PAGE_SIZE = 10;
 const currency = (value) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(Number(value || 0));
@@ -71,6 +72,7 @@ function UserActivityModal({ userId, onClose, onRequestDelete }) {
 }
 
 export default function UsuariosAdmin() {
+  const [activeTab, setActiveTab] = useState('clientes');
   const [users, setUsers] = useState([]);
   const [summary, setSummary] = useState({ total: 0, activos: 0, pendientes: 0 });
   const [searchInput, setSearchInput] = useState('');
@@ -159,8 +161,11 @@ export default function UsuariosAdmin() {
   const toggleUser = (id) => setSelectedIds((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const togglePage = () => setSelectedIds((current) => allOnPageSelected ? current.filter((id) => !users.some((user) => user.id === id)) : [...new Set([...current, ...users.map((user) => user.id)])]);
 
+  if (activeTab === 'roles') return <RolesPermisosAdmin onBack={() => setActiveTab('clientes')} />;
+
   return <section className={tw('mx-auto w-full max-w-7xl space-y-6 pb-10')}>
     <header className={tw('flex flex-col gap-2')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#e06d43]')}>Administración</p><h1 className={tw('text-3xl font-bold tracking-tight text-slate-800')}>Usuarios</h1><p className={tw('text-sm text-slate-500')}>Consulta las cuentas de clientes y su actividad en CDISFRUTA.</p></header>
+    <nav aria-label="Secciones de usuarios" className={tw('flex flex-wrap gap-2')}><button type="button" onClick={() => setActiveTab('clientes')} className={tw(`min-h-10 rounded-xl px-4 text-sm font-semibold ${activeTab === 'clientes' ? 'bg-[#ff7e5f] text-white' : 'border border-slate-200 bg-white text-slate-600'}`)}>Cuentas de clientes</button><button type="button" onClick={() => setActiveTab('roles')} className={tw('min-h-10 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50')}>Roles y permisos</button></nav>
     <div className={tw('grid gap-3 sm:grid-cols-3')}>
       {[['Usuarios registrados', summary.total, FaUsers, 'slate'], ['Cuentas verificadas', summary.activos, FaUserCheck, 'green'], ['Pendientes de verificación', summary.pendientes, FaUserClock, 'amber']].map(([label, value, Icon, tone]) => <article key={label} className={tw('flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm')}><span className={tw(`flex h-11 w-11 items-center justify-center rounded-xl ${tone === 'green' ? 'bg-emerald-50 text-emerald-700' : tone === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'}`)}>{createElement(Icon)}</span><div><p className={tw('text-xs text-slate-500')}>{label}</p><p className={tw('text-xl font-bold text-slate-800')}>{value}</p></div></article>)}
     </div>

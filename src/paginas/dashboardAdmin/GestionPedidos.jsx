@@ -184,6 +184,12 @@ export default function GestionPedidos() {
                   </div>
                 </div>
 
+                <div className={tw('mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 sm:px-4')}>
+                  <span className={tw('text-xs font-semibold uppercase tracking-wide text-slate-500')}>Medio de pago</span>
+                  <span className={tw('rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-700')}>{({ NEQUI: 'Nequi', CARD: 'Tarjeta de crédito/débito', Contraentrega: 'Pago contra entrega' }[pedido.metodoPago] || 'Pago contra entrega')}</span>
+                  {pedido.metodoPago !== 'Contraentrega' && <span className={tw(`rounded-full px-3 py-1 text-xs font-bold ${pedido.estadoPago === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : ['DECLINED', 'ERROR', 'VOIDED'].includes(pedido.estadoPago) ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}`)}>Wompi: {({ PENDIENTE: 'Pendiente', APPROVED: 'Pagado', DECLINED: 'Rechazado', ERROR: 'Error', VOIDED: 'Anulado' }[pedido.estadoPago] || 'Pendiente')}</span>}
+                </div>
+
                 <div className={tw("admin-order-products")}>
                   <strong>Productos solicitados:</strong>
                   <ul>
