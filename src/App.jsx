@@ -140,7 +140,8 @@ function LayoutAdmin() {
 }
 
 function AdminModule({ permission, children }) {
-  const { userData } = useAuth();
+  const { userData, loading } = useAuth();
+  if (loading) return <div className={tw('flex min-h-72 items-center justify-center text-slate-500')}>Verificando permisos…</div>;
   if (userData?.rol === 'admin' || userData?.permisos?.includes(permission)) return children;
   const ownModule = userData?.rol === 'logistica' && userData?.permisos?.includes('inventory:read')
     ? '/admin/inventario'

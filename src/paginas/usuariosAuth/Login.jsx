@@ -75,11 +75,16 @@ export default function Login({ verifyToken }) {
       // 2. Verificamos el token de inmediato para capturar los datos reales del usuario y su rol
       if (verifyToken) {
         const tokenData = await verifyToken();
-        const rolUsuario = tokenData?.user?.rol;
+        const rolUsuario = tokenData?.user?.rol || loginResponse?.user?.rol;
 
         // 3. Redirección dinámica basada exactamente en el rol obtenido
-        if (rolUsuario === 'admin') {
-          navigate("/admin", { replace: true });
+        if (['admin', 'logistica', 'catalogo'].includes(rolUsuario)) {
+          const destination = rolUsuario === 'logistica'
+            ? '/admin/inventario'
+            : rolUsuario === 'catalogo'
+              ? '/admin/productos'
+              : '/admin';
+          navigate(destination, { replace: true });
         } else {
           navigate("/cliente/tienda", { replace: true });
         }
