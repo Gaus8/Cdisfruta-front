@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createElement } from 'react';
 import { createPortal } from 'react-dom';
 import { FaSearch, FaUsers, FaUserCheck, FaUserClock, FaChevronLeft, FaChevronRight, FaTimes, FaTrash, FaEye, FaShoppingBag, FaClipboardList, FaRegClock, FaChartLine } from 'react-icons/fa';
@@ -83,12 +83,21 @@ export default function UsuariosAdmin() {
   const [error, setError] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [bulkDeleteTargets, setBulkDeleteTargets] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
   const [deleting, setDeleting] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const selectAllRef = useRef(null);
+
+  const selectedOnPage = users.filter((user) => selectedIds.includes(user.id)).length;
+  const allOnPageSelected = users.length > 0 && selectedOnPage === users.length;
+  useEffect(() => {
+    if (selectAllRef.current) selectAllRef.current.indeterminate = selectedOnPage > 0 && !allOnPageSelected;
+  }, [selectedOnPage, allOnPageSelected]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => { setPage(1); setSearch(searchInput.trim()); }, 300);
+    const timer = window.setTimeout(() => { setPage(1); setSelectedIds([]); setSearch(searchInput.trim()); }, 300);
     return () => window.clearTimeout(timer);
   }, [searchInput]);
 
@@ -115,17 +124,27 @@ export default function UsuariosAdmin() {
   const closeUserDetails = useCallback(() => setSelectedUser(null), []);
 
   const confirmDelete = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget && !bulkDeleteTargets.length) return;
     setDeleting(true);
     try {
-      await apiAxios.delete(`/auth/admin/usuarios/${deleteTarget.id}`);
-      setDeleteTarget(null);
-      setSelectedUser(null);
-      setFeedback({ type: 'success', text: `La cuenta de ${deleteTarget.nombre} fue eliminada.` });
-      if (users.length === 1 && page > 1) setPage((current) => current - 1);
+      if (bulkDeleteTargets.length) {
+        await apiAxios.delete('/auth/admin/usuarios', { data: { ids: bulkDeleteTargets.map((user) => user.id) } });
+        setFeedback({ type: 'success', text: `Se eliminaron ${bulkDeleteTargets.length} cuentas seleccionadas. El historial de pedidos se conserva.` });
+        setSelectedIds([]);
+        setBulkDeleteTargets([]);
+        if (users.length === bulkDeleteTargets.length && page > 1) setPage((current) => current - 1);
+      } else {
+        await apiAxios.delete(`/auth/admin/usuarios/${deleteTarget.id}`);
+        setDeleteTarget(null);
+        setSelectedUser(null);
+        setSelectedIds((current) => current.filter((id) => id !== deleteTarget.id));
+        setFeedback({ type: 'success', text: `La cuenta de ${deleteTarget.nombre} fue eliminada.` });
+        if (users.length === 1 && page > 1) setPage((current) => current - 1);
+      }
       setRefreshKey((current) => current + 1);
     } catch (requestError) {
       setDeleteTarget(null);
+      setBulkDeleteTargets([]);
       setSelectedUser(null);
       setFeedback({ type: 'error', text: requestError.response?.data?.message || 'No se pudo eliminar la cuenta.' });
     } finally { setDeleting(false); }
@@ -137,6 +156,8 @@ export default function UsuariosAdmin() {
     const startPage = Math.max(1, Math.min(page - 2, totalPages - 4));
     return startPage + index;
   }), [page, totalPages]);
+  const toggleUser = (id) => setSelectedIds((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const togglePage = () => setSelectedIds((current) => allOnPageSelected ? current.filter((id) => !users.some((user) => user.id === id)) : [...new Set([...current, ...users.map((user) => user.id)])]);
 
   return <section className={tw('mx-auto w-full max-w-7xl space-y-6 pb-10')}>
     <header className={tw('flex flex-col gap-2')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#e06d43]')}>Administración</p><h1 className={tw('text-3xl font-bold tracking-tight text-slate-800')}>Usuarios</h1><p className={tw('text-sm text-slate-500')}>Consulta las cuentas de clientes y su actividad en CDISFRUTA.</p></header>
@@ -146,19 +167,20 @@ export default function UsuariosAdmin() {
     {feedback && <div role={feedback.type === 'error' ? 'alert' : 'status'} className={tw(`flex items-start justify-between gap-3 rounded-xl border px-4 py-3 text-sm ${feedback.type === 'error' ? 'border-rose-200 bg-rose-50 text-rose-800' : 'border-emerald-200 bg-emerald-50 text-emerald-800'}`)}><span>{feedback.text}</span><button type="button" onClick={() => setFeedback(null)} aria-label="Cerrar aviso"><FaTimes /></button></div>}
     <section className={tw('overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm')}>
       <div className={tw('flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5')}>
-        <div><h2 className={tw('text-lg font-bold text-slate-800')}>Cuentas de clientes</h2><p className={tw('text-sm text-slate-500')}>Abre el nombre para ver el detalle y su historial.</p></div>
+        <div><h2 className={tw('text-lg font-bold text-slate-800')}>Cuentas de clientes</h2><p className={tw('text-sm text-slate-500')}>Abre el nombre para ver el detalle y su historial.</p>{selectedIds.length > 0 && <div className={tw('mt-2 flex flex-wrap items-center gap-2')}><span className={tw('text-xs font-medium text-slate-500')}>{selectedIds.length} seleccionados</span><button type="button" onClick={() => setBulkDeleteTargets(users.filter((user) => selectedIds.includes(user.id)))} className={tw('inline-flex min-h-9 items-center gap-2 rounded-lg border border-rose-200 px-3 text-xs font-semibold text-rose-700 hover:bg-rose-50')}><FaTrash />Eliminar seleccionados</button></div>}</div>
         <div className={tw('grid gap-2 sm:grid-cols-[minmax(220px,300px)_190px]')}>
           <label className={tw('relative')}><FaSearch className={tw('absolute left-3 top-1/2 -translate-y-1/2 text-slate-400')} /><input type="search" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} placeholder="Buscar nombre o correo" aria-label="Buscar usuarios" className={tw('min-h-11 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100')} /></label>
-          <select value={status} onChange={(event) => { setPage(1); setStatus(event.target.value); }} aria-label="Filtrar usuarios por estado" className={tw('min-h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-[#ff7e5f]')}><option value="all">Todos los estados</option><option value="active">Verificados</option><option value="pending">Pendientes</option></select>
+          <select value={status} onChange={(event) => { setPage(1); setSelectedIds([]); setStatus(event.target.value); }} aria-label="Filtrar usuarios por estado" className={tw('min-h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-[#ff7e5f]')}><option value="all">Todos los estados</option><option value="active">Verificados</option><option value="pending">Pendientes</option></select>
         </div>
       </div>
       {error && <div role="alert" className={tw('m-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700')}>{error}</div>}
       <div className={tw('overflow-x-auto')}>
         <table className={tw('w-full min-w-[650px] text-left')}>
-          <thead className={tw('bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500')}><tr><th scope="col" className={tw('px-5 py-3')}>Nombre</th><th scope="col" className={tw('px-5 py-3')}>Correo electrónico</th><th scope="col" className={tw('px-5 py-3')}>Fecha de registro</th><th scope="col" className={tw('px-5 py-3')}>Estado</th></tr></thead>
+          <thead className={tw('bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500')}><tr><th scope="col" className={tw('w-12 px-4 py-3')}><input ref={selectAllRef} type="checkbox" checked={allOnPageSelected} onChange={togglePage} disabled={!users.length || loading} aria-label="Seleccionar todos los usuarios de esta página" className={tw('h-4 w-4 accent-[#ff7e5f]')} /></th><th scope="col" className={tw('px-5 py-3')}>Nombre</th><th scope="col" className={tw('px-5 py-3')}>Correo electrónico</th><th scope="col" className={tw('px-5 py-3')}>Fecha de registro</th><th scope="col" className={tw('px-5 py-3')}>Estado</th></tr></thead>
           <tbody className={tw('divide-y divide-slate-100')}>
-            {loading ? <tr><td colSpan="4" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>Cargando usuarios…</td></tr> : !users.length ? <tr><td colSpan="4" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>{search || status !== 'all' ? 'No hay usuarios que coincidan con la búsqueda.' : 'Todavía no hay cuentas de cliente registradas.'}</td></tr> : users.map((user) => <tr key={user.id} className={tw('transition hover:bg-slate-50')}>
-              <td className={tw('px-5 py-4')}><button type="button" onClick={() => openUserDetails(user)} className={tw('group flex items-center gap-3 text-left')}><span className={tw('flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-50 text-xs font-bold text-[#e06d43]')}>{initials(user.nombre)}</span><span className={tw('font-semibold text-slate-800 group-hover:text-[#e06d43]')}>{user.nombre}</span></button></td>
+            {loading ? <tr><td colSpan="5" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>Cargando usuarios…</td></tr> : !users.length ? <tr><td colSpan="5" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>{search || status !== 'all' ? 'No hay usuarios que coincidan con la búsqueda.' : 'Todavía no hay cuentas de cliente registradas.'}</td></tr> : users.map((user) => <tr key={user.id} className={tw('transition hover:bg-slate-50')}>
+              <td className={tw('px-4 py-4')}><input type="checkbox" checked={selectedIds.includes(user.id)} onChange={() => toggleUser(user.id)} aria-label={`Seleccionar a ${user.nombre}`} className={tw('h-4 w-4 accent-[#ff7e5f]')} /></td>
+              <td className={tw('px-5 py-4')}><button type="button" onClick={() => openUserDetails(user)} className={tw('group flex items-center gap-3 text-left')} aria-label={`Ver detalle y actividad de ${user.nombre}`}><span className={tw('flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-50 text-xs font-bold text-[#e06d43]')}>{initials(user.nombre)}</span><span className={tw('font-semibold text-slate-800 group-hover:text-[#e06d43]')}>{user.nombre}</span><FaEye className={tw('ml-1 shrink-0 text-xs text-slate-400 transition group-hover:text-[#e06d43]')} /></button></td>
               <td className={tw('px-5 py-4 text-sm text-slate-600')}>{user.correo}</td><td className={tw('whitespace-nowrap px-5 py-4 text-sm text-slate-600')}>{dateOnly(user.fechaRegistro)}</td><td className={tw('px-5 py-4')}><span className={tw(`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${user.estado === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`)}>{user.estado === 'active' ? 'Verificado' : 'Pendiente'}</span></td>
             </tr>)}
           </tbody>
@@ -167,13 +189,13 @@ export default function UsuariosAdmin() {
       <footer className={tw('flex flex-col gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5')}>
         <p className={tw('text-xs text-slate-500')}>Mostrando {firstRow}–{lastRow} de {total} usuarios</p>
         <nav aria-label="Paginación de usuarios" className={tw('flex flex-wrap items-center gap-1')}>
-          <button type="button" disabled={page <= 1 || loading} onClick={() => setPage((current) => current - 1)} aria-label="Página anterior" className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40')}><FaChevronLeft className={tw('text-xs')} /></button>
-          {pageNumbers.map((number) => <button key={number} type="button" aria-current={number === page ? 'page' : undefined} onClick={() => setPage(number)} className={tw(`h-9 min-w-9 rounded-lg px-2 text-sm font-semibold ${number === page ? 'bg-[#ff7e5f] text-white' : 'text-slate-600 hover:bg-slate-100'}`)}>{number}</button>)}
-          <button type="button" disabled={page >= totalPages || loading} onClick={() => setPage((current) => current + 1)} aria-label="Página siguiente" className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40')}><FaChevronRight className={tw('text-xs')} /></button>
+          <button type="button" disabled={page <= 1 || loading} onClick={() => { setSelectedIds([]); setPage((current) => current - 1); }} aria-label="Página anterior" className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40')}><FaChevronLeft className={tw('text-xs')} /></button>
+          {pageNumbers.map((number) => <button key={number} type="button" aria-current={number === page ? 'page' : undefined} onClick={() => { setSelectedIds([]); setPage(number); }} className={tw(`h-9 min-w-9 rounded-lg px-2 text-sm font-semibold ${number === page ? 'bg-[#ff7e5f] text-white' : 'text-slate-600 hover:bg-slate-100'}`)}>{number}</button>)}
+          <button type="button" disabled={page >= totalPages || loading} onClick={() => { setSelectedIds([]); setPage((current) => current + 1); }} aria-label="Página siguiente" className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40')}><FaChevronRight className={tw('text-xs')} /></button>
         </nav>
       </footer>
     </section>
     {selectedUser && <UserActivityModal userId={selectedUser.id} onClose={closeUserDetails} onRequestDelete={setDeleteTarget} />}
-    <ConfirmModal open={Boolean(deleteTarget)} title="¿Eliminar esta cuenta?" description={deleteTarget ? `Se eliminará de forma permanente la cuenta de ${deleteTarget.nombre} y sus métricas analíticas. El historial de pedidos se conservará para mantener los registros de venta.` : ''} confirmLabel="Sí, eliminar cuenta" busy={deleting} busyLabel="Eliminando cuenta…" onCancel={() => !deleting && setDeleteTarget(null)} onConfirm={confirmDelete} />
+    <ConfirmModal open={Boolean(deleteTarget || bulkDeleteTargets.length)} title={bulkDeleteTargets.length ? `¿Eliminar ${bulkDeleteTargets.length} cuentas?` : '¿Eliminar esta cuenta?'} description={bulkDeleteTargets.length ? `Se eliminarán permanentemente las ${bulkDeleteTargets.length} cuentas seleccionadas y sus métricas analíticas. Los pedidos se conservarán para mantener los registros de venta.` : deleteTarget ? `Se eliminará de forma permanente la cuenta de ${deleteTarget.nombre} y sus métricas analíticas. El historial de pedidos se conservará para mantener los registros de venta.` : ''} confirmLabel={bulkDeleteTargets.length ? 'Sí, eliminar seleccionados' : 'Sí, eliminar cuenta'} busy={deleting} busyLabel="Eliminando…" onCancel={() => { if (!deleting) { setDeleteTarget(null); setBulkDeleteTargets([]); } }} onConfirm={confirmDelete} />
   </section>;
 }

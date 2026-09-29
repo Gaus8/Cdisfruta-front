@@ -23,7 +23,8 @@ export function registrarVistaProducto(productoId) {
 }
 
 /** Registra únicamente el intento, nunca los datos personales escritos en el formulario. */
-export function registrarIntentoFormulario(tipoFormulario) {
+export function registrarIntentoFormulario(tipoFormulario, productoId) {
   if (!['cart', 'quote', 'product_interest'].includes(tipoFormulario)) return Promise.resolve(false);
-  return sendActivity({ tipo: 'form_attempt', tipoFormulario });
+  if (tipoFormulario === 'product_interest' && !productoId) return Promise.resolve(false);
+  return sendActivity({ tipo: 'form_attempt', tipoFormulario, ...(productoId ? { productoId } : {}) });
 }

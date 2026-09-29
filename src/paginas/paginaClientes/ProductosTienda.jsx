@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
+import { registrarIntentoFormulario, registrarVistaProducto } from "../../funciones/analytics";
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -37,6 +38,7 @@ export default function ProductosTienda({ categoria, user }) {
 
   const abrirModalDetalle = (product) => {
     setProductoSeleccionado(product);
+    if (user) registrarVistaProducto(product._id);
     // Extrae tanto el array de 'imagenes' como la 'imagen' principal por compatibilidad
     const listaImagenes = product.imagenes && product.imagenes.length > 0 
       ? product.imagenes 
@@ -240,6 +242,7 @@ export default function ProductosTienda({ categoria, user }) {
     }
 
     setCart(updatedCart);
+    registrarIntentoFormulario('cart', product._id);
     localStorage.setItem('cart_cdisfruta', JSON.stringify(updatedCart));
     window.dispatchEvent(new Event('cartUpdate'));
     

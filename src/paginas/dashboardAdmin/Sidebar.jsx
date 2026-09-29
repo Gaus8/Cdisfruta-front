@@ -1,6 +1,6 @@
 import { tw } from '../../funciones/tw.js';
 import { useState } from "react";
-import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaBars, FaTimes, FaPaintBrush } from "react-icons/fa";
+import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaBars, FaTimes, FaPaintBrush, FaChartBar } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { URL_SERVER } from "../../funciones/conexion.js"; 
@@ -53,6 +53,10 @@ export default function Sidebar() {
 
           <Link title="Usuarios" to="/admin/usuarios" onClick={() => setIsOpen(false)}>
             <FaUsers /> <span>Usuarios</span>
+          </Link>
+
+          <Link title="Analítica de productos" to="/admin/analitica-productos" onClick={() => setIsOpen(false)}>
+            <FaChartBar /> <span>Analítica de productos</span>
           </Link>
 
           <Link title="Pedidos" to="/admin/pedidos" onClick={() => setIsOpen(false)}>

@@ -1100,6 +1100,8 @@ export const tailwindClassMap = {
   ],
   "sidebar-nav": [
     "[flex:1]",
+    "[min-height:0]",
+    "[overflow-y:auto]",
     "[padding:1rem_0]",
     "[display:flex]",
     "[flex-direction:column]",
