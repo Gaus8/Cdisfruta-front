@@ -14,6 +14,7 @@ import { iniciarSesion } from '../../funciones/usuarioAuth';
 import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
 import AuthBackground from './AuthBackground';
+import { apiAxios } from '../../funciones/conexion';
 
 export default function Login({ verifyToken }) {
   const navigate = useNavigate();
@@ -55,7 +56,19 @@ export default function Login({ verifyToken }) {
 
     try {
       // 1. Iniciamos sesión (se genera la cookie httpOnly en el navegador)
-      await iniciarSesion(data);
+      const loginResponse = await iniciarSesion(data);
+      const pendingOrderClaim = sessionStorage.getItem('guest_order_claim');
+      if (pendingOrderClaim) {
+        try {
+          const pending = JSON.parse(pendingOrderClaim);
+          if (pending.email === String(loginResponse?.user?.email || data.email).trim().toLowerCase()) {
+            await apiAxios.post('/pedidos/reclamar', { claimToken: pending.claimToken });
+            sessionStorage.removeItem('guest_order_claim');
+          }
+        } catch (claimError) {
+          if (claimError.response?.status === 404 || claimError.response?.status === 400) sessionStorage.removeItem('guest_order_claim');
+        }
+      }
 
       setMensajeExpirado("");
 

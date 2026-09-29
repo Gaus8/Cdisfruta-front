@@ -1,14 +1,12 @@
 import { tw } from '../../funciones/tw.js';
 import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../funciones/conexion";
 
-export default function ProductosTienda({ categoria, user }) {
+export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
-  const navigate = useNavigate();
 
   // Estado para la búsqueda global (sincronizado con la barra del header)
   const [searchTerm, setSearchTerm] = useState("");
@@ -182,12 +180,6 @@ export default function ProductosTienda({ categoria, user }) {
 
   // Función de agregar al carrito (valida sesión si es invitado)
   const addToCart = (product) => {
-    if (!user) {
-      alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
-      navigate('/login');
-      return;
-    }
-
     const quantityToAdd = quantities[product._id] || 1;
     const currentStorageCart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
