@@ -55,6 +55,9 @@ export default function CartModal({ isOpen, onClose }) {
   const [registering, setRegistering] = useState(false);
   const [registerError, setRegisterError] = useState('');
   const [registrationComplete, setRegistrationComplete] = useState(false);
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false);
+  const [resendingVerification, setResendingVerification] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
   const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
   
@@ -148,7 +151,7 @@ export default function CartModal({ isOpen, onClose }) {
       const confirmedTotal = Number(orderResponse.pedido?.total || total);
       const confirmedItems = orderResponse.pedido?.productos || cartItems;
       const mensaje = 
-        `*CDISFRUTA.SHOP - NUEVO PEDIDO*\n` +
+        `*CDISFRUTA SHOP - NUEVO PEDIDO*\n` +
         `_Gracias por elegir nuestros productos._\n\n` +
         `--------------------------------\n` +
         `*CLIENTE*\n` +
@@ -213,7 +216,7 @@ export default function CartModal({ isOpen, onClose }) {
     }
     setRegistering(true);
     try {
-      await apiAxios.post('/auth/registro-post-compra', {
+      const { data } = await apiAxios.post('/auth/registro-post-compra', {
         name: `${formData.nombres} ${formData.apellidos}`.replace(/[^\p{L}\s]/gu, ' ').replace(/\s+/g, ' ').trim(),
         email,
         emailConfirmacion: repeatedEmail,
@@ -224,6 +227,8 @@ export default function CartModal({ isOpen, onClose }) {
       localStorage.setItem('userEmail', email);
       sessionStorage.removeItem('guest_order_claim');
       setRegistrationComplete(true);
+      setVerificationEmailSent(data.correoEnviado !== false);
+      setVerificationMessage(data.correoEnviado === false ? data.message : '');
       setAccountAlreadyExists(false);
       setAccountPassword('');
     } catch (error) {
@@ -231,6 +236,22 @@ export default function CartModal({ isOpen, onClose }) {
       setAccountAlreadyExists(Boolean(error.response?.status === 409 && message.toLowerCase().includes('ya tiene una cuenta')));
       setRegisterError(message);
     } finally { setRegistering(false); }
+  };
+
+  const handleResendVerification = async () => {
+    setResendingVerification(true);
+    setVerificationMessage('');
+    try {
+      const { data } = await apiAxios.post('/auth/reenviar-verificacion-post-compra', {
+        email: formData.correo.trim().toLowerCase()
+      });
+      setVerificationEmailSent(true);
+      setVerificationMessage(data.message || 'Enviamos el código de verificación.');
+    } catch (error) {
+      setVerificationMessage(error.response?.data?.message || 'No se pudo enviar el código ahora. Inténtalo más tarde.');
+    } finally {
+      setResendingVerification(false);
+    }
   };
 
   const closeCart = () => {
@@ -269,7 +290,7 @@ export default function CartModal({ isOpen, onClose }) {
                 <button type="submit" disabled={registering} className={tw('min-h-12 w-full rounded-xl bg-[#ff7e5f] px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-[#e06d43] disabled:opacity-60')}>{registering ? 'Creando cuenta…' : 'Crear cuenta y vincular pedido'}</button>
               </form>
             </div>}
-            {registrationComplete && <div role="status" className={tw('mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center')}><p className={tw('font-semibold text-emerald-800')}>Cuenta creada y pedido asociado.</p><p className={tw('mt-1 text-sm leading-5 text-emerald-700')}>Enviamos un código de verificación a tu correo. Verifícalo para activar el acceso y consultar tus pedidos.</p><button type="button" onClick={() => { closeCart(); navigate('/validacion'); }} className={tw('mt-3 min-h-10 rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800')}>Verificar correo</button></div>}
+            {registrationComplete && <div role="status" className={tw('mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center')}><p className={tw('font-semibold text-emerald-800')}>Cuenta creada y pedido asociado.</p><p className={tw('mt-1 text-sm leading-5 text-emerald-700')}>{verificationEmailSent ? 'Enviamos un código de verificación a tu correo. Verifícalo para activar el acceso y consultar tus pedidos.' : 'El correo de verificación no pudo enviarse por el momento. Tu cuenta y pedido están guardados; podrás solicitar el código más tarde.'}</p>{verificationMessage && <p className={tw('mt-2 text-sm text-slate-600')} aria-live="polite">{verificationMessage}</p>}{!verificationEmailSent && <button type="button" onClick={handleResendVerification} disabled={resendingVerification} className={tw('mt-3 min-h-10 rounded-xl border border-emerald-700 bg-white px-4 text-sm font-semibold text-emerald-800 hover:bg-emerald-50 disabled:opacity-60')}>{resendingVerification ? 'Solicitando código…' : 'Reintentar envío del código'}</button>}<button type="button" onClick={() => { closeCart(); navigate('/validacion'); }} className={tw('mt-3 min-h-10 w-full rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800')}>Ir a verificación</button></div>}
             <button type="button" onClick={closeCart} className={tw('mt-4 min-h-11 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50')}>Continuar comprando</button>
           </div>
         </section> : <div className={tw("cart-body")}>
