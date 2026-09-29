@@ -17,6 +17,7 @@ import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
 import Productos from "./paginas/dashboardAdmin/productos/Productos";
 import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
 import Tienda from "./paginas/paginaTienda/Tienda";
+import PagoResultado from "./paginas/paginaTienda/PagoResultado";
 import Terminos from "./assets/styles/legal/Terminos";
 import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
 import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
@@ -143,6 +144,7 @@ const router = createBrowserRouter([
   // Rutas públicas independientes
   { path: '/', element: <MainPage /> },
   { path: '/tienda', element: <Tienda /> },
+  { path: '/pago/resultado', element: <PagoResultado /> },
   { path: '/login', element: <LoginWrapper /> },
   { path: '/registro', element: <Registro /> },
   { path: '/reset-password', element: <ResetPasswordPage /> },

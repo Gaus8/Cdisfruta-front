@@ -60,6 +60,7 @@ export default function CartModal({ isOpen, onClose }) {
   const [verificationMessage, setVerificationMessage] = useState('');
   const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
+  const [metodoPago, setMetodoPago] = useState('Contraentrega');
   
   const [formData, setFormData] = useState({
     nombres: "",
@@ -116,7 +117,7 @@ export default function CartModal({ isOpen, onClose }) {
     }
 
     if (!formData.compromiso) {
-      alert("⚠️ Debes aceptar el compromiso de pago contra entrega para poder confirmar tu pedido en CDISFRUTA.shop.");
+      alert("Debes confirmar que tus datos de envío son correctos para continuar.");
       return;
     }
 
@@ -129,6 +130,7 @@ export default function CartModal({ isOpen, onClose }) {
         cantidad: i.quantity,
         imagen: i.imagen || i.img || i.url || i.foto
       })),
+      metodoPago,
       total: total,
       datosEnvio: {
         nombres: formData.nombres,
@@ -146,6 +148,23 @@ export default function CartModal({ isOpen, onClose }) {
     try {
       // 2. Guardar pedido en MongoDB mediante la API
       const { data: orderResponse } = await apiAxios.post('/pedidos', nuevoPedido);
+
+      if (metodoPago !== 'Contraentrega') {
+        const checkout = orderResponse.checkout;
+        if (!checkout?.url || !checkout?.fields) throw new Error('No recibimos los datos para iniciar el pago seguro. El carrito sigue guardado.');
+        sessionStorage.setItem('pending_wompi_reference', checkout.fields.reference);
+        const checkoutForm = document.createElement('form');
+        checkoutForm.method = 'GET';
+        checkoutForm.action = checkout.url;
+        Object.entries(checkout.fields).forEach(([name, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden'; input.name = name; input.value = String(value);
+          checkoutForm.appendChild(input);
+        });
+        document.body.appendChild(checkoutForm);
+        checkoutForm.submit();
+        return;
+      }
 
       // 3. Generar mensaje de WhatsApp
       const confirmedTotal = Number(orderResponse.pedido?.total || total);
@@ -191,7 +210,7 @@ export default function CartModal({ isOpen, onClose }) {
 
     } catch (error) {
       console.error("Error al guardar el pedido:", error);
-      alert(error.response?.data?.message || "Hubo un error al registrar tu pedido en el sistema. Inténtalo de nuevo.");
+      alert(error.response?.data?.message || error.message || "Hubo un error al registrar tu pedido en el sistema. Inténtalo de nuevo.");
     } finally {
       setSubmittingOrder(false);
     }
@@ -411,9 +430,16 @@ export default function CartModal({ isOpen, onClose }) {
             <div className={tw("checkbox-container")}>
               <input type="checkbox" id="compromiso" name="compromiso" checked={formData.compromiso} onChange={handleInputChange} />
               <label htmlFor="compromiso">
-                Me comprometo a pagar al recibir mi producto y confirmo que mis datos son correctos.
+                Confirmo que mis datos de envío son correctos. {metodoPago === 'Contraentrega' && 'Pagaré al recibir mi producto.'}
               </label>
             </div>
+
+            <section className={tw('mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-4')} aria-label="Opciones de envío y pago">
+              <div><h3 className={tw('text-base font-bold text-slate-800')}>Envío</h3><label className={tw('mt-2 flex cursor-pointer items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-800')}><input type="radio" checked readOnly className={tw('accent-emerald-600')} /><span><strong>Envío gratis</strong><br /><span className={tw('text-xs')}>Sin costo adicional</span></span></label></div>
+              <div><h3 className={tw('text-base font-bold text-slate-800')}>Método de pago</h3><div className={tw('mt-2 grid gap-2 sm:grid-cols-3')}>
+                {[['NEQUI', 'Nequi'], ['CARD', 'Tarjeta'], ['Contraentrega', 'Contra entrega']].map(([value, label]) => <label key={value} className={tw(`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-3 text-sm ${metodoPago === value ? 'border-[#ff7e5f] bg-orange-50 text-slate-900' : 'border-slate-200 bg-white text-slate-600'}`)}><input type="radio" name="metodoPago" value={value} checked={metodoPago === value} onChange={() => setMetodoPago(value)} className={tw('accent-[#ff7e5f]')} /><span>{label}</span></label>)}
+              </div>{metodoPago !== 'Contraentrega' && <p className={tw('text-xs leading-5 text-slate-500')}>Continuarás al checkout seguro de Wompi. Selecciona allí el mismo medio de pago elegido para completar la transacción.</p>}</div>
+            </section>
 
             <div className={tw("cart-footer-sticky")}>
               <div className={tw("total-display")}>
