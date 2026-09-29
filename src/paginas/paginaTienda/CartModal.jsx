@@ -148,25 +148,25 @@ export default function CartModal({ isOpen, onClose }) {
       const confirmedTotal = Number(orderResponse.pedido?.total || total);
       const confirmedItems = orderResponse.pedido?.productos || cartItems;
       const mensaje = 
-        `🍃 *CDISFRUTA.SHOP - NUEVO PEDIDO* 🍃\n` +
-        `✨ _¡Gracias por elegirnos para tus momentos saludables!_ ✨\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `👤 *CLIENTE*\n` +
-        `• Nombre: ${formData.nombres} ${formData.apellidos}\n` +
-        `• WhatsApp: ${formData.whatsapp}\n` +
-        `• Correo: ${formData.correo || 'No especificado'}\n\n` +
-        `📍 *ENTREGAS*\n` +
-        `• Departamento: ${formData.departamento}\n` +
-        `• Ciudad / Municipio: ${formData.municipio}\n` +
-        `• Dirección: ${formData.direccion}\n` +
-        `• Barrio / Sector: ${formData.barrio}\n` +
-        `• Observaciones: ${formData.nota || 'Ninguna'}\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `🛒 *RESUMEN DE PRODUCTOS:*\n` +
-        confirmedItems.map(i => `  ▪️ *${i.nombre}* \n    Cantidad: ${i.cantidad ?? i.quantity} | Subtotal: *$${(i.precio * (i.cantidad ?? i.quantity)).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `💳 *TOTAL A PAGAR: *$${confirmedTotal.toLocaleString("es-CO")}* (Pago Contra Entrega)\n` +
-        `✅ _Pedido verificado y respaldado por el cliente._`;
+        `*CDISFRUTA.SHOP - NUEVO PEDIDO*\n` +
+        `_Gracias por elegir nuestros productos._\n\n` +
+        `--------------------------------\n` +
+        `*CLIENTE*\n` +
+        `- Nombre: ${formData.nombres} ${formData.apellidos}\n` +
+        `- WhatsApp: ${formData.whatsapp}\n` +
+        `- Correo: ${formData.correo || 'No especificado'}\n\n` +
+        `*ENTREGAS*\n` +
+        `- Departamento: ${formData.departamento}\n` +
+        `- Ciudad / Municipio: ${formData.municipio}\n` +
+        `- Dirección: ${formData.direccion}\n` +
+        `- Barrio / Sector: ${formData.barrio}\n` +
+        `- Observaciones: ${formData.nota || 'Ninguna'}\n` +
+        `--------------------------------\n\n` +
+        `*RESUMEN DE PRODUCTOS*\n` +
+        confirmedItems.map(i => `- *${i.nombre}*\n  Cantidad: ${i.cantidad ?? i.quantity} | Subtotal: *$${(i.precio * (i.cantidad ?? i.quantity)).toLocaleString("es-CO")}*`).join('\n\n') + `\n\n` +
+        `--------------------------------\n` +
+        `*TOTAL A PAGAR: $${confirmedTotal.toLocaleString("es-CO")}* (Pago contra entrega)\n` +
+        `_Pedido confirmado por el cliente._`;
 
       const miNumero = "573229683625"; // Puedes cambiarlo si usas otro número aquí
       const whatsappUrl = `https://wa.me/${miNumero}?text=${encodeURIComponent(mensaje)}`;
