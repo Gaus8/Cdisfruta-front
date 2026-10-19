@@ -119,24 +119,24 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     }}
     onPointerCancel={() => { pointerStart.current = null; }}
   >
-    <div key={current._id || activeIndex} className={tw('mx-auto flex min-h-[220px] max-w-4xl flex-col items-center justify-center text-center animate-[fadeSlideUp_.35s_ease_both] motion-reduce:animate-none sm:min-h-[240px]')}>
-      <p className={tw('mb-3 line-clamp-1 text-[11px] font-bold uppercase tracking-[.18em] text-[#E8603C] sm:text-xs')}>{current.eyebrow}</p>
-      <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold leading-[1.03] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
-      <p className={tw('mt-4 line-clamp-2 max-w-[650px] text-[13px] leading-[1.6] text-[#8B6652] sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
-      <div className={tw('mt-6 flex flex-wrap justify-center gap-3')}>
+    <div key={current._id || activeIndex} className={tw('mx-auto flex min-h-[240px] max-w-4xl flex-col items-center justify-center text-center animate-[fadeSlideUp_.35s_ease_both] motion-reduce:animate-none sm:min-h-[260px]')}>
+      <p className={tw('mb-5 line-clamp-1 text-[11px] font-bold uppercase tracking-[.18em] text-[#E8603C] sm:mb-6 sm:text-xs')}>{current.eyebrow}</p>
+      <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold leading-[1.1] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
+      <p className={tw('mt-5 line-clamp-2 max-w-[650px] text-[13px] leading-[1.8] text-[#8B6652] sm:mt-6 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
+      <div className={tw('mt-7 flex flex-wrap justify-center gap-3 sm:mt-8')}>
         <button type="button" onClick={() => setShowRegister(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{current.textoBotonPrincipal || 'Comprar ahora'}</button>
         <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{current.textoBotonSecundario || 'Más información'} <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
-    <div className={tw('relative mx-auto mt-5 h-[310px] max-w-[1400px] touch-pan-y sm:mt-7 sm:h-[390px] lg:h-[430px]')}>
+    <div className={tw('relative mx-auto mt-7 h-[310px] max-w-[1400px] touch-pan-y sm:mt-9 sm:h-[390px] lg:mt-10 lg:h-[430px]')}>
       {banners.length > 1 && <button type="button" aria-label="Banner anterior" onClick={() => move(-1)} className={tw('absolute left-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:left-2 sm:size-12')}><FaChevronLeft /></button>}
       <div className={tw('absolute inset-0 [perspective:1200px] [transform-style:preserve-3d]')} aria-live="off">
         {virtualCards.map(({ banner, index, offset }, virtualIndex) => {
           const isCenter = offset === 0;
           const scale = isCenter ? 1 : Math.max(0.82, 0.88 - Math.abs(offset) * 0.025);
           const imageLabel = banner.tag || banner.etiqueta || banner.eyebrow;
-          return <article key={`${banner._id || index}-${offset}-${virtualIndex}`} className={tw('absolute left-1/2 top-1/2 select-none transition-[transform,opacity,filter] ease-out', !isCenter && 'cursor-pointer')} style={{
+          return <article key={`${banner._id || index}-${offset}-${virtualIndex}`} className={tw('group absolute left-1/2 top-1/2 select-none transition-[transform,opacity,filter] ease-out', !isCenter && 'cursor-pointer')} style={{
             width: cardWidth,
             transform: `translate(calc(-50% + ${offset * spacing}px), -50%) rotateY(${offset === 0 ? 0 : offset < 0 ? 18 : -18}deg) scale(${scale})`,
             opacity: isCenter ? 1 : Math.max(0.55, 0.86 - Math.abs(offset) * 0.075),
@@ -144,9 +144,9 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
             zIndex: 30 - Math.abs(offset),
             transitionDuration: transitionTime
           }} onClick={() => { if (!isCenter) setActiveIndex(index); }}>
-            <div className={tw('relative aspect-[3/4] overflow-hidden rounded-[28px] border border-white/70 bg-[#f2dfd1] shadow-[0_18px_48px_rgba(84,48,25,.2)]', isCenter && 'shadow-[0_24px_58px_rgba(195,67,31,.28)]')}>
+            <div className={tw('relative aspect-[3/4] overflow-hidden rounded-[28px] border border-white/70 bg-[#f2dfd1] shadow-[0_18px_48px_rgba(84,48,25,.2)] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_28px_60px_rgba(195,67,31,.3)] motion-reduce:transition-none', isCenter && 'shadow-[0_24px_58px_rgba(195,67,31,.28)]')}>
               <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={`Mostrar banner: ${banner.titulo}`} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
-                <img src={getImage(banner)} alt={banner.titulo || 'Banner CDISFRUTA'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover')} />
+                <img src={getImage(banner)} alt={banner.titulo || 'Banner CDISFRUTA'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
               </button>
               <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-4 pt-20 text-white sm:px-5 sm:pb-5')}>
                 {isCenter && <>
