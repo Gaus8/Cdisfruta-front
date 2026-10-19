@@ -122,8 +122,8 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     <div key={current._id || activeIndex} className={tw('mx-auto flex min-h-[240px] max-w-4xl flex-col items-center justify-center text-center animate-[fadeSlideUp_.35s_ease_both] motion-reduce:animate-none sm:min-h-[260px]')}>
       <p className={tw('mb-5 line-clamp-1 text-[11px] font-bold uppercase tracking-[.18em] text-[#E8603C] sm:mb-6 sm:text-xs')}>{current.eyebrow}</p>
       <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold leading-[1.1] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
-      <p className={tw('mt-5 line-clamp-2 max-w-[650px] text-[13px] leading-[1.8] text-[#8B6652] sm:mt-6 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
-      <div className={tw('mt-7 flex flex-wrap justify-center gap-3 sm:mt-8')}>
+      <p className={tw('mt-5 max-w-[650px] whitespace-pre-line break-words text-[13px] leading-[1.8] text-[#8B6652] sm:mt-6 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
+      <div className={tw('mt-6 flex flex-wrap justify-center gap-3 sm:mt-8')}>
         <button type="button" onClick={() => setShowRegister(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{current.textoBotonPrincipal || 'Comprar ahora'}</button>
         <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{current.textoBotonSecundario || 'Más información'} <span aria-hidden="true">→</span></button>
       </div>
@@ -148,7 +148,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
               <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={`Mostrar banner: ${banner.titulo}`} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
                 <img src={getImage(banner)} alt={banner.titulo || 'Banner CDISFRUTA'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
               </button>
-              <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-4 pt-20 text-white sm:px-5 sm:pb-5')}>
+              <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-2 pt-16 text-white sm:px-5 sm:pb-3 sm:pt-16')}>
                 {isCenter && <>
                   <span className={tw('mb-2 inline-flex max-w-full truncate rounded-full bg-[#E8603C] px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em] text-white shadow-md')}>{banner.etiqueta || banner.eyebrow}</span>
                   <p className={tw('line-clamp-2 text-base font-extrabold leading-tight sm:text-lg')}>{imageLabel}</p>
