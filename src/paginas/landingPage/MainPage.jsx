@@ -1,6 +1,7 @@
 import { tw } from '../../funciones/tw.js';
 import Videos from './Videos';
-import CarruselProductos from './Carrusel';
+import HeroCarousel from './Carrusel';
+import ProductCarousel3D from './ProductCarousel3D';
 import Header from './Header';
 import { MdOutlineComputer } from "react-icons/md";
 import { IoIosTimer } from "react-icons/io";
@@ -16,9 +17,10 @@ import { FiTruck } from "react-icons/fi";
 
 function MainPage() {
   return (
-    <div className={tw("main-page-wrapper")}>
-      <Header />
-      <CarruselProductos />
+    <div className={tw("main-page-wrapper", "theme-v2")}>
+      <Header themeV2 />
+      <HeroCarousel />
+      <ProductCarousel3D />
  
       {/* ── SECCIÓN SOBRE NOSOTROS ── */}
       <section className={tw("about-section")} id="sobre">

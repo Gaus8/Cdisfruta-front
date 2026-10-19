@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root {
+  --font-display: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, Menlo, monospace;
+  --font-legacy-serif: "Fraunces", Georgia, serif;
+}
+
 @theme {
   --font-poppins: "Poppins", sans-serif;
   --font-jakarta: "Plus Jakarta Sans", sans-serif;

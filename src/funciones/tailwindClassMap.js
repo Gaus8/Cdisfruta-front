@@ -2750,6 +2750,32 @@ export const tailwindClassMap = {
   "main-page-wrapper": [
     "[width:100%]"
   ],
+  "theme-v2": [
+    "[font-family:var(--font-display)]",
+    "[&_.section-title]:[font-family:var(--font-display)]",
+    "[&_.section-title]:[font-size:clamp(2.5rem,_4vw,_3.5rem)]",
+    "[&_.section-title]:[font-weight:800]",
+    "[&_.section-title]:[letter-spacing:-.02em]",
+    "[&_.about-quote]:[font-family:var(--font-display)]",
+    "[&_.about-quote]:[font-weight:800]",
+    "[&_.footer-brand-name]:[font-family:var(--font-display)]",
+    "[&_.footer-brand-name]:[font-weight:800]",
+    "[&_.carrusel-title]:[font-family:var(--font-display)]",
+    "[&_.carrusel-title]:[font-weight:800]",
+    "[&_.carrusel-title]:[letter-spacing:-.02em]",
+    "[&_.carrusel-desc]:[font-family:var(--font-mono)]",
+    "[&_.carrusel-desc]:[font-size:14px]",
+    "[&_.carrusel-desc]:[line-height:1.6]",
+    "[&_.carrusel-desc]:[color:#8B6652]",
+    "[&_.about-content_p]:[font-family:var(--font-mono)]",
+    "[&_.about-content_p]:[font-size:14px]",
+    "[&_.about-content_p]:[line-height:1.6]",
+    "[&_.feature-card_p]:[font-family:var(--font-mono)]",
+    "[&_.feature-card_p]:[font-size:13px]",
+    "[&_.feature-card_p]:[line-height:1.6]",
+    "[&_.footer-tagline]:[font-family:var(--font-mono)]",
+    "[&_.footer-tagline]:[font-size:13px]"
+  ],
   "eyebrow": [
     "[display:inline-block]",
     "[font-size:0.7rem]",
