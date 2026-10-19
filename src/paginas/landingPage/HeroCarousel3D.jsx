@@ -9,7 +9,7 @@ import Login from '../usuariosAuth/Login';
 const BRAND_PLACEHOLDER = '/img/logo_cdisfruta.webp';
 
 function HeroSkeleton() {
-  return <section aria-label="Cargando banners de portada" className={tw('bg-[#FAEFE6] px-4 pb-10 pt-10 sm:px-8 sm:pb-12 sm:pt-12')}>
+  return <section id="inicio" aria-label="Cargando banners de portada" className={tw('scroll-mt-24 bg-[#FAEFE6] px-4 pb-10 pt-10 sm:px-8 sm:pb-12 sm:pt-12')}>
     <div className={tw('mx-auto flex max-w-3xl flex-col items-center gap-4 text-center')}>
       <div className={tw('h-3 w-44 animate-pulse rounded-full bg-orange-200')} />
       <div className={tw('h-12 w-3/4 max-w-xl animate-pulse rounded-xl bg-orange-100')} />
@@ -96,12 +96,12 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
   const getImage = (banner) => banner.img || BRAND_PLACEHOLDER;
 
   return <section
-    id="carrusel"
+    id="inicio"
     role="region"
     aria-roledescription="carrusel de portada"
     aria-label="Historias y productos de CDISFRUTA"
     tabIndex={0}
-    className={tw('overflow-hidden bg-[#FAEFE6] px-4 pb-10 pt-9 outline-none sm:px-8 sm:pb-12 sm:pt-12 lg:px-10', '[font-family:var(--font-display)]', 'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#E8603C]')}
+    className={tw('scroll-mt-24 overflow-hidden bg-[#FAEFE6] px-4 pb-10 pt-9 outline-none sm:px-8 sm:pb-12 sm:pt-12 lg:px-10', '[font-family:var(--font-display)]', 'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#E8603C]')}
     onMouseEnter={() => setPaused(true)}
     onMouseLeave={() => setPaused(false)}
     onFocus={() => setPaused(true)}

@@ -70,8 +70,9 @@ export default function ProductCarousel3D({ products: productsProp }) {
   const cardWidth = typeof window !== 'undefined' && window.innerWidth < 640 ? 'min(66vw, 230px)' : 'clamp(205px, 24vw, 292px)';
 
   return <section
+    id="productos"
     aria-labelledby="home-products-title"
-    className={tw('overflow-hidden bg-[#fffaf5] px-4 py-16 sm:px-6 sm:py-20 lg:px-10', '[font-family:var(--font-display)]')}
+    className={tw('scroll-mt-24 overflow-hidden bg-[#fffaf5] px-4 py-16 sm:px-6 sm:py-20 lg:px-10', '[font-family:var(--font-display)]')}
     onMouseEnter={() => setPaused(true)}
     onMouseLeave={() => setPaused(false)}
     onFocus={() => setPaused(true)}

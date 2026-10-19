@@ -23,7 +23,7 @@ function MainPage() {
       <ProductCarousel3D />
  
       {/* ── SECCIÓN SOBRE NOSOTROS ── */}
-      <section className={tw("about-section")} id="sobre">
+      <section className={tw("about-section", "scroll-mt-24")} id="historia">
         <div className={tw("about-visual")}>
           <img 
             src="/img/cdisfruta_06.webp" 
@@ -60,7 +60,7 @@ function MainPage() {
       </section>
  
       {/* ── SECCIÓN DE CARACTERÍSTICAS ── */}
-      <section className={tw("features-section")} id="features">
+      <section className={tw("features-section", "scroll-mt-24")} id="features">
         <div className={tw("features-header")}>
           <span className={tw("eyebrow")}>¿Por qué elegirnos?</span>
           <h2 className={tw("section-title")}>Calidad en cada detalle</h2>
@@ -90,7 +90,7 @@ function MainPage() {
       </section>
  
       {/* ── GALERÍA / VIDEOS ── */}
-      <section className={tw("media-section")} id="media">
+      <section className={tw("media-section", "scroll-mt-24")} id="videos">
         <div className={tw("media-header")}>
           <span className={tw("eyebrow eyebrow--light")}>Nuestra galería</span>
           <h2 className={tw("section-title section-title--light")}>
@@ -101,7 +101,7 @@ function MainPage() {
       </section>
  
       {/* ── FOOTER ── */}
-      <footer className={tw("footer-main")} id="contacto">
+      <footer className={tw("footer-main", "scroll-mt-24")} id="contacto">
         <div className={tw("footer-grid")}>
           {/* Marca */}
           <div className={tw("footer-brand-col")}>
