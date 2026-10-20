@@ -183,7 +183,45 @@
 
 @media (max-width: 700px) {
   .history-editorial { grid-template-columns: minmax(0, 1fr); overflow: clip; }
-  .history-editorial__visual { min-height: clamp(430px, 78vw, 650px); }
+  .history-editorial__visual {
+    --history-mobile-fade-strong: rgb(15 8 3 / .55);
+    --history-mobile-fade-mid: rgb(15 8 3 / .32);
+    --history-mobile-badge-halo-strong: rgb(15 8 3 / .45);
+    --history-mobile-badge-halo-mid: rgb(15 8 3 / .25);
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(430px, 78vw, 650px);
+  }
+  .history-editorial__photo-frame { z-index: 1; }
+  .history-editorial__photo-gradient {
+    z-index: 2;
+    inset: auto 0 0;
+    height: 44%;
+    background: linear-gradient(to top, var(--history-mobile-fade-strong) 0%, var(--history-mobile-fade-mid) 45%, transparent 100%);
+  }
+  .history-editorial__base-brush { z-index: 3; }
+  .history-editorial__years,
+  .history-editorial__photo-badges,
+  .history-editorial__tagline { z-index: 4; }
+  .history-editorial__edge-leaves { z-index: 5; }
+  .history-editorial__photo-badges {
+    isolation: isolate;
+  }
+  .history-editorial__photo-badges--count-1 { grid-template-columns: minmax(0, 1fr); right: 33.333%; left: 33.333%; }
+  .history-editorial__photo-badges--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); right: 17%; left: 17%; }
+  .history-editorial__photo-badges--count-many { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; }
+  .history-editorial__visual--many-photo-badges .history-editorial__years { bottom: clamp(186px, 42vw, 210px); }
+  .history-editorial__photo-badges::before {
+    position: absolute;
+    z-index: 0;
+    inset: -12px -8px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, var(--history-mobile-badge-halo-strong) 0%, var(--history-mobile-badge-halo-mid) 55%, transparent 100%);
+    content: "";
+    filter: blur(10px);
+    pointer-events: none;
+  }
+  .history-editorial__photo-badge { position: relative; z-index: 1; }
   .history-editorial__content { padding: clamp(38px, 7vw, 66px) clamp(24px, 7vw, 72px) 54px; }
   .history-editorial__quote { max-width: 720px; font-size: clamp(30px, 5.2vw, 44px); }
   .history-editorial__paragraphs p { font-size: clamp(14px, 1.8vw, 17px); }
@@ -200,8 +238,22 @@
   .history-editorial__years-number strong { font-size: 32px; }
   .history-editorial__years-label { font-size: 11px; }
   .history-editorial__photo-badges { right: 8px; bottom: 11%; left: 8px; gap: 3px; }
-  .history-editorial__photo-badge { flex-direction: column; gap: 3px; font-size: 8px; text-align: center; letter-spacing: .02em; }
-  .history-editorial__photo-badge svg { width: 27px; height: 27px; }
+  .history-editorial__photo-badge {
+    flex-direction: column;
+    gap: 3px;
+    font-size: clamp(10.5px, 2.8vw, 12px);
+    line-height: 1.25;
+    text-align: center;
+    letter-spacing: .02em;
+    text-shadow: 0 1px 3px rgb(0 0 0 / .55), 0 0 10px rgb(0 0 0 / .35);
+  }
+  .history-editorial__photo-badge svg {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / .5));
+  }
+  .history-editorial__photo-badge svg circle:first-child { fill: rgb(15 8 3 / .28); }
   .history-editorial__edge-leaves { width: 100px; height: 80px; }
   .history-editorial__edge-leaves--top { top: 9px; right: 5px; }
   .history-editorial__edge-leaves--bottom { right: 2px; bottom: 3px; }
@@ -220,8 +272,8 @@
 
 @media (max-width: 350px) {
   .history-editorial__visual { min-height: 380px; }
-  .history-editorial__photo-badge { font-size: 7px; }
-  .history-editorial__photo-badge svg { width: 24px; height: 24px; }
+  .history-editorial__photo-badge { font-size: 10.5px; }
+  .history-editorial__photo-badge svg { width: 34px; height: 34px; }
   .history-editorial__content { padding-right: 18px; padding-left: 18px; }
   .history-editorial__closing { grid-template-columns: 24px minmax(0, 1fr) 20px; gap: 5px; }
 }

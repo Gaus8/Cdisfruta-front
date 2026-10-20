@@ -42,7 +42,7 @@ function SmallGlints({ className = '' }) {
 function PhotoBadges({ items = [] }) {
   if (!items.length) return null;
   return (
-    <ul className="history-editorial__photo-badges" aria-label="Características de nuestros productos">
+    <ul className={`history-editorial__photo-badges history-editorial__photo-badges--count-${items.length > 3 ? 'many' : items.length}`} aria-label="Características de nuestros productos">
       {items.map((item) => (
         <li className="history-editorial__photo-badge" key={item.id}>
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
@@ -121,7 +121,7 @@ export default function HistorySection({ content }) {
           </clipPath>
         </defs>
       </svg>
-      <div className="history-editorial__visual">
+      <div className={`history-editorial__visual${photoBadges.length > 3 ? ' history-editorial__visual--many-photo-badges' : ''}`}>
         <div className="history-editorial__photo-frame">
           {content.photo ? (
             <img
