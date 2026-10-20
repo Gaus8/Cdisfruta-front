@@ -50,9 +50,9 @@ function PaperMission({ item, visible, index }) {
   );
 }
 
-function PaintedVision({ item, visible, index }) {
+function PaintedVision({ item, visible, index, style }) {
   return (
-    <article className={`purpose-scrap purpose-scrap--vision${visible ? ' is-visible' : ''}`} style={{ '--scrap-delay': `${index * 120}ms` }}>
+    <article className={`purpose-scrap purpose-scrap--vision${visible ? ' is-visible' : ''}`} style={{ '--scrap-delay': `${index * 120}ms`, ...style }}>
       <div className="purpose-scrap__paint">
         <div className="purpose-scrap__vision-copy">
           <span className="sr-only">{item.eyebrow}</span>
@@ -76,8 +76,8 @@ function PaintedVision({ item, visible, index }) {
   );
 }
 
-export default function PurposeScrapCard({ item, visible, index }) {
+export default function PurposeScrapCard({ item, visible, index, style }) {
   return item.id === 'mision'
     ? <PaperMission item={item} visible={visible} index={index} />
-    : <PaintedVision item={item} visible={visible} index={index} />;
+    : <PaintedVision item={item} visible={visible} index={index} style={style} />;
 }

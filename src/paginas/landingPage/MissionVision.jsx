@@ -1,31 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import './MissionVision.css';
-import { ACTIVE_BLOB, ACTIVE_MISION_SHAPE, ACTIVE_VISION_SHAPE, ORGANIC_SHAPES } from './organicShapes.js';
+import {
+  ACTIVE_BLOB,
+  ACTIVE_MISION_SHAPE,
+  ACTIVE_VISION_SHAPE_MOBILE,
+  ACTIVE_VISION_SHAPE_TABLET,
+  ACTIVE_VISION_SHAPE_DESKTOP,
+  ORGANIC_SHAPES,
+} from './organicShapes.js';
 import PurposeScrapCard from './PurposeScrapCard.jsx';
-
-const PURPOSE_ITEMS = [
-  {
-    id: 'mision',
-    eyebrow: 'Nuestra misión',
-    title: 'Bienestar que nace de la tierra',
-    description: 'Transformamos frutas de nuestra región en snacks y aromáticas naturales, elaborados con cuidado junto a familias campesinas, para compartir bienestar y sabor auténtico.',
-    image: '/img/cdisfruta_06.webp',
-    alt: 'Productos CDISFRUTA y frutas deshidratadas sobre una mesa de madera',
-    icon: 'mision',
-    shape: 'fotoMision',
-  },
-  {
-    id: 'vision',
-    eyebrow: 'Nuestra visión',
-    title: 'El sabor de Ubaté llega más lejos',
-    description: 'Queremos ser una marca colombiana reconocida por innovar con productos naturales, fortalecer el origen campesino y llevar el sabor de Ubaté a nuevos mercados.',
-    image: '/img/cdisfruta_07.webp',
-    alt: 'Bolsa de aromáticas CDISFRUTA rodeada de fruta fresca y deshidratada',
-    icon: 'vision',
-    caption: 'Sabor de nuestra tierra',
-    shape: 'fotoVision',
-  },
-];
+import { PURPOSE_ITEMS } from './purposeItems.js';
 
 function OrganicClipPaths() {
   return (
@@ -133,7 +117,9 @@ export default function MissionVision() {
           className="mission-vision__cards mission-vision__cards--scrapbook"
           style={{
             '--active-mision-shape': `url(#mission-vision-${ACTIVE_MISION_SHAPE})`,
-            '--active-vision-shape': `url(#mission-vision-${ACTIVE_VISION_SHAPE})`,
+            '--active-vision-shape-mobile': `url(#mission-vision-${ACTIVE_VISION_SHAPE_MOBILE})`,
+            '--active-vision-shape-tablet': `url(#mission-vision-${ACTIVE_VISION_SHAPE_TABLET})`,
+            '--active-vision-shape-desktop': `url(#mission-vision-${ACTIVE_VISION_SHAPE_DESKTOP})`,
           }}
         >
           {PURPOSE_ITEMS.map((item, index) => <PurposeScrapCard key={item.id} item={item} index={index} visible={visible} />)}

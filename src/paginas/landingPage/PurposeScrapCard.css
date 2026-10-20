@@ -172,12 +172,14 @@
   box-sizing: border-box;
   width: 100%;
   min-height: clamp(430px, 34vw, 500px);
-  padding: clamp(34px, 4vw, 52px) max(34%, 230px) clamp(62px, 6vw, 82px) clamp(32px, 4vw, 48px);
+  padding: clamp(58px, 5vw, 72px) max(34%, 230px) clamp(62px, 6vw, 82px) clamp(70px, 5.6vw, 88px);
   filter: drop-shadow(0 16px 20px rgba(0, 0, 0, .22));
   opacity: 0;
   transform: scale(.98);
   transition: opacity 600ms ease 100ms, transform 600ms ease 100ms;
 }
+
+.purpose-scrap--vision { --active-vision-shape: var(--active-vision-shape-desktop, url(#mission-vision-visionShapeDesktop1)); }
 
 .purpose-scrap__paint::before {
   position: absolute;
@@ -316,6 +318,8 @@
   .purpose-scrap__hand-title { font-size: clamp(56px, 7vw, 68px); }
   .purpose-scrap__description { font-size: 14px; }
   .purpose-scrap__paint { padding-right: max(34%, 225px); }
+  .purpose-scrap__paint { padding-top: 64px; }
+  .purpose-scrap--vision { --active-vision-shape: var(--active-vision-shape-tablet, url(#mission-vision-visionShapeTablet1)); }
 }
 
 @media (max-width: 700px) {
@@ -365,12 +369,14 @@
     position: relative;
     inset: auto;
     display: flex;
-    width: 100%;
+    width: calc(100% + 28px);
     min-height: 0;
     flex-direction: column;
-    padding: 28px 25px 26px;
+    margin-inline: -14px;
+    padding: 34px 38px 30px 46px;
     transform: scale(.99);
   }
+  .purpose-scrap--vision { --active-vision-shape: var(--active-vision-shape-mobile, url(#mission-vision-visionShapeMobile1)); }
   .purpose-scrap__paint::before,
   .purpose-scrap__paint::after { inset: 0; }
   .purpose-scrap__vision-copy {
@@ -379,7 +385,8 @@
     width: 100%;
     min-height: 0;
   }
-  .purpose-scrap--vision .purpose-scrap__icon { width: 56px; }
+  .purpose-scrap--vision .purpose-scrap__icon { position: absolute; top: 12px; left: 0; width: 56px; height: 56px; margin: 0; padding: 4px; border-radius: 50%; background: rgba(42, 82, 64, .6); }
+  .purpose-scrap--vision .purpose-scrap__hand-title { margin-top: 80px; }
   .purpose-scrap--vision .purpose-scrap__original-title { font-size: 18px; }
   .purpose-scrap--vision .purpose-scrap__description { font-size: 13px; }
   .purpose-scrap__polaroid {
@@ -402,7 +409,7 @@
 }
 
 @media (max-width: 700px) {
-  .purpose-scrap__paint { padding-right: 25px; padding-bottom: 62px; }
+  .purpose-scrap__paint { padding-right: 38px; padding-bottom: 70px; }
   .purpose-scrap__vision-leaves { width: 64px; right: 1%; bottom: 5%; }
 }
 

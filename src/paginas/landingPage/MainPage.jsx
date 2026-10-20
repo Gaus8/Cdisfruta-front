@@ -49,12 +49,6 @@ function MainPage() {
  
       {/* ── GALERÍA / VIDEOS ── */}
       <section className={tw("media-section", "scroll-mt-24")} id="videos">
-        <div className={tw("media-header")}>
-          <span className={tw("eyebrow eyebrow--light")}>Nuestra galería</span>
-          <h2 className={tw("section-title section-title--light")}>
-            En cada imagen, <em>nuestra pasión</em>
-          </h2>
-        </div>
         <Videos />
       </section>
  

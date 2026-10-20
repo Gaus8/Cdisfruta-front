@@ -117,7 +117,7 @@ export default function HistorySection({ content }) {
       <svg className="history-editorial__defs" aria-hidden="true" focusable="false">
         <defs>
           <clipPath id="history-photo-organic-clip" clipPathUnits="objectBoundingBox">
-            <path d="M0 0H1V.955C.82.955.68.95.52.96.35.977.15.956 0 .918Z" />
+            <path d="M0 0H1V.87C.88.875.75.9.63.925.48.96.3.98.16.945.09.928.04.902 0 .88Z" />
           </clipPath>
         </defs>
       </svg>
