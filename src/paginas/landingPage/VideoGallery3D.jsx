@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import './VideoGallery3D.css';
 
 function LeafIcon() {
@@ -11,6 +12,10 @@ function CameraIcon() {
 
 function PlayIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z" /></svg>;
+}
+
+function CloseIcon() {
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>;
 }
 
 function splitTitle(title = '') {
@@ -30,12 +35,15 @@ function splitLabel(title = '') {
 export default function VideoGallery3D({ videos = [], title = 'nuestra pasión', loading = false }) {
   const sectionRef = useRef(null);
   const videoRefs = useRef(new Map());
+  const playButtonRefs = useRef(new Map());
+  const closeButtonRef = useRef(null);
   const [playingIndex, setPlayingIndex] = useState(null);
   const [visible, setVisible] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const cleanVideos = useMemo(() => videos.filter((video) => video?.src && video?.title), [videos]);
   const titleParts = splitTitle(title);
   const galleryCount = cleanVideos.length === 1 ? 'one' : cleanVideos.length === 2 ? 'two' : 'mosaic';
+  const activeVideo = playingIndex == null ? null : cleanVideos[playingIndex];
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -64,10 +72,27 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
     if (playingIndex == null) return undefined;
     const video = videoRefs.current.get(playingIndex);
     if (!video) return undefined;
-    video.play().catch(() => setPlayingIndex(null));
+    video.play().catch(() => {});
     return () => {
       video.pause();
       video.currentTime = 0;
+    };
+  }, [playingIndex]);
+
+  useEffect(() => {
+    if (playingIndex == null) return undefined;
+    const playButtons = playButtonRefs.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setPlayingIndex(null);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+      playButtons.get(playingIndex)?.focus();
     };
   }, [playingIndex]);
 
@@ -93,21 +118,16 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
 
           <div className={`video-gallery__grid video-gallery__grid--${galleryCount}`}>
             {cleanVideos.map((video, index) => {
-              const playing = playingIndex === index;
               const label = splitLabel(video.title);
               return (
-                <article className={`video-gallery__tile${playing ? ' is-playing' : ''}`} key={video.src} style={{ '--tile-delay': `${index * 90}ms` }}>
+                <article className="video-gallery__tile" key={video.src} style={{ '--tile-delay': `${index * 90}ms` }}>
                   <div className="video-gallery__tile-media">
                     <span className="video-gallery__placeholder" aria-hidden="true" />
                     {video.img && <img className="video-gallery__thumbnail" src={video.img} alt={video.alt || ''} width="750" height="1000" loading="lazy" onError={(event) => { event.currentTarget.hidden = true; }} />}
-                    {playing ? (
-                      <video className="video-gallery__video" ref={(node) => { if (node) videoRefs.current.set(index, node); else videoRefs.current.delete(index); }} src={video.src} controls playsInline autoPlay preload="metadata" aria-label={video.title} onEnded={() => setPlayingIndex(null)} />
-                    ) : (
-                      <button className="video-gallery__play-button" type="button" aria-label={`Reproducir video: ${video.title}`} onClick={() => setPlayingIndex(index)}>
-                        <span className="video-gallery__play-icon"><PlayIcon /></span>
-                        <span className="video-gallery__play-label">Reproducir historia</span>
-                      </button>
-                    )}
+                    <button className="video-gallery__play-button" type="button" aria-label={`Reproducir video: ${video.title}`} ref={(node) => { if (node) playButtonRefs.current.set(index, node); else playButtonRefs.current.delete(index); }} onClick={() => setPlayingIndex(index)}>
+                      <span className="video-gallery__play-icon"><PlayIcon /></span>
+                      <span className="video-gallery__play-label">Reproducir historia</span>
+                    </button>
                     <span className="video-gallery__tile-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                     <span className="video-gallery__caption" aria-hidden="true">
                       <CameraIcon />
@@ -118,6 +138,18 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
               );
             })}
           </div>
+          {activeVideo && createPortal(
+            <div className="video-gallery__modal" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setPlayingIndex(null); }}>
+              <section className="video-gallery__modal-panel" role="dialog" aria-modal="true" aria-label={`Reproduciendo: ${activeVideo.title}`}>
+                <div className="video-gallery__modal-header">
+                  <p>{activeVideo.title}</p>
+                  <button className="video-gallery__modal-close" type="button" ref={closeButtonRef} onClick={() => setPlayingIndex(null)} aria-label="Cerrar video"><CloseIcon /></button>
+                </div>
+                <video className="video-gallery__modal-video" ref={(node) => { if (node) videoRefs.current.set(playingIndex, node); else videoRefs.current.delete(playingIndex); }} src={activeVideo.src} controls playsInline autoPlay preload="metadata" aria-label={activeVideo.title} />
+              </section>
+            </div>,
+            document.body
+          )}
         </>
       )}
     </div>
