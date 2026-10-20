@@ -168,11 +168,11 @@
 
 .mission-vision__decor-art {
   position: absolute;
-  z-index: 1;
-  left: -19%;
-  top: 27%;
+  z-index: 4;
+  left: -25%;
+  top: 15%;
   display: block;
-  width: 28%;
+  width: 35%;
   height: auto;
   opacity: .9;
   pointer-events: none;
@@ -206,11 +206,11 @@
 }
 
 .mission-vision__fruit-art {
-  --fruta-escala: 1.4;
+  --fruta-escala: 1.7;
   position: absolute;
   z-index: 3;
-  top: -5%;
-  right: -1%;
+  top: -11%;
+  right: -10%;
   display: block;
   width: 29.5%;
   height: auto;
@@ -226,6 +226,127 @@
 }
 
 .mission-vision[data-visible="true"] .mission-vision__fruit-art { opacity: 1; translate: 0 var(--fruit-parallax, 0px); }
+
+.mission-vision__fact-trigger {
+  position: absolute;
+  z-index: 4;
+  top: 58%;
+  right: -4%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: 1px solid rgba(232, 96, 60, .24);
+  border-radius: 999px;
+  background: rgba(255, 250, 246, .96);
+  box-shadow: 0 9px 22px rgba(92, 54, 32, .14);
+  color: #633b2b;
+  font-family: var(--font-display, "Manrope", sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  animation: fact-bubble-float 4.8s ease-in-out infinite;
+  transition: border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.mission-vision__fact-trigger::after {
+  position: absolute;
+  right: 22px;
+  bottom: -6px;
+  width: 11px;
+  height: 11px;
+  border-right: 1px solid rgba(232, 96, 60, .24);
+  border-bottom: 1px solid rgba(232, 96, 60, .24);
+  background: #fffaf6;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.mission-vision__fact-trigger:hover,
+.mission-vision__fact-trigger:focus-visible {
+  border-color: #E8603C;
+  box-shadow: 0 12px 28px rgba(92, 54, 32, .2);
+  color: #E8603C;
+}
+
+.mission-vision__fact-trigger:focus-visible,
+.fruit-fact-dialog__close:focus-visible,
+.fruit-fact-dialog a:focus-visible { outline: 3px solid #302010; outline-offset: 3px; }
+.mission-vision__fact-spark { color: #E8603C; font-size: 17px; line-height: 1; }
+
+@keyframes fact-bubble-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+
+.fruit-fact-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  color: #302010;
+}
+
+.fruit-fact-dialog::backdrop { background: rgba(37, 25, 17, .52); backdrop-filter: blur(5px); }
+.fruit-fact-dialog[open] { animation: fruit-dialog-in 240ms cubic-bezier(.2,.8,.2,1) both; }
+.fruit-fact-dialog__card {
+  position: relative;
+  padding: clamp(28px, 6vw, 42px);
+  overflow: hidden;
+  border: 1px solid rgba(232, 96, 60, .3);
+  border-radius: 28px;
+  background: radial-gradient(circle at 100% 0, rgba(232,96,60,.14), transparent 36%), linear-gradient(145deg, #fffaf6, #FAEFE6);
+  box-shadow: 0 24px 70px rgba(37, 25, 17, .3);
+}
+
+.fruit-fact-dialog__card::before {
+  position: absolute;
+  top: -62px;
+  right: -40px;
+  width: 170px;
+  height: 170px;
+  border: 1px solid rgba(232,96,60,.22);
+  border-radius: 50%;
+  content: "";
+  box-shadow: 0 0 0 14px rgba(232,96,60,.04), 0 0 0 29px rgba(232,96,60,.03);
+}
+
+.fruit-fact-dialog__close {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid #f0d5c5;
+  border-radius: 50%;
+  background: #fffaf6;
+  color: #633b2b;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fruit-fact-dialog__eyebrow { position: relative; color: #E8603C; font: 800 11px/1.5 var(--font-display, "Manrope", sans-serif); letter-spacing: .16em; text-transform: uppercase; }
+.fruit-fact-dialog h2 { position: relative; max-width: 360px; margin: 12px 0 14px; font: 800 clamp(25px, 6vw, 34px)/1.12 var(--font-display, "Manrope", sans-serif); letter-spacing: -.04em; }
+.fruit-fact-dialog p { position: relative; margin: 0; color: #684D3C; font: 14px/1.75 var(--font-mono, "Space Mono", monospace); }
+.fruit-fact-dialog p strong { color: #302010; font-family: var(--font-display, "Manrope", sans-serif); font-size: 16px; }
+.fruit-fact-dialog a { position: relative; display: inline-flex; align-items: center; gap: 7px; margin-top: 20px; color: #B94C30; font: 750 13px/1.5 var(--font-display, "Manrope", sans-serif); text-decoration-color: rgba(185,76,48,.4); text-underline-offset: 4px; }
+.fruit-fact-dialog__note { position: relative; display: block; margin-top: 12px; color: #806A5B; font: 10px/1.6 var(--font-mono, "Space Mono", monospace); }
+
+@keyframes fruit-dialog-in {
+  from { opacity: 0; scale: .96; translate: 0 12px; }
+  to { opacity: 1; scale: 1; translate: 0 0; }
+}
 
 @keyframes fruit-float {
   0%, 100% { transform: translateY(0) rotate(-1deg); }
@@ -380,25 +501,6 @@
 .purpose-card__rule i { transition: background 300ms ease; }
 .purpose-card:hover .purpose-card__rule i { background: #E8603C; }
 
-.purpose-card__arrow {
-  position: absolute;
-  right: 24px;
-  bottom: 20px;
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border-radius: 50%;
-  background: #FBE3D3;
-  color: #E8603C;
-  font-family: var(--font-display, "Manrope", sans-serif);
-  font-size: 22px;
-  line-height: 1;
-  transition: transform 250ms ease;
-}
-
-.purpose-card:hover .purpose-card__arrow { transform: translateX(4px); }
-
 @media (hover: none) {
   .purpose-card:active { transform: scale(.985); }
 }
@@ -434,7 +536,7 @@
   .purpose-card__body h3 { font-size: 25px; }
   .purpose-card__description { margin-top: 10px; font-size: 12px; line-height: 1.75; }
   .purpose-card__rule { margin-top: 16px; }
-  .purpose-card__arrow { right: 18px; bottom: 14px; width: 34px; height: 34px; }
+  .mission-vision__fact-trigger { top: 60%; right: 0; padding: 9px 12px; font-size: 12px; }
   .mission-vision__shape--left-orbit { top: 25%; left: -104px; width: 112px; height: 156px; }
   .mission-vision__shape--right-petal { right: -28px; bottom: 12%; width: 74px; height: 66px; }
   .mission-vision__botanical { right: -30px; bottom: 8%; width: 64px; }
@@ -461,6 +563,8 @@
   .purpose-card__photo img { transition: none; }
   .purpose-card:hover .purpose-card__photo img { transform: none; }
   .mission-vision__fruit-art { animation: none; translate: none; opacity: 1; transition: none; }
+  .mission-vision__fact-trigger { animation: none; }
+  .fruit-fact-dialog[open] { animation: none; }
   .mission-vision__leaf { translate: none; transition: none; }
   .mission-vision__leaf,
   .mission-vision__decor-art { animation: none; }

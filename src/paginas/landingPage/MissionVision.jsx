@@ -60,6 +60,7 @@ function PurposeIcon({ type }) {
 export default function MissionVision() {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef(null);
+  const fruitFactDialogRef = useRef(null);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -136,6 +137,15 @@ export default function MissionVision() {
               <path d="M8 92C19 61 37 30 70 8M25 60C9 60 4 50 5 37c14 1 22 8 20 23Zm14-20C38 25 45 15 59 10c2 14-5 24-20 30Zm-1 1C23 39 16 30 16 18c13 1 21 8 22 23Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
+            <button
+              className="mission-vision__fact-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => fruitFactDialogRef.current?.showModal()}
+            >
+              <span className="mission-vision__fact-spark" aria-hidden="true">✳</span>
+              <span>¿Sabías que?</span>
+            </button>
           </figure>
         </div>
 
@@ -156,12 +166,27 @@ export default function MissionVision() {
                 <h3>{item.title}</h3>
                 <p className="purpose-card__description">{item.description}</p>
                 <div className="purpose-card__rule" aria-hidden="true"><span /><i /></div>
-                <span className="purpose-card__arrow" aria-hidden="true">→</span>
               </div>
             </article>
           ))}
         </div>
       </div>
+
+      <dialog
+        className="fruit-fact-dialog"
+        ref={fruitFactDialogRef}
+        aria-labelledby="fruit-fact-title"
+        onClick={(event) => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
+      >
+        <div className="fruit-fact-dialog__card">
+          <button className="fruit-fact-dialog__close" type="button" aria-label="Cerrar dato curioso" onClick={() => fruitFactDialogRef.current?.close()}>×</button>
+          <span className="fruit-fact-dialog__eyebrow">Un dato para saborear</span>
+          <h2 id="fruit-fact-title">Pequeña, ligera y llena de sabor</h2>
+          <p>Bien almacenada, la fruta deshidratada suele conservar buena calidad entre <strong>6 y 12 meses</strong>. El calor y la humedad pueden acortar ese tiempo.</p>
+          <a href="https://nchfp.uga.edu/how/dry/general-information-drying/packaging-and-storing-dried-foods/" target="_blank" rel="noreferrer">Conoce las recomendaciones de conservación <span aria-hidden="true">↗</span></a>
+          <span className="fruit-fact-dialog__note">El tiempo exacto depende del tipo de fruta y su empaque.</span>
+        </div>
+      </dialog>
     </section>
   );
 }
