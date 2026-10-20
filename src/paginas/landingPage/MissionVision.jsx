@@ -180,11 +180,9 @@ export default function MissionVision() {
       >
         <div className="fruit-fact-dialog__card">
           <button className="fruit-fact-dialog__close" type="button" aria-label="Cerrar dato curioso" onClick={() => fruitFactDialogRef.current?.close()}>×</button>
-          <span className="fruit-fact-dialog__eyebrow">Un dato para saborear</span>
-          <h2 id="fruit-fact-title">Pequeña, ligera y llena de sabor</h2>
-          <p>Bien almacenada, la fruta deshidratada suele conservar buena calidad entre <strong>6 y 12 meses</strong>. El calor y la humedad pueden acortar ese tiempo.</p>
-          <a href="https://nchfp.uga.edu/how/dry/general-information-drying/packaging-and-storing-dried-foods/" target="_blank" rel="noreferrer">Conoce las recomendaciones de conservación <span aria-hidden="true">↗</span></a>
-          <span className="fruit-fact-dialog__note">El tiempo exacto depende del tipo de fruta y su empaque.</span>
+          <span className="fruit-fact-dialog__eyebrow">Aprovechamiento y Calidad CDISFRUTA</span>
+          <h2 id="fruit-fact-title">Fruta deshidratada: sabor y duración óptima</h2>
+         <p>Nuestra inspiración es sacarle el mayor aprovechamiento a esta fruta; por ello, conservan su máxima calidad entre <span style={{ color: '#d9381e', backgroundColor: '#fde8e5', padding: '2px 6px', borderRadius: '4px' }}>6 y 12 meses</span> mediante un óptimo almacenamiento.</p>
         </div>
       </dialog>
     </section>
