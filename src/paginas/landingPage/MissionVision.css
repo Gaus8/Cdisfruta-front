@@ -31,6 +31,16 @@
   transform: rotate(-20deg);
 }
 
+.mission-vision__shape--left-orbit {
+  top: 19%;
+  left: -78px;
+  width: 142px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(255, 213, 183, .8), rgba(248, 170, 123, .38));
+  transform: rotate(-22deg);
+}
+
 .mission-vision__shape--right {
   right: -70px;
   bottom: 60px;
@@ -39,6 +49,27 @@
   border: 1px solid rgba(119, 144, 74, .3);
   border-radius: 50% 0 50% 0;
   transform: rotate(12deg);
+}
+
+.mission-vision__shape--right-petal {
+  right: 4%;
+  bottom: 8%;
+  width: 104px;
+  height: 88px;
+  border-radius: 6% 60% 8% 58%;
+  background: linear-gradient(135deg, rgba(255, 214, 186, .8), rgba(248, 177, 132, .42));
+  transform: rotate(24deg);
+}
+
+.mission-vision__botanical {
+  position: absolute;
+  z-index: 0;
+  right: -9px;
+  bottom: 13%;
+  width: clamp(72px, 8vw, 120px);
+  color: rgba(127, 141, 91, .38);
+  pointer-events: none;
+  transform: rotate(7deg);
 }
 
 .mission-vision__intro {
@@ -143,24 +174,17 @@
   transform: rotate(35deg);
 }
 
-.mission-vision__fruit {
+.mission-vision__fruit-art {
   position: absolute;
-  top: 2px;
-  right: -34px;
-  width: clamp(86px, 10vw, 142px);
-  aspect-ratio: 1;
-  overflow: hidden;
-  border: 5px solid #FAEFE6;
-  border-radius: 50%;
-  box-shadow: 0 10px 28px rgba(92, 54, 32, .2);
-}
-
-.mission-vision__fruit img {
+  z-index: 3;
+  top: -34px;
+  right: clamp(-120px, calc((700px - 100vw) * .12), -28px);
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 79% 88%;
+  width: clamp(185px, 17vw, 300px);
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 15px rgba(92, 54, 32, .12));
 }
 
 .mission-vision__cards {
@@ -198,10 +222,12 @@
 
 .purpose-card__photo {
   position: relative;
+  z-index: 1;
   min-width: 0;
   min-height: 100%;
   overflow: hidden;
-  border-radius: 0 38% 38% 0 / 0 30% 70% 0;
+  /* Curva orgánica más profunda: se estrecha arriba y abajo y abre hacia el centro. */
+  border-radius: 0 62% 46% 0 / 0 24% 76% 0;
 }
 
 .purpose-card__photo img {
@@ -312,11 +338,11 @@
   .mission-vision__heading h2 { font-size: clamp(36px, 9vw, 50px); }
   .mission-vision__subtitle { margin-top: 14px; font-size: 13px; line-height: 1.75; }
   .mission-vision__place { width: calc(100% - 12px); max-width: 480px; margin-inline: auto; }
-  .mission-vision__fruit { top: -8px; right: -18px; width: 88px; }
+  .mission-vision__fruit-art { top: -26px; right: -26px; width: clamp(142px, 40vw, 205px); }
   .mission-vision__leaf { right: 31%; width: 20px; height: 36px; }
   .mission-vision__cards { gap: 18px; margin-top: 36px; }
   .purpose-card { grid-template-columns: minmax(0, 1fr); min-height: 0; border-radius: 24px; }
-  .purpose-card__photo { height: clamp(150px, 48vw, 210px); min-height: 0; border-radius: 0 0 34% 0 / 0 0 22% 0; }
+  .purpose-card__photo { height: clamp(150px, 48vw, 210px); min-height: 0; border-radius: 0 0 46% 0 / 0 0 34% 0; }
   .purpose-card__photo img { height: 100%; min-height: 0; object-position: center 53%; }
   .purpose-card__body { padding: 22px 22px 54px; }
   .purpose-card__number { top: 20px; right: 20px; }
@@ -326,6 +352,9 @@
   .purpose-card__rule { margin-top: 16px; }
   .purpose-card__arrow { right: 18px; bottom: 14px; width: 34px; height: 34px; }
   .mission-vision__shape--right { right: -96px; bottom: 16px; }
+  .mission-vision__shape--left-orbit { top: 25%; left: -104px; width: 112px; height: 156px; }
+  .mission-vision__shape--right-petal { right: -28px; bottom: 12%; width: 74px; height: 66px; }
+  .mission-vision__botanical { right: -30px; bottom: 8%; width: 64px; }
 }
 
 @media (max-width: 380px) {

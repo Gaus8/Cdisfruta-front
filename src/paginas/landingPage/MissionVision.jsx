@@ -53,7 +53,12 @@ export default function MissionVision() {
       data-visible={visible ? 'true' : 'false'}
     >
       <span className="mission-vision__shape mission-vision__shape--left" aria-hidden="true" />
+      <span className="mission-vision__shape mission-vision__shape--left-orbit" aria-hidden="true" />
       <span className="mission-vision__shape mission-vision__shape--right" aria-hidden="true" />
+      <span className="mission-vision__shape mission-vision__shape--right-petal" aria-hidden="true" />
+      <svg className="mission-vision__botanical" viewBox="0 0 120 220" fill="none" aria-hidden="true">
+        <path d="M18 211C35 154 48 92 104 10M35 154c-20-2-29-13-31-31 18 2 29 12 31 31Zm21-48c-2-20 7-32 24-40 2 19-7 32-24 40Zm-1 1c-19-3-29-14-31-32 18 3 29 14 31 32Zm28-49c0-18 9-29 26-35 0 18-9 29-26 35Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
 
       <div className="mission-vision__inner">
         <div className="mission-vision__intro">
@@ -73,9 +78,7 @@ export default function MissionVision() {
               loading="lazy"
             />
             <span className="mission-vision__leaf" aria-hidden="true" />
-            <span className="mission-vision__fruit" aria-hidden="true">
-              <img src="/img/cdisfruta_06.webp" alt="" loading="lazy" />
-            </span>
+            <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" loading="lazy" />
           </figure>
         </div>
 
