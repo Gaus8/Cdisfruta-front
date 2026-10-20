@@ -3,9 +3,10 @@
   --scrap-orange: #E8603C;
   --scrap-green: #1F3D2B;
   --scrap-paper: #F6EBDD;
+  --scrap-height: clamp(430px, 34vw, 500px);
   position: relative;
   min-width: 0;
-  min-height: clamp(430px, 34vw, 500px);
+  min-height: var(--scrap-height);
   isolation: isolate;
   opacity: 0;
   transition: opacity 500ms ease var(--scrap-delay, 0ms);
@@ -14,7 +15,7 @@
 .purpose-scrap.is-visible { opacity: 1; }
 
 .purpose-scrap--mission { margin-top: 0; }
-.purpose-scrap--vision { margin-top: 34px; }
+.purpose-scrap--vision { margin-top: 0; }
 
 .purpose-scrap__mission-photo {
   position: absolute;
@@ -171,7 +172,7 @@
   z-index: 0;
   box-sizing: border-box;
   width: 100%;
-  min-height: clamp(430px, 34vw, 500px);
+  min-height: var(--scrap-height);
   padding: clamp(58px, 5vw, 72px) max(34%, 230px) clamp(62px, 6vw, 82px) clamp(70px, 5.6vw, 88px);
   filter: drop-shadow(0 16px 20px rgba(0, 0, 0, .22));
   opacity: 0;
@@ -312,9 +313,9 @@
 }
 
 @media (max-width: 1099px) and (min-width: 701px) {
-  .purpose-scrap { width: min(100%, 680px); min-height: 500px; }
+  .purpose-scrap { --scrap-height: 500px; width: min(100%, 680px); min-height: var(--scrap-height); }
   .purpose-scrap--mission { margin-left: 0; }
-  .purpose-scrap--vision { margin-left: auto; }
+  .purpose-scrap--vision { margin-left: auto; margin-top: 24px; }
   .purpose-scrap__hand-title { font-size: clamp(56px, 7vw, 68px); }
   .purpose-scrap__description { font-size: 14px; }
   .purpose-scrap__paint { padding-right: max(34%, 225px); }
