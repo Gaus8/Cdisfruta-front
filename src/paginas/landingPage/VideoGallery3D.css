@@ -15,8 +15,8 @@
 .video-gallery__eyebrow i { display: block; width: 54px; height: 2px; background: linear-gradient(90deg, var(--gallery-amber), var(--gallery-orange)); }
 .video-gallery__title-stage { position: relative; display: grid; min-height: 230px; place-items: start center; }
 .video-gallery__heading { display: flex; flex-direction: column; align-items: center; margin: 4px 0 clamp(28px, 4vw, 56px); }
-.video-gallery__heading h2 { display: block; margin: 0; color: var(--gallery-cream); font: 800 clamp(76px, 9vw, 126px)/.78 var(--font-display, 'Manrope', sans-serif); letter-spacing: -.065em; text-align: center; }
-.video-gallery__heading h2 > span { display: block; position: relative; z-index: 1; margin-bottom: -.08em; color: var(--gallery-amber); font: 400 clamp(52px, 6.3vw, 86px)/.95 'Kaushan Script', 'Brush Script MT', cursive; letter-spacing: -.025em; transform: rotate(-4deg); }
+.video-gallery__heading h2 { display: block; margin: 0; color: var(--gallery-cream); font: 800 clamp(66px, 7.5vw, 104px)/.78 var(--font-display, 'Manrope', sans-serif); letter-spacing: -.065em; text-align: center; }
+.video-gallery__heading h2 > span { display: block; position: relative; z-index: 1; margin-bottom: -.08em; color: var(--gallery-amber); font: 400 clamp(46px, 5.4vw, 74px)/.95 'Kaushan Script', 'Brush Script MT', cursive; letter-spacing: -.025em; transform: rotate(-4deg); }
 .video-gallery__heading h2 > strong { display: block; font: inherit; }
 .video-gallery__underline { width: clamp(190px, 28vw, 370px); height: 24px; margin-top: 7px; overflow: visible; }
 .video-gallery__underline path { stroke: var(--gallery-amber); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 600; stroke-dashoffset: 600; }
@@ -120,8 +120,8 @@
   .video-gallery__eyebrow svg { width: 21px; height: 21px; }
   .video-gallery__eyebrow i { width: 36px; }
   .video-gallery__heading { margin: 12px 0 20px; }
-  .video-gallery__heading h2 { font-size: clamp(62px, 16vw, 82px); line-height: .8; }
-  .video-gallery__heading h2 > span { font-size: clamp(42px, 11vw, 56px); line-height: .95; transform: rotate(-3deg); }
+  .video-gallery__heading h2 { font-size: clamp(56px, 14vw, 72px); line-height: .8; }
+  .video-gallery__heading h2 > span { font-size: clamp(38px, 10vw, 50px); line-height: .95; transform: rotate(-3deg); }
   .video-gallery__heading h2 > strong { display: block; }
   .video-gallery__underline { width: min(230px, 68vw); height: 18px; margin-top: 7px; }
   .video-gallery__grid--mosaic,
