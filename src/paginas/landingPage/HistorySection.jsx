@@ -114,6 +114,13 @@ export default function HistorySection({ content }) {
 
   return (
     <section ref={sectionRef} className="history-editorial" id="historia" data-visible={visible}>
+      <svg className="history-editorial__defs" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="history-photo-organic-clip" clipPathUnits="objectBoundingBox">
+            <path d="M0 0H1V.91C.84.96.69.995.52.99.32.98.14.94 0 .88Z" />
+          </clipPath>
+        </defs>
+      </svg>
       <div className="history-editorial__visual">
         <div className="history-editorial__photo-frame">
           {content.photo ? (
@@ -141,7 +148,6 @@ export default function HistorySection({ content }) {
         <div className="history-editorial__years" aria-label={`${content.years} años en el mercado`}>
           <SmallGlints className="history-editorial__years-glints history-editorial__years-glints--left" />
           <div className="history-editorial__years-number">
-            <svg viewBox="0 0 32 36" fill="none" aria-hidden="true"><path d="M16 33C17 20 22 10 30 3M17 22C8 22 4 17 5 9c9 1 13 6 12 13Zm4-8c-1-8 3-12 10-13 1 8-3 12-10 13Z" /></svg>
             <strong><CountUpNumber value={content.years} /></strong>
           </div>
           <span className="history-editorial__years-label">años en el mercado</span>
@@ -156,7 +162,6 @@ export default function HistorySection({ content }) {
           <path d="M0 44c168 49 312 55 476 39 197-20 354-47 524-34" fill="none" stroke="#F28C1B" strokeWidth="4" strokeLinecap="round" strokeDasharray="1100" strokeDashoffset="1100" />
         </svg>
 
-        <LeafSprig className="history-editorial__real-leaves" />
         <svg className="history-editorial__edge-leaves history-editorial__edge-leaves--top" viewBox="0 0 180 130" fill="none" aria-hidden="true"><path d="M12 101C59 69 103 43 168 15M59 70C41 66 32 53 35 37c17 4 25 14 24 31Zm35-19c-4-18 3-32 21-41 5 17-1 31-21 41Zm-1 2C74 48 68 37 70 21c16 3 24 13 24 32Zm34-20c5 14 17 19 32 13-4-15-17-20-32-13Z" /></svg>
         <svg className="history-editorial__edge-leaves history-editorial__edge-leaves--bottom" viewBox="0 0 180 130" fill="none" aria-hidden="true"><path d="M12 101C59 69 103 43 168 15M59 70C41 66 32 53 35 37c17 4 25 14 24 31Zm35-19c-4-18 3-32 21-41 5 17-1 31-21 41Zm-1 2C74 48 68 37 70 21c16 3 24 13 24 32Zm34-20c5 14 17 19 32 13-4-15-17-20-32-13Z" /></svg>
       </div>
