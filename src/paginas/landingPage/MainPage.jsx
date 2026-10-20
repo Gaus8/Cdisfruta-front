@@ -53,7 +53,7 @@ function MainPage() {
       </section>
  
       {/* ── FOOTER ── */}
-      <footer className={tw("footer-main", "scroll-mt-24")} id="contacto">
+      <footer className={tw("footer-main")}>
         <div className={tw("footer-grid")}>
           {/* Marca */}
           <div className={tw("footer-brand-col")}>
@@ -113,8 +113,8 @@ function MainPage() {
           </div>
  
           {/* Contacto */}
-          <div className={tw("footer-col")}>
-            <h4 className={tw("footer-col-title")}>Contacto</h4>
+          <section className={tw("footer-col", "scroll-mt-24")} id="contacto" aria-labelledby="footer-contact-title">
+            <h4 className={tw("footer-col-title")} id="footer-contact-title">Contacto</h4>
             <ul className={tw("footer-contact-list")}>
               <li>
                 <span className={tw("footer-contact-icon")}><IoLocationOutline /></span>
@@ -129,7 +129,7 @@ function MainPage() {
                 <span>cdisfruta@gmail.com</span>
               </li>
             </ul>
-          </div>
+          </section>
         </div>
  
         <div className={tw("footer-bottom")}>
