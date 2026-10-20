@@ -1,0 +1,410 @@
+/* Composiciones scrapbook de Misión y Visión */
+.purpose-scrap {
+  --scrap-orange: #E8603C;
+  --scrap-green: #1F3D2B;
+  --scrap-paper: #F6EBDD;
+  position: relative;
+  min-width: 0;
+  min-height: clamp(430px, 34vw, 500px);
+  isolation: isolate;
+  opacity: 0;
+  transition: opacity 500ms ease var(--scrap-delay, 0ms);
+}
+
+.purpose-scrap.is-visible { opacity: 1; }
+
+.purpose-scrap--mission { margin-top: 0; }
+.purpose-scrap--vision { margin-top: 34px; }
+
+.purpose-scrap__mission-photo {
+  position: absolute;
+  z-index: 0;
+  inset: 7% 34% 8% 0;
+  margin: 0;
+  overflow: visible;
+  background: linear-gradient(135deg, #fff8f1, #f9d5be);
+  filter: drop-shadow(0 17px 22px rgba(120, 60, 20, .2));
+  opacity: 0;
+  transform: scale(.97);
+  transition: opacity 650ms ease 80ms, transform 650ms ease 80ms;
+}
+
+.purpose-scrap__mission-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  clip-path: var(--active-mision-shape, url(#mission-vision-fotoMision));
+  background: linear-gradient(135deg, #fff8f1, #f9d5be);
+}
+
+.purpose-scrap__paper {
+  position: absolute;
+  z-index: 1;
+  top: 10%;
+  right: 1%;
+  display: flex;
+  width: 67%;
+  min-height: 80%;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(28px, 3vw, 42px) clamp(23px, 3vw, 40px) 27px;
+  border: 1px solid rgba(135, 97, 61, .12);
+  background-color: var(--scrap-paper);
+  background-image: radial-gradient(ellipse at 22% 16%, rgba(255,255,255,.7), transparent 55%), repeating-linear-gradient(0deg, rgba(111,75,42,.018) 0 1px, transparent 1px 4px);
+  box-shadow: 0 20px 34px rgba(120, 60, 20, .22);
+  transform: rotate(-9deg) translate(15px, -30px);
+  transition: transform 500ms cubic-bezier(.2,.9,.3,1.2), box-shadow 400ms ease, opacity 550ms ease 220ms;
+  opacity: 0;
+}
+
+.purpose-scrap__paper::before,
+.purpose-scrap__paper::after {
+  position: absolute;
+  z-index: -1;
+  inset: 4px -2px -3px 3px;
+  border: 1px solid rgba(120, 80, 46, .1);
+  content: "";
+  transform: rotate(.8deg);
+}
+
+.purpose-scrap__paper::after { inset: -2px 2px 1px -3px; transform: rotate(-.6deg); }
+
+.purpose-scrap__tape {
+  position: absolute;
+  top: -16px;
+  left: 39%;
+  width: 132px;
+  height: 34px;
+  background: rgba(211, 194, 162, .72);
+  box-shadow: 0 2px 4px rgba(80, 55, 32, .1);
+  clip-path: polygon(2% 6%, 98% 0, 96% 92%, 83% 96%, 70% 91%, 57% 98%, 42% 92%, 29% 97%, 15% 92%, 3% 100%);
+  transform: rotate(-3deg);
+}
+
+.purpose-scrap__icon {
+  width: clamp(58px, 6vw, 82px);
+  height: auto;
+  flex: 0 0 auto;
+  margin-bottom: 8px;
+  color: var(--scrap-orange);
+  overflow: visible;
+}
+
+.purpose-scrap__icon path { stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.purpose-scrap__icon .purpose-scrap__icon-ring { stroke-width: 2.4; stroke-dasharray: 106 5; }
+
+.purpose-scrap__hand-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: "Kaushan Script", "Brush Script MT", cursive;
+  font-size: clamp(44px, 4.3vw, 66px);
+  font-weight: 400;
+  line-height: .91;
+  letter-spacing: -.035em;
+}
+
+.purpose-scrap__hand-title span { font-size: .68em; }
+.purpose-scrap__hand-title--mission { color: var(--scrap-green); }
+.purpose-scrap__hand-title--vision { color: #FAEFE6; }
+
+.purpose-scrap__stroke {
+  display: block;
+  width: min(72%, 230px);
+  height: auto;
+  flex: 0 0 auto;
+  overflow: visible;
+  color: var(--scrap-orange);
+}
+
+.purpose-scrap__stroke path {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  transition: stroke-dashoffset 800ms ease 430ms;
+}
+.purpose-scrap.is-visible .purpose-scrap__stroke path { stroke-dashoffset: 0; }
+.purpose-scrap__title-stroke { margin: 4px 0 11px 16%; }
+
+.purpose-scrap__original-title {
+  margin: 0;
+  color: var(--scrap-green);
+  font: 750 clamp(16px, 1.35vw, 20px)/1.25 Manrope, sans-serif;
+  letter-spacing: -.02em;
+}
+
+.purpose-scrap__description {
+  width: 100%;
+  margin: 12px 0 0;
+  color: #2B1B12;
+  font: 13px/1.7 "Space Mono", monospace;
+  overflow-wrap: anywhere;
+}
+
+.purpose-scrap__footer-stroke { width: min(84%, 290px); margin: auto 0 0 14%; padding-top: 10px; }
+
+.purpose-scrap__mission-glints {
+  position: absolute;
+  top: 3%;
+  left: -4%;
+  width: 70px;
+  color: var(--scrap-orange);
+  transform: rotate(-18deg);
+}
+
+.purpose-scrap__mission-leaves {
+  position: absolute;
+  bottom: -5%;
+  left: -4%;
+  width: 28%;
+  color: #577B32;
+  filter: drop-shadow(0 4px 5px rgba(50,75,31,.16));
+  transform-origin: 15% 90%;
+  animation: scrapbook-leaf-sway 7s ease-in-out .8s infinite;
+}
+
+.purpose-scrap__paint {
+  position: absolute;
+  inset: 3% 0 2%;
+  min-height: 95%;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, .22));
+  opacity: 0;
+  transform: scale(.98);
+  transition: opacity 600ms ease 100ms, transform 600ms ease 100ms;
+}
+
+.purpose-scrap__paint::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(ellipse at 68% 24%, rgba(76, 104, 67, .36), transparent 48%), linear-gradient(145deg, #23432f, #173222 72%);
+  clip-path: var(--active-vision-shape, url(#mission-vision-visionBrush));
+  content: "";
+}
+
+.purpose-scrap__paint::after {
+  position: absolute;
+  z-index: -1;
+  inset: 4% 3%;
+  background: repeating-linear-gradient(170deg, transparent 0 9px, rgba(242, 235, 211, .035) 10px 11px, transparent 12px 18px);
+  clip-path: var(--active-vision-shape, url(#mission-vision-visionBrush));
+  content: "";
+}
+
+.purpose-scrap__vision-copy {
+  position: absolute;
+  top: 11%;
+  left: 10%;
+  display: flex;
+  width: 52%;
+  height: 76%;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #FAEFE6;
+}
+
+.purpose-scrap--vision .purpose-scrap__icon { width: clamp(58px, 5.2vw, 74px); }
+.purpose-scrap--vision .purpose-scrap__original-title { color: #fff6eb; }
+.purpose-scrap--vision .purpose-scrap__description { color: #FAEFE6; }
+.purpose-scrap--vision .purpose-scrap__footer-stroke { width: min(85%, 290px); margin-left: 9%; }
+
+.purpose-scrap__polaroid {
+  position: absolute;
+  z-index: 2;
+  top: 8%;
+  right: -2%;
+  width: 33%;
+  margin: 0;
+  padding: 12px 12px 18px;
+  background: #FBF6EC;
+  box-shadow: 0 17px 28px rgba(0,0,0,.25);
+  rotate: 4deg;
+  transform: translateY(-30px);
+  transform-origin: 50% 4%;
+  opacity: 0;
+  transition: opacity 550ms ease 300ms, transform 600ms cubic-bezier(.2,.9,.3,1.2) 300ms, rotate 400ms ease, box-shadow 400ms ease;
+}
+
+.purpose-scrap__polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: .92 / 1;
+  object-fit: cover;
+  object-position: center;
+  background: linear-gradient(135deg, #fff8f1, #f9d5be);
+}
+
+.purpose-scrap__polaroid figcaption {
+  padding-top: 10px;
+  color: var(--scrap-green);
+  font: 18px/1.1 "Kaushan Script", "Brush Script MT", cursive;
+  text-align: center;
+}
+.purpose-scrap__polaroid figcaption span { display: block; font: 22px/1 Manrope, sans-serif; }
+
+.purpose-scrap__clothespin {
+  position: absolute;
+  z-index: 2;
+  top: -25px;
+  right: 10%;
+  width: 18px;
+  height: 68px;
+  border: 1px solid rgba(118, 77, 36, .55);
+  background: linear-gradient(90deg,#b8884d,#dfbd81 42%,#9d703e 48%,#d6b47a 56%,#b18149);
+  box-shadow: 0 3px 5px rgba(58, 43, 28, .24);
+  transform: rotate(5deg);
+}
+
+.purpose-scrap__clothespin::before,
+.purpose-scrap__clothespin::after { position: absolute; left: 0; width: 100%; height: 1px; background: rgba(87,57,31,.65); content: ""; }
+.purpose-scrap__clothespin::before { top: 45%; }
+.purpose-scrap__clothespin::after { top: 51%; }
+
+.purpose-scrap__vision-glints {
+  position: absolute;
+  top: 4%;
+  right: -1%;
+  width: 70px;
+  color: var(--scrap-green);
+  transform: rotate(180deg);
+}
+
+.purpose-scrap__vision-leaves {
+  position: absolute;
+  right: 19%;
+  bottom: 0;
+  width: 22%;
+  color: #78904b;
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 4px 5px rgba(0,0,0,.2));
+  transform-origin: 50% 90%;
+  animation: scrapbook-leaf-sway 7s ease-in-out -2s infinite;
+}
+
+.purpose-scrap--mission.is-visible .purpose-scrap__mission-photo,
+.purpose-scrap--mission.is-visible .purpose-scrap__paper,
+.purpose-scrap--vision.is-visible .purpose-scrap__paint,
+.purpose-scrap--vision.is-visible .purpose-scrap__polaroid { opacity: 1; }
+
+.purpose-scrap--mission.is-visible .purpose-scrap__mission-photo { transform: scale(1); }
+.purpose-scrap--mission.is-visible .purpose-scrap__paper { transform: rotate(-4.2deg); }
+.purpose-scrap--vision.is-visible .purpose-scrap__paint { transform: scale(1); }
+.purpose-scrap--vision.is-visible .purpose-scrap__polaroid { transform: translateY(0); animation: scrapbook-polaroid-sway 7s ease-in-out 900ms infinite; }
+
+@media (hover: hover) and (pointer: fine) {
+  .purpose-scrap--mission:hover .purpose-scrap__paper { transform: rotate(-3.2deg) translateY(-6px); box-shadow: 0 26px 40px rgba(120,60,20,.27); }
+  .purpose-scrap--vision:hover .purpose-scrap__polaroid { rotate: 6deg; transform: translateY(-4px); animation-play-state: paused; box-shadow: 0 23px 34px rgba(0,0,0,.3); }
+}
+
+@media (hover: none) {
+  .purpose-scrap:active .purpose-scrap__paper,
+  .purpose-scrap:active .purpose-scrap__paint,
+  .purpose-scrap:active .purpose-scrap__polaroid { scale: .985; }
+}
+
+@media (max-width: 1099px) and (min-width: 701px) {
+  .purpose-scrap { width: min(100%, 680px); min-height: 500px; }
+  .purpose-scrap--mission { margin-left: 0; }
+  .purpose-scrap--vision { margin-left: auto; }
+  .purpose-scrap__hand-title { font-size: clamp(56px, 7vw, 68px); }
+  .purpose-scrap__description { font-size: 14px; }
+}
+
+@media (max-width: 700px) {
+  .purpose-scrap { min-height: 0; }
+  .purpose-scrap--mission { display: flex; flex-direction: column; padding-bottom: 0; }
+  .purpose-scrap__mission-photo {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(190px, 58vw, 250px);
+    flex: none;
+    transform: scale(.98);
+  }
+  .purpose-scrap__mission-photo img { clip-path: var(--active-mision-shape, url(#mission-vision-fotoMovil)); }
+  .purpose-scrap__paper {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: calc(100% - 28px);
+    min-height: 0;
+    margin: -38px auto 0;
+    padding: 28px 24px 22px;
+    transform: rotate(-8deg) translate(8px, -18px);
+  }
+  .purpose-scrap--mission.is-visible .purpose-scrap__paper { transform: rotate(-1.5deg) translate(0); }
+  .purpose-scrap__tape { left: 39%; width: 108px; }
+  .purpose-scrap__icon { width: 56px; }
+  .purpose-scrap__hand-title { font-size: clamp(42px, 12vw, 56px); }
+  .purpose-scrap__title-stroke { width: 65%; }
+  .purpose-scrap__original-title { font-size: 18px; }
+  .purpose-scrap__description { margin-top: 10px; font-size: 13px; line-height: 1.7; }
+  .purpose-scrap__footer-stroke { min-height: 30px; margin-top: 10px; }
+  .purpose-scrap__mission-glints { top: 1%; left: -2%; width: 54px; }
+  .purpose-scrap__mission-leaves { bottom: -10px; left: -2%; width: 30%; }
+
+  .purpose-scrap--vision { min-height: 0; margin-top: 20px; padding: 10px 0 6px; }
+  .purpose-scrap__paint {
+    position: relative;
+    inset: auto;
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 28px 25px 26px;
+    transform: scale(.99);
+  }
+  .purpose-scrap__paint::before,
+  .purpose-scrap__paint::after { inset: 0; }
+  .purpose-scrap__vision-copy {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+  }
+  .purpose-scrap--vision .purpose-scrap__icon { width: 56px; }
+  .purpose-scrap--vision .purpose-scrap__original-title { font-size: 18px; }
+  .purpose-scrap--vision .purpose-scrap__description { font-size: 13px; }
+  .purpose-scrap__polaroid {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(72%, 270px);
+    margin: 27px auto 0;
+    padding: 10px 10px 14px;
+    rotate: 3deg;
+    transform: translateY(-24px);
+  }
+  .purpose-scrap--vision.is-visible .purpose-scrap__polaroid { transform: none; animation: scrapbook-polaroid-sway-mobile 7s ease-in-out 900ms infinite; }
+  .purpose-scrap--vision:hover .purpose-scrap__polaroid { animation-play-state: paused; }
+  .purpose-scrap__polaroid img { aspect-ratio: 1.08 / 1; }
+  .purpose-scrap__polaroid figcaption { font-size: 17px; }
+  .purpose-scrap__clothespin { top: -17px; width: 15px; height: 50px; }
+  .purpose-scrap__vision-leaves { right: 2%; bottom: 10%; width: 23%; }
+  .purpose-scrap__vision-glints { top: 1%; right: 1%; width: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .purpose-scrap,
+  .purpose-scrap__mission-photo,
+  .purpose-scrap__paper,
+  .purpose-scrap__paint,
+  .purpose-scrap__polaroid,
+  .purpose-scrap__stroke path {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .purpose-scrap__mission-photo { transform: none; }
+  .purpose-scrap__paper { transform: rotate(-4.2deg); }
+  .purpose-scrap__paint { transform: none; }
+  .purpose-scrap__polaroid { transform: none; rotate: 4deg; }
+  .purpose-scrap__polaroid,
+  .purpose-scrap__mission-leaves,
+  .purpose-scrap__vision-leaves { animation: none !important; }
+}
+
+@keyframes scrapbook-polaroid-sway { 0%, 100% { rotate: 4deg; } 50% { rotate: 5deg; } }
+@keyframes scrapbook-polaroid-sway-mobile { 0%, 100% { rotate: 3deg; } 50% { rotate: 4deg; } }
+@keyframes scrapbook-leaf-sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }

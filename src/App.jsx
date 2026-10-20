@@ -11,6 +11,7 @@ import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
 
 import MainPage from './paginas/landingPage/MainPage';
 import BlobShapesPreview from './paginas/landingPage/BlobShapesPreview';
+import MissionVisionShapesPreview from './paginas/landingPage/MissionVisionShapesPreview';
 import Validacion from "./paginas/usuariosAuth/Validacion";
 import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
 import MisPedidos from "./paginas/paginaClientes/MisPedidos"; 
@@ -155,6 +156,7 @@ function AdminModule({ permission, children }) {
 // Definición de las Rutas de la Aplicación
 const router = createBrowserRouter([
   ...(import.meta.env.DEV ? [{ path: '/dev/formas', element: <BlobShapesPreview /> }] : []),
+  ...(import.meta.env.DEV ? [{ path: '/dev/mision-vision', element: <MissionVisionShapesPreview /> }] : []),
   // Rutas públicas independientes
   { path: '/', element: <MainPage /> },
   { path: '/tienda', element: <Tienda /> },

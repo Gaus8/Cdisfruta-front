@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './MissionVision.css';
-import { ACTIVE_BLOB, ORGANIC_SHAPES } from './organicShapes.js';
+import { ACTIVE_BLOB, ACTIVE_MISION_SHAPE, ACTIVE_VISION_SHAPE, ORGANIC_SHAPES } from './organicShapes.js';
+import PurposeScrapCard from './PurposeScrapCard.jsx';
 
 const PURPOSE_ITEMS = [
   {
@@ -21,6 +22,7 @@ const PURPOSE_ITEMS = [
     image: '/img/cdisfruta_07.webp',
     alt: 'Bolsa de aromáticas CDISFRUTA rodeada de fruta fresca y deshidratada',
     icon: 'vision',
+    caption: 'Sabor de nuestra tierra',
     shape: 'fotoVision',
   },
 ];
@@ -36,24 +38,6 @@ function OrganicClipPaths() {
         ))}
       </defs>
     </svg>
-  );
-}
-
-function PurposeIcon({ type }) {
-  return (
-    <span className="purpose-card__icon" aria-hidden="true">
-      {type === 'mision' ? (
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 21v-9m0 3C7 15 5 12 5 7c5 0 8 2 8 7m-1 1c0-5 3-8 8-8 0 5-2 8-8 8Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5" strokeDasharray="1.2 2.1" />
-          <path d="m15.7 8.2-2.5 5.1-4.9 2.5 2.5-5 4.9-2.6Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-          <circle cx="12" cy="12" r="1" fill="currentColor" />
-        </svg>
-      )}
-    </span>
   );
 }
 
@@ -132,10 +116,6 @@ export default function MissionVision() {
               loading="lazy"
               onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
             />
-            <img className="mission-vision__decor-art" src="/img/brujula-hojas-trazos.png" alt="" aria-hidden="true" loading="lazy" />
-            <svg className="mission-vision__leaf" viewBox="0 0 80 104" fill="none" aria-hidden="true">
-              <path d="M8 92C19 61 37 30 70 8M25 60C9 60 4 50 5 37c14 1 22 8 20 23Zm14-20C38 25 45 15 59 10c2 14-5 24-20 30Zm-1 1C23 39 16 30 16 18c13 1 21 8 22 23Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
             <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
             <button
               className="mission-vision__fact-trigger"
@@ -149,26 +129,14 @@ export default function MissionVision() {
           </figure>
         </div>
 
-        <div className="mission-vision__cards">
-          {PURPOSE_ITEMS.map((item, index) => (
-            <article
-              className="purpose-card"
-              key={item.id}
-              data-shape={item.shape}
-              style={{ '--purpose-delay': `${index * 120}ms` }}
-            >
-              <div className={`purpose-card__photo purpose-card__photo--${item.id}`}>
-                <img src={item.image} alt={item.alt} loading="lazy" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} />
-              </div>
-              <div className="purpose-card__body">
-                <PurposeIcon type={item.icon} />
-                <p className="purpose-card__eyebrow">{item.eyebrow}</p>
-                <h3>{item.title}</h3>
-                <p className="purpose-card__description">{item.description}</p>
-                <div className="purpose-card__rule" aria-hidden="true"><span /><i /></div>
-              </div>
-            </article>
-          ))}
+        <div
+          className="mission-vision__cards mission-vision__cards--scrapbook"
+          style={{
+            '--active-mision-shape': `url(#mission-vision-${ACTIVE_MISION_SHAPE})`,
+            '--active-vision-shape': `url(#mission-vision-${ACTIVE_VISION_SHAPE})`,
+          }}
+        >
+          {PURPOSE_ITEMS.map((item, index) => <PurposeScrapCard key={item.id} item={item} index={index} visible={visible} />)}
         </div>
       </div>
 
