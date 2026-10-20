@@ -3,17 +3,11 @@ import Videos from './Videos';
 import HeroCarousel from './Carrusel';
 import ProductCarousel3D from './ProductCarousel3D';
 import Header from './Header';
-import { MdOutlineComputer } from "react-icons/md";
-import { IoIosTimer } from "react-icons/io";
-import { AiOutlineGlobal } from "react-icons/ai";
-import { FaArrowTrendUp } from "react-icons/fa6";
+import CountUpNumber from './CountUpNumber';
+import MissionVision from './MissionVision';
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
-import { FiShield } from "react-icons/fi";
-import { AiOutlineStar } from "react-icons/ai";
-import { FiCheckCircle } from "react-icons/fi";
-import { FiTruck } from "react-icons/fi";
 
 function MainPage() {
   return (
@@ -31,7 +25,7 @@ function MainPage() {
             className={tw("about-image-bg")} 
           />
           <div className={tw("about-badge")}>
-            <span className={tw("about-badge-num")}>6</span>
+            <span className={tw("about-badge-num")}><CountUpNumber value={6} /></span>
             <span className={tw("about-badge-label")}>años en el mercado</span>
           </div>
         </div>
@@ -50,44 +44,10 @@ function MainPage() {
             elaborado con frutas cultivadas por manos campesinas,
             garantizando calidad, frescura y el auténtico sabor natural.
           </p>
-          <div className={tw("about-tags")}>
-            <span className={tw("about-tag")}>🌿 100% Natural</span>
-            <span className={tw("about-tag")}>🏔️ Origen Ubatense</span>
-            <span className={tw("about-tag")}>✈️ Presencia Internacional</span>
-            <span className={tw("about-tag")}>🫙 Sin conservantes</span>
-          </div>
         </div>
       </section>
  
-      {/* ── SECCIÓN DE CARACTERÍSTICAS ── */}
-      <section className={tw("features-section", "scroll-mt-24")} id="features">
-        <div className={tw("features-header")}>
-          <span className={tw("eyebrow")}>¿Por qué elegirnos?</span>
-          <h2 className={tw("section-title")}>Calidad en cada detalle</h2>
-        </div>
-        <div className={tw("features-grid")}>
-          <div className={tw("feature-card")}>
-            <div className={tw("feat-icon-wrap")}><MdOutlineComputer /></div>
-            <h3>Diseño Adaptable</h3>
-            <p>Nuestra plataforma se adapta a cualquier dispositivo para brindarte una mayor experiencia.</p>
-          </div>
-          <div className={tw("feature-card")}>
-            <div className={tw("feat-icon-wrap")}><FiShield /></div>
-            <h3>Compra fácil y segura</h3>
-            <p>Disfruta de un proceso de compra rápido, intuitivo y confiable, pensado para que adquieras nuestros productos sin complicaciones.</p>
-          </div>
-          <div className={tw("feature-card")}>
-            <div className={tw("feat-icon-wrap")}><FiCheckCircle /></div>
-            <h3>Compromiso con la calidad</h3>
-            <p>Seleccionamos cuidadosamente cada producto para ofrecerte siempre frescura, sabor y estándares de alta calidad.</p>
-          </div>
-          <div className={tw("feature-card")}>
-            <div className={tw("feat-icon-wrap")}><FiTruck /></div>
-            <h3>Entrega rápida</h3>
-            <p>Llevamos nuestros productos hasta la puerta de tu casa, garantizando frescura, rapidez y calidad en cada envío.</p>
-          </div>
-        </div>
-      </section>
+      <MissionVision />
  
       {/* ── GALERÍA / VIDEOS ── */}
       <section className={tw("media-section", "scroll-mt-24")} id="videos">
