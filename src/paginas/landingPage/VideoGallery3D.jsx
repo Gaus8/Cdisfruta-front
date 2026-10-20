@@ -109,12 +109,20 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
             <span>Nuestra galería</span>
             <i aria-hidden="true" />
           </div>
-          <header className="video-gallery__heading">
-            <h2>
-              {titleParts.second ? <><span>{titleParts.first}</span><strong>{titleParts.second}</strong></> : <strong>{titleParts.first}</strong>}
-            </h2>
-            <svg className="video-gallery__underline" viewBox="0 0 400 24" fill="none" aria-hidden="true"><path d="M8 17C87 5 173 14 256 9c50-3 94-5 137-3" /></svg>
-          </header>
+          <div className="video-gallery__title-stage">
+            <svg className="video-gallery__rays" viewBox="0 0 90 100" fill="none" aria-hidden="true"><path d="m15 18 22 19M5 48l27 1m4-42 4 26m27 7 17-15m-12 35 20-3" /></svg>
+            <header className="video-gallery__heading">
+              <h2>
+                {titleParts.second ? <><span>{titleParts.first}</span><strong>{titleParts.second}</strong></> : <strong>{titleParts.first}</strong>}
+              </h2>
+              <svg className="video-gallery__underline" viewBox="0 0 400 24" fill="none" aria-hidden="true"><path d="M8 17C87 5 173 14 256 9c50-3 94-5 137-3" /></svg>
+            </header>
+            <aside className="video-gallery__aside" aria-label="Una historia en cada video">
+              <span>en cada<br />video...</span>
+              <span className="video-gallery__aside-play" aria-hidden="true"><PlayIcon /></span>
+              <svg viewBox="0 0 92 70" fill="none" aria-hidden="true"><path d="M86 5C65 7 55 17 48 34 42 48 30 57 10 61m0 0 16-2M10 61l8-14" /></svg>
+            </aside>
+          </div>
 
           <div className={`video-gallery__grid video-gallery__grid--${galleryCount}`}>
             {cleanVideos.map((video, index) => {
