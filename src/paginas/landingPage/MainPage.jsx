@@ -3,11 +3,38 @@ import Videos from './Videos';
 import HeroCarousel from './Carrusel';
 import ProductCarousel3D from './ProductCarousel3D';
 import Header from './Header';
-import CountUpNumber from './CountUpNumber';
+import HistorySection from './HistorySection';
 import MissionVision from './MissionVision';
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
+
+// Contenido editorial de Historia. Esta sección es estática y no está conectada al panel administrativo.
+// Los textos y distintivos visuales de esta configuración se pueden editar aquí sin tocar el panel.
+const historyContent = {
+  photo: '/img/cdisfruta_06.webp',
+  photoAlt: 'Productos CDISFRUTA de fruta deshidratada sobre una mesa de madera',
+  years: 6,
+  eyebrow: 'Nuestra historia',
+  quote: '"Del campo de Ubaté al mundo"',
+  paragraphs: [
+    <>Somos una empresa fundada en el año 2020 por una <strong>Familia Ubatense</strong>, a partir de las oportunidades y necesidades generadas por la pandemia. Dedicada a la producción de <strong>snacks de fruta deshidratada y aromáticas frutales</strong>, promoviendo una alimentación saludable y completamente natural.</>,
+    <>Cada producto nace de la riqueza agrícola de nuestra región, elaborado con frutas cultivadas por manos campesinas, garantizando calidad, frescura y el auténtico sabor natural.</>,
+  ],
+  photoTagline: 'El sabor natural de nuestra tierra',
+  photoBadges: [
+    { id: 'natural', icon: 'leaf', label: '100% NATURAL' },
+    { id: 'sin-conservantes', icon: 'heart', label: 'SIN CONSERVANTES' },
+    { id: 'nutrientes', icon: 'sprout', label: 'RICO EN NUTRIENTES' },
+  ],
+  values: [
+    { id: 'fruta-natural', icon: 'leaf', label: <>Frutas 100%<br />naturales</> },
+    { id: 'apoyo-campesino', icon: 'support', label: <>Apoyo al<br />campesino local</> },
+    { id: 'calidad', icon: 'shield', label: <>Calidad y<br />seguridad</> },
+    { id: 'sabor', icon: 'heart', label: <>Sabor<br />auténtico</> },
+  ],
+  closingNote: 'Más que un snack... es naturaleza en cada bocado',
+};
 
 function MainPage() {
   return (
@@ -16,36 +43,7 @@ function MainPage() {
       <HeroCarousel />
       <ProductCarousel3D />
  
-      {/* ── SECCIÓN SOBRE NOSOTROS ── */}
-      <section className={tw("about-section", "scroll-mt-24")} id="historia">
-        <div className={tw("about-visual")}>
-          <img 
-            src="/img/cdisfruta_06.webp" 
-            alt="Sobre nosotros" 
-            className={tw("about-image-bg")} 
-          />
-          <div className={tw("about-badge")}>
-            <span className={tw("about-badge-num")}><CountUpNumber value={6} /></span>
-            <span className={tw("about-badge-label")}>años en el mercado</span>
-          </div>
-        </div>
-        <div className={tw("about-content")}>
-          <span className={tw("eyebrow")}>Nuestra historia</span>
-          <blockquote className={tw("about-quote")}>
-            "Del campo de Ubaté al mundo"
-          </blockquote>
-          <p>
-            Somos una empresa fundada en el año 2020 por una <strong> Familia Ubatense, </strong> a partir de las oportunidades y necesidades generadas por la pandemia. Dedicada a la{' '}
-            producción de <strong> snacks de fruta deshidratada y aromáticas frutales</strong>, promoviendo
-            una alimentación saludable y completamente natural.
-          </p>
-          <p>
-            Cada producto nace de la riqueza agrícola de nuestra región,
-            elaborado con frutas cultivadas por manos campesinas,
-            garantizando calidad, frescura y el auténtico sabor natural.
-          </p>
-        </div>
-      </section>
+      <HistorySection content={historyContent} />
  
       <MissionVision />
  

@@ -35,7 +35,7 @@ export default function CountUpNumber({ value = 6 }) {
       hasCounted.current = true;
       observer.unobserve(element);
       const start = performance.now();
-      const duration = 1100;
+      const duration = 900;
       const animate = (now) => {
         const progress = Math.min((now - start) / duration, 1);
         setCount(Math.round(value * (1 - (1 - progress) ** 3)));
