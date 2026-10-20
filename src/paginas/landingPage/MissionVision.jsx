@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './MissionVision.css';
-import { ORGANIC_SHAPES } from './organicShapes.js';
+import { ACTIVE_BLOB, ORGANIC_SHAPES } from './organicShapes.js';
 
 const PURPOSE_ITEMS = [
   {
@@ -85,7 +85,7 @@ export default function MissionVision() {
 
     const updateParallax = () => {
       const bounds = node.getBoundingClientRect();
-      const offset = Math.max(-18, Math.min(18, (window.innerHeight / 2 - bounds.top) * 0.018));
+      const offset = Math.max(-10, Math.min(10, (window.innerHeight / 2 - bounds.top) * 0.018));
       node.style.setProperty('--fruit-parallax', `${offset}px`);
       node.style.setProperty('--leaf-parallax', `${-offset * 0.45}px`);
     };
@@ -123,6 +123,7 @@ export default function MissionVision() {
           <figure className="mission-vision__place" aria-label="Paisaje e iglesia de Ubaté">
             <img
               className="mission-vision__place-photo"
+              style={{ '--active-place-blob': `url(#mission-vision-${ACTIVE_BLOB})` }}
               src="/img/ubate-iglesia.png"
               alt="Iglesia y paisaje de Ubaté, Cundinamarca"
               width="1024"
@@ -130,6 +131,7 @@ export default function MissionVision() {
               loading="lazy"
               onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
             />
+            <img className="mission-vision__decor-art" src="/img/brujula-hojas-trazos.png" alt="" aria-hidden="true" loading="lazy" />
             <svg className="mission-vision__leaf" viewBox="0 0 80 104" fill="none" aria-hidden="true">
               <path d="M8 92C19 61 37 30 70 8M25 60C9 60 4 50 5 37c14 1 22 8 20 23Zm14-20C38 25 45 15 59 10c2 14-5 24-20 30Zm-1 1C23 39 16 30 16 18c13 1 21 8 22 23Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
