@@ -163,7 +163,6 @@ export default function HistorySection({ content }) {
         </svg>
 
         <svg className="history-editorial__edge-leaves history-editorial__edge-leaves--top" viewBox="0 0 180 130" fill="none" aria-hidden="true"><path d="M12 101C59 69 103 43 168 15M59 70C41 66 32 53 35 37c17 4 25 14 24 31Zm35-19c-4-18 3-32 21-41 5 17-1 31-21 41Zm-1 2C74 48 68 37 70 21c16 3 24 13 24 32Zm34-20c5 14 17 19 32 13-4-15-17-20-32-13Z" /></svg>
-        <svg className="history-editorial__edge-leaves history-editorial__edge-leaves--bottom" viewBox="0 0 180 130" fill="none" aria-hidden="true"><path d="M12 101C59 69 103 43 168 15M59 70C41 66 32 53 35 37c17 4 25 14 24 31Zm35-19c-4-18 3-32 21-41 5 17-1 31-21 41Zm-1 2C74 48 68 37 70 21c16 3 24 13 24 32Zm34-20c5 14 17 19 32 13-4-15-17-20-32-13Z" /></svg>
       </div>
 
       <div className="history-editorial__content">

@@ -113,7 +113,6 @@
 .history-editorial__base-brush path:last-child { animation: history-brush-draw 1.6s .35s ease-out backwards; }
 .history-editorial__edge-leaves { position: absolute; z-index: 1; width: 140px; height: 110px; stroke: #244c26; stroke-width: 2; opacity: .75; pointer-events: none; }
 .history-editorial__edge-leaves--top { top: 18px; right: 18px; transform: rotate(15deg); }
-.history-editorial__edge-leaves--bottom { right: 16px; bottom: 15px; transform: rotate(195deg); }
 
 .history-editorial__content {
   position: relative;
@@ -206,6 +205,7 @@
   .history-editorial__edge-leaves { z-index: 5; }
   .history-editorial__photo-badges {
     isolation: isolate;
+    bottom: 14%;
   }
   .history-editorial__photo-badges--count-1 { grid-template-columns: minmax(0, 1fr); right: 33.333%; left: 33.333%; }
   .history-editorial__photo-badges--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); right: 17%; left: 17%; }
@@ -237,7 +237,7 @@
   .history-editorial__years { bottom: 124px; min-width: 142px; padding: 8px 14px 9px; border-radius: 16px; }
   .history-editorial__years-number strong { font-size: 32px; }
   .history-editorial__years-label { font-size: 11px; }
-  .history-editorial__photo-badges { right: 8px; bottom: 11%; left: 8px; gap: 3px; }
+  .history-editorial__photo-badges { right: 8px; bottom: 14%; left: 8px; gap: 3px; }
   .history-editorial__photo-badge {
     flex-direction: column;
     gap: 3px;
@@ -256,7 +256,6 @@
   .history-editorial__photo-badge svg circle:first-child { fill: rgb(15 8 3 / .28); }
   .history-editorial__edge-leaves { width: 100px; height: 80px; }
   .history-editorial__edge-leaves--top { top: 9px; right: 5px; }
-  .history-editorial__edge-leaves--bottom { right: 2px; bottom: 3px; }
   .history-editorial__content { padding: 40px 22px 48px; }
   .history-editorial__eyebrow { font-size: 11px; }
   .history-editorial__quote { margin-bottom: 23px; padding-left: 13px; font-size: clamp(27px, 8vw, 36px); }
