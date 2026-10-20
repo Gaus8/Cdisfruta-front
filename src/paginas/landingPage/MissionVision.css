@@ -210,7 +210,7 @@
   position: absolute;
   z-index: 3;
   top: -11%;
-  right: -10%;
+  right: -18%;
   display: block;
   width: 29.5%;
   height: auto;
@@ -219,7 +219,7 @@
   transform-origin: top right;
   pointer-events: none;
   filter: drop-shadow(0 12px 15px rgba(92, 54, 32, .12));
-  translate: 40px var(--fruit-parallax, 0px);
+  translate: 0 var(--fruit-parallax, 0px);
   opacity: 0;
   transition: opacity 500ms ease 320ms, translate 500ms ease 320ms;
   animation: fruit-float 7s ease-in-out infinite;
@@ -246,7 +246,6 @@
   font-weight: 800;
   white-space: nowrap;
   cursor: pointer;
-  animation: fact-bubble-float 4.8s ease-in-out infinite;
   transition: border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
 }
 
@@ -274,11 +273,6 @@
 .fruit-fact-dialog__close:focus-visible,
 .fruit-fact-dialog a:focus-visible { outline: 3px solid #302010; outline-offset: 3px; }
 .mission-vision__fact-spark { color: #E8603C; font-size: 17px; line-height: 1; }
-
-@keyframes fact-bubble-float {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -5px; }
-}
 
 .fruit-fact-dialog {
   position: fixed;
@@ -349,8 +343,8 @@
 }
 
 @keyframes fruit-float {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50% { transform: translateY(-8px) rotate(2deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 .mission-vision__cards {
@@ -521,7 +515,7 @@
   .mission-vision__heading h2 { font-size: clamp(36px, 9vw, 50px); }
   .mission-vision__subtitle { margin-top: 14px; font-size: 13px; line-height: 1.75; }
   .mission-vision__place { width: calc(100% - 12px); max-width: 480px; margin-inline: auto; }
-  .mission-vision__fruit-art { top: -4%; right: 0; width: 30%; }
+  .mission-vision__fruit-art { top: -4%; right: -10%; width: 30%; }
   .mission-vision__place { aspect-ratio: 1.25 / 1; }
   .mission-vision__leaf { left: -3%; bottom: 0; width: 18%; height: 26%; }
   .mission-vision__decor-art { left: auto; right: -2%; top: -10%; width: 21%; opacity: .82; }
@@ -563,7 +557,6 @@
   .purpose-card__photo img { transition: none; }
   .purpose-card:hover .purpose-card__photo img { transform: none; }
   .mission-vision__fruit-art { animation: none; translate: none; opacity: 1; transition: none; }
-  .mission-vision__fact-trigger { animation: none; }
   .fruit-fact-dialog[open] { animation: none; }
   .mission-vision__leaf { translate: none; transition: none; }
   .mission-vision__leaf,

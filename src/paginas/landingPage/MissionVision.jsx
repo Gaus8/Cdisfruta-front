@@ -86,7 +86,7 @@ export default function MissionVision() {
 
     const updateParallax = () => {
       const bounds = node.getBoundingClientRect();
-      const offset = Math.max(-10, Math.min(10, (window.innerHeight / 2 - bounds.top) * 0.018));
+      const offset = Math.max(-2, Math.min(2, (window.innerHeight / 2 - bounds.top) * 0.004));
       node.style.setProperty('--fruit-parallax', `${offset}px`);
       node.style.setProperty('--leaf-parallax', `${-offset * 0.45}px`);
     };
