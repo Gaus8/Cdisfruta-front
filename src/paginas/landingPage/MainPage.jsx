@@ -94,10 +94,10 @@ function MainPage() {
           <div className={tw("footer-col")}>
             <h4 className={tw("footer-col-title")}>Navegación</h4>
             <ul className={tw("footer-links")}>
-              <li><a href="#">Inicio</a></li>
-              <li><a href="#sobre">Sobre Nosotros</a></li>
-              <li><a href="#features">Características</a></li>
-              <li><a href="#media">Galería</a></li>
+              <li><a href="/#inicio">Inicio</a></li>
+              <li><a href="/#historia">Sobre Nosotros</a></li>
+              <li><a href="/#features">Características</a></li>
+              <li><a href="/#videos">Galería</a></li>
             </ul>
           </div>
  
@@ -105,10 +105,10 @@ function MainPage() {
           <div className={tw("footer-col")}>
             <h4 className={tw("footer-col-title")}>Empresa</h4>
             <ul className={tw("footer-links")}>
-              <li><a href="#">Nuestra historia</a></li>
-              <li><a href="#">Proceso artesanal</a></li>
-              <li><a href="#">Presencia internacional</a></li>
-              <li><a href="#">Distribuidores</a></li>
+              <li><a href="/#historia">Nuestra historia</a></li>
+              <li><a href="/#historia">Proceso artesanal</a></li>
+              <li><a href="/#inicio">Presencia internacional</a></li>
+              <li><a href="/#contacto">Distribuidores</a></li>
             </ul>
           </div>
  
@@ -118,15 +118,15 @@ function MainPage() {
             <ul className={tw("footer-contact-list")}>
               <li>
                 <span className={tw("footer-contact-icon")}><IoLocationOutline /></span>
-                <span>Ubaté, Cundinamarca - Colombia</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Ubat%C3%A9%2C%20Cundinamarca%2C%20Colombia" target="_blank" rel="noopener noreferrer">Ubaté, Cundinamarca - Colombia</a>
               </li>
               <li>
                 <span className={tw("footer-contact-icon")}><BsTelephone /></span>
-                <span>+57 322 968 3625</span>
+                <a href="tel:+573229683625">+57 322 968 3625</a>
               </li>
               <li>
                 <span className={tw("footer-contact-icon")}><MdOutlineMail /></span>
-                <span>cdisfruta@gmail.com</span>
+                <a href="mailto:cdisfruta@gmail.com">cdisfruta@gmail.com</a>
               </li>
             </ul>
           </section>
