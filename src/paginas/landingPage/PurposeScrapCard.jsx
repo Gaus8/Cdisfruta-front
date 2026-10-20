@@ -33,9 +33,9 @@ function PaperMission({ item, visible, index }) {
       <figure className="purpose-scrap__mission-photo">
         <img src={item.image} alt={item.alt} loading="lazy" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} />
         <Glints className="purpose-scrap__mission-glints" />
-        {/* Sustituir este SVG por /img/hojas-mision.png si se entrega el recurso real. */}
-        <LeafSprig className="purpose-scrap__mission-leaves" />
       </figure>
+      {/* Las hojas se mantienen fuera de los elementos recortados para quedar sobre la foto y el papel. */}
+      <LeafSprig className="purpose-scrap__mission-leaves" />
       <div className="purpose-scrap__paper">
         <span className="purpose-scrap__tape" aria-hidden="true" />
         <span className="sr-only">{item.eyebrow}</span>
@@ -68,10 +68,10 @@ function PaintedVision({ item, visible, index }) {
           <img src={item.image} alt={item.alt} loading="lazy" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} />
           <figcaption>{item.caption || 'Sabor de nuestra tierra'} <span aria-hidden="true">♡</span></figcaption>
         </figure>
-        <Glints className="purpose-scrap__vision-glints" />
-        {/* Sustituir este SVG por /img/hojas-vision.png si se entrega el recurso real. */}
-        <LeafSprig className="purpose-scrap__vision-leaves" />
       </div>
+      {/* Adornos hermanos del fondo: pueden superponerse sin quedar recortados por la mancha. */}
+      <Glints className="purpose-scrap__vision-glints" />
+      <LeafSprig className="purpose-scrap__vision-leaves" />
     </article>
   );
 }

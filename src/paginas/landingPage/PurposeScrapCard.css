@@ -18,7 +18,7 @@
 
 .purpose-scrap__mission-photo {
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   inset: 7% 34% 8% 0;
   margin: 0;
   overflow: visible;
@@ -34,14 +34,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: var(--foto-pos, center 48%);
   clip-path: var(--active-mision-shape, url(#mission-vision-fotoMision));
   background: linear-gradient(135deg, #fff8f1, #f9d5be);
 }
 
 .purpose-scrap__paper {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 10%;
   right: 1%;
   display: flex;
@@ -73,6 +73,7 @@
 
 .purpose-scrap__tape {
   position: absolute;
+  z-index: 3;
   top: -16px;
   left: 39%;
   width: 132px;
@@ -155,9 +156,10 @@
 
 .purpose-scrap__mission-leaves {
   position: absolute;
-  bottom: -5%;
-  left: -4%;
-  width: 28%;
+  z-index: 4;
+  top: 55%;
+  left: 0;
+  width: clamp(120px, 14vw, 180px);
   color: #577B32;
   filter: drop-shadow(0 4px 5px rgba(50,75,31,.16));
   transform-origin: 15% 90%;
@@ -165,9 +167,12 @@
 }
 
 .purpose-scrap__paint {
-  position: absolute;
-  inset: 3% 0 2%;
-  min-height: 95%;
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: clamp(430px, 34vw, 500px);
+  padding: clamp(34px, 4vw, 52px) max(34%, 230px) clamp(62px, 6vw, 82px) clamp(32px, 4vw, 48px);
   filter: drop-shadow(0 16px 20px rgba(0, 0, 0, .22));
   opacity: 0;
   transform: scale(.98);
@@ -176,7 +181,7 @@
 
 .purpose-scrap__paint::before {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset: 0;
   background: radial-gradient(ellipse at 68% 24%, rgba(76, 104, 67, .36), transparent 48%), linear-gradient(145deg, #23432f, #173222 72%);
   clip-path: var(--active-vision-shape, url(#mission-vision-visionBrush));
@@ -185,7 +190,7 @@
 
 .purpose-scrap__paint::after {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset: 4% 3%;
   background: repeating-linear-gradient(170deg, transparent 0 9px, rgba(242, 235, 211, .035) 10px 11px, transparent 12px 18px);
   clip-path: var(--active-vision-shape, url(#mission-vision-visionBrush));
@@ -193,12 +198,11 @@
 }
 
 .purpose-scrap__vision-copy {
-  position: absolute;
-  top: 11%;
-  left: 10%;
+  position: relative;
+  z-index: 1;
   display: flex;
-  width: 52%;
-  height: 76%;
+  width: 100%;
+  min-height: clamp(335px, 27vw, 390px);
   flex-direction: column;
   align-items: flex-start;
   color: #FAEFE6;
@@ -263,6 +267,7 @@
 
 .purpose-scrap__vision-glints {
   position: absolute;
+  z-index: 4;
   top: 4%;
   right: -1%;
   width: 70px;
@@ -272,6 +277,7 @@
 
 .purpose-scrap__vision-leaves {
   position: absolute;
+  z-index: 4;
   right: 19%;
   bottom: 0;
   width: 22%;
@@ -309,6 +315,7 @@
   .purpose-scrap--vision { margin-left: auto; }
   .purpose-scrap__hand-title { font-size: clamp(56px, 7vw, 68px); }
   .purpose-scrap__description { font-size: 14px; }
+  .purpose-scrap__paint { padding-right: max(34%, 225px); }
 }
 
 @media (max-width: 700px) {
@@ -318,18 +325,23 @@
     position: relative;
     inset: auto;
     width: 100%;
-    height: clamp(190px, 58vw, 250px);
+    height: auto;
+    aspect-ratio: 4 / 3;
     flex: none;
     transform: scale(.98);
   }
-  .purpose-scrap__mission-photo img { clip-path: var(--active-mision-shape, url(#mission-vision-fotoMovil)); }
+  .purpose-scrap__mission-photo img {
+    --foto-pos: center 42%;
+    clip-path: url(#mission-vision-missionPhotoMobile);
+  }
   .purpose-scrap__paper {
     position: relative;
+    z-index: 2;
     top: auto;
     right: auto;
     width: calc(100% - 28px);
     min-height: 0;
-    margin: -38px auto 0;
+    margin: -36px auto 0;
     padding: 28px 24px 22px;
     transform: rotate(-8deg) translate(8px, -18px);
   }
@@ -342,13 +354,18 @@
   .purpose-scrap__description { margin-top: 10px; font-size: 13px; line-height: 1.7; }
   .purpose-scrap__footer-stroke { min-height: 30px; margin-top: 10px; }
   .purpose-scrap__mission-glints { top: 1%; left: -2%; width: 54px; }
-  .purpose-scrap__mission-leaves { bottom: -10px; left: -2%; width: 30%; }
+  .purpose-scrap__mission-leaves {
+    top: max(154px, calc(75vw - 58px));
+    left: 0;
+    width: clamp(64px, 20vw, 88px);
+  }
 
   .purpose-scrap--vision { min-height: 0; margin-top: 20px; padding: 10px 0 6px; }
   .purpose-scrap__paint {
     position: relative;
     inset: auto;
     display: flex;
+    width: 100%;
     min-height: 0;
     flex-direction: column;
     padding: 28px 25px 26px;
@@ -360,7 +377,7 @@
     position: relative;
     inset: auto;
     width: 100%;
-    height: auto;
+    min-height: 0;
   }
   .purpose-scrap--vision .purpose-scrap__icon { width: 56px; }
   .purpose-scrap--vision .purpose-scrap__original-title { font-size: 18px; }
@@ -382,6 +399,11 @@
   .purpose-scrap__clothespin { top: -17px; width: 15px; height: 50px; }
   .purpose-scrap__vision-leaves { right: 2%; bottom: 10%; width: 23%; }
   .purpose-scrap__vision-glints { top: 1%; right: 1%; width: 48px; }
+}
+
+@media (max-width: 700px) {
+  .purpose-scrap__paint { padding-right: 25px; padding-bottom: 62px; }
+  .purpose-scrap__vision-leaves { width: 64px; right: 1%; bottom: 5%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
