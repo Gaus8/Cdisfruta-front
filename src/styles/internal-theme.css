@@ -329,15 +329,6 @@
   text-decoration: none;
 }
 
-.auth-theme.auth-login-theme .login-brand__logo {
-  display: block;
-  width: clamp(90px, 10vw, 150px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .3));
-  transition: transform .2s ease;
-}
-
 .auth-theme.auth-login-theme .login-brand__tagline {
   position: relative;
   align-self: flex-start;
@@ -349,6 +340,7 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, .55);
   transform: rotate(-7deg);
   transform-origin: left center;
+  transition: transform .2s ease;
 }
 
 .auth-theme.auth-login-theme .login-brand__tagline::after {
@@ -363,7 +355,7 @@
   transform: rotate(-8deg);
 }
 
-.auth-theme.auth-login-theme .login-brand:hover .login-brand__logo { transform: scale(1.05); }
+.auth-theme.auth-login-theme .login-brand:hover .login-brand__tagline { transform: rotate(-7deg) scale(1.04); }
 .auth-theme.auth-login-theme .login-brand:focus-visible {
   border-radius: 12px;
   outline: 3px solid var(--brand-amber);
@@ -371,7 +363,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-theme.auth-login-theme .login-brand__logo { transition: none; }
+  .auth-theme.auth-login-theme .login-brand__tagline { transition: none; }
 }
 
 .auth-theme.auth-login-theme .form-container {
