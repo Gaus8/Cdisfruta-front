@@ -43,7 +43,13 @@ export default function Header({ themeV2 = false }) {
   };
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12);
+      const reachedPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 48;
+      if (reachedPageEnd && document.getElementById('contacto')) {
+        setActiveSection((current) => current === 'contacto' ? current : 'contacto');
+      }
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
