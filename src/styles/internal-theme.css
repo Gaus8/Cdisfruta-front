@@ -291,6 +291,103 @@
   --brand-border: #e5e7eb;
 }
 
+.auth-theme.auth-login-theme {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--brand-green-deep);
+  background-image: linear-gradient(rgba(20, 10, 0, .18), rgba(20, 10, 0, .18)), url("/img/login-bg.webp");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: var(--font-body);
+}
+
+.auth-theme.auth-login-theme > div[aria-hidden="true"] { display: none; }
+
+.auth-theme.auth-login-theme .form-container {
+  width: min(92vw, 440px);
+  max-width: 440px;
+  max-height: calc(100dvh - 32px);
+  padding: 32px 36px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, .68);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .22);
+  color: var(--brand-ink);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  backdrop-filter: blur(10px) saturate(120%);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .auth-theme.auth-login-theme .form-container { background: rgba(255, 255, 255, .96); }
+}
+
+.auth-theme.auth-login-theme .logo-empresa {
+  width: 92px;
+  height: 92px;
+  border-radius: 0;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.auth-theme.auth-login-theme .form-container h3 {
+  margin: 8px 0 4px;
+  color: var(--brand-green);
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 5vw, 2rem);
+  letter-spacing: -.03em;
+}
+
+.auth-theme.auth-login-theme .form-container .auth-login-subtitle {
+  margin: 0 0 18px;
+  color: #4b5563;
+  font-size: .94rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.auth-theme.auth-login-theme .form-container-input {
+  min-height: 54px;
+  margin-bottom: 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .9);
+}
+
+.auth-theme.auth-login-theme .form-container-input .icon-react { color: var(--brand-coral); }
+.auth-theme.auth-login-theme .btn-eye { color: #6b7280; }
+.auth-theme.auth-login-theme .form-container button[type="submit"] {
+  min-height: 54px;
+  margin-top: 4px;
+  border-radius: 18px;
+  background: var(--brand-coral);
+  box-shadow: var(--brand-shadow-glow);
+}
+.auth-theme.auth-login-theme .form-container .button-google {
+  min-height: 54px;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .92);
+  color: var(--brand-ink);
+}
+.auth-theme.auth-login-theme .link-switch { color: var(--brand-green); }
+.auth-theme.auth-login-theme .link-switch:hover { color: var(--brand-coral); }
+
+@media (max-width: 480px) {
+  .auth-theme.auth-login-theme .form-container {
+    max-height: calc(100dvh - 24px);
+    padding: 24px;
+    border-radius: 24px;
+  }
+}
+
+@media (max-height: 620px) {
+  .auth-theme.auth-login-theme { align-items: flex-start; }
+}
+
 .auth-theme .form-container,
 .auth-theme .form-container-validacion {
   border: 1px solid var(--brand-border);

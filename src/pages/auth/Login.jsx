@@ -100,7 +100,7 @@ export default function Login({ verifyToken }) {
 
   return (
     <>
-      <div className={tw("auth-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
+      <div className={tw("auth-theme auth-login-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
         <AuthBackground />
         <form
           className={tw("form-container", "relative z-10")}
@@ -118,6 +118,7 @@ export default function Login({ verifyToken }) {
 
           <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
           <h3>Inicio de Sesión</h3>
+          <p className={tw("auth-login-subtitle")}>Bienvenido, ingresa tus datos para continuar.</p>
 
           {mensajeExpirado && (
             <div
