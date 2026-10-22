@@ -1,7 +1,7 @@
 .video-gallery {
   --gallery-orange: var(--brand-coral);
   --gallery-amber: var(--brand-amber);
-  --gallery-cream: var(--cream);
+  --gallery-cream: var(--brand-cream);
   position: relative;
   isolation: isolate;
   width: 100%;

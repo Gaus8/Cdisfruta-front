@@ -2952,7 +2952,7 @@ export const tailwindClassMap = {
   ],
   "media-section": [
     "[padding:5rem]",
-    "[background:var(--cream)]",
+    "[background:var(--brand-cream)]",
     "max-[1024px]:[padding:4rem_3rem]",
     "max-[768px]:[padding:3rem_1.5rem]"
   ],
