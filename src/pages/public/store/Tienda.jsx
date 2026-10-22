@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../../hooks/useAuth.js";
 import HeaderTienda from "./HeaderTienda";
 import ProductosTienda from "./ProductosTienda";
-import { FaChevronUp } from "react-icons/fa";
+import { FaArrowRight, FaChevronUp } from "react-icons/fa";
 
 export default function Tienda() {
   const { userData, loading } = useAuth();
@@ -57,16 +57,28 @@ export default function Tienda() {
                 </p>
                 
                 <button className={tw("hero-explore-btn")} onClick={scrollToProducts}>
-                  Ver Productos
+                  <span>Ver Productos</span>
+                  <FaArrowRight aria-hidden="true" />
                 </button>
               </div>
 
+              <picture className={tw("hero-side-decoration")} aria-hidden="true">
+                <source media="(max-width: 768px)" srcSet="/img/tienda-hero-side-320.webp" />
+                <img src="/img/tienda-hero-side-640.webp" alt="" />
+              </picture>
+
               <div className={tw("hero-visual")}>
-                <img 
-                  src="/img/productos_destacados.webp" 
-                  alt="Frutas deshidratadas Cdisfruta" 
-                  className={tw("hero-product-img")}
-                />
+                <picture className={tw("store-hero-picture")}>
+                  <source media="(max-width: 768px)" srcSet="/img/tienda-hero-800.webp" />
+                  <img
+                    src="/img/tienda-hero-1600.webp"
+                    srcSet="/img/tienda-hero-800.webp 800w, /img/tienda-hero-1600.webp 1600w"
+                    sizes="(max-width: 480px) 100vw, (max-width: 1023px) 48vw, 62vw"
+                    alt="Escena CDISFRUTA con bolsa de frutas deshidratadas, empaque azul, fresa, piña, menta y hojas"
+                    className={tw("hero-product-img")}
+                    fetchPriority="high"
+                  />
+                </picture>
               </div>
             </div>
           </header>
