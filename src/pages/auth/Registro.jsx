@@ -6,11 +6,13 @@ import {
   IoMailOutline, 
   IoLockClosedOutline, 
   IoArrowForwardOutline, 
-  IoArrowBackOutline 
+  IoArrowBackOutline,
+  IoEyeOutline,
+  IoEyeOffOutline
 } from "react-icons/io5";
 import { registrarUsuario, procesarErroresRegistro } from '../../services/api/authService';
 import LoginGoogle from './LoginGoogle';
-import AuthBackground from './AuthBackground';
+import AuthLayout from './AuthLayout';
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function Registro() {
   const [terminos, setTerminos] = useState(false); 
   const [respuestas, setRespuestas] = useState({ s1: "", s2: "", s3: "" });
   const [loading, setLoading] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -55,10 +58,9 @@ export default function Registro() {
   };
 
   return (
-    <div className={tw("auth-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
-      <AuthBackground />
+    <AuthLayout variant="register">
       <form
-        className={tw("form-container", "relative z-10")}
+        className={tw("form-container auth-register-card", "relative z-10")}
         onSubmit={handleSubmit}
       >
         <button 
@@ -71,8 +73,9 @@ export default function Registro() {
           <IoArrowBackOutline />
         </button>
 
-        <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="logo" />
+        <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="CDISFRUTA" />
         <h3>Crear cuenta</h3>
+        <p className={tw("auth-login-subtitle")}>Completa tus datos para crear tu cuenta.</p>
 
         <div className={tw("form-container-input")}>
           <IoPersonOutline className={tw("icon-react")} />
@@ -103,13 +106,23 @@ export default function Registro() {
         <div className={tw("form-container-input")}>
           <IoLockClosedOutline className={tw("icon-react")} />
           <input
-            type="password"
+            type={mostrarPassword ? "text" : "password"}
             placeholder="Contraseña"
             name="password"
             value={data.password}
             onChange={handleChange}
             disabled={loading}
           />
+          <button
+            type="button"
+            className={tw("btn-eye")}
+            onClick={() => setMostrarPassword((visible) => !visible)}
+            disabled={loading}
+            aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            title={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+          >
+            {mostrarPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+          </button>
         </div>
         <p className={tw("error-text")}>{respuestas.s3}</p>
 
@@ -124,11 +137,11 @@ export default function Registro() {
           />
           <label htmlFor="terminos" className={tw("![cursor:var(--tw-inline-Registro-3878-0)]")} style={{ "--tw-inline-Registro-3878-0": loading ? 'not-allowed' : 'pointer' }}>
             Acepto los{' '}
-            <Link to="/terminos" target="_blank" rel="noopener noreferrer" className={tw("![color:#007bff]", "![text-decoration:underline]")}>
+            <Link to="/terminos" target="_blank" rel="noopener noreferrer" className={tw("auth-terms-link")}>
               Términos y Condiciones
             </Link>{' '}
             y la{' '}
-            <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" className={tw("![color:#007bff]", "![text-decoration:underline]")}>
+            <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" className={tw("auth-terms-link")}>
               Política de Tratamiento de Datos
             </Link>
           </label>
@@ -163,6 +176,6 @@ export default function Registro() {
           ¿Ya tienes cuenta? Inicia Sesión
         </span>
       </form>
-    </div>
+    </AuthLayout>
   );
 }
