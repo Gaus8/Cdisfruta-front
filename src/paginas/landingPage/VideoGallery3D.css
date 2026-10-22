@@ -1,7 +1,7 @@
 .video-gallery {
-  --gallery-orange: #e8603c;
-  --gallery-amber: #f5a04a;
-  --gallery-cream: #faefe6;
+  --gallery-orange: var(--brand-coral);
+  --gallery-amber: var(--brand-amber);
+  --gallery-cream: var(--brand-cream);
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -65,7 +65,7 @@
 .video-gallery__tile.is-playing .video-gallery__caption,
 .video-gallery__tile.is-playing .video-gallery__tile-index { opacity: 0; }
 
-.video-gallery__modal { --gallery-orange: #e8603c; --gallery-amber: #f5a04a; --gallery-cream: #faefe6; position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: clamp(14px, 3vw, 40px); background: rgba(10,7,5,.88); backdrop-filter: blur(10px); animation: gallery-modal-in .2s ease-out both; }
+.video-gallery__modal { --gallery-orange: var(--brand-coral); --gallery-amber: var(--brand-amber); --gallery-cream: var(--brand-cream); position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: clamp(14px, 3vw, 40px); background: rgba(10,7,5,.88); backdrop-filter: blur(10px); animation: gallery-modal-in .2s ease-out both; }
 .video-gallery__modal-panel { display: flex; width: min(100%, 1120px); max-height: 92dvh; flex-direction: column; overflow: hidden; border: 1px solid rgba(245,160,74,.52); border-radius: 20px; background: #160f0b; box-shadow: 0 28px 100px rgba(0,0,0,.55), 0 0 48px rgba(232,96,60,.12); }
 .video-gallery__modal-header { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 12px 8px 20px; color: var(--gallery-cream); }
 .video-gallery__modal-header p { min-width: 0; margin: 0; overflow: hidden; font: 700 15px/1.3 var(--font-display, 'Manrope', sans-serif); text-overflow: ellipsis; white-space: nowrap; }

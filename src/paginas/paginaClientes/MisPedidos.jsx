@@ -97,7 +97,7 @@ export default function MisPedidos() {
   if (loading) return <div className={tw("loading-state")}>Cargando tus compras...</div>;
 
   return (
-    <div className={tw("mis-pedidos-container")}>
+    <div className={tw("mis-pedidos-container client-area")}>
       
       <div className={tw("mis-pedidos-nav-top")}>
         <button className={tw("btn-volver-pro")} onClick={() => navigate('/cliente/tienda')}>

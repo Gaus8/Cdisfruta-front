@@ -130,7 +130,7 @@ export default function ConfiguracionUsuario() {
   };
 
   return (
-    <div className={tw("userpage-container")}>
+    <div className={tw("userpage-container client-area")}>
       <HeaderDashboard />
 
       <div className={tw(tw("content-wrapper"), "![justify-content:center]", "![padding:40px_20px]")} >

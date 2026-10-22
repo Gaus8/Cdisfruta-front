@@ -40,7 +40,7 @@ export default function DashboardUsuario() {
   }
 
   return (
-    <div className={tw("userpage-container")}>
+    <div className={tw("userpage-container client-area")}>
       <HeaderDashboard />
 
       <div className={tw(tw("content-wrapper"), "![display:block]")} >

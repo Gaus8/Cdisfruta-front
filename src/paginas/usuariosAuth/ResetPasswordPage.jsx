@@ -55,7 +55,7 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
+    <div className={tw("auth-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
       <AuthBackground />
       <div className={tw("form-container", "relative z-10")}>
         <img

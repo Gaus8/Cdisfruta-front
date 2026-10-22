@@ -1,9 +1,9 @@
 .history-editorial {
-  --history-cream: #fbf0e6;
-  --history-paper: #fffaf4;
-  --history-orange: #e8603c;
-  --history-green: #153b25;
-  --history-ink: #322113;
+  --history-cream: var(--brand-cream);
+  --history-paper: var(--brand-paper);
+  --history-orange: var(--brand-coral);
+  --history-green: var(--brand-green);
+  --history-ink: var(--brand-ink);
   --history-mono: var(--font-mono, 'Space Mono', monospace);
   --history-sans: var(--font-display, 'Manrope', sans-serif);
   position: relative;

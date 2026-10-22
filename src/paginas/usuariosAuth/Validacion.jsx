@@ -71,7 +71,7 @@ function Validacion() {
   };
 
   return (
-    <div className={tw("relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
+    <div className={tw("auth-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")}>
       <AuthBackground />
       <form className={tw("form-container-validacion", "relative z-10")} onSubmit={handleVerify}>
         <img className={tw("logo-empresa-validacion")} src="/img/logo_siecu.webp" alt="logo" />

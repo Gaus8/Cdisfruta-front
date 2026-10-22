@@ -1,8 +1,8 @@
 /* Composiciones scrapbook de Misión y Visión */
 .purpose-scrap {
-  --scrap-orange: #E8603C;
-  --scrap-green: #1F3D2B;
-  --scrap-paper: #F6EBDD;
+  --scrap-orange: var(--brand-coral);
+  --scrap-green: var(--brand-green);
+  --scrap-paper: var(--brand-cream);
   --scrap-height: clamp(430px, 34vw, 500px);
   position: relative;
   min-width: 0;

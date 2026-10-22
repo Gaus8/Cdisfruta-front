@@ -1,10 +1,34 @@
 @import "tailwindcss";
+@import "./estilos/tema-interno.css";
 
 :root {
   --font-display: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "Space Mono", ui-monospace, Menlo, monospace;
   --font-legacy-serif: "Fraunces", Georgia, serif;
+  /* CDISFRUTA design tokens shared by the landing and internal views. */
+  --brand-coral: #E8603C;
+  --brand-coral-hover: #C4431F;
+  --brand-amber: #F5A04A;
+  --brand-cream: #FAEFE6;
+  --brand-paper: #FFFAF6;
+  --brand-ink: #2D1B0A;
+  --brand-brown: #8B6652;
+  --brand-border: #EAE0D5;
+  --brand-green: #1F3D2B;
+  --brand-green-deep: #173222;
+  --brand-danger: #B42318;
+  --brand-success: #27633B;
+  --brand-warning: #8A5700;
+  --brand-radius-sm: 12px;
+  --brand-radius-md: 18px;
+  --brand-radius-lg: 24px;
+  --brand-shadow-card: 0 12px 32px rgba(84, 48, 25, .09);
+  --brand-shadow-raised: 0 18px 44px rgba(84, 48, 25, .16);
+  --brand-shadow-glow: 0 8px 24px rgba(232, 96, 60, .22);
+  --brand-focus: 0 0 0 4px rgba(232, 96, 60, .18);
 }
+
 
 @theme {
   --font-poppins: "Poppins", sans-serif;
