@@ -1,6 +1,6 @@
 import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   IoMailOutline,
   IoLockClosedOutline,
@@ -102,6 +102,10 @@ export default function Login({ verifyToken }) {
     <>
       <div className={tw("auth-theme auth-login-theme relative isolate flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6")} >
         <AuthBackground />
+        <Link to="/" className={tw("login-brand")} aria-label="Volver al inicio">
+          <img className={tw("login-brand__logo")} src="/img/logo_cdisfruta-transparent.png" alt="CDISFRUTA, frutas deshidratadas" />
+          <span className={tw("login-brand__tagline")}>Del campo<br />a tu mesa</span>
+        </Link>
         <form
           className={tw("form-container", "relative z-10")}
           onSubmit={handleSubmit}

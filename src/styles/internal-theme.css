@@ -315,6 +315,65 @@
 
 .auth-theme.auth-login-theme > div[aria-hidden="true"] { display: none; }
 
+.auth-theme.auth-login-theme .login-brand {
+  position: absolute;
+  z-index: 20;
+  top: clamp(16px, 3vw, 40px);
+  left: clamp(16px, 3vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+}
+
+.auth-theme.auth-login-theme .login-brand__logo {
+  display: block;
+  width: clamp(90px, 10vw, 150px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .3));
+  transition: transform .2s ease;
+}
+
+.auth-theme.auth-login-theme .login-brand__tagline {
+  position: relative;
+  align-self: flex-start;
+  margin-left: 4px;
+  padding-bottom: .32em;
+  color: #fff;
+  font: 400 clamp(1rem, 2.1vw, 1.6rem)/1.1 "Kaushan Script", "Brush Script MT", cursive;
+  text-align: left;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .55);
+  transform: rotate(-7deg);
+  transform-origin: left center;
+}
+
+.auth-theme.auth-login-theme .login-brand__tagline::after {
+  position: absolute;
+  right: 6%;
+  bottom: 0;
+  left: 6%;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--brand-amber);
+  content: "";
+  transform: rotate(-8deg);
+}
+
+.auth-theme.auth-login-theme .login-brand:hover .login-brand__logo { transform: scale(1.05); }
+.auth-theme.auth-login-theme .login-brand:focus-visible {
+  border-radius: 12px;
+  outline: 3px solid var(--brand-amber);
+  outline-offset: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-theme.auth-login-theme .login-brand__logo { transition: none; }
+}
+
 .auth-theme.auth-login-theme .form-container {
   width: min(92vw, 440px);
   max-width: 440px;
