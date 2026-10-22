@@ -68,6 +68,11 @@ export default function Tienda() {
               </picture>
 
               <div className={tw("hero-visual")}>
+                <div className={tw("hero-light-effects")} aria-hidden="true">
+                  <span className={tw("hero-light-beam")} />
+                  <span className={tw("hero-floor-reflection")} />
+                  <span className={tw("hero-contact-shadow")} />
+                </div>
                 <picture className={tw("store-hero-picture")}>
                   <source media="(max-width: 768px)" srcSet="/img/tienda-hero-800.webp" />
                   <img

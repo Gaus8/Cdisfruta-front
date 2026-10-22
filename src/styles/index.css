@@ -28,6 +28,11 @@
   --brand-shadow-glow: 0 8px 24px rgba(232, 96, 60, .22);
   --brand-focus: 0 0 0 4px rgba(232, 96, 60, .18);
   --store-hero-background: linear-gradient(112deg, #0b1f44 0%, #10294f 55%, #183862 100%);
+  --store-hero-vignette: radial-gradient(ellipse at 58% 45%, transparent 52%, rgba(0, 10, 40, .24) 100%);
+  --store-hero-halo: radial-gradient(ellipse at 55% 45%, rgba(255, 255, 255, .55) 0%, rgba(147, 197, 253, .30) 30%, rgba(59, 130, 246, .12) 55%, transparent 72%);
+  --store-hero-beam: radial-gradient(ellipse at 55% 0%, rgba(255, 255, 255, .18) 0%, rgba(255, 255, 255, .08) 34%, transparent 72%);
+  --store-hero-floor: radial-gradient(ellipse at 62% 100%, rgba(59, 130, 246, .28) 0%, rgba(59, 130, 246, .14) 32%, transparent 70%);
+  --store-hero-contact: radial-gradient(ellipse, rgba(0, 10, 40, .55) 0%, transparent 70%);
 }
 
 /* Hero de la tienda: escena transparente sobre un fondo azul continuo. */
@@ -39,7 +44,7 @@
   min-height: 500px;
   padding: 40px 50px;
   border-radius: 24px;
-  background: var(--store-hero-background);
+  background: var(--store-hero-vignette), var(--store-hero-background);
 }
 
 .userpage-container:not(.client-area) .products-hero-section .hero-content {
@@ -82,9 +87,9 @@
   position: absolute;
   z-index: 1;
   top: 50%;
-  right: -18px;
-  width: 60%;
-  height: 122%;
+  right: -95px;
+  width: 68%;
+  height: 142%;
   min-width: 0;
   overflow: visible;
   transform: translateY(-50%);
@@ -94,16 +99,56 @@
 .userpage-container:not(.client-area) .products-hero-section .hero-visual::before {
   position: absolute;
   z-index: 0;
-  top: 50%;
-  right: 4%;
-  width: 90%;
-  height: 82%;
+  top: 48%;
+  right: 2%;
+  width: 138%;
+  height: 124%;
   border-radius: 48% 52% 51% 49%;
-  background: radial-gradient(ellipse at center, rgba(59, 130, 246, .36) 0%, rgba(147, 197, 253, .14) 43%, transparent 70%);
+  background: var(--store-hero-halo);
   content: "";
-  filter: blur(40px);
+  filter: blur(46px);
   pointer-events: none;
   transform: translateY(-50%);
+}
+
+.userpage-container:not(.client-area) .products-hero-section .hero-light-effects {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.userpage-container:not(.client-area) .products-hero-section .hero-light-beam {
+  position: absolute;
+  top: -5%;
+  left: 8%;
+  width: 88%;
+  height: 90%;
+  background: var(--store-hero-beam);
+  filter: blur(30px);
+  opacity: .75;
+}
+
+.userpage-container:not(.client-area) .products-hero-section .hero-contact-shadow {
+  position: absolute;
+  bottom: 4%;
+  left: 14%;
+  width: 82%;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--store-hero-contact);
+  filter: blur(17px);
+}
+
+.userpage-container:not(.client-area) .products-hero-section .hero-floor-reflection {
+  position: absolute;
+  right: 0;
+  bottom: -2%;
+  left: 0;
+  height: 30%;
+  background: var(--store-hero-floor);
+  filter: blur(8px);
 }
 
 .userpage-container:not(.client-area) .products-hero-section .store-hero-picture {
@@ -123,7 +168,7 @@
   height: 100%;
   object-fit: contain;
   object-position: right center;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .35));
+  filter: drop-shadow(0 25px 35px rgba(0, 10, 40, .45)) drop-shadow(0 6px 10px rgba(0, 0, 0, .25));
 }
 
 @media (max-width: 1023px) {
@@ -148,10 +193,25 @@
 
   .userpage-container:not(.client-area) .products-hero-section .hero-visual {
     top: 50%;
-    right: -14px;
-    width: 47%;
+    right: -55px;
+    width: 55%;
     height: 96%;
     transform: translateY(-50%);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-visual::before {
+    width: 138%;
+    height: 112%;
+    filter: blur(36px);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-contact-shadow {
+    height: 30px;
+    filter: blur(14px);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-light-beam {
+    filter: blur(22px);
   }
 
   .userpage-container:not(.client-area) .products-hero-section .hero-side-decoration {
@@ -202,7 +262,28 @@
   .userpage-container:not(.client-area) .products-hero-section .hero-visual::before {
     width: 100%;
     height: 75%;
-    filter: blur(28px);
+    filter: blur(25px);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-visual {
+    right: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.77;
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-light-beam {
+    filter: blur(18px);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-contact-shadow {
+    bottom: 2%;
+    height: 24px;
+    filter: blur(12px);
+  }
+
+  .userpage-container:not(.client-area) .products-hero-section .hero-floor-reflection {
+    height: 18%;
   }
 }
 
