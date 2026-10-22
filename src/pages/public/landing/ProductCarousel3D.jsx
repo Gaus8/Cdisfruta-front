@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { URL_SERVER } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
+import { URL_SERVER } from '../../../services/api/client.js';
+import { tw } from '../../../utils/tw.js';
 
 const currencyCOP = new Intl.NumberFormat('es-CO', {
   style: 'currency', currency: 'COP', maximumFractionDigits: 0

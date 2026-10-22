@@ -1,4 +1,4 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export const RutaProtegida = ({ 

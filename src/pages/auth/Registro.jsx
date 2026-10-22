@@ -1,4 +1,4 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { 
@@ -8,7 +8,7 @@ import {
   IoArrowForwardOutline, 
   IoArrowBackOutline 
 } from "react-icons/io5";
-import { registrarUsuario, procesarErroresRegistro } from '../../funciones/usuarioAuth';
+import { registrarUsuario, procesarErroresRegistro } from '../../services/api/authService';
 import LoginGoogle from './LoginGoogle';
 import AuthBackground from './AuthBackground';
 

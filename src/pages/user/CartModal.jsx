@@ -1,1 +1,1 @@
-export { default } from '../paginaTienda/CartModal';
+export { default } from '../../components/ui/CartModal.jsx';

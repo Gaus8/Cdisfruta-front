@@ -1,8 +1,8 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { Outlet } from "react-router"; // <--- IMPORTANTE
-import Sidebar from './Sidebar';
-import Header from './Header';
-import { useAuth } from '../../funciones/useAuth';
+import Sidebar from './AdminSidebar';
+import Header from './AdminHeader';
+import { useAuth } from '../../hooks/useAuth';
 
 
 export default function DashboardAdmin() {

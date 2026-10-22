@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import React from 'react';
 
 export default function Terminos() {

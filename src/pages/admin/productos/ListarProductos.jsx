@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { FaPlus, FaEdit, FaTrash, FaCloudUploadAlt } from 'react-icons/fa';
 
 

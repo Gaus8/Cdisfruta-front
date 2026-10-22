@@ -1,8 +1,8 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { restablecerPasswordConToken } from '../../funciones/usuarioAuth';
+import { restablecerPasswordConToken } from '../../services/api/authService';
 import AuthBackground from './AuthBackground';
 
 export const ResetPasswordPage = () => {

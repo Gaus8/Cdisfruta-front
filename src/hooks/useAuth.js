@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { apiAxios } from './conexion';
+import { apiAxios } from '../services/api/client';
 
 export const useAuth = () => {
   const [userData, setUserData] = useState(null);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { URL_SERVER } from '../../funciones/conexion';
+import { URL_SERVER } from '../../../services/api/client.js';
 import HeroCarousel3D from './HeroCarousel3D';
 
 const isBannerActive = (banner) => banner.activo !== false && banner.active !== false && banner.estado !== 'inactivo';

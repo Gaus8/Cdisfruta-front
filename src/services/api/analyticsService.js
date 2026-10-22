@@ -1,4 +1,4 @@
-import { apiAxios } from './conexion';
+import { apiAxios } from './client';
 
 const recentProductViews = new Map();
 const PRODUCT_VIEW_COOLDOWN_MS = 30_000;

@@ -1,8 +1,8 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useNavigate } from 'react-router';
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import { URL_SERVER } from '../../funciones/conexion';
+import { URL_SERVER } from '../../services/api/client';
 import AuthBackground from './AuthBackground';
 
 function Validacion() {

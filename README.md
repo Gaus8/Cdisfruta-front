@@ -1,16 +1,25 @@
-# React + Vite
+# CDISFRUTA frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación React 19 con Vite y Tailwind CSS. Mantiene sus rutas de navegador y consume la API mediante `VITE_API_URL`.
 
-Currently, two official plugins are available:
+## Desarrollo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev
+```
 
-## React Compiler
+Configura `.env` a partir de `.env.example`. Para compilar y revisar el código usa `npm run build` y `npm run lint`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Estructura
 
-## Expanding the ESLint configuration
+- `src/routes`: enrutador de la aplicación; conserva las URLs públicas y protegidas.
+- `src/pages`: páginas públicas, de autenticación, usuario y administración.
+- `src/components`: elementos compartidos de layout e interfaz.
+- `src/services/api`: cliente HTTP y servicios de API.
+- `src/hooks`, `src/utils`: hooks y utilidades compartidas.
+- `src/styles`: estilos globales y tema del panel interno.
+- `src/assets`, `public`: recursos importados por código y archivos estáticos.
+- `src/legacy/legal`: versiones previas sin referencias activas, retenidas para revisión.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+La configuración de Vite está en `vite.config.js`; no se usan alias de importación.

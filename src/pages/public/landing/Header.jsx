@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IoMenuOutline, IoCloseOutline } from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 
 const SECTION_LINKS = [
   { id: 'inicio', label: 'Inicio', always: true },

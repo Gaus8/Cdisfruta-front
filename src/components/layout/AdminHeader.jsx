@@ -1,12 +1,12 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
 
-import { URL_SERVER } from "../../funciones/conexion"; 
+import { URL_SERVER } from "../../services/api/client.js";
 import { FaBell, FaUserCircle, FaSignOutAlt, FaUserEdit, FaCog, FaCheck } from "react-icons/fa";
-import { apiAxios } from '../../funciones/conexion';
-import ConfirmModal from './ConfirmModal';
+import { apiAxios } from '../../services/api/client';
+import ConfirmModal from '../ui/ConfirmModal';
 
 export default function Header({ userName, role = 'admin' }) {
   const isAdmin = role === 'admin';

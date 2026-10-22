@@ -1,4 +1,4 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -10,11 +10,11 @@ import {
   IoTimeOutline,
   IoArrowBackOutline
 } from "react-icons/io5";
-import { iniciarSesion } from '../../funciones/usuarioAuth';
+import { iniciarSesion } from '../../services/api/authService';
 import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
 import AuthBackground from './AuthBackground';
-import { apiAxios } from '../../funciones/conexion';
+import { apiAxios } from '../../services/api/client';
 
 export default function Login({ verifyToken }) {
   const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { FaArrowLeft, FaCamera, FaSave, FaUserCircle, FaLock, FaShieldAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../funciones/useAuth';
-import { actualizarPerfil, cambiarPassword } from '../../funciones/usuarioAuth';
-import { apiAxios } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
-import HeaderDashboard from '../paginaClientes/Header';
+import { useAuth } from '../../hooks/useAuth';
+import { actualizarPerfil, cambiarPassword } from '../../services/api/authService';
+import { apiAxios } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
+import HeaderDashboard from '../../components/layout/CustomerHeader';
 
 const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100';
 const avatars = [

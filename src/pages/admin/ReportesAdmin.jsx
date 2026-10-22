@@ -1,7 +1,7 @@
 import { createElement, useEffect, useMemo, useState } from 'react';
 import { FaChartLine, FaShoppingBag, FaDollarSign, FaBoxOpen, FaCalendarAlt, FaArrowUp, FaArrowDown, FaExclamationCircle } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
+import { apiAxios } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
 
 const paidStates = new Set(['Comprobado', 'Enviado', 'Entregado']);
 const statusOrder = ['Pendiente', 'Comprobado', 'Enviado', 'Entregado', 'Cancelado'];

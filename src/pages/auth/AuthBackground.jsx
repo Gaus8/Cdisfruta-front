@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { URL_SERVER } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
+import { URL_SERVER } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
 
 const fallbackImages = ['/img/cdisfruta_01.webp', '/img/cdisfruta_02.webp', '/img/cdisfruta_07.webp'];
 

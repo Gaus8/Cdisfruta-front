@@ -1,11 +1,11 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState } from "react";
 import { FaHome, FaStore, FaBoxes, FaUsers, FaChartLine, FaCog, FaBars, FaTimes, FaPaintBrush, FaChartBar } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import axios from "axios";
-import { URL_SERVER } from "../../funciones/conexion.js"; 
-import ConfirmModal from './ConfirmModal';
-import { useAuth } from '../../funciones/useAuth';
+import { URL_SERVER } from "../../services/api/client.js";
+import ConfirmModal from '../ui/ConfirmModal';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Sidebar() {
   const navigate = useNavigate();

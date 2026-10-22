@@ -1,10 +1,10 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { 
   FaTrash, FaTimes, FaWhatsapp, FaUser, FaEnvelope, 
   FaPhone, FaMapMarkerAlt, FaHome, FaStickyNote, FaCheckCircle, FaGlobeAmericas, FaCity 
 } from "react-icons/fa";
-import { apiAxios } from "../../funciones/conexion";
+import { apiAxios } from "../../services/api/client.js";
 import { useNavigate } from 'react-router-dom';
 
 const COLOMBIA_GEO = {

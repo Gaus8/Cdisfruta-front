@@ -1,6 +1,6 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect, useMemo } from 'react';
-import { apiAxios } from '../../funciones/conexion';
+import { apiAxios } from '../../services/api/client';
 import { FaSave, FaCheckCircle, FaTimes, FaCalendarAlt, FaChevronDown } from 'react-icons/fa';
 
 export default function GestionPedidos() {

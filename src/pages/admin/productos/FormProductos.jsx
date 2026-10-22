@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCloudUploadAlt, FaExclamationTriangle } from 'react-icons/fa';
 

@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./estilos/tema-interno.css";
+@import "./internal-theme.css";
 
 :root {
   --font-display: "Manrope", system-ui, -apple-system, sans-serif;

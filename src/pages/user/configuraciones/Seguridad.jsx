@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { useState } from 'react';
 import { FaLock, FaShieldAlt, FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 

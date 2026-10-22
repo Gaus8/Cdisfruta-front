@@ -1,7 +1,7 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import React, { useState } from 'react';
 import { FaEnvelope, FaTimes } from 'react-icons/fa';
-import { solicitarRestablecerPassword } from '../../funciones/usuarioAuth';
+import { solicitarRestablecerPassword } from '../../services/api/authService';
 
 export const ResetPasswordModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');

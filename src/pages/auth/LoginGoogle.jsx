@@ -1,8 +1,8 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginConGoogle } from '../../funciones/usuarioAuth';
+import { loginConGoogle } from '../../services/api/authService';
 
 export default function LoginGoogle({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");

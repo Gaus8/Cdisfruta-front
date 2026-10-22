@@ -1,7 +1,7 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { URL_SERVER } from "../../funciones/conexion";
+import { URL_SERVER } from "../../../services/api/client.js";
 
 export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);

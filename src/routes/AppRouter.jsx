@@ -1,4 +1,4 @@
-import { tw } from './funciones/tw.js';
+import { tw } from '../utils/tw.js';
 import { 
   createBrowserRouter, 
   RouterProvider, 
@@ -6,33 +6,33 @@ import {
   useLocation
 } from "react-router-dom";
 import { useEffect, useRef, useCallback } from "react";
-import { useAuth } from "./funciones/useAuth";
-import { RutaProtegida } from "./paginas/usuariosAuth/RutaProtegida";
+import { useAuth } from "../hooks/useAuth";
+import { RutaProtegida } from "../pages/auth/RutaProtegida";
 
-import MainPage from './paginas/landingPage/MainPage';
-import BlobShapesPreview from './paginas/landingPage/BlobShapesPreview';
-import MissionVisionShapesPreview from './paginas/landingPage/MissionVisionShapesPreview';
-import Validacion from "./paginas/usuariosAuth/Validacion";
-import DashboardUsuario from "./paginas/paginaClientes/DashboardUsuario";
-import MisPedidos from "./paginas/paginaClientes/MisPedidos"; 
-import DashboardAdmin from "./paginas/dashboardAdmin/DashboardAdmin";
-import Productos from "./paginas/dashboardAdmin/productos/Productos";
-import HomeAdmin from "./paginas/dashboardAdmin/HomeAdmin";
-import Tienda from "./paginas/paginaTienda/Tienda";
-import PagoResultado from "./paginas/paginaTienda/PagoResultado";
-import Terminos from "./assets/styles/legal/Terminos";
-import PoliticaDatos from "./assets/styles/legal/PoliticaDatos";
-import { ResetPasswordPage } from "./paginas/usuariosAuth/ResetPasswordPage";
-import Login from "./paginas/usuariosAuth/Login";
-import Registro from "./paginas/usuariosAuth/Registro";
-import GestionPedidos from "./paginas/dashboardAdmin/GestionPedidos";
-import DisenoPortada from "./paginas/dashboardAdmin/DisenoPortada";
-import Inventario from "./paginas/dashboardAdmin/Inventario";
-import PerfilCuenta from "./paginas/dashboardAdmin/PerfilCuenta";
-import ConfiguracionAdmin from "./paginas/dashboardAdmin/ConfiguracionAdmin";
-import ReportesAdmin from "./paginas/dashboardAdmin/ReportesAdmin";
-import UsuariosAdmin from "./paginas/dashboardAdmin/UsuariosAdmin";
-import AnaliticaProductosAdmin from "./paginas/dashboardAdmin/AnaliticaProductosAdmin";
+import MainPage from '../pages/public/landing/MainPage';
+import BlobShapesPreview from '../pages/public/landing/BlobShapesPreview';
+import MissionVisionShapesPreview from '../pages/public/landing/MissionVisionShapesPreview';
+import Validacion from "../pages/auth/Validacion";
+import DashboardUsuario from "../pages/user/DashboardUsuario";
+import MisPedidos from "../pages/user/MisPedidos";
+import DashboardAdmin from "../components/layout/AdminLayout";
+import Productos from "../pages/admin/productos/Productos";
+import HomeAdmin from "../pages/admin/HomeAdmin";
+import Tienda from "../pages/public/store/Tienda";
+import PagoResultado from "../pages/public/store/PagoResultado";
+import Terminos from "../pages/public/legal/Terminos";
+import PoliticaDatos from "../pages/public/legal/PoliticaDatos";
+import { ResetPasswordPage } from "../pages/auth/ResetPasswordPage";
+import Login from "../pages/auth/Login";
+import Registro from "../pages/auth/Registro";
+import GestionPedidos from "../pages/admin/GestionPedidos";
+import DisenoPortada from "../pages/admin/DisenoPortada";
+import Inventario from "../pages/admin/Inventario";
+import PerfilCuenta from "../pages/admin/PerfilCuenta";
+import ConfiguracionAdmin from "../pages/admin/ConfiguracionAdmin";
+import ReportesAdmin from "../pages/admin/ReportesAdmin";
+import UsuariosAdmin from "../pages/admin/UsuariosAdmin";
+import AnaliticaProductosAdmin from "../pages/admin/AnaliticaProductosAdmin";
 
 // Componente Wrapper para pasar verifyToken al Login standalone
 function LoginWrapper() {

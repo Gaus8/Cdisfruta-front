@@ -1,7 +1,7 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useRef } from "react";
-import { useAuth } from "../../funciones/useAuth";
-import HeaderDashboard from "./Header";
+import { useAuth } from "../../hooks/useAuth";
+import HeaderDashboard from "../../components/layout/CustomerHeader.jsx";
 import ProductosTienda from "./ProductosTienda";
 import { FaChevronUp } from "react-icons/fa";
 

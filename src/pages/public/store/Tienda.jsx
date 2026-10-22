@@ -1,6 +1,6 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "../../funciones/useAuth";
+import { useAuth } from "../../../hooks/useAuth.js";
 import HeaderTienda from "./HeaderTienda";
 import ProductosTienda from "./ProductosTienda";
 import { FaChevronUp } from "react-icons/fa";

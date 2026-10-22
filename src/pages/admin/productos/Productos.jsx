@@ -1,11 +1,11 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 // Productos.jsx
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from "react-router"; 
 import { FaPlus, FaTrash, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
-import { URL_SERVER, apiAxios } from '../../../funciones/conexion';
-import { useAuth } from '../../../funciones/useAuth';
+import { URL_SERVER, apiAxios } from '../../../services/api/client';
+import { useAuth } from '../../../hooks/useAuth';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
 

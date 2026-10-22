@@ -1,8 +1,8 @@
 import { createElement, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBoxes, FaClipboardList, FaStore, FaMoneyBillWave, FaTruckLoading, FaExclamationTriangle, FaPlus, FaArrowRight } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
+import { apiAxios } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
 
 const money = (value) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(value || 0);
 const orderDate = (order) => new Date(order.fechaCreacion || order.createdAt || 0);

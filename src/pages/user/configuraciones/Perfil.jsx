@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import React from 'react';
 import { FaUser, FaEnvelope } from 'react-icons/fa';
 

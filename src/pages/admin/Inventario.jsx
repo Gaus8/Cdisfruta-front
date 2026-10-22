@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FaBoxes, FaCamera, FaCheck, FaEdit, FaExclamationTriangle, FaMinus, FaPlus, FaSearch, FaTimes, FaUpload, FaTrash } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { useAuth } from '../../funciones/useAuth';
-import { tw } from '../../funciones/tw.js';
+import { apiAxios } from '../../services/api/client';
+import { useAuth } from '../../hooks/useAuth';
+import { tw } from '../../utils/tw.js';
 
 const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100';
 const buttonClass = 'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50';

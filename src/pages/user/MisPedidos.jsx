@@ -1,12 +1,12 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FaArrowLeft, FaBoxOpen, FaClock, FaCheckCircle, 
   FaTruck, FaHome, FaTimesCircle, FaWhatsapp, FaEye 
 } from "react-icons/fa";
-import { apiAxios } from "../../funciones/conexion";
-import { useAuth } from "../../funciones/useAuth";
+import { apiAxios } from "../../services/api/client";
+import { useAuth } from "../../hooks/useAuth";
 
 const PASOS_ESTADO = ["Pendiente", "Comprobado", "Enviado", "Entregado"];
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaSave, FaShieldAlt } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
+import { apiAxios } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
 
 const roleNames = { admin: 'Administrador', user: 'Usuario cliente', logistica: 'Gestión Logística', catalogo: 'Gestión de Catálogo' };
 const permissionNames = { 'inventory:read': 'Ver inventario', 'inventory:write': 'Actualizar existencias y artículos', 'catalog:read': 'Ver catálogo', 'catalog:write': 'Crear y editar artículos del catálogo' };

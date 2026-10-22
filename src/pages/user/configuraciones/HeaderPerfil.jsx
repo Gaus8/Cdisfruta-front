@@ -1,4 +1,4 @@
-import { tw } from '../../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { FaCamera } from 'react-icons/fa';
 
 export default function HeaderPerfil({ nombre, avatarSeleccionado, mostrarSelector, setMostrarSelector }) {

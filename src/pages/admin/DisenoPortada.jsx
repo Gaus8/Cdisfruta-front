@@ -1,8 +1,8 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useEffect, useRef, useState } from 'react';
 import { FaCloudUploadAlt, FaSave } from 'react-icons/fa';
 import { useBlocker } from 'react-router-dom';
-import { apiAxios } from '../../funciones/conexion';
+import { apiAxios } from '../../services/api/client';
 
 const initialSlides = [
   { eyebrow: 'Presencia internacional', etiqueta: 'Presencia internacional', titulo: 'CDISFRUTA en Australia', desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.', tag: 'Australia · Melbourne', detalle: 'Nuestra expansión internacional comenzó con el sueño de llevar el sabor de Ubaté al mundo. Hoy, nuestras infusiones se disfrutan en Melbourne por diversas familias, destacando por su origen natural y procesos artesanales.', img: '/img/cdisfruta_01.webp', iconKey: 'globe' },

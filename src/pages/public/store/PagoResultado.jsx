@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { tw } from '../../funciones/tw.js';
-import { apiAxios } from '../../funciones/conexion.js';
+import { tw } from '../../../utils/tw.js';
+import { apiAxios } from '../../../services/api/client.js';
 
 export default function PagoResultado() {
   const [params] = useSearchParams();

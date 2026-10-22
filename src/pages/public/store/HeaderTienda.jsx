@@ -1,9 +1,9 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt } from "react-icons/fa";
-import CartModal from "./CartModal";
-import { useAuth } from "../../funciones/useAuth";
+import CartModal from "../../../components/ui/CartModal.jsx";
+import { useAuth } from "../../../hooks/useAuth.js";
 
 export default function HeaderTienda() {
   const { authenticated, logout, userData } = useAuth();

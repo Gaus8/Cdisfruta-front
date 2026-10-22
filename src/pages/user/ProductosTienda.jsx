@@ -1,9 +1,9 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { URL_SERVER } from "../../funciones/conexion";
-import { registrarIntentoFormulario, registrarVistaProducto } from "../../funciones/analytics";
+import { URL_SERVER } from "../../services/api/client";
+import { registrarIntentoFormulario, registrarVistaProducto } from "../../services/api/analyticsService";
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);

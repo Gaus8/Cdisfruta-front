@@ -1,4 +1,4 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../../utils/tw.js';
 import Videos from './Videos';
 import HeroCarousel from './Carrusel';
 import ProductCarousel3D from './ProductCarousel3D';

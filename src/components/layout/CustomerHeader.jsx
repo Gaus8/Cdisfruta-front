@@ -1,4 +1,4 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,9 +6,9 @@ import {
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
   FaSignInAlt, FaUserPlus
 } from "react-icons/fa";
-import CartModal from "./CartModal";
-import { apiAxios } from "../../funciones/conexion"; // Usar instancia configurada con withCredentials
-import { useAuth } from "../../funciones/useAuth";
+import CartModal from "../../pages/user/CartModal";
+import { apiAxios } from "../../services/api/client"; // Usar instancia configurada con withCredentials
+import { useAuth } from "../../hooks/useAuth";
 
 export default function HeaderDashboard() {
   const { userData, verifyToken } = useAuth();

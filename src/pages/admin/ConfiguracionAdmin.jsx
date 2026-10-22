@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FaBell, FaCheck, FaLock, FaSave, FaShieldAlt, FaExclamationTriangle } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { cambiarPassword } from '../../funciones/usuarioAuth';
-import { tw } from '../../funciones/tw.js';
+import { apiAxios } from '../../services/api/client';
+import { cambiarPassword } from '../../services/api/authService';
+import { tw } from '../../utils/tw.js';
 
 const defaults = { notificarPedidos: true, notificarInventario: true, notificarCatalogo: true, umbralStockCritico: 5 };
 const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100';

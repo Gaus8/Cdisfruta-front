@@ -1,8 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import { tailwindClassMap } from './funciones/tailwindClassMap.js';
-import App from './App.jsx'
+import './styles/index.css'
+import { tailwindClassMap } from './utils/tailwindClassMap.js';
+import App from './routes/AppRouter.jsx'
 // 1. Importar el Provider
 import { GoogleOAuthProvider } from '@react-oauth/google';
 

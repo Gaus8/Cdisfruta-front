@@ -1,13 +1,13 @@
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from "react";
-import { useAuth } from "../../funciones/useAuth";
-import HeaderDashboard from "./Header";
+import { useAuth } from "../../hooks/useAuth";
+import HeaderDashboard from "../../components/layout/CustomerHeader";
 import { FaSave, FaCheckCircle } from "react-icons/fa";
 import Perfil from "./configuraciones/Perfil";
 import Seguridad from "./configuraciones/Seguridad";
 import HeaderPerfil from "./configuraciones/HeaderPerfil";
 import SelectorAvatar from "./configuraciones/SelectorAvatar";
-import { cambiarPassword, actualizarPerfil } from "../../funciones/usuarioAuth";
+import { cambiarPassword, actualizarPerfil } from "../../services/api/authService";
 
 const AVATAR_OPTIONS = [
   "https://api.dicebear.com/7.x/bottts/svg?seed=Gordi1",

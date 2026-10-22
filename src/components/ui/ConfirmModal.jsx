@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { tw } from '../../funciones/tw.js';
+import { tw } from '../../utils/tw.js';
 
 export default function ConfirmModal({ open, title, description, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', busy = false, busyLabel = 'Procesando…', onCancel, onConfirm }) {
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { apiAxios } from "./conexion";
+import { apiAxios } from "./client";
 
 /**
  * Inicia sesión con credenciales de email y contraseña.

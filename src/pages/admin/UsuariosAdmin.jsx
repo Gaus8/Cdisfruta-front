@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createElement } from 'react';
 import { createPortal } from 'react-dom';
 import { FaSearch, FaUsers, FaUserCheck, FaUserClock, FaChevronLeft, FaChevronRight, FaTimes, FaTrash, FaEye, FaShoppingBag, FaClipboardList, FaRegClock, FaChartLine } from 'react-icons/fa';
-import { apiAxios } from '../../funciones/conexion';
-import { tw } from '../../funciones/tw.js';
-import ConfirmModal from './ConfirmModal';
+import { apiAxios } from '../../services/api/client';
+import { tw } from '../../utils/tw.js';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 import RolesPermisosAdmin from './RolesPermisosAdmin';
 
 const PAGE_SIZE = 10;

@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
-import { tw } from '../../funciones/tw.js';
-import Registro from '../usuariosAuth/Registro';
-import Login from '../usuariosAuth/Login';
+import { tw } from '../../../utils/tw.js';
+import Registro from '../../auth/Registro.jsx';
+import Login from '../../auth/Login.jsx';
 
 const BRAND_PLACEHOLDER = '/img/logo_cdisfruta.webp';
 
