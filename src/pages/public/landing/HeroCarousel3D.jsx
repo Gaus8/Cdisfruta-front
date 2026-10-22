@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { tw } from '../../../utils/tw.js';
 import Registro from '../../auth/Registro.jsx';
@@ -124,8 +124,8 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
       <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold uppercase leading-[1.1] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
       <p className={tw('mt-6 max-w-[650px] whitespace-pre-line break-words text-[13px] leading-[1.8] text-[#8B6652] sm:mt-8 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
       <div className={tw('mt-8 flex flex-wrap justify-center gap-3 sm:mt-10')}>
-        <button type="button" onClick={() => setShowRegister(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{current.textoBotonPrincipal || 'Comprar ahora'}</button>
-        <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{current.textoBotonSecundario || 'Más información'} <span aria-hidden="true">→</span></button>
+        <Link to="/tienda" aria-label="Comprar ahora en la tienda CDISFRUTA" className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{current.textoBotonPrincipal || 'Comprar ahora'}</Link>
+        <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{current.textoBotonSecundario || 'Más información'}</button>
       </div>
     </div>
 
@@ -169,7 +169,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
       <section role="dialog" aria-modal="true" aria-labelledby="hero-banner-details-title" className={tw('relative w-full max-w-xl overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl')}>
         <button type="button" aria-label="Cerrar información" onClick={() => setShowDetails(false)} className={tw('absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full bg-white/90 text-slate-700 shadow-sm hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-[#E8603C]')}><FaTimes /></button>
         <img src={getImage(current)} alt={current.titulo || 'CDISFRUTA'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} className={tw('h-52 w-full object-cover sm:h-64')} />
-        <div className={tw('space-y-3 p-5 sm:p-7')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#E8603C]')}>{current.etiqueta || current.eyebrow}</p><h2 id="hero-banner-details-title" className={tw('text-2xl font-extrabold tracking-[-.02em] text-[#2D1B0A]')}>{current.titulo}</h2><p className={tw('max-h-48 overflow-y-auto whitespace-pre-line text-sm leading-6 text-[#8B6652]')} style={{ fontFamily: 'var(--font-mono)' }}>{current.detalle || current.desc}</p><p className={tw('inline-flex rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-[#8B6652]')}>{current.tag || current.etiqueta}</p><div><button type="button" onClick={() => { setShowDetails(false); navigate('/dashboard_usuario'); }} className={tw('min-h-11 rounded-full bg-[#E8603C] px-5 text-sm font-bold text-white transition hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>Ver en la tienda</button></div></div>
+        <div className={tw('space-y-3 p-5 sm:p-7')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#E8603C]')}>{current.etiqueta || current.eyebrow}</p><h2 id="hero-banner-details-title" className={tw('text-2xl font-extrabold tracking-[-.02em] text-[#2D1B0A]')}>{current.titulo}</h2><p className={tw('max-h-48 overflow-y-auto whitespace-pre-line text-sm leading-6 text-[#8B6652]')} style={{ fontFamily: 'var(--font-mono)' }}>{current.detalle || current.desc}</p><p className={tw('inline-flex rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-[#8B6652]')}>{current.tag || current.etiqueta}</p><div><button type="button" onClick={() => { setShowDetails(false); navigate('/tienda'); }} className={tw('min-h-11 rounded-full bg-[#E8603C] px-5 text-sm font-bold text-white transition hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>Ver en la tienda</button></div></div>
       </section>
     </div>, document.body)}
 
