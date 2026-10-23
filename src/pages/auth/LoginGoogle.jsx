@@ -1,27 +1,37 @@
 import { tw } from '../../utils/tw.js';
-import { useGoogleLogin } from '@react-oauth/google';
-import { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginConGoogle } from '../../services/api/authService';
 
 export default function LoginGoogle({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");
   const [loading, setLoading] = useState(false);
+  const [buttonWidth, setButtonWidth] = useState(320);
+  const containerRef = useRef(null);
   const navigate = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => handleGoogleSuccess(codeResponse),
-    onError: () => setRespuestaServer("Error en la autenticación con Google"),
-    flow: 'auth-code',
-    prompt: 'select_account', // Muestra directamente el selector de cuentas
-  });
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element) return undefined;
+    const update = () => setButtonWidth(Math.min(400, Math.max(240, Math.floor(element.clientWidth))));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [loading]);
 
-  const handleGoogleSuccess = async (codeResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
+    if (!credentialResponse?.credential) {
+      setRespuestaServer('Google no devolvió la sesión. Ciérrala e inténtalo de nuevo.');
+      return;
+    }
+
     setLoading(true);
     setRespuestaServer("");
-    
+
     try {
-      const data = await loginConGoogle(codeResponse.code);
+      const data = await loginConGoogle(credentialResponse.credential);
 
       if (cerrarModal) cerrarModal();
 
@@ -42,17 +52,21 @@ export default function LoginGoogle({ cerrarModal }) {
   };
 
   return (
-    <div className={tw("google-btn-container")}>
-      <button 
-        className={tw(tw("button-google"), "![opacity:var(--tw-inline-LoginGoogle-1266-0)]", "![cursor:var(--tw-inline-LoginGoogle-1266-1)]")} 
-        type="button" 
-        onClick={() => login()}
-        disabled={loading}
-        style={{ "--tw-inline-LoginGoogle-1266-0": loading ? 0.7 : 1, "--tw-inline-LoginGoogle-1266-1": loading ? 'not-allowed' : 'pointer' }}
-      >
-        <img src="/img/google_logo.webp" alt="Google" />
-        <span>{loading ? "Autenticando..." : "Acceder con Google"}</span>
-      </button>
+    <div ref={containerRef} className={tw("google-btn-container")}>
+      {loading ? (
+        <button className={tw("button-google")} type="button" disabled>Autenticando...</button>
+      ) : (
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={() => setRespuestaServer('No se pudo completar el ingreso con Google. Inténtalo de nuevo.')}
+          theme="outline"
+          size="large"
+          shape="pill"
+          text="continue_with"
+          width={buttonWidth}
+          use_fedcm_for_button={false}
+        />
+      )}
       {respuestaServer && (
         <p className={tw(tw("error-text"), "![text-align:center]")} >
           {respuestaServer}

@@ -11,7 +11,7 @@ document.body.classList.add(...tailwindClassMap['global-body']);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* 2. Envolver la App con el Client ID */}
-    <GoogleOAuthProvider clientId="291876279012-gsnvnoi8b3v6ja2odjl5mdvvd6rjd3d3.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="291876279012-gsnvnoi8b3v6ja2odjl5mdvvd6rjd3d3.apps.googleusercontent.com" locale="es">
       <App />
     </GoogleOAuthProvider>
   </StrictMode>,

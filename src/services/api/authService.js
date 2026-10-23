@@ -55,16 +55,13 @@ export const registrarUsuario = async (data, terminos) => {
   }
 };
 
-export const loginConGoogle = async (code) => {
+export const loginConGoogle = async (credential) => {
   try {
-    const res = await apiAxios.post('/auth/google', { code });
-    if (res.status === 200) {
-      // CORREGIDO: Se eliminó sessionStorage.setItem('token', res.data.token)
-      // La cookie access_token httpOnly es establecida por el backend
-      return res.data;
-    }
+    const res = await apiAxios.post('/auth/google', { credential });
+    if (res.status === 200 && res.data) return res.data;
+    throw new Error('Google confirmó la cuenta, pero la aplicación no pudo abrir la sesión.');
   } catch (err) {
-    const message = err.response?.data?.message || "Error al iniciar sesión con Google.";
+    const message = err.response?.data?.message || err.message || "Error al iniciar sesión con Google.";
     throw new Error(message);
   }
 };
