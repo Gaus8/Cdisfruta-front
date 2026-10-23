@@ -344,3 +344,35 @@
     }
   }
 }
+
+a[href],
+button:not(:disabled),
+summary,
+label,
+select:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="file"]:not(:disabled) {
+  cursor: pointer;
+}
+
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="image"]),
+textarea {
+  cursor: text;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}

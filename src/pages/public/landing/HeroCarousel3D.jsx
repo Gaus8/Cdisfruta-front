@@ -157,7 +157,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
       {banners.length > 1 && <button type="button" aria-label="Banner siguiente" onClick={() => move(1)} className={tw('absolute right-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:right-2 sm:size-12')}><FaChevronRight /></button>}
     </div>
 
-    {banners.length > 1 && <nav aria-label="Paginación de banners" className={tw('mt-3 flex min-h-8 items-center justify-center gap-2')}>
+    {banners.length > 1 && <nav aria-label="Paginación de banners" className={tw('mt-3 flex min-h-8 flex-wrap items-center justify-center gap-2 px-4')}>
       {banners.map((banner, index) => <button key={banner._id || index} type="button" onClick={() => setActiveIndex(index)} aria-label={`Ir al banner ${index + 1}: ${banner.titulo}`} aria-current={index === activeIndex ? 'true' : undefined} className={tw('h-2.5 rounded-full bg-[#d8c8bc] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]', index === activeIndex ? 'w-9 bg-[#E8603C]' : 'w-2.5 hover:bg-[#E8603C]')} />)}
     </nav>}
 
