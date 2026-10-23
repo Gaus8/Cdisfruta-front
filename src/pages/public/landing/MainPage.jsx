@@ -1,7 +1,6 @@
 import { tw } from '../../../utils/tw.js';
 import Videos from './Videos';
 import HeroCarousel from './Carrusel';
-import ProductCarousel3D from './ProductCarousel3D';
 import Header from './Header';
 import HistorySection from './HistorySection';
 import MissionVision from './MissionVision';
@@ -41,8 +40,7 @@ function MainPage() {
     <div className={tw("main-page-wrapper", "theme-v2")}>
       <Header themeV2 />
       <HeroCarousel />
-      <ProductCarousel3D />
- 
+
       <HistorySection content={historyContent} />
  
       <MissionVision />

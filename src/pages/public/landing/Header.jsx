@@ -5,7 +5,6 @@ import { tw } from '../../../utils/tw.js';
 
 const SECTION_LINKS = [
   { id: 'inicio', label: 'Inicio', always: true },
-  { id: 'productos', label: 'Productos' },
   { id: 'historia', label: 'Historia', always: true },
   { id: 'videos', label: 'Videos', always: true },
   { id: 'contacto', label: 'Contacto', always: true },
