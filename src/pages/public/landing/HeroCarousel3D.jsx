@@ -3,8 +3,6 @@ import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { tw } from '../../../utils/tw.js';
-import Registro from '../../auth/Registro.jsx';
-import Login from '../../auth/Login.jsx';
 
 const BRAND_PLACEHOLDER = '/img/logo_cdisfruta.webp';
 
@@ -28,8 +26,6 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [paused, setPaused] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
   const pointerStart = useRef(null);
   const navigate = useNavigate();
 
@@ -146,7 +142,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
           }} onClick={() => { if (!isCenter) setActiveIndex(index); }}>
             <div className={tw('relative aspect-[3/4] overflow-hidden rounded-[28px] border border-white/70 bg-[#f2dfd1] shadow-[0_18px_48px_rgba(84,48,25,.2)] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_28px_60px_rgba(195,67,31,.3)] motion-reduce:transition-none', isCenter && 'shadow-[0_24px_58px_rgba(195,67,31,.28)]')}>
               <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={`Mostrar banner: ${banner.titulo}`} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
-                <img src={getImage(banner)} alt={banner.titulo || 'Banner CDISFRUTA'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
+                <img src={getImage(banner)} alt={banner.titulo || 'Banner CDISFRUTA'} width="600" height="800" decoding="async" loading={isCenter && index === 0 ? 'eager' : 'lazy'} fetchPriority={isCenter && index === 0 ? 'high' : 'low'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
               </button>
               <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-2 pt-16 text-white sm:px-5 sm:pb-3 sm:pt-16')}>
                 {isCenter && <>
@@ -173,7 +169,5 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
       </section>
     </div>, document.body)}
 
-    {showRegister && <Registro cerrar={() => setShowRegister(false)} irLogin={() => { setShowRegister(false); setShowLogin(true); }} />}
-    {showLogin && <Login cerrar={() => setShowLogin(false)} irRegistro={() => { setShowLogin(false); setShowRegister(true); }} />}
   </section>;
 }

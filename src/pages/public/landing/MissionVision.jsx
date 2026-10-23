@@ -100,7 +100,7 @@ export default function MissionVision() {
               loading="lazy"
               onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
             />
-            <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
+            <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" width="900" height="900" decoding="async" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
             <button
               className="mission-vision__fact-trigger"
               type="button"
