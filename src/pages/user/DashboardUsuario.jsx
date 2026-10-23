@@ -1,5 +1,5 @@
 import { tw } from '../../utils/tw.js';
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import HeaderDashboard from "../../components/layout/CustomerHeader.jsx";
 import ProductosTienda from "./ProductosTienda";
@@ -22,13 +22,12 @@ export default function DashboardUsuario() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-      setMostrarBotonSubir(true);
-    } else {
-      setMostrarBotonSubir(false);
-    }
-  });
+  useEffect(() => {
+    const onScroll = () => setMostrarBotonSubir(window.scrollY > 300);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   if (loading) {
     return (

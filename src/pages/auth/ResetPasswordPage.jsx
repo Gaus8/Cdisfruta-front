@@ -39,6 +39,11 @@ export const ResetPasswordPage = () => {
       return;
     }
 
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[.!@#$%^&*])[\S]{8,16}$/.test(nuevaPassword)) {
+      setError('Debe tener 8-16 caracteres, una mayúscula, una minúscula, un número y un símbolo (.!@#$%^&*).');
+      return;
+    }
+
     setLoading(true);
 
     try {

@@ -11,18 +11,19 @@ apiAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     const url = error.config?.url || '';
-    // Evitamos interceptar las rutas explícitas de autenticación
     const isAuthRoute = 
       url.includes('/login') || 
       url.includes('/registro') || 
       url.includes('/logout') ||
-      url.includes('/verificar-token'); // 👈 un 401 aquí es normal para visitantes sin sesión
+      url.includes('/cambiar-password') ||
+      url.includes('/verificar-token');
 
-    if (
-      error.response && 
-      (error.response.status === 401 || error.response.status === 403) &&
-      !isAuthRoute
-    ) {
+    const message = String(error.response?.data?.message || error.response?.data?.mensaje || '');
+    const sessionRejected = error.response?.status === 401 || (
+      error.response?.status === 403 && /token|access not authorized|no hay token|no token/i.test(message)
+    );
+
+    if (error.response && sessionRejected && !isAuthRoute) {
       // Guardamos la marca de que la sesión venció mientras el usuario usaba la app
       sessionStorage.setItem('session_was_expired', 'true');
       

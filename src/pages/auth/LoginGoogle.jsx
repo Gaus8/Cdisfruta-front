@@ -25,11 +25,15 @@ export default function LoginGoogle({ cerrarModal }) {
 
       if (cerrarModal) cerrarModal();
 
-      if (data?.rol === 'admin') {
-        navigate("/dashboard_admin");
-      } else {
-        navigate("/dashboard_usuario");
-      }
+      const rolUsuario = data?.user?.rol || data?.rol;
+      const destination = rolUsuario === 'logistica'
+        ? '/admin/inventario'
+        : rolUsuario === 'catalogo'
+          ? '/admin/productos'
+          : rolUsuario === 'admin'
+            ? '/admin'
+            : '/cliente/tienda';
+      navigate(destination, { replace: true });
     } catch (err) {
       setRespuestaServer(err.message);
     } finally {

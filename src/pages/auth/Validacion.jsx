@@ -64,7 +64,7 @@ function Validacion() {
         setTimeout(() => navigate('/login'), 2500);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Código incorrecto o expirado.');
+      setError(err.response?.data?.message || err.response?.data?.mensaje || 'Código incorrecto o expirado.');
     } finally {
       setCargando(false);
     }
