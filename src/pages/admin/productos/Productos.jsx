@@ -167,9 +167,10 @@ function Productos() {
       
       const method = editingProduct ? 'PUT' : 'POST';
 
-      const response = await fetch(url, { 
-        method, 
-        body: formDataToSend 
+      const response = await fetch(url, {
+        method,
+        body: formDataToSend,
+        credentials: 'include'
       });
       
       if (!response.ok) {

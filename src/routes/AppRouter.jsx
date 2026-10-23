@@ -6,7 +6,7 @@ import {
   useLocation
 } from "react-router-dom";
 import { useEffect, useRef, useCallback } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { RutaProtegida } from "../pages/auth/RutaProtegida";
 
 import MainPage from '../pages/public/landing/MainPage';
@@ -66,7 +66,7 @@ function useGuardedAuth() {
   // Verificación reutilizable: si había sesión antes y ya no la hay, marcamos expiración real
   const checkAndFlagExpiration = useCallback(async () => {
     const data = await verifyToken();
-    if (!data && wasAuthenticated.current) {
+    if (data === false && wasAuthenticated.current) {
       sessionStorage.setItem('session_was_expired', 'true');
     }
   }, [verifyToken]);
@@ -208,5 +208,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
