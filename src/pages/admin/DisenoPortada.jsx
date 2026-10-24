@@ -4,22 +4,15 @@ import { FaArrowDown, FaArrowUp, FaCloudUploadAlt, FaPlus, FaSave, FaTrash } fro
 import { useBlocker } from 'react-router-dom';
 import { apiAxios } from '../../services/api/client';
 import ConfirmModal from '../../components/ui/ConfirmModal';
+import { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../utils/imageUpload.js';
 
 const MAX_SLIDES = 12;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const MIN_IMAGE_EDGE = 480;
 const PLACEHOLDER = '/img/logo_cdisfruta.webp';
-const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'jfif', 'png', 'webp', 'gif', 'avif', 'bmp', 'tif', 'tiff', 'heic', 'heif'];
-const IMAGE_MIMES = new Set([
-  'image/jpeg', 'image/jpg', 'image/pjpeg',
-  'image/png', 'image/webp', 'image/gif', 'image/avif',
-  'image/bmp', 'image/x-ms-bmp',
-  'image/tiff', 'image/tif',
-  'image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence'
-]);
 const PREVIEWABLE_EXTENSIONS = new Set(['jpg', 'jpeg', 'jfif', 'png', 'webp', 'gif', 'avif', 'bmp']);
 const imageExtension = (file) => file.name.split('.').pop()?.toLowerCase() || '';
-const isAcceptedImage = (file) => IMAGE_MIMES.has(file.type) || IMAGE_EXTENSIONS.includes(imageExtension(file));
+const isAcceptedImage = isAllowedImageFile;
 
 const initialSlides = [
   { eyebrow: 'Presencia internacional', etiqueta: 'Presencia internacional', titulo: 'CDISFRUTA en Australia', desc: 'Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.', tag: 'Australia · Melbourne', detalle: 'Nuestra expansión internacional comenzó con el sueño de llevar el sabor de Ubaté al mundo. Hoy, nuestras infusiones se disfrutan en Melbourne por diversas familias, destacando por su origen natural y procesos artesanales.', img: '/img/cdisfruta_01.webp', iconKey: 'globe' },
@@ -95,7 +88,7 @@ export default function DisenoPortada() {
   const selectImage = async (key, file) => {
     if (!file) return;
     if (!isAcceptedImage(file)) {
-      setMessage({ type: 'error', text: 'Usa JPG, PNG, WebP, GIF, AVIF, BMP, TIFF o HEIC.' });
+      setMessage({ type: 'error', text: `Usa ${IMAGE_FORMATS_LABEL}.` });
       return;
     }
     if (file.size > MAX_IMAGE_BYTES) {
@@ -235,7 +228,7 @@ export default function DisenoPortada() {
           <FaPlus /> Agregar diapositiva
         </button>
       </header>
-      <div className={tw("cover-guidance")}><strong>Guía de imágenes</strong><span>JPG, PNG, WebP, GIF, AVIF, BMP, TIFF o HEIC · Máximo 8 MB · Al menos 480 px en el lado más largo · Recomendado 1200 px o más · Hasta {MAX_SLIDES} diapositivas.</span></div>
+      <div className={tw("cover-guidance")}><strong>Guía de imágenes</strong><span>{IMAGE_FORMATS_LABEL} · Máximo 8 MB · Al menos 480 px en el lado más largo · Recomendado 1200 px o más · Hasta {MAX_SLIDES} diapositivas.</span></div>
       {message && <div className={tw(`cover-feedback ${message.type}`)} role="status">{message.text}</div>}
       <div className={tw("cover-slide-list")}>
         {slides.map((slide, index) => {
@@ -254,9 +247,9 @@ export default function DisenoPortada() {
               <div className={tw("cover-slide-body")}>
                 <div className={tw("cover-image-column")}>
                   <div className={tw("cover-image-preview")}><img src={slide.img || PLACEHOLDER} alt={slide.img ? `Vista previa diapositiva ${index + 1}` : `La diapositiva ${index + 1} todavía no tiene imagen`} /></div>
-                  <input ref={(element) => { refs.current[key] = element; }} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/bmp,image/tiff,.jpg,.jpeg,.jfif,.png,.webp,.gif,.avif,.bmp,.tif,.tiff,.heic,.heif" hidden onChange={(event) => { selectImage(key, event.target.files?.[0]); event.target.value = ''; }} />
+                  <input ref={(element) => { refs.current[key] = element; }} type="file" accept={IMAGE_ACCEPT} hidden onChange={(event) => { selectImage(key, event.target.files?.[0]); event.target.value = ''; }} />
                   <button className={tw("cover-image-button")} type="button" onClick={() => refs.current[key]?.click()}><FaCloudUploadAlt /> {slide.img ? 'Cambiar imagen' : 'Elegir imagen'}</button>
-                  <small>{slide.img ? 'La imagen se recorta para adaptarse a escritorio y móvil.' : 'Esta diapositiva necesita una imagen antes de guardar.'}</small>
+                  <small>{slide.img ? `Formatos: ${IMAGE_FORMATS_LABEL}. La imagen se recorta para escritorio y móvil.` : `Formatos: ${IMAGE_FORMATS_LABEL}. Esta diapositiva necesita una imagen antes de guardar.`}</small>
                 </div>
                 <div className={tw("cover-fields")}>
                   <div className={tw('cover-field-group grid grid-cols-1 gap-3 rounded-xl border border-[#e6ece4] bg-[#fbfcfa] p-4 sm:grid-cols-2 [&>h3]:col-span-full [&>h3]:m-0 [&>h3]:text-base [&>h3]:text-[#344b37] [&>p]:col-span-full [&>p]:m-0 [&>p]:text-sm [&>p]:text-[#7d897e]')}>

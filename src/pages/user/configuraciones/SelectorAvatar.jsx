@@ -1,6 +1,7 @@
 import { tw } from '../../../utils/tw.js';
 import { useRef } from "react";
 import { FaUpload, FaUser } from "react-icons/fa";
+import { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../../utils/imageUpload.js';
 
 export default function SelectorAvatar({ avatarOptions, avatarSeleccionado, setAvatarSeleccionado }) {
   const fileInputRef = useRef(null);
@@ -8,15 +9,18 @@ export default function SelectorAvatar({ avatarOptions, avatarSeleccionado, setA
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
-        alert("Por favor selecciona un archivo de imagen válido.");
+      if (!isAllowedImageFile(file)) {
+        alert(`Formato no permitido. Usa ${IMAGE_FORMATS_LABEL}.`);
+        e.target.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('La imagen supera el límite de 5 MB.');
+        e.target.value = '';
         return;
       }
       const imageUrl = URL.createObjectURL(file);
       setAvatarSeleccionado(imageUrl);
-      
-      // Opcional: Si necesitas el archivo binario para enviarlo al backend, 
-      // puedes pasarlo mediante una prop adicional (ej. onFileSelect(file))
     }
   };
 
@@ -39,6 +43,9 @@ export default function SelectorAvatar({ avatarOptions, avatarSeleccionado, setA
           <p className={tw("![font-size:0.8rem]", "![color:#64748b]", "![margin:0]")}>
             Elige un diseño predeterminado o sube una foto personalizada desde tu equipo.
           </p>
+          <p className={tw("![font-size:0.75rem]", "![color:#94a3b8]", "![margin:6px_0_0_0]")}>
+            Formatos: {IMAGE_FORMATS_LABEL} · Máximo 5 MB
+          </p>
         </div>
       </div>
 
@@ -53,7 +60,7 @@ export default function SelectorAvatar({ avatarOptions, avatarSeleccionado, setA
           type="file" 
           ref={fileInputRef} 
           onChange={handleImageChange} 
-          accept="image/*" 
+          accept={IMAGE_ACCEPT}
           className={tw("![display:none]")} 
         />
 

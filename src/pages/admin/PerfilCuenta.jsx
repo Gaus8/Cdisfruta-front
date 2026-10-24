@@ -6,6 +6,7 @@ import { actualizarPerfil, cambiarPassword } from '../../services/api/authServic
 import { apiAxios } from '../../services/api/client';
 import { tw } from '../../utils/tw.js';
 import HeaderDashboard from '../../components/layout/CustomerHeader';
+import { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../utils/imageUpload.js';
 
 const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100';
 const avatars = [
@@ -46,8 +47,8 @@ export default function PerfilCuenta({ adminMode = true }) {
   const chooseAvatar = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    if (!['image/jpeg', 'image/png'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-      setFeedback({ type: 'error', text: 'Selecciona una imagen JPG o PNG de máximo 5 MB.' });
+    if (!isAllowedImageFile(file) || file.size > 5 * 1024 * 1024) {
+      setFeedback({ type: 'error', text: `Selecciona una imagen (${IMAGE_FORMATS_LABEL}) de máximo 5 MB.` });
       event.target.value = '';
       return;
     }
@@ -117,8 +118,8 @@ export default function PerfilCuenta({ adminMode = true }) {
             {avatar ? <img src={avatar} alt="Foto de perfil" className={tw('h-full w-full object-cover')} /> : <FaUserCircle className={tw('text-7xl')} />}
           </div>
           <button type="button" onClick={() => fileRef.current?.click()} className={tw('inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#ff7e5f] hover:text-[#e06d43]')}><FaCamera /> Cambiar foto</button>
-          <input ref={fileRef} hidden type="file" accept="image/jpeg,image/png" onChange={chooseAvatar} />
-          <p className={tw('text-center text-xs text-slate-400')}>JPG o PNG · Máximo 5 MB</p>
+          <input ref={fileRef} hidden type="file" accept={IMAGE_ACCEPT} onChange={chooseAvatar} />
+          <p className={tw('text-center text-xs text-slate-400')}>{IMAGE_FORMATS_LABEL} · Máximo 5 MB</p>
           <button type="button" onClick={() => setShowAvatarOptions((visible) => !visible)} className={tw('text-xs font-semibold text-[#e06d43] hover:underline')}>{showAvatarOptions ? 'Ocultar avatares' : 'O elegir un avatar'}</button>
           {showAvatarOptions && <div className={tw('grid grid-cols-3 gap-2')} aria-label="Avatares predeterminados">{avatars.map((url) => <button key={url} type="button" onClick={() => selectPresetAvatar(url)} aria-label="Elegir avatar predeterminado" aria-pressed={avatar === url} className={tw('h-12 w-12 overflow-hidden rounded-full border-2 bg-white transition hover:scale-105', avatar === url ? 'border-[#ff7e5f]' : 'border-slate-200')}><img src={url} alt="" className={tw('h-full w-full object-cover')} /></button>)}</div>}
         </div>

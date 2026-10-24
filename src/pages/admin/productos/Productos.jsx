@@ -8,6 +8,7 @@ import { URL_SERVER, apiAxios } from '../../../services/api/client';
 import { useAuth } from '../../../hooks/useAuth';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
+import { IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../../utils/imageUpload.js';
 
 function Productos() {
   const [fileName, setFileName] = useState("");
@@ -77,6 +78,13 @@ function Productos() {
     const validFiles = [];
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      if (!isAllowedImageFile(file)) {
+        setDialogMessage({
+          title: 'Formato no permitido',
+          message: `La imagen "${file.name}" no es válida. Usa ${IMAGE_FORMATS_LABEL}.`,
+        });
+        continue;
+      }
       if (file.size > 5 * 1024 * 1024) {
         setDialogMessage({ title: 'Imagen demasiado grande', message: `La imagen "${file.name}" supera el límite permitido de 5 MB.` });
         continue;

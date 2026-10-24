@@ -1,6 +1,7 @@
 import { tw } from '../../../utils/tw.js';
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCloudUploadAlt, FaExclamationTriangle } from 'react-icons/fa';
+import { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL } from '../../../utils/imageUpload.js';
 
 export default function FormProductos({
   editingProduct, handleDragLeave, handleDragOver,
@@ -124,7 +125,7 @@ export default function FormProductos({
                   <div className={tw("upload-text")}>
                     {previews.length === 0 ? 'Haz click o arrastra imágenes aquí' : 'Agregar'}
                   </div>
-                  <div className={tw("upload-hint")}>PNG, JPG (Máx. 5MB)</div>
+                  <div className={tw("upload-hint")}>{IMAGE_FORMATS_LABEL} · Máx. 5 MB</div>
                 </div>
               )}
             </div>
@@ -134,7 +135,7 @@ export default function FormProductos({
               ref={fileInputRef}
               multiple
               onChange={handleFileSelect}
-              accept="image/png, image/jpeg, image/webp"
+              accept={IMAGE_ACCEPT}
               name="imagenes"
               className={tw("![display:none]")}
             />
