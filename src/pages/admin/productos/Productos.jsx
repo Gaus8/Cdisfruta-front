@@ -9,6 +9,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import ListarProductos from './ListarProductos';
 import FormProductos from './FormProductos';
 import { IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../../utils/imageUpload.js';
+import { hasPermission } from '../../../utils/permissions.js';
 
 function Productos() {
   const [fileName, setFileName] = useState("");
@@ -34,7 +35,7 @@ function Productos() {
 
   const location = useLocation();
   const { userData } = useAuth();
-  const canWriteCatalog = userData?.rol === 'admin' || userData?.permisos?.includes('catalog:write');
+  const canWriteCatalog = hasPermission(userData, 'catalog:write');
 
   // 1. LÓGICA DE ACCESO RÁPIDO (Desde HomeAdmin)
   useEffect(() => {

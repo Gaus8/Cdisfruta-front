@@ -7,9 +7,14 @@ import { URL_SERVER } from "../../services/api/client.js";
 import { FaBell, FaUserCircle, FaSignOutAlt, FaUserEdit, FaCog, FaCheck } from "react-icons/fa";
 import { apiAxios } from '../../services/api/client';
 import ConfirmModal from '../ui/ConfirmModal';
+import { useAuth } from '../../hooks/useAuth';
+import { hasPermission } from '../../utils/permissions.js';
 
 export default function Header({ userName, role = 'admin' }) {
+  const { userData } = useAuth();
   const isAdmin = role === 'admin';
+  const canSeeNotifications = hasPermission(userData, 'notifications:read');
+  const canEditProfile = hasPermission(userData, 'profile:write');
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -38,12 +43,10 @@ export default function Header({ userName, role = 'admin' }) {
     };
   }, [userName, isAdmin]);
 
-  // 1. CARGAR NOTIFICACIONES
   useEffect(() => {
-    if (!isAdmin) return undefined;
+    if (!canSeeNotifications) return undefined;
     const fetchNotifications = async () => {
       try {
-        // Quitamos el /api de aquí porque ya está en URL_SERVER
         const res = await axios.get(`${URL_SERVER}/get-notificaciones`, { withCredentials: true });
         setNotifications(res.data.filter((notification) => {
           const text = `${notification.tipo || ''} ${notification.mensaje || ''}`.toLowerCase();
@@ -60,7 +63,7 @@ export default function Header({ userName, role = 'admin' }) {
       if (document.visibilityState === 'visible') fetchNotifications();
     }, 30000);
     return () => window.clearInterval(notificationsSync);
-  }, [notificationPreferences, isAdmin]);
+  }, [notificationPreferences, canSeeNotifications]);
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
@@ -111,7 +114,7 @@ export default function Header({ userName, role = 'admin' }) {
         
     
         <div className={tw("header-actions")}>
-          {isAdmin && <div className={tw("dropdown-container")}>
+          {canSeeNotifications && <div className={tw("dropdown-container")}>
             <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper", "![width:42px]", "![height:42px]", "![flex-shrink:0]")} onClick={toggleNotifications}>
               <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`, "![font-size:20px]")} />
               {notifications.length > 0 && (
@@ -126,7 +129,7 @@ export default function Header({ userName, role = 'admin' }) {
                   {notifications.length > 0 ? (
                     notifications.map((notif) => (
                       <li key={notif._id} className={tw("notification-item")}>
-                        <span className={tw("notif-text")}>{notif.mensaje}</span> {/* Clase añadida */}
+                        <span className={tw("notif-text")}>{notif.mensaje}</span>
                         <button 
                           className={tw("btn-check-read")} 
                           onClick={() => markAsRead(notif._id)}
@@ -158,8 +161,8 @@ export default function Header({ userName, role = 'admin' }) {
               <div className={tw("dropdown-menu profile-menu")}>
                 <div className={tw("dropdown-header")}>Mi Cuenta</div>
                 <ul className={tw("dropdown-list")}>
-                  {isAdmin && <><li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> Editar perfil</button></li>
-                  <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> Configuración</button></li></>}
+                  {canEditProfile && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> Editar perfil</button></li>}
+                  {isAdmin && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> Configuración</button></li>}
                   <hr />
                   <li className={tw("logout-opt")}><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => {
                     setShowLogoutModal(true);

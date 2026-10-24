@@ -8,6 +8,7 @@ import {
 import { lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { RutaProtegida } from "../pages/auth/RutaProtegida";
+import { hasPermission } from "../utils/permissions.js";
 
 import MainPage from '../pages/public/landing/MainPage';
 
@@ -149,10 +150,10 @@ function LayoutAdmin() {
 function AdminModule({ permission, children }) {
   const { userData, loading } = useAuth();
   if (loading) return <div className={tw('flex min-h-72 items-center justify-center text-slate-500')}>Verificando permisos…</div>;
-  if (userData?.rol === 'admin' || userData?.permisos?.includes(permission)) return children;
-  const ownModule = userData?.rol === 'logistica' && userData?.permisos?.includes('inventory:read')
+  if (hasPermission(userData, permission)) return children;
+  const ownModule = hasPermission(userData, 'inventory:read') && userData?.rol === 'logistica'
     ? '/admin/inventario'
-    : userData?.rol === 'catalogo' && userData?.permisos?.includes('catalog:read')
+    : hasPermission(userData, 'catalog:read') && userData?.rol === 'catalogo'
       ? '/admin/productos'
       : '/';
   return <Navigate to={ownModule} replace />;

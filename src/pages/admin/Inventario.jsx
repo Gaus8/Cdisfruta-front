@@ -5,6 +5,7 @@ import { apiAxios } from '../../services/api/client';
 import { useAuth } from '../../hooks/useAuth';
 import { tw } from '../../utils/tw.js';
 import { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL, isAllowedImageFile } from '../../utils/imageUpload.js';
+import { hasPermission } from '../../utils/permissions.js';
 
 const inputClass = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100';
 const buttonClass = 'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50';
@@ -12,7 +13,8 @@ const toError = (error) => error.response?.data?.message || 'Ocurrió un error. 
 
 export default function Inventario() {
   const { userData } = useAuth();
-  const canWriteInventory = userData?.rol === 'admin' || userData?.permisos?.includes('inventory:write');
+  const canWriteInventory = hasPermission(userData, 'inventory:write');
+  const isFullAdmin = userData?.rol === 'admin';
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -299,16 +301,16 @@ export default function Inventario() {
 
     <div className={tw('overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm')}>
       <div className={tw('flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-6')}><div><h2 className={tw('text-lg font-bold text-slate-800')}>Existencias</h2><p className={tw('text-sm text-slate-500')}>Selecciona artículos terminados para prepararlos en el catálogo.</p></div><label className={tw('relative block w-full sm:max-w-xs')}><FaSearch className={tw('absolute left-3 top-1/2 -translate-y-1/2 text-slate-400')} /><input className={tw(inputClass, 'pl-9')} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar producto o código" /></label></div>
-      {canWriteInventory && selectedIds.length > 0 && <div className={tw('flex flex-col gap-3 border-b border-orange-100 bg-orange-50/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6')}><p className={tw('text-sm font-medium text-slate-700')}>{selectedIds.length} artículo(s) seleccionado(s) para exportar</p><button type="button" onClick={exportSelectedToCatalog} className={tw(buttonClass, 'bg-[#ff7e5f] text-white hover:bg-[#e06d43]')}><FaBoxes /> Exportar al catálogo</button></div>}
+      {isFullAdmin && selectedIds.length > 0 && <div className={tw('flex flex-col gap-3 border-b border-orange-100 bg-orange-50/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6')}><p className={tw('text-sm font-medium text-slate-700')}>{selectedIds.length} artículo(s) seleccionado(s) para exportar</p><button type="button" onClick={exportSelectedToCatalog} className={tw(buttonClass, 'bg-[#ff7e5f] text-white hover:bg-[#e06d43]')}><FaBoxes /> Exportar al catálogo</button></div>}
       {filtered.length === 0 ? <div className={tw('px-6 py-14 text-center')}><FaBoxes className={tw('mx-auto mb-3 text-3xl text-slate-300')} /><p className={tw('font-semibold text-slate-700')}>{products.length ? 'No hay coincidencias' : 'Aún no hay productos en inventario'}</p><p className={tw('mt-1 text-sm text-slate-500')}>{products.length ? 'Prueba otro nombre o código de barras.' : 'Registra el primer producto para comenzar.'}</p></div> : <>
         <div className={tw('hidden overflow-x-auto md:block')}>
           <table className={tw('w-full min-w-[900px] text-left')}>
             <thead className={tw('bg-slate-50 text-xs uppercase tracking-wide text-slate-500')}><tr>
-              {userData?.rol === 'admin' && <th className={tw('px-4 py-3')}>Catálogo</th>}<th className={tw('px-4 py-3')}>Artículo</th>{canWriteInventory && <th className={tw('px-4 py-3')}>Código de barras</th>}<th className={tw('px-4 py-3')}>Creación</th><th className={tw('px-4 py-3')}>Existencias</th>{canWriteInventory && <th className={tw('px-5 py-3 text-right')}>Ajustar</th>}
+              {isFullAdmin && <th className={tw('px-4 py-3')}>Catálogo</th>}<th className={tw('px-4 py-3')}>Artículo</th>{canWriteInventory && <th className={tw('px-4 py-3')}>Código de barras</th>}<th className={tw('px-4 py-3')}>Creación</th><th className={tw('px-4 py-3')}>Existencias</th>{canWriteInventory && <th className={tw('px-5 py-3 text-right')}>Ajustar</th>}
             </tr></thead>
             <tbody className={tw('divide-y divide-slate-100')}>
               {filtered.map((product) => <tr key={product._id} className={tw('hover:bg-slate-50')}>
-                {userData?.rol === 'admin' && <td className={tw('px-4 py-3')}><input type="checkbox" aria-label={`Seleccionar ${product.nombre} para catálogo`} checked={selectedIds.includes(product._id)} disabled={product.enCatalogo !== false} onChange={() => toggleSelected(product._id)} className={tw('h-4 w-4 accent-[#ff7e5f] disabled:cursor-not-allowed disabled:opacity-30')} /></td>}
+                {isFullAdmin && <td className={tw('px-4 py-3')}><input type="checkbox" aria-label={`Seleccionar ${product.nombre} para catálogo`} checked={selectedIds.includes(product._id)} disabled={product.enCatalogo !== false} onChange={() => toggleSelected(product._id)} className={tw('h-4 w-4 accent-[#ff7e5f] disabled:cursor-not-allowed disabled:opacity-30')} /></td>}
                 <td className={tw('px-4 py-3')}><div className={tw('flex items-center gap-3')}><img src={product.imagen} alt="" className={tw('h-12 w-12 rounded-xl bg-slate-100 object-cover')} /><div><p className={tw('font-semibold text-slate-800')}>{product.nombre}</p><p className={tw('text-xs text-slate-500')}>{product.categoria}</p><span className={tw('mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold', product.enCatalogo === false ? 'bg-slate-100 text-slate-600' : product.publicarEnTienda === false ? 'bg-amber-100 text-amber-800' : 'bg-orange-100 text-orange-800')}>{product.enCatalogo === false ? 'Solo inventario' : product.publicarEnTienda === false ? 'Borrador en catálogo' : 'Tienda virtual'}</span></div></div></td>
                 {canWriteInventory && <td className={tw('px-4 py-3')}><div className={tw('flex gap-1')}><input aria-label={`Código de barras de ${product.nombre}`} maxLength={64} className={tw(inputClass, 'min-w-36 px-2 py-2 text-xs')} placeholder="Asignar código" value={barcodeValues[product._id] ?? product.codigoBarras ?? ''} onChange={(e) => setBarcodeValues((old) => ({ ...old, [product._id]: e.target.value }))} /><button type="button" onClick={() => saveBarcode(product)} className={tw('rounded-lg bg-slate-100 px-2 text-xs font-semibold text-slate-700 hover:bg-emerald-100')}>Guardar</button></div></td>}
                 <td className={tw('px-4 py-3 text-sm text-slate-600')}>{new Date(product.fechaCreacion || product.createdAt).toLocaleDateString('es-CO')}</td>
@@ -320,7 +322,7 @@ export default function Inventario() {
         </div>
         <div className={tw('divide-y divide-slate-100 md:hidden')}>
           {filtered.map((product) => <article key={product._id} className={tw('flex gap-3 p-4')}>
-            {userData?.rol === 'admin' && <input type="checkbox" aria-label={`Seleccionar ${product.nombre} para catálogo`} checked={selectedIds.includes(product._id)} disabled={product.enCatalogo !== false} onChange={() => toggleSelected(product._id)} className={tw('mt-1 h-4 w-4 shrink-0 accent-[#ff7e5f] disabled:opacity-30')} />}
+            {isFullAdmin && <input type="checkbox" aria-label={`Seleccionar ${product.nombre} para catálogo`} checked={selectedIds.includes(product._id)} disabled={product.enCatalogo !== false} onChange={() => toggleSelected(product._id)} className={tw('mt-1 h-4 w-4 shrink-0 accent-[#ff7e5f] disabled:opacity-30')} />}
             <img src={product.imagen} alt="" className={tw('h-16 w-16 shrink-0 rounded-xl bg-slate-100 object-cover')} />
             <div className={tw('min-w-0 flex-1')}><div className={tw('flex items-start justify-between gap-2')}><div className={tw('min-w-0')}><h3 className={tw('truncate font-semibold text-slate-800')}>{product.nombre}</h3><p className={tw('text-xs text-slate-500')}>{product.categoria}</p><span className={tw('text-[10px] font-semibold', product.enCatalogo === false ? 'text-slate-500' : product.publicarEnTienda === false ? 'text-amber-700' : 'text-orange-700')}>{product.enCatalogo === false ? 'Solo inventario' : product.publicarEnTienda === false ? 'Borrador en catálogo' : 'Tienda virtual'}</span></div><span className={tw('shrink-0 rounded-full px-2.5 py-1 text-xs font-bold', product.stock <= 5 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800')}>{product.stock} uds.</span></div>
               {canWriteInventory && <div className={tw('mt-2 flex gap-1')}><input aria-label={`Código de barras de ${product.nombre}`} maxLength={64} className={tw(inputClass, 'min-w-0 px-2 py-2 text-xs')} placeholder="Asignar código" value={barcodeValues[product._id] ?? product.codigoBarras ?? ''} onChange={(e) => setBarcodeValues((old) => ({ ...old, [product._id]: e.target.value }))} /><button type="button" onClick={() => saveBarcode(product)} className={tw('shrink-0 rounded-lg bg-slate-100 px-2 text-xs font-semibold text-slate-700')}>Guardar</button></div>}
