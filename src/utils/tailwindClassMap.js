@@ -3211,6 +3211,98 @@ export const tailwindClassMap = {
   "modal-lg": [
     "[.modal&]:[max-width:800px]"
   ],
+  "modal-product": [
+    "![max-width:920px]",
+    "[width:100%]",
+    "[box-sizing:border-box]"
+  ],
+  "product-form-layout": [
+    "[display:grid]",
+    "[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)]",
+    "[gap:24px]",
+    "[padding:24px]",
+    "[width:100%]",
+    "[box-sizing:border-box]",
+    "[overflow-y:auto]",
+    "[flex:1]",
+    "[min-height:0]",
+    "max-[768px]:[grid-template-columns:1fr]",
+    "max-[768px]:[gap:16px]",
+    "max-[768px]:[padding:16px]"
+  ],
+  "product-form-column": [
+    "[display:flex]",
+    "[flex-direction:column]",
+    "[gap:16px]",
+    "[min-width:0]",
+    "[width:100%]",
+    "[box-sizing:border-box]"
+  ],
+  "product-preview-stage": [
+    "[position:relative]",
+    "[display:flex]",
+    "[align-items:center]",
+    "[justify-content:center]",
+    "[overflow:hidden]",
+    "[border-radius:12px]",
+    "[border:1px_solid_#e2e8f0]",
+    "[background:#f8fafc]",
+    "[width:100%]",
+    "[min-height:200px]",
+    "[aspect-ratio:1]",
+    "[max-height:min(320px,45vh)]",
+    "[&_img]:[width:100%]",
+    "[&_img]:[height:100%]",
+    "[&_img]:[object-fit:cover]"
+  ],
+  "product-preview-empty": [
+    "[display:flex]",
+    "[flex-direction:column]",
+    "[align-items:center]",
+    "[justify-content:center]",
+    "[gap:8px]",
+    "[padding:24px]",
+    "[text-align:center]",
+    "[color:#94a3b8]",
+    "[cursor:pointer]",
+    "[width:100%]",
+    "[height:100%]",
+    "[box-sizing:border-box]"
+  ],
+  "product-preview-badge": [
+    "[position:absolute]",
+    "[left:10px]",
+    "[bottom:10px]",
+    "[border-radius:999px]",
+    "[background:rgba(15,23,42,0.7)]",
+    "[color:white]",
+    "[font-size:0.7rem]",
+    "[font-weight:600]",
+    "[padding:4px_10px]"
+  ],
+  "product-preview-thumbs": [
+    "[display:flex]",
+    "[flex-wrap:wrap]",
+    "[gap:8px]",
+    "[margin-top:10px]",
+    "[width:100%]"
+  ],
+  "product-preview-thumb": [
+    "[position:relative]",
+    "[width:56px]",
+    "[height:56px]",
+    "[border-radius:8px]",
+    "[overflow:hidden]",
+    "[padding:0]",
+    "[cursor:pointer]",
+    "[background:white]",
+    "[border:1px_solid_#cbd5e1]",
+    "[&_img]:[width:100%]",
+    "[&_img]:[height:100%]",
+    "[&_img]:[object-fit:cover]",
+    "[&_img]:[display:block]",
+    "[&.is-active]:[border:2px_solid_#3b82f6]"
+  ],
   "modal-content": [
     "[padding:25px]",
     "[overflow-y:auto]",
@@ -3227,6 +3319,9 @@ export const tailwindClassMap = {
   "form-group": [
     "[display:flex]",
     "[flex-direction:column]",
+    "[width:100%]",
+    "[min-width:0]",
+    "[box-sizing:border-box]",
     "[&_label]:[font-weight:600]",
     "[&_label]:[margin-bottom:8px]",
     "[&_label]:[color:#555]",
@@ -3237,6 +3332,7 @@ export const tailwindClassMap = {
     "[&_input]:[font-size:1rem]",
     "[&_input]:[transition:border-color_0.2s]",
     "[&_input]:[width:100%]",
+    "[&_input]:[max-width:100%]",
     "[&_input]:[box-sizing:border-box]",
     "[&_textarea]:[padding:10px]",
     "[&_textarea]:[border:1px_solid_#ddd]",
@@ -3244,6 +3340,7 @@ export const tailwindClassMap = {
     "[&_textarea]:[font-size:1rem]",
     "[&_textarea]:[transition:border-color_0.2s]",
     "[&_textarea]:[width:100%]",
+    "[&_textarea]:[max-width:100%]",
     "[&_textarea]:[box-sizing:border-box]",
     "[&_input:focus]:[outline:none]",
     "[&_input:focus]:[border-color:#3b82f6]",
@@ -3254,11 +3351,17 @@ export const tailwindClassMap = {
   ],
   "form-row": [
     "[display:flex]",
-    "[gap:15px]"
+    "[flex-wrap:wrap]",
+    "[gap:15px]",
+    "[width:100%]",
+    "[box-sizing:border-box]"
   ],
   "col-md-6": [
-    "[flex:1]",
-    "[min-width:0]"
+    "[flex:1_1_calc(50%_-_8px)]",
+    "[min-width:min(100%,_200px)]",
+    "[width:100%]",
+    "[max-width:100%]",
+    "[box-sizing:border-box]"
   ],
   "upload-section-wrapper": [
     "[display:flex]",
