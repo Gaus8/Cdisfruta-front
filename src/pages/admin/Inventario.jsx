@@ -55,7 +55,9 @@ export default function Inventario() {
 
   useEffect(() => {
     const initialLoad = window.setTimeout(() => loadInventory(true), 0);
-    const timer = window.setInterval(() => loadInventory(), 5000);
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') loadInventory();
+    }, 30000);
     return () => { window.clearTimeout(initialLoad); window.clearInterval(timer); };
   }, [loadInventory]);
 

@@ -2,6 +2,7 @@ import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { URL_SERVER } from "../../../services/api/client.js";
+import { cloudinaryUrl } from "../../../utils/cloudinaryUrl.js";
 
 export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);
@@ -116,7 +117,9 @@ export default function ProductosTienda({ categoria }) {
       }
     };
     fetchProducts(true);
-    const inventorySync = window.setInterval(() => fetchProducts(), 5000);
+    const inventorySync = window.setInterval(() => {
+      if (document.visibilityState === 'visible') fetchProducts();
+    }, 30000);
     return () => window.clearInterval(inventorySync);
   }, []);
 
@@ -381,7 +384,14 @@ export default function ProductosTienda({ categoria }) {
 
                   <div className={tw("product-image")}>
                     {product.imagen ? (
-                      <img src={product.imagen} alt={product.nombre} />
+                      <img
+                        src={cloudinaryUrl(product.imagen, { width: 480 })}
+                        alt={product.nombre}
+                        width="480"
+                        height="480"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <div className={tw("placeholder-img")} />
                     )}

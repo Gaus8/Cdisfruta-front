@@ -56,7 +56,9 @@ export default function Header({ userName, role = 'admin' }) {
       }
     };
     fetchNotifications();
-    const notificationsSync = window.setInterval(fetchNotifications, 5000);
+    const notificationsSync = window.setInterval(() => {
+      if (document.visibilityState === 'visible') fetchNotifications();
+    }, 30000);
     return () => window.clearInterval(notificationsSync);
   }, [notificationPreferences, isAdmin]);
 

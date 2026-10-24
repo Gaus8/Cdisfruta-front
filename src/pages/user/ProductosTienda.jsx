@@ -4,6 +4,7 @@ import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, F
 import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../services/api/client";
 import { registrarIntentoFormulario, registrarVistaProducto } from "../../services/api/analyticsService";
+import { cloudinaryUrl } from "../../utils/cloudinaryUrl.js";
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -154,7 +155,9 @@ export default function ProductosTienda({ categoria, user }) {
       }
     };
     fetchProducts(true);
-    const inventorySync = window.setInterval(() => fetchProducts(), 5000);
+    const inventorySync = window.setInterval(() => {
+      if (document.visibilityState === 'visible') fetchProducts();
+    }, 30000);
     return () => window.clearInterval(inventorySync);
   }, []);
 
@@ -422,7 +425,14 @@ export default function ProductosTienda({ categoria, user }) {
 
                   <div className={tw(tw("product-image"), "![cursor:pointer]")} onClick={() => abrirModalDetalle(product)}  title="Ver detalle">
                     {product.imagen ? (
-                      <img src={product.imagen} alt={product.nombre} />
+                      <img
+                        src={cloudinaryUrl(product.imagen, { width: 480 })}
+                        alt={product.nombre}
+                        width="480"
+                        height="480"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <div className={tw("placeholder-img")} />
                     )}
@@ -531,7 +541,14 @@ export default function ProductosTienda({ categoria, user }) {
                 <div className={tw(tw("modal-main-image-wrapper"), "![position:relative]")} >
                   {imagenActiva ? (
                     <>
-                      <img src={imagenActiva} alt={productoSeleccionado.nombre} />
+                      <img
+                        src={cloudinaryUrl(imagenActiva, { width: 900 })}
+                        alt={productoSeleccionado.nombre}
+                        width="900"
+                        height="900"
+                        loading="lazy"
+                        decoding="async"
+                      />
                       
                       {/* Flechas de navegación si hay más de una imagen */}
                       {((productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 1) || 
@@ -569,7 +586,14 @@ export default function ProductosTienda({ categoria, user }) {
                         className={tw(`thumbnail-btn ${imagenActiva === imgUrl ? 'active' : ''}`)}
                         onClick={() => setImagenActiva(imgUrl)}
                       >
-                        <img src={imgUrl} alt={`${productoSeleccionado.nombre} vista ${index + 1}`} />
+                        <img
+                          src={cloudinaryUrl(imgUrl, { width: 160 })}
+                          alt={`${productoSeleccionado.nombre} vista ${index + 1}`}
+                          width="160"
+                          height="160"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </button>
                     ))}
                   </div>

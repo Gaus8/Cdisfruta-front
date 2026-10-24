@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginConGoogle } from '../../services/api/authService';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function LoginGoogle({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");
@@ -10,6 +11,7 @@ export default function LoginGoogle({ cerrarModal }) {
   const [buttonWidth, setButtonWidth] = useState(320);
   const containerRef = useRef(null);
   const navigate = useNavigate();
+  const { verifyToken } = useAuth();
 
   useEffect(() => {
     const element = containerRef.current;
@@ -33,9 +35,18 @@ export default function LoginGoogle({ cerrarModal }) {
     try {
       const data = await loginConGoogle(credentialResponse.credential);
 
+      // Igual que el login con email: la cookie ya existe, pero AuthContext
+      // sigue en authenticated=false hasta verificar. Sin esto, RutaProtegida
+      // redirige de vuelta a /login y parece que "recarga y no entra".
+      const tokenData = await verifyToken();
+      if (!tokenData?.valid && !tokenData?.user) {
+        setRespuestaServer('Google confirmó la cuenta, pero la sesión no quedó activa. Inténtalo de nuevo.');
+        return;
+      }
+
       if (cerrarModal) cerrarModal();
 
-      const rolUsuario = data?.user?.rol || data?.rol;
+      const rolUsuario = tokenData?.user?.rol || data?.user?.rol || data?.rol;
       const destination = rolUsuario === 'logistica'
         ? '/admin/inventario'
         : rolUsuario === 'catalogo'
