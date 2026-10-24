@@ -115,7 +115,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     }}
     onPointerCancel={() => { pointerStart.current = null; }}
   >
-    <div key={current._id || activeIndex} className={tw('mx-auto flex min-h-[240px] max-w-4xl flex-col items-center justify-center text-center animate-[fadeSlideUp_.35s_ease_both] motion-reduce:animate-none sm:min-h-[260px]')}>
+    <div key={activeIndex} className={tw('mx-auto flex min-h-[240px] max-w-4xl flex-col items-center justify-center text-center animate-[fadeSlideUp_.35s_ease_both] motion-reduce:animate-none sm:min-h-[260px]')}>
       <p className={tw('mb-6 line-clamp-1 text-[11px] font-bold uppercase tracking-[.18em] text-[#E8603C] sm:mb-7 sm:text-xs')}>{current.eyebrow}</p>
       <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold uppercase leading-[1.1] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
       <p className={tw('mt-6 max-w-[650px] whitespace-pre-line break-words text-[13px] leading-[1.8] text-[#8B6652] sm:mt-8 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>

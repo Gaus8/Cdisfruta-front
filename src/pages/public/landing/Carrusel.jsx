@@ -10,10 +10,12 @@ const initialBanners = [
   { eyebrow: 'Nuestra tierra', etiqueta: 'Nuestra tierra', titulo: 'Tradición de Ubaté', desc: 'Reflejamos la riqueza de nuestra tierra en cada mezcla, con frutas y hierbas cuidadosamente seleccionadas.', tag: 'Ubaté · Cundinamarca', detalle: 'CDISFRUTA nace en el corazón de la provincia de Ubaté.', img: '/img/cdisfruta_07.webp', iconKey: 'location', orden: 2 }
 ];
 
+const bannerSnapshot = (slides) => JSON.stringify(slides.map(({ _id, orden, titulo, eyebrow, etiqueta, desc, tag, detalle, img, iconKey }) => ({ _id, orden, titulo, eyebrow, etiqueta, desc, tag, detalle, img, iconKey })));
+
 /** Loads the same ordered banner collection used by the admin cover editor. */
 export default function Carrusel() {
-  const [banners, setBanners] = useState(initialBanners);
-  const [loading, setLoading] = useState(false);
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const loadBanners = useCallback(async (signal, initial = false) => {
     try {
@@ -23,9 +25,16 @@ export default function Carrusel() {
       const activeBanners = Array.isArray(slides)
         ? slides.filter(isBannerActive).sort((a, b) => Number(a.orden || 0) - Number(b.orden || 0))
         : [];
-      setBanners(activeBanners);
+      if (activeBanners.length) {
+        setBanners((prev) => (bannerSnapshot(prev) === bannerSnapshot(activeBanners) ? prev : activeBanners));
+      } else if (initial) {
+        setBanners(initialBanners);
+      }
     } catch (error) {
-      if (error.name !== 'AbortError') console.error('No se pudo sincronizar el contenido de portada:', error);
+      if (error.name !== 'AbortError') {
+        console.error('No se pudo sincronizar el contenido de portada:', error);
+        if (initial) setBanners(initialBanners);
+      }
     } finally {
       if (initial) setLoading(false);
     }
