@@ -291,57 +291,58 @@
 @theme {
   --font-poppins: "Poppins", sans-serif;
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
-  @keyframes coverModalIn { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes coverModalIn { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { opacity: 1; } }
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  40% {
+    transform: translateY(4px);
   }
-  @keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { opacity: 1; } }
-  @keyframes slideInRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+  60% {
+    transform: translateY(2px);
   }
-  @keyframes bounceDown {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(4px);
-    }
-    60% {
-      transform: translateY(2px);
-    }
+}
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  @keyframes fadeInModal {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
   }
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideUp { 
-    from { opacity: 0; transform: translateY(30px); } 
-    to { opacity: 1; transform: translateY(0); } 
-  }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

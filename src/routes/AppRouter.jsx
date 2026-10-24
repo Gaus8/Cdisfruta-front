@@ -5,34 +5,39 @@ import {
   Navigate,
   useLocation
 } from "react-router-dom";
-import { useEffect, useRef, useCallback } from "react";
+import { lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { RutaProtegida } from "../pages/auth/RutaProtegida";
 
 import MainPage from '../pages/public/landing/MainPage';
-import BlobShapesPreview from '../pages/public/landing/BlobShapesPreview';
-import MissionVisionShapesPreview from '../pages/public/landing/MissionVisionShapesPreview';
-import Validacion from "../pages/auth/Validacion";
-import DashboardUsuario from "../pages/user/DashboardUsuario";
-import MisPedidos from "../pages/user/MisPedidos";
-import DashboardAdmin from "../components/layout/AdminLayout";
-import Productos from "../pages/admin/productos/Productos";
-import HomeAdmin from "../pages/admin/HomeAdmin";
-import Tienda from "../pages/public/store/Tienda";
-import PagoResultado from "../pages/public/store/PagoResultado";
-import Terminos from "../pages/public/legal/Terminos";
-import PoliticaDatos from "../pages/public/legal/PoliticaDatos";
-import { ResetPasswordPage } from "../pages/auth/ResetPasswordPage";
-import Login from "../pages/auth/Login";
-import Registro from "../pages/auth/Registro";
-import GestionPedidos from "../pages/admin/GestionPedidos";
-import DisenoPortada from "../pages/admin/DisenoPortada";
-import Inventario from "../pages/admin/Inventario";
-import PerfilCuenta from "../pages/admin/PerfilCuenta";
-import ConfiguracionAdmin from "../pages/admin/ConfiguracionAdmin";
-import ReportesAdmin from "../pages/admin/ReportesAdmin";
-import UsuariosAdmin from "../pages/admin/UsuariosAdmin";
-import AnaliticaProductosAdmin from "../pages/admin/AnaliticaProductosAdmin";
+
+const BlobShapesPreview = import.meta.env.DEV ? lazy(() => import('../pages/public/landing/BlobShapesPreview')) : null;
+const MissionVisionShapesPreview = import.meta.env.DEV ? lazy(() => import('../pages/public/landing/MissionVisionShapesPreview')) : null;
+const Validacion = lazy(() => import('../pages/auth/Validacion'));
+const DashboardUsuario = lazy(() => import('../pages/user/DashboardUsuario'));
+const MisPedidos = lazy(() => import('../pages/user/MisPedidos'));
+const DashboardAdmin = lazy(() => import('../components/layout/AdminLayout'));
+const Productos = lazy(() => import('../pages/admin/productos/Productos'));
+const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
+const Tienda = lazy(() => import('../pages/public/store/Tienda'));
+const PagoResultado = lazy(() => import('../pages/public/store/PagoResultado'));
+const Terminos = lazy(() => import('../pages/public/legal/Terminos'));
+const PoliticaDatos = lazy(() => import('../pages/public/legal/PoliticaDatos'));
+const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordPage').then((module) => ({ default: module.ResetPasswordPage })));
+const Login = lazy(() => import('../pages/auth/Login'));
+const Registro = lazy(() => import('../pages/auth/Registro'));
+const GestionPedidos = lazy(() => import('../pages/admin/GestionPedidos'));
+const DisenoPortada = lazy(() => import('../pages/admin/DisenoPortada'));
+const Inventario = lazy(() => import('../pages/admin/Inventario'));
+const PerfilCuenta = lazy(() => import('../pages/admin/PerfilCuenta'));
+const ConfiguracionAdmin = lazy(() => import('../pages/admin/ConfiguracionAdmin'));
+const ReportesAdmin = lazy(() => import('../pages/admin/ReportesAdmin'));
+const UsuariosAdmin = lazy(() => import('../pages/admin/UsuariosAdmin'));
+const AnaliticaProductosAdmin = lazy(() => import('../pages/admin/AnaliticaProductosAdmin'));
+
+function PageFallback() {
+  return <div className={tw('flex min-h-screen items-center justify-center bg-[#FAEFE6]')} role="status" aria-live="polite" />;
+}
 
 // Componente Wrapper para pasar verifyToken al Login standalone
 function LoginWrapper() {
@@ -210,7 +215,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <Suspense fallback={<PageFallback />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </AuthProvider>
   );
 }

@@ -27,7 +27,7 @@ export default function Tienda() {
       setMostrarBotonSubir(window.scrollY > 300);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

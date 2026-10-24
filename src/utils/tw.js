@@ -1,6 +1,12 @@
 import { tailwindClassMap } from './tailwindClassMap.js';
 
+const classCache = new Map();
+
 export function tw(...values) {
+  const key = JSON.stringify(values);
+  const cached = classCache.get(key);
+  if (cached) return cached;
+
   const names = [];
   const collect = (item) => {
     if (!item) return;
@@ -9,5 +15,7 @@ export function tw(...values) {
     else if (typeof item === 'object') Object.entries(item).forEach(([name, enabled]) => enabled && names.push(name));
   };
   values.forEach(collect);
-  return [...new Set([...names, ...names.flatMap((name) => tailwindClassMap[name] || [])])].join(' ');
+  const classes = [...new Set([...names, ...names.flatMap((name) => tailwindClassMap[name] || [])])].join(' ');
+  classCache.set(key, classes);
+  return classes;
 }
