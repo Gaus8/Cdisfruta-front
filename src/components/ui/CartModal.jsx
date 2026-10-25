@@ -78,19 +78,62 @@ export default function CartModal({ isOpen, onClose }) {
   const municipiosDisponibles = COLOMBIA_GEO[formData.departamento] || [];
 
   useEffect(() => {
+    const normalizeCart = (items) => (Array.isArray(items) ? items : []).map((item) => ({
+      ...item,
+      precio: Number(item?.precio) || 0,
+      quantity: Math.max(1, Number(item?.quantity) || 1),
+    }));
+
+    const persistCart = (items) => {
+      localStorage.setItem('cart_cdisfruta', JSON.stringify(items));
+      setCartItems(items);
+      window.dispatchEvent(new Event('cartUpdate'));
+    };
+
     const handleSync = () => {
-      const savedCart = JSON.parse(localStorage.getItem("cart_cdisfruta") || "[]");
+      const savedCart = normalizeCart(JSON.parse(localStorage.getItem('cart_cdisfruta') || '[]'));
       setCartItems(savedCart);
+    };
+
+    const refreshPrices = async () => {
+      const savedCart = normalizeCart(JSON.parse(localStorage.getItem('cart_cdisfruta') || '[]'));
+      if (savedCart.length === 0) {
+        setCartItems([]);
+        return;
+      }
+      try {
+        const { data } = await apiAxios.get('/get-productos');
+        const catalog = Array.isArray(data) ? data : (data?.productos || data?.data || []);
+        const byId = new Map(catalog.map((product) => [String(product._id), product]));
+        const refreshed = savedCart
+          .map((item) => {
+            const product = byId.get(String(item._id));
+            if (!product) return null;
+            return {
+              ...item,
+              nombre: product.nombre || item.nombre,
+              precio: Number(product.precio) || 0,
+              stock: product.stock,
+              imagen: product.imagen || item.imagen,
+            };
+          })
+          .filter(Boolean);
+        persistCart(refreshed);
+      } catch {
+        handleSync();
+      }
     };
 
     if (isOpen) {
       handleSync();
+      refreshPrices();
       window.addEventListener('cartUpdate', handleSync);
     }
     return () => window.removeEventListener('cartUpdate', handleSync);
   }, [isOpen]);
 
-  const total = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0);
+  const total = cartItems.reduce((acc, item) => acc + (Number(item.precio) || 0) * (Number(item.quantity) || 0), 0);
+  const canCheckout = cartItems.length > 0 && total > 0;
 
   const removeItem = (id) => {
     const currentCart = JSON.parse(localStorage.getItem("cart_cdisfruta") || "[]");
@@ -118,6 +161,16 @@ export default function CartModal({ isOpen, onClose }) {
 
     if (!formData.compromiso) {
       alert("Debes confirmar que tus datos de envío son correctos para continuar.");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert('Tu carrito está vacío. Agrega un producto de la tienda antes de pagar.');
+      return;
+    }
+
+    if (!(total > 0)) {
+      alert('El total del pedido es $0. Vuelve a agregar el producto desde la tienda (el precio debe ser mayor a cero) e inténtalo de nuevo.');
       return;
     }
 
@@ -434,20 +487,17 @@ export default function CartModal({ isOpen, onClose }) {
                 <h3 className={tw('text-base font-bold text-slate-800')}>Método de pago</h3>
                 <div className={tw('mt-2 grid gap-2 sm:grid-cols-3')}>
                   {[
-                    ['NEQUI', 'Nequi', false],
-                    ['CARD', 'Tarjeta', true],
-                    ['Contraentrega', 'Contra entrega', false],
-                  ].map(([value, label, disabled]) => (
+                    ['NEQUI', 'Nequi'],
+                    ['CARD', 'Tarjeta'],
+                    ['Contraentrega', 'Contra entrega'],
+                  ].map(([value, label]) => (
                     <label
                       key={value}
-                      title={disabled ? 'Próximamente — pago con tarjeta temporalmente desactivado' : undefined}
                       className={tw(
-                        'flex items-center gap-2 rounded-xl border px-3 py-3 text-sm',
-                        disabled
-                          ? 'cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 opacity-70'
-                          : metodoPago === value
-                            ? 'cursor-pointer border-[#ff7e5f] bg-orange-50 text-slate-900'
-                            : 'cursor-pointer border-slate-200 bg-white text-slate-600'
+                        'flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-3 text-sm',
+                        metodoPago === value
+                          ? 'border-[#ff7e5f] bg-orange-50 text-slate-900'
+                          : 'border-slate-200 bg-white text-slate-600'
                       )}
                     >
                       <input
@@ -455,21 +505,19 @@ export default function CartModal({ isOpen, onClose }) {
                         name="metodoPago"
                         value={value}
                         checked={metodoPago === value}
-                        disabled={disabled}
-                        onChange={() => !disabled && setMetodoPago(value)}
-                        className={tw('accent-[#ff7e5f] disabled:cursor-not-allowed')}
+                        onChange={() => setMetodoPago(value)}
+                        className={tw('accent-[#ff7e5f]')}
                       />
-                      <span className={tw('flex flex-col')}>
-                        <span>{label}</span>
-                        {disabled && <span className={tw('text-[10px] font-semibold uppercase tracking-wide')}>Próximamente</span>}
-                      </span>
+                      <span>{label}</span>
                     </label>
                   ))}
                 </div>
                 <p className={tw('mt-2 text-xs leading-5 text-slate-500')}>
                   {metodoPago === 'NEQUI'
                     ? 'Continuarás al checkout seguro de Wompi. Selecciona Nequi allí para completar la transacción.'
-                    : 'El pago con tarjeta estará disponible próximamente. Por ahora puedes usar Nequi o contra entrega.'}
+                    : metodoPago === 'CARD'
+                      ? 'Continuarás al checkout seguro de Wompi. Selecciona tarjeta allí para completar el pago (sandbox: sin cobro real).'
+                      : 'Confirmaremos el pedido y te abriremos WhatsApp para coordinar el pago contra entrega.'}
                 </p>
               </div>
             </section>
@@ -479,13 +527,24 @@ export default function CartModal({ isOpen, onClose }) {
                 <span>Total a pagar</span>
                 <strong>${total.toLocaleString("es-CO")}</strong>
               </div>
+              {!canCheckout && (
+                <p className={tw('mb-2 text-center text-xs font-medium text-rose-600')} role="status">
+                  {cartItems.length === 0
+                    ? 'Agrega productos desde la tienda para continuar.'
+                    : 'El total es $0: el carrito no tiene precio válido. Quita el ítem y vuelve a agregarlo desde la tienda.'}
+                </p>
+              )}
               <button 
                 type="button" 
                 className={tw("btn-confirm-whatsapp")} 
                 onClick={handleConfirmarPedido}
-                disabled={cartItems.length === 0 || submittingOrder}
+                disabled={!canCheckout || submittingOrder}
               >
-                {submittingOrder ? 'Registrando pedido…' : <>Confirmar Pedido <FaWhatsapp size={20} /></>}
+                {submittingOrder
+                  ? 'Registrando pedido…'
+                  : metodoPago === 'Contraentrega'
+                    ? <>Confirmar Pedido <FaWhatsapp size={20} /></>
+                    : 'Ir a pagar con Wompi'}
               </button>
             </div>
           </form>
