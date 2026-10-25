@@ -1,9 +1,10 @@
 import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useMemo } from 'react';
-import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight, FaEye } from "react-icons/fa";
 import { URL_SERVER } from "../../../services/api/client.js";
 import { cloudinaryUrl } from "../../../utils/cloudinaryUrl.js";
 import { animateProductToCart } from "../../../utils/cartFlightAnimation.js";
+import ProductDetailModal from "../../../components/ui/ProductDetailModal.jsx";
 
 export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,7 @@ export default function ProductosTienda({ categoria }) {
   // Estados para la Paginación (6 productos por página)
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   // Escuchar eventos globales de búsqueda desde la barra superior de la app
   useEffect(() => {
@@ -384,7 +386,19 @@ export default function ProductosTienda({ categoria }) {
                     <span className={tw("product-tag out")}>Agotado</span>
                   )}
 
-                  <div className={tw("product-image")}>
+                  <div
+                    className={tw(tw("product-image"), "![cursor:pointer]")}
+                    onClick={() => setProductoSeleccionado(product)}
+                    title="Ver detalle"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setProductoSeleccionado(product);
+                      }
+                    }}
+                  >
                     {product.imagen ? (
                       <img
                         src={cloudinaryUrl(product.imagen, { width: 480 })}
@@ -397,11 +411,19 @@ export default function ProductosTienda({ categoria }) {
                     ) : (
                       <div className={tw("placeholder-img")} />
                     )}
+                    <div className={tw("quick-view-overlay")}>
+                      <FaEye /> Ver Detalle
+                    </div>
                   </div>
 
                   <div className={tw("product-info")}>
                     <span className={tw("product-category-label")}>{product.categoria}</span>
-                    <h3>{product.nombre}</h3>
+                    <h3
+                      onClick={() => setProductoSeleccionado(product)}
+                      className={tw("![cursor:pointer]")}
+                    >
+                      {product.nombre}
+                    </h3>
                     <p className={tw("product-description-short")}>
                       {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
                     </p>
@@ -483,6 +505,18 @@ export default function ProductosTienda({ categoria }) {
           </>
         )}
       </div>
+
+      <ProductDetailModal
+        product={productoSeleccionado}
+        quantity={productoSeleccionado ? (quantities[productoSeleccionado._id] || 1) : 1}
+        onClose={() => setProductoSeleccionado(null)}
+        onIncrease={handleIncrease}
+        onDecrease={handleDecrease}
+        onAddToCart={(product, sourceElement) => {
+          addToCart(product, sourceElement);
+          setProductoSeleccionado(null);
+        }}
+      />
 
     </div>
   );

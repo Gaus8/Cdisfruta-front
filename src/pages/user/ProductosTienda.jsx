@@ -6,6 +6,7 @@ import { URL_SERVER } from "../../services/api/client";
 import { registrarIntentoFormulario, registrarVistaProducto } from "../../services/api/analyticsService";
 import { cloudinaryUrl } from "../../utils/cloudinaryUrl.js";
 import { animateProductToCart } from "../../utils/cartFlightAnimation.js";
+import ProductDetailModal from "../../components/ui/ProductDetailModal.jsx";
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -34,41 +35,11 @@ export default function ProductosTienda({ categoria, user }) {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
 
-  // Estado para el Modal de Detalle de Producto y su galería de imágenes
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [imagenActiva, setImagenActiva] = useState("");
 
   const abrirModalDetalle = (product) => {
     setProductoSeleccionado(product);
     if (user) registrarVistaProducto(product._id);
-    // Extrae tanto el array de 'imagenes' como la 'imagen' principal por compatibilidad
-    const listaImagenes = product.imagenes && product.imagenes.length > 0 
-      ? product.imagenes 
-      : [product.imagen].filter(Boolean);
-    setImagenActiva(listaImagenes[0] || "");
-  };
-
-  // Funciones para navegar entre imágenes con flechas
-  const handleNextImage = () => {
-    if (!productoSeleccionado) return;
-    const listaImagenes = productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 0 
-      ? productoSeleccionado.imagenes 
-      : [productoSeleccionado.imagen].filter(Boolean);
-    
-    const currentIndex = listaImagenes.indexOf(imagenActiva);
-    const nextIndex = (currentIndex + 1) % listaImagenes.length;
-    setImagenActiva(listaImagenes[nextIndex]);
-  };
-
-  const handlePrevImage = () => {
-    if (!productoSeleccionado) return;
-    const listaImagenes = productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 0 
-      ? productoSeleccionado.imagenes 
-      : [productoSeleccionado.imagen].filter(Boolean);
-    
-    const currentIndex = listaImagenes.indexOf(imagenActiva);
-    const prevIndex = (currentIndex - 1 + listaImagenes.length) % listaImagenes.length;
-    setImagenActiva(listaImagenes[prevIndex]);
   };
 
   // Escuchar eventos globales de búsqueda desde la barra superior de la app
@@ -528,135 +499,17 @@ export default function ProductosTienda({ categoria, user }) {
         )}
       </div>
 
-      {/* MODAL DE DETALLE DE PRODUCTO CON GALERÍA Y FLECHAS */}
-      {productoSeleccionado && (
-        <div className={tw("product-modal-overlay")} onClick={() => setProductoSeleccionado(null)}>
-          <div className={tw("product-modal-content")} onClick={(e) => e.stopPropagation()}>
-            <button className={tw("close-modal-btn")} onClick={() => setProductoSeleccionado(null)}>
-              <FaTimes size={18} />
-            </button>
-
-            <div className={tw("modal-body-grid")}>
-              
-              {/* CONTENEDOR DE MULTIPLES IMÁGENES, FLECHAS Y MINIATURAS */}
-              <div className={tw("modal-image-gallery-container")}>
-                <div className={tw(tw("modal-main-image-wrapper"), "![position:relative]")} >
-                  {imagenActiva ? (
-                    <>
-                      <img
-                        src={cloudinaryUrl(imagenActiva, { width: 900 })}
-                        alt={productoSeleccionado.nombre}
-                        width="900"
-                        height="900"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      
-                      {/* Flechas de navegación si hay más de una imagen */}
-                      {((productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 1) || 
-                        (!productoSeleccionado.imagenes && productoSeleccionado.imagen)) && (
-                        <>
-                          <button 
-                            type="button" 
-                            className={tw("modal-slider-arrow modal-prev")} 
-                            onClick={handlePrevImage}
-                          >
-                            <FaChevronLeft size={14} />
-                          </button>
-                          <button 
-                            type="button" 
-                            className={tw("modal-slider-arrow modal-next")} 
-                            onClick={handleNextImage}
-                          >
-                            <FaChevronRight size={14} />
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <div className={tw("placeholder-img")} />
-                  )}
-                </div>
-
-                {/* Miniaturas de diferentes ángulos */}
-                {productoSeleccionado.imagenes && productoSeleccionado.imagenes.length > 1 && (
-                  <div className={tw("modal-thumbnails-grid")}>
-                    {productoSeleccionado.imagenes.map((imgUrl, index) => (
-                      <button 
-                        key={index} 
-                        type="button"
-                        className={tw(`thumbnail-btn ${imagenActiva === imgUrl ? 'active' : ''}`)}
-                        onClick={() => setImagenActiva(imgUrl)}
-                      >
-                        <img
-                          src={cloudinaryUrl(imgUrl, { width: 160 })}
-                          alt={`${productoSeleccionado.nombre} vista ${index + 1}`}
-                          width="160"
-                          height="160"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className={tw("modal-details-container")}>
-                <span className={tw("product-category-label")}>{productoSeleccionado.categoria}</span>
-                <h2>{productoSeleccionado.nombre}</h2>
-                
-                <div className={tw("modal-price-box")}>
-                  <span className={tw("price-label")}>PRECIO UNITARIO</span>
-                  <span className={tw("product-price")}>
-                    ${productoSeleccionado.precio ? productoSeleccionado.precio.toLocaleString("es-CO") : "0"}
-                  </span>
-                  <span className={tw("product-stock-text")}>
-                    {productoSeleccionado.stock > 0 ? `${productoSeleccionado.stock} unidades disponibles` : 'Sin existencias'}
-                  </span>
-                </div>
-
-                <div className={tw("modal-description-box")}>
-                  <h4>Descripción detallada</h4>
-                  <p>{productoSeleccionado.descripcion || "Este producto artesanal de CDISFRUTA no cuenta con una descripción detallada adicional, pero garantiza el mejor estándar de calidad natural."}</p>
-                </div>
-
-                {productoSeleccionado.stock > 0 && (
-                  <div className={tw("product-detail-actions")}>
-                    <div className={tw("product-detail-qty-box")}>
-                      <button 
-                        type="button" 
-                        onClick={() => handleDecrease(productoSeleccionado._id)} 
-                        className={tw("product-detail-qty-btn")}
-                      >
-                        <FaMinus size={12} />
-                      </button>
-                      <span className={tw("product-detail-qty-number")}>{quantities[productoSeleccionado._id] || 1}</span>
-                      <button 
-                        type="button" 
-                        onClick={() => handleIncrease(productoSeleccionado._id, productoSeleccionado.stock)} 
-                        className={tw("product-detail-qty-btn")}
-                      >
-                        <FaPlus size={12} />
-                      </button>
-                    </div>
-
-                    <button 
-                      className={tw("product-detail-submit-btn")}
-                      onClick={(event) => {
-                        addToCart(productoSeleccionado, null, event.currentTarget);
-                        setProductoSeleccionado(null);
-                      }}
-                    >
-                      <FaShoppingCart size={18} /> Agregar al Carrito
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ProductDetailModal
+        product={productoSeleccionado}
+        quantity={productoSeleccionado ? (quantities[productoSeleccionado._id] || 1) : 1}
+        onClose={() => setProductoSeleccionado(null)}
+        onIncrease={handleIncrease}
+        onDecrease={handleDecrease}
+        onAddToCart={(product, sourceElement) => {
+          addToCart(product, null, sourceElement);
+          setProductoSeleccionado(null);
+        }}
+      />
 
     </div>
   );
