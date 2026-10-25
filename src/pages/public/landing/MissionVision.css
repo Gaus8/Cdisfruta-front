@@ -121,7 +121,7 @@
   max-width: 720px;
   margin: 16px 0 0;
   color: #805F4B;
-  font-family: var(--font-mono, "Space Mono", monospace);
+  font-family: var(--font-mono, ui-monospace, monospace);
   font-size: 16px;
   line-height: 1.75;
 }
@@ -293,10 +293,10 @@
 
 .fruit-fact-dialog__eyebrow { position: relative; color: #E8603C; font: 800 11px/1.5 var(--font-display, "Manrope", sans-serif); letter-spacing: .16em; text-transform: uppercase; }
 .fruit-fact-dialog h2 { position: relative; max-width: 360px; margin: 12px 0 14px; font: 800 clamp(25px, 6vw, 34px)/1.12 var(--font-display, "Manrope", sans-serif); letter-spacing: -.04em; }
-.fruit-fact-dialog p { position: relative; margin: 0; color: #684D3C; font: 14px/1.75 var(--font-mono, "Space Mono", monospace); }
+.fruit-fact-dialog p { position: relative; margin: 0; color: #684D3C; font: 14px/1.75 var(--font-mono, ui-monospace, monospace); }
 .fruit-fact-dialog p strong { color: #302010; font-family: var(--font-display, "Manrope", sans-serif); font-size: 16px; }
 .fruit-fact-dialog a { position: relative; display: inline-flex; align-items: center; gap: 7px; margin-top: 20px; color: #B94C30; font: 750 13px/1.5 var(--font-display, "Manrope", sans-serif); text-decoration-color: rgba(185,76,48,.4); text-underline-offset: 4px; }
-.fruit-fact-dialog__note { position: relative; display: block; margin-top: 12px; color: #806A5B; font: 10px/1.6 var(--font-mono, "Space Mono", monospace); }
+.fruit-fact-dialog__note { position: relative; display: block; margin-top: 12px; color: #806A5B; font: 10px/1.6 var(--font-mono, ui-monospace, monospace); }
 
 @keyframes fruit-dialog-in {
   from { opacity: 0; scale: .96; translate: 0 12px; }
@@ -423,7 +423,7 @@
   max-width: 440px;
   margin: 12px 0 0;
   color: #684D3C;
-  font-family: var(--font-mono, "Space Mono", monospace);
+  font-family: var(--font-mono, ui-monospace, monospace);
   font-size: 14px;
   line-height: 1.72;
   display: -webkit-box;

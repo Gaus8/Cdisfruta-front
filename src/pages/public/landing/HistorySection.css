@@ -4,7 +4,7 @@
   --history-orange: var(--brand-coral);
   --history-green: var(--brand-green);
   --history-ink: var(--brand-ink);
-  --history-mono: var(--font-mono, 'Space Mono', monospace);
+  --history-mono: var(--font-mono, ui-monospace, monospace);
   --history-sans: var(--font-display, 'Manrope', sans-serif);
   position: relative;
   isolation: isolate;

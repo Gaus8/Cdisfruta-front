@@ -140,7 +140,7 @@
   width: 100%;
   margin: 12px 0 0;
   color: #2B1B12;
-  font: 13px/1.7 "Space Mono", monospace;
+  font: 13px/1.7 ui-monospace, monospace;
   overflow-wrap: anywhere;
 }
 

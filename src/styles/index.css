@@ -4,8 +4,9 @@
 :root {
   --font-display: "Manrope", system-ui, -apple-system, sans-serif;
   --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, Menlo, monospace;
-  --font-legacy-serif: "Fraunces", Georgia, serif;
+  /* Mono del sistema: evita descargar Space Mono (mejora LCP en móvil). */
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  --font-legacy-serif: "Manrope", Georgia, serif;
   /* CDISFRUTA design tokens shared by the landing and internal views. */
   --brand-coral: #E8603C;
   --brand-coral-hover: #C4431F;
@@ -13,7 +14,8 @@
   --brand-cream: #FAEFE6;
   --brand-paper: #FFFAF6;
   --brand-ink: #2D1B0A;
-  --brand-brown: #8B6652;
+  /* Contraste AA sobre crema (antes #8B6652). */
+  --brand-brown: #5C4033;
   --brand-border: #EAE0D5;
   --brand-green: #1F3D2B;
   --brand-green-deep: #173222;
@@ -289,8 +291,8 @@
 
 
 @theme {
-  --font-poppins: "Poppins", sans-serif;
-  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-poppins: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 @keyframes coverModalIn { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }

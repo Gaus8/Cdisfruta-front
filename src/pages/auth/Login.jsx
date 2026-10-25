@@ -115,7 +115,7 @@ export default function Login({ verifyToken }) {
             <IoArrowBackOutline />
           </button>
 
-          <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="logo_cdisfruta" />
+          <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="Logo CDISFRUTA" width="160" height="160" decoding="async" />
           <h3>Inicio de Sesión</h3>
           <p className={tw("auth-login-subtitle")}>Bienvenido, ingresa tus datos para continuar.</p>
 

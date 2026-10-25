@@ -38,7 +38,7 @@ function UserActivityModal({ userId, onClose, onRequestDelete }) {
     <section role="dialog" aria-modal="true" aria-labelledby="user-activity-title" className={tw('flex max-h-[94dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl')}>
       <header className={tw('flex items-start justify-between gap-4 border-b border-slate-100 p-5 sm:p-6')}>
         <div className={tw('flex min-w-0 items-center gap-3')}>
-          {user?.avatar ? <img src={user.avatar} alt="" className={tw('h-12 w-12 shrink-0 rounded-2xl object-cover')} /> : <span className={tw('flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-50 font-bold text-[#e06d43]')}>{initials(user?.nombre)}</span>}
+          {user?.avatar ? <img src={user.avatar} alt={`Avatar de ${user?.nombre || 'usuario'}`} className={tw('h-12 w-12 shrink-0 rounded-2xl object-cover')} width="48" height="48" loading="lazy" decoding="async" /> : <span className={tw('flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-50 font-bold text-[#e06d43]')}>{initials(user?.nombre)}</span>}
           <div className={tw('min-w-0')}><p className={tw('text-xs font-semibold uppercase tracking-[.12em] text-[#e06d43]')}>Actividad del cliente</p><h2 id="user-activity-title" className={tw('truncate text-lg font-bold text-slate-800 sm:text-xl')}>{user?.nombre || (loading ? 'Cargando usuario…' : 'Detalle del usuario')}</h2>{user?.correo && <p className={tw('truncate text-sm text-slate-500')}>{user.correo}</p>}</div>
         </div>
         <button type="button" onClick={onClose} aria-label="Cerrar detalle" className={tw('flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100')}><FaTimes /></button>

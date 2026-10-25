@@ -123,7 +123,7 @@ export default function Header({ themeV2 = false }) {
   }, [location.pathname]);
 
   const linkClass = (mobile = false) => tw(
-    'relative inline-flex min-h-11 items-center justify-center px-2 text-[15px] font-semibold leading-none text-[#8B6652] transition-colors duration-200 hover:text-[#E8603C] focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]',
+    'relative inline-flex min-h-11 items-center justify-center px-2 text-[15px] font-semibold leading-none text-[#5C4033] transition-colors duration-200 hover:text-[#E8603C] focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]',
     'after:absolute after:bottom-1 after:left-2 after:h-0.5 after:w-[calc(100%-1rem)] after:origin-left after:scale-x-0 after:bg-[#E8603C] after:transition-transform after:duration-200 hover:after:scale-x-100 aria-[current=true]:text-[#E8603C] aria-[current=true]:after:scale-x-100',
     mobile && 'w-full justify-start border-b border-[#EAE0D5]/70 px-5 py-3 after:bottom-2 after:left-5 after:w-[calc(100%-2.5rem)]'
   );
@@ -142,7 +142,7 @@ export default function Header({ themeV2 = false }) {
         </span>
         <span className={tw('flex flex-col justify-center gap-0.5')}>
           <span className={tw('text-base font-semibold uppercase tracking-[.11em] text-[#ff7961] sm:text-lg')}>CDISFRUTA</span>
-          <span className={tw('hidden text-[10px] uppercase leading-none tracking-[.14em] text-[#8B6652] min-[900px]:block')} style={{ fontFamily: 'var(--font-mono)' }}>Frutas Deshidratadas · Ubaté</span>
+          <span className={tw('hidden text-[10px] uppercase leading-none tracking-[.14em] text-[#5C4033] min-[900px]:block')} style={{ fontFamily: 'var(--font-mono)' }}>Frutas Deshidratadas · Ubaté</span>
         </span>
       </a>
 

@@ -11,4 +11,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: { headers: googlePopupHeaders },
   preview: { headers: googlePopupHeaders },
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    sourcemap: false,
+  },
 })

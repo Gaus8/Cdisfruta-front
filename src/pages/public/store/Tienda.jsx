@@ -64,7 +64,7 @@ export default function Tienda() {
 
               <picture className={tw("hero-side-decoration")} aria-hidden="true">
                 <source media="(max-width: 768px)" srcSet="/img/tienda-hero-side-320.webp" />
-                <img src="/img/tienda-hero-side-640.webp" alt="" />
+                <img src="/img/tienda-hero-side-640.webp" alt="" width="480" height="640" decoding="async" loading="lazy" />
               </picture>
 
               <div className={tw("hero-visual")}>

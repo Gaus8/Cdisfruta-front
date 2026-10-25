@@ -38,7 +38,14 @@ const historyContent = {
 function MainPage() {
   return (
     <div className={tw("main-page-wrapper", "theme-v2")}>
+      <a
+        href="#inicio"
+        className={tw('sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-lg focus:bg-[#E8603C] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white')}
+      >
+        Saltar al contenido principal
+      </a>
       <Header themeV2 />
+      <main id="contenido-principal">
       <HeroCarousel />
 
       <HistorySection content={historyContent} />
@@ -49,6 +56,7 @@ function MainPage() {
       <section className={tw("media-section", "scroll-mt-24")} id="videos">
         <Videos />
       </section>
+      </main>
  
       {/* ── FOOTER ── */}
       <footer className={tw("footer-main")}>
@@ -57,7 +65,7 @@ function MainPage() {
           <div className={tw("footer-brand-col")}>
             <div className={tw("footer-logo")}>
               <div className={tw("hdr-logo-ring")}>
-                <img src="/img/logo_cdisfruta.webp" alt="CDISFRUTA Logo" />
+                <img src="/img/logo_cdisfruta.webp" alt="Logo CDISFRUTA" width="54" height="54" decoding="async" loading="lazy" />
               </div>
               <span className={tw("footer-brand-name")}>CDISFRUTA</span>
             </div>
@@ -115,15 +123,15 @@ function MainPage() {
             <h4 className={tw("footer-col-title")} id="footer-contact-title">Contacto</h4>
             <ul className={tw("footer-contact-list")}>
               <li>
-                <span className={tw("footer-contact-icon")}><IoLocationOutline /></span>
+                <span className={tw("footer-contact-icon")} aria-hidden="true"><IoLocationOutline /></span>
                 <a href="https://www.google.com/maps/search/?api=1&query=Ubat%C3%A9%2C%20Cundinamarca%2C%20Colombia" target="_blank" rel="noopener noreferrer">Ubaté, Cundinamarca - Colombia</a>
               </li>
               <li>
-                <span className={tw("footer-contact-icon")}><BsTelephone /></span>
+                <span className={tw("footer-contact-icon")} aria-hidden="true"><BsTelephone /></span>
                 <a href="tel:+573229683625">+57 322 968 3625</a>
               </li>
               <li>
-                <span className={tw("footer-contact-icon")}><MdOutlineMail /></span>
+                <span className={tw("footer-contact-icon")} aria-hidden="true"><MdOutlineMail /></span>
                 <a href="mailto:cdisfruta@gmail.com">cdisfruta@gmail.com</a>
               </li>
             </ul>

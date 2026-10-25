@@ -598,7 +598,7 @@ export const tailwindClassMap = {
     "[--cream-2:#F9F1E8]",
     "[--dark:#1C1209]",
     "[--brown:#4A2E18]",
-    "[--warm-mid:#8B6652]",
+    "[--warm-mid:#5C4033]",
     "[--warm-light:#C4A882]",
     "[--border:#EAE0D5]",
     "[--white:#FFFFFF]",
@@ -2415,7 +2415,7 @@ export const tailwindClassMap = {
     "[&::before]:[border-radius:2px]"
   ],
   "carrusel-title": [
-    "[font-family:'Fraunces',_'Georgia',_serif]",
+    "[font-family:'Manrope',_'Georgia',_serif]",
     "[font-size:clamp(1.8rem,_3vw,_3.2rem)]",
     "[font-weight:900]",
     "[line-height:1.05]",
@@ -2428,7 +2428,7 @@ export const tailwindClassMap = {
   "carrusel-desc": [
     "[font-size:0.9375rem]",
     "[line-height:1.78]",
-    "[color:#8B6652]",
+    "[color:#5C4033]",
     "[max-width:380px]",
     "[margin-bottom:2.25rem]",
     "[animation:fadeSlideUp_0.5s_0.05s_ease_both]"
@@ -2669,7 +2669,7 @@ export const tailwindClassMap = {
   "hdr-brand-sub": [
     "[font-size:0.625rem]",
     "[font-weight:600]",
-    "[color:#8B6652]",
+    "[color:#5C4033]",
     "[letter-spacing:1.8px]",
     "[text-transform:uppercase]",
     "[margin-top:0]",
@@ -2709,7 +2709,7 @@ export const tailwindClassMap = {
   ],
   "hdr-btn--ghost": [
     "[background:none]",
-    "[color:#8B6652]",
+    "[color:#5C4033]",
     "[border:1.5px_solid_#EAE0D5]",
     "[&:hover]:[border-color:#E8583A]",
     "[&:hover]:[color:#E8583A]"
@@ -2766,7 +2766,7 @@ export const tailwindClassMap = {
     "[&_.carrusel-desc]:[font-family:var(--font-mono)]",
     "[&_.carrusel-desc]:[font-size:14px]",
     "[&_.carrusel-desc]:[line-height:1.6]",
-    "[&_.carrusel-desc]:[color:#8B6652]",
+    "[&_.carrusel-desc]:[color:#5C4033]",
     "[&_.about-content_p]:[font-family:var(--font-mono)]",
     "[&_.about-content_p]:[font-size:14px]",
     "[&_.about-content_p]:[line-height:1.6]",
@@ -2789,7 +2789,7 @@ export const tailwindClassMap = {
     "[color:var(--coral-light)]"
   ],
   "section-title": [
-    "[font-family:'Fraunces',_'Georgia',_serif]",
+    "[font-family:'Manrope',_'Georgia',_serif]",
     "[font-size:clamp(1.8rem,_2.8vw,_2.6rem)]",
     "[font-weight:900]",
     "[color:var(--dark)]",
@@ -2834,7 +2834,7 @@ export const tailwindClassMap = {
   ],
   "about-badge-num": [
     "[display:block]",
-    "[font-family:'Fraunces',_serif]",
+    "[font-family:'Manrope',_sans-serif]",
     "[font-size:2.4rem]",
     "[font-weight:900]",
     "[line-height:1]"
@@ -2863,7 +2863,7 @@ export const tailwindClassMap = {
     "max-[768px]:[padding:2.5rem_1.5rem]"
   ],
   "about-quote": [
-    "[font-family:'Fraunces',_'Georgia',_serif]",
+    "[font-family:'Manrope',_'Georgia',_serif]",
     "[font-size:clamp(1.4rem,_2vw,_2rem)]",
     "[font-weight:600]",
     "[font-style:italic]",
@@ -2981,7 +2981,7 @@ export const tailwindClassMap = {
     "[margin-bottom:1rem]"
   ],
   "footer-brand-name": [
-    "[font-family:'Fraunces',_serif]",
+    "[font-family:'Manrope',_sans-serif]",
     "[font-size:1.6rem]",
     "[font-weight:900]",
     "[color:var(--coral)]",
@@ -3179,7 +3179,7 @@ export const tailwindClassMap = {
     "[padding:20px]",
     "[box-sizing:border-box]",
     "[margin:0]",
-    "[font-family:'Poppins',_sans-serif]",
+    "[font-family:'Plus_Jakarta_Sans',_sans-serif]",
     "[width:100vw]",
     "[height:100vh]",
     "[background-color:rgba(0,_0,_0,_0.5)]",
@@ -4226,7 +4226,7 @@ export const tailwindClassMap = {
     "[min-height:100vh]",
     "[width:100vw]",
     "[background-color:var(--bg-contrast)]",
-    "[font-family:'Poppins',_sans-serif]",
+    "[font-family:'Plus_Jakarta_Sans',_sans-serif]",
     "[display:flex]",
     "[justify-content:center]",
     "[align-items:center]",
@@ -4381,7 +4381,7 @@ export const tailwindClassMap = {
     "[&_a]:[align-items:center]",
     "[&_a]:[font-size:0.875rem]",
     "[&_a]:[font-weight:500]",
-    "[&_a]:[color:#8B6652]",
+    "[&_a]:[color:#5C4033]",
     "[&_a]:[text-decoration:none]",
     "[&_a:hover]:[color:#ff7961]",
     "[&_a:hover::after]:[width:100%]",

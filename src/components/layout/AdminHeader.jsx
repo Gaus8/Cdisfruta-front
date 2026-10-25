@@ -155,7 +155,7 @@ export default function Header({ userName, role = 'admin' }) {
           <div className={tw("dropdown-container")}>
             <button type="button" aria-expanded={showUserMenu} className={tw("user-profile", "![border:0]", "![background:transparent]", "![font:inherit]")} onClick={toggleUserMenu}>
               <span className={tw("user-name-text")}>{profileOverride || userName}</span>
-              {profileAvatar ? <img src={profileAvatar} alt="" className={tw('h-[30px] w-[30px] rounded-full object-cover')} /> : <FaUserCircle size={30} />}
+              {profileAvatar ? <img src={profileAvatar} alt="Foto de perfil" className={tw('h-[30px] w-[30px] rounded-full object-cover')} width="30" height="30" decoding="async" /> : <FaUserCircle size={30} aria-hidden="true" />}
             </button>
             {showUserMenu && (
               <div className={tw("dropdown-menu profile-menu")}>

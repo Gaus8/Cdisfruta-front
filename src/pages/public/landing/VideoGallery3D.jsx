@@ -131,7 +131,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                 <article className="video-gallery__tile" key={video.src} style={{ '--tile-delay': `${index * 90}ms` }}>
                   <div className="video-gallery__tile-media">
                     <span className="video-gallery__placeholder" aria-hidden="true" />
-                    {video.img && <img className="video-gallery__thumbnail" src={video.img} alt={video.alt || ''} width="750" height="1000" loading="lazy" onError={(event) => { event.currentTarget.hidden = true; }} />}
+                    {video.img && <img className="video-gallery__thumbnail" src={video.img} alt={video.alt || `Miniatura: ${video.title}`} width="750" height="1000" loading="lazy" decoding="async" onError={(event) => { event.currentTarget.hidden = true; }} />}
                     <button className="video-gallery__play-button" type="button" aria-label={`Reproducir video: ${video.title}`} ref={(node) => { if (node) playButtonRefs.current.set(index, node); else playButtonRefs.current.delete(index); }} onClick={() => setPlayingIndex(index)}>
                       <span className="video-gallery__play-icon"><PlayIcon /></span>
                       <span className="video-gallery__play-label">Reproducir historia</span>
