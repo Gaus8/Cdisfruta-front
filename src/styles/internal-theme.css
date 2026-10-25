@@ -572,7 +572,8 @@
 }
 
 /* —— Área cliente: hub operativo (vs tienda pública / vitrina) —— */
-.client-header .client-header__icon {
+.client-header .client-header__icon,
+.user-header .shop-header__icon {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -590,13 +591,15 @@
   transition: border-color .15s ease, color .15s ease, background .15s ease;
 }
 
-.client-header .client-header__icon:hover {
+.client-header .client-header__icon:hover,
+.user-header .shop-header__icon:hover {
   border-color: #ffb59a;
   color: #e06d43;
   background: #fff8f5;
 }
 
-.client-header .client-header__icon .notification-badge {
+.client-header .client-header__icon .notification-badge,
+.user-header .shop-header__icon .notification-badge {
   top: -0.15rem;
   right: -0.15rem;
   min-width: 1rem;

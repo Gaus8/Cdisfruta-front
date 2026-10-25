@@ -116,21 +116,26 @@ export default function HeaderTienda() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir por WhatsApp"
-              className={tw(tw("icon-wrapper"), "![color:#25D366]", "![text-decoration:none]")}
+              className={tw('shop-header__icon', '![color:#25D366]', '![text-decoration:none]')}
               title="WhatsApp"
             >
-              <FaWhatsapp className={tw("icon-btn-large")} />
+              <FaWhatsapp size={18} />
             </a>
 
-            <div className={tw(tw("icon-wrapper"), "![cursor:pointer]")} onClick={() => setCartModalOpen(true)} >
-              <FaShoppingCart className={tw("icon-btn-large")} />
+            <button
+              type="button"
+              className={tw('shop-header__icon')}
+              onClick={() => setCartModalOpen(true)}
+              aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
+            >
+              <FaShoppingCart size={18} />
               <span className={tw("notification-badge")}>{cartCount}</span>
-            </div>
+            </button>
 
             <div className={tw("dropdown-container")} ref={containerRef}>
-              <div className={tw(tw("user-profile"), "![cursor:pointer]")} onClick={toggleDropdown} >
-                <FaUserCircle size={30} />
-              </div>
+              <button type="button" className={tw('shop-header__icon')} onClick={toggleDropdown} aria-label="Menú de usuario" aria-expanded={dropdownOpen}>
+                <FaUserCircle size={20} />
+              </button>
 
               {dropdownOpen && (
                 <div className={tw("dropdown-menu profile-menu")}>
