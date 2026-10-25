@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import {
   FaShoppingCart, FaSearch, FaUserCircle, FaCog,
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
-  FaSignInAlt, FaUserPlus
+  FaSignInAlt, FaUserPlus, FaWhatsapp
 } from "react-icons/fa";
 import CartModal from "../../pages/user/CartModal";
 import { apiAxios } from "../../services/api/client"; // Usar instancia configurada con withCredentials
 import { useAuth } from "../../hooks/useAuth";
+import { whatsappUrl } from "../../utils/whatsapp.js";
 
 export default function HeaderDashboard() {
   const { userData, verifyToken } = useAuth();
@@ -126,6 +127,17 @@ export default function HeaderDashboard() {
           </form>
 
           <div className={tw("header-actions")}>
+            <a
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir por WhatsApp"
+              className={tw(tw("icon-wrapper"), "![color:#25D366]", "![text-decoration:none]")}
+              title="WhatsApp"
+            >
+              <FaWhatsapp className={tw("icon-btn-large")} />
+            </a>
+
             <div
               className={tw(tw("icon-wrapper"), "![cursor:pointer]")}
               onClick={() => setCartModalOpen(true)}

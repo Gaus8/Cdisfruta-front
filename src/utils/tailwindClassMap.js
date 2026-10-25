@@ -1250,8 +1250,8 @@ export const tailwindClassMap = {
   ],
   "form-grid": [
     "[display:grid]",
-    "[grid-template-columns:1fr_1fr]",
-    "[gap:15px]"
+    "[grid-template-columns:1fr]",
+    "[gap:0]"
   ],
   "input-box": [
     "[margin-bottom:18px]",

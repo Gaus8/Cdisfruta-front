@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IoMenuOutline, IoCloseOutline } from 'react-icons/io5';
+import { FaWhatsapp } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { tw } from '../../../utils/tw.js';
+import { whatsappUrl } from '../../../utils/whatsapp.js';
 
 const SECTION_LINKS = [
   { id: 'inicio', label: 'Inicio', always: true },
@@ -151,6 +153,20 @@ export default function Header({ themeV2 = false }) {
       <nav id="home-primary-navigation" aria-label="Navegación principal" className={tw('absolute left-0 right-0 top-full flex max-h-[calc(100dvh-76px)] flex-col items-stretch overflow-y-auto border-b border-[#EAE0D5] bg-[rgba(254,250,246,.98)] px-0 py-2 shadow-[0_12px_32px_rgba(28,18,9,.1)] backdrop-blur-xl transition duration-200 min-[1200px]:static min-[1200px]:max-h-none min-[1200px]:flex min-[1200px]:flex-row min-[1200px]:items-center min-[1200px]:gap-4 min-[1200px]:overflow-visible min-[1200px]:border-0 min-[1200px]:bg-transparent min-[1200px]:p-0 min-[1200px]:opacity-100 min-[1200px]:shadow-none min-[1200px]:backdrop-blur-none min-[1200px]:transition-none min-[1200px]:xl:gap-7', menuOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0 min-[1200px]:pointer-events-auto min-[1200px]:translate-y-0')}>
         {renderSectionLinks(menuOpen)}
         <a href="/login" onClick={(event) => { event.preventDefault(); handleAbrirLogin(); }} className={tw(linkClass(menuOpen), 'min-[1200px]:border-0 min-[1200px]:px-2 min-[1200px]:py-0 min-[1200px]:after:left-2 min-[1200px]:after:w-[calc(100%-1rem)]')}>Ingresar</a>
+        <a
+          href={whatsappUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={closeMenu}
+          aria-label="Escribir por WhatsApp"
+          className={tw(
+            buttonClass,
+            'mx-5 mt-2 gap-2 border border-[#25D366]/40 bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 min-[1200px]:mx-0 min-[1200px]:mt-0 min-[1200px]:size-11 min-[1200px]:rounded-full min-[1200px]:border-0 min-[1200px]:bg-[#25D366] min-[1200px]:p-0 min-[1200px]:text-white min-[1200px]:shadow-[0_4px_14px_rgba(37,211,102,.35)] min-[1200px]:hover:bg-[#1ebe57]'
+          )}
+        >
+          <FaWhatsapp size={20} aria-hidden="true" />
+          <span className={tw('min-[1200px]:hidden')}>WhatsApp</span>
+        </a>
         <button type="button" onClick={() => { navigate('/tienda'); closeMenu(); }} className={tw(buttonClass, 'mx-5 mt-3 bg-[#E8583A] text-white shadow-[0_4px_14px_rgba(232,88,58,.3)] hover:-translate-y-0.5 hover:bg-[#C4431F] min-[1200px]:mx-0 min-[1200px]:mt-0')}>Tienda</button>
       </nav>
     </header>

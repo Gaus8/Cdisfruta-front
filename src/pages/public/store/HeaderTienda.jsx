@@ -1,9 +1,10 @@
 import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt, FaWhatsapp } from "react-icons/fa";
 import CartModal from "../../../components/ui/CartModal.jsx";
 import { useAuth } from "../../../hooks/useAuth.js";
+import { whatsappUrl } from "../../../utils/whatsapp.js";
 
 export default function HeaderTienda() {
   const { authenticated, logout, userData } = useAuth();
@@ -110,6 +111,17 @@ export default function HeaderTienda() {
           </form>
 
           <div className={tw("header-actions")}>
+            <a
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir por WhatsApp"
+              className={tw(tw("icon-wrapper"), "![color:#25D366]", "![text-decoration:none]")}
+              title="WhatsApp"
+            >
+              <FaWhatsapp className={tw("icon-btn-large")} />
+            </a>
+
             <div className={tw(tw("icon-wrapper"), "![cursor:pointer]")} onClick={() => setCartModalOpen(true)} >
               <FaShoppingCart className={tw("icon-btn-large")} />
               <span className={tw("notification-badge")}>{cartCount}</span>

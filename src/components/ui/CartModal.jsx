@@ -335,20 +335,18 @@ export default function CartModal({ isOpen, onClose }) {
           <form ref={formRef} className={tw("checkout-form-professional")} onSubmit={(e) => e.preventDefault()}>
             <h3>Datos de Entrega</h3>
             
-            <div className={tw("form-grid")}>
-              <div className={tw("input-box")}>
-                <label>Nombres *</label>
-                <div className={tw("input-field")}>
-                  <FaUser />
-                  <input type="text" name="nombres" required value={formData.nombres} onChange={handleInputChange} placeholder="Ej. Juan" />
-                </div>
+            <div className={tw("input-box")}>
+              <label>Nombres *</label>
+              <div className={tw("input-field")}>
+                <FaUser />
+                <input type="text" name="nombres" required value={formData.nombres} onChange={handleInputChange} placeholder="Ej. Juan" />
               </div>
-              <div className={tw("input-box")}>
-                <label>Apellidos *</label>
-                <div className={tw("input-field")}>
-                  <FaUser />
-                  <input type="text" name="apellidos" required value={formData.apellidos} onChange={handleInputChange} placeholder="Ej. Pérez" />
-                </div>
+            </div>
+            <div className={tw("input-box")}>
+              <label>Apellidos *</label>
+              <div className={tw("input-field")}>
+                <FaUser />
+                <input type="text" name="apellidos" required value={formData.apellidos} onChange={handleInputChange} placeholder="Ej. Pérez" />
               </div>
             </div>
 
@@ -360,54 +358,50 @@ export default function CartModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            <div className={tw("form-grid")}>
-              <div className={tw("input-box")}>
-                <label>Departamento *</label>
-                <div className={tw("input-field")}>
-                  <FaGlobeAmericas />
-                  <select name="departamento" value={formData.departamento} onChange={handleInputChange} className={tw("filter-select")} required>
-                    <option value="">Seleccione departamento...</option>
-                    {DEPARTAMENTOS_ORDENADOS.map((dep, idx) => (
-                      <option key={idx} value={dep}>{dep}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className={tw("input-box")}>
+              <label>Departamento *</label>
+              <div className={tw("input-field")}>
+                <FaGlobeAmericas />
+                <select name="departamento" value={formData.departamento} onChange={handleInputChange} className={tw("filter-select")} required>
+                  <option value="">Seleccione departamento...</option>
+                  {DEPARTAMENTOS_ORDENADOS.map((dep, idx) => (
+                    <option key={idx} value={dep}>{dep}</option>
+                  ))}
+                </select>
               </div>
-              <div className={tw("input-box")}>
-                <label>Municipio / Ciudad *</label>
-                <div className={tw("input-field")}>
-                  <FaCity />
-                  <select 
-                    name="municipio" 
-                    value={formData.municipio} 
-                    onChange={handleInputChange} 
-                    className={tw("filter-select")} 
-                    required 
-                    disabled={!formData.departamento}
-                  >
-                    <option value="">{formData.departamento ? "Seleccione municipio..." : "Elija un departamento primero"}</option>
-                    {municipiosDisponibles.map((mun, idx) => (
-                      <option key={idx} value={mun}>{mun}</option>
-                    ))}
-                  </select>
-                </div>
+            </div>
+            <div className={tw("input-box")}>
+              <label>Municipio / Ciudad *</label>
+              <div className={tw("input-field")}>
+                <FaCity />
+                <select
+                  name="municipio"
+                  value={formData.municipio}
+                  onChange={handleInputChange}
+                  className={tw("filter-select")}
+                  required
+                  disabled={!formData.departamento}
+                >
+                  <option value="">{formData.departamento ? "Seleccione municipio..." : "Elija un departamento primero"}</option>
+                  {municipiosDisponibles.map((mun, idx) => (
+                    <option key={idx} value={mun}>{mun}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            <div className={tw("form-grid")}>
-              <div className={tw("input-box")}>
-                <label>Dirección *</label>
-                <div className={tw("input-field")}>
-                  <FaMapMarkerAlt />
-                  <input type="text" name="direccion" required value={formData.direccion} onChange={handleInputChange} placeholder="Calle/Cra..." />
-                </div>
+            <div className={tw("input-box")}>
+              <label>Dirección *</label>
+              <div className={tw("input-field")}>
+                <FaMapMarkerAlt />
+                <input type="text" name="direccion" required value={formData.direccion} onChange={handleInputChange} placeholder="Calle/Cra..." />
               </div>
-              <div className={tw("input-box")}>
-                <label>Barrio o Sector *</label>
-                <div className={tw("input-field")}>
-                  <FaHome />
-                  <input type="text" name="barrio" required value={formData.barrio} onChange={handleInputChange} placeholder="Ej. Centro" />
-                </div>
+            </div>
+            <div className={tw("input-box")}>
+              <label>Barrio o Sector *</label>
+              <div className={tw("input-field")}>
+                <FaHome />
+                <input type="text" name="barrio" required value={formData.barrio} onChange={handleInputChange} placeholder="Ej. Centro" />
               </div>
             </div>
 
@@ -436,9 +430,48 @@ export default function CartModal({ isOpen, onClose }) {
 
             <section className={tw('mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-4')} aria-label="Opciones de envío y pago">
               <div><h3 className={tw('text-base font-bold text-slate-800')}>Envío</h3><label className={tw('mt-2 flex cursor-pointer items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-800')}><input type="radio" checked readOnly className={tw('accent-emerald-600')} /><span><strong>Envío gratis</strong><br /><span className={tw('text-xs')}>Sin costo adicional</span></span></label></div>
-              <div><h3 className={tw('text-base font-bold text-slate-800')}>Método de pago</h3><div className={tw('mt-2 grid gap-2 sm:grid-cols-3')}>
-                {[['NEQUI', 'Nequi'], ['CARD', 'Tarjeta'], ['Contraentrega', 'Contra entrega']].map(([value, label]) => <label key={value} className={tw(`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-3 text-sm ${metodoPago === value ? 'border-[#ff7e5f] bg-orange-50 text-slate-900' : 'border-slate-200 bg-white text-slate-600'}`)}><input type="radio" name="metodoPago" value={value} checked={metodoPago === value} onChange={() => setMetodoPago(value)} className={tw('accent-[#ff7e5f]')} /><span>{label}</span></label>)}
-              </div>{metodoPago !== 'Contraentrega' && <p className={tw('text-xs leading-5 text-slate-500')}>Continuarás al checkout seguro de Wompi. Selecciona allí el mismo medio de pago elegido para completar la transacción.</p>}</div>
+              <div>
+                <h3 className={tw('text-base font-bold text-slate-800')}>Método de pago</h3>
+                <div className={tw('mt-2 grid gap-2 sm:grid-cols-3')}>
+                  {[
+                    ['NEQUI', 'Nequi', false],
+                    ['CARD', 'Tarjeta', true],
+                    ['Contraentrega', 'Contra entrega', false],
+                  ].map(([value, label, disabled]) => (
+                    <label
+                      key={value}
+                      title={disabled ? 'Próximamente — pago con tarjeta temporalmente desactivado' : undefined}
+                      className={tw(
+                        'flex items-center gap-2 rounded-xl border px-3 py-3 text-sm',
+                        disabled
+                          ? 'cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 opacity-70'
+                          : metodoPago === value
+                            ? 'cursor-pointer border-[#ff7e5f] bg-orange-50 text-slate-900'
+                            : 'cursor-pointer border-slate-200 bg-white text-slate-600'
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="metodoPago"
+                        value={value}
+                        checked={metodoPago === value}
+                        disabled={disabled}
+                        onChange={() => !disabled && setMetodoPago(value)}
+                        className={tw('accent-[#ff7e5f] disabled:cursor-not-allowed')}
+                      />
+                      <span className={tw('flex flex-col')}>
+                        <span>{label}</span>
+                        {disabled && <span className={tw('text-[10px] font-semibold uppercase tracking-wide')}>Próximamente</span>}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <p className={tw('mt-2 text-xs leading-5 text-slate-500')}>
+                  {metodoPago === 'NEQUI'
+                    ? 'Continuarás al checkout seguro de Wompi. Selecciona Nequi allí para completar la transacción.'
+                    : 'El pago con tarjeta estará disponible próximamente. Por ahora puedes usar Nequi o contra entrega.'}
+                </p>
+              </div>
             </section>
 
             <div className={tw("cart-footer-sticky")}>
