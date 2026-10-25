@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { URL_SERVER } from "../../services/api/client";
 import { registrarIntentoFormulario, registrarVistaProducto } from "../../services/api/analyticsService";
 import { cloudinaryUrl } from "../../utils/cloudinaryUrl.js";
+import { animateProductToCart } from "../../utils/cartFlightAnimation.js";
 
 export default function ProductosTienda({ categoria, user }) {
   const [products, setProducts] = useState([]);
@@ -220,7 +221,7 @@ export default function ProductosTienda({ categoria, user }) {
   };
 
   // Función de agregar al carrito (valida sesión si es invitado)
-  const addToCart = (product, customQty = null) => {
+  const addToCart = (product, customQty = null, sourceElement = null) => {
     if (!user) {
       alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
       navigate('/login');
@@ -248,6 +249,7 @@ export default function ProductosTienda({ categoria, user }) {
     registrarIntentoFormulario('cart', product._id);
     localStorage.setItem('cart_cdisfruta', JSON.stringify(updatedCart));
     window.dispatchEvent(new Event('cartUpdate'));
+    animateProductToCart(cloudinaryUrl(product.imagen, { width: 480 }), sourceElement);
     
     setQuantities(prev => ({ ...prev, [product._id]: 1 }));
   };
@@ -474,7 +476,7 @@ export default function ProductosTienda({ categoria, user }) {
 
                         <button 
                           className={tw("add-to-cart-btn-full")}
-                          onClick={() => addToCart(product)}
+                          onClick={(event) => addToCart(product, null, event.currentTarget)}
                           disabled={product.stock === 0}
                         >
                           <FaShoppingCart />
@@ -641,8 +643,8 @@ export default function ProductosTienda({ categoria, user }) {
 
                     <button 
                       className={tw("product-detail-submit-btn")}
-                      onClick={() => {
-                        addToCart(productoSeleccionado);
+                      onClick={(event) => {
+                        addToCart(productoSeleccionado, null, event.currentTarget);
                         setProductoSeleccionado(null);
                       }}
                     >

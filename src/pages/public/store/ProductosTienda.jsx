@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaFilter, FaSortAmountDown, FaTimes, FaCheck, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { URL_SERVER } from "../../../services/api/client.js";
 import { cloudinaryUrl } from "../../../utils/cloudinaryUrl.js";
+import { animateProductToCart } from "../../../utils/cartFlightAnimation.js";
 
 export default function ProductosTienda({ categoria }) {
   const [products, setProducts] = useState([]);
@@ -182,7 +183,7 @@ export default function ProductosTienda({ categoria }) {
   };
 
   // Función de agregar al carrito (valida sesión si es invitado)
-  const addToCart = (product) => {
+  const addToCart = (product, sourceElement) => {
     const quantityToAdd = quantities[product._id] || 1;
     const currentStorageCart = JSON.parse(localStorage.getItem('cart_cdisfruta') || "[]");
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
@@ -203,6 +204,7 @@ export default function ProductosTienda({ categoria }) {
     setCart(updatedCart);
     localStorage.setItem('cart_cdisfruta', JSON.stringify(updatedCart));
     window.dispatchEvent(new Event('cartUpdate'));
+    animateProductToCart(cloudinaryUrl(product.imagen, { width: 480 }), sourceElement);
     
     setQuantities(prev => ({ ...prev, [product._id]: 1 }));
   };
@@ -430,7 +432,7 @@ export default function ProductosTienda({ categoria }) {
 
                         <button 
                           className={tw("add-to-cart-btn-full")}
-                          onClick={() => addToCart(product)}
+                          onClick={(event) => addToCart(product, event.currentTarget)}
                           disabled={product.stock === 0}
                         >
                           <FaShoppingCart />

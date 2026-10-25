@@ -125,6 +125,7 @@ export default function HeaderTienda() {
             <button
               type="button"
               className={tw('shop-header__icon')}
+              data-cart-animation-target="true"
               onClick={() => setCartModalOpen(true)}
               aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
             >

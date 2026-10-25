@@ -159,6 +159,7 @@ export default function HeaderDashboard() {
             <button
               type="button"
               className={tw('client-header__icon')}
+              data-cart-animation-target="true"
               onClick={() => setCartModalOpen(true)}
               aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
             >
