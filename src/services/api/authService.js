@@ -96,11 +96,11 @@ export const cambiarPassword = async (passActual, nuevaPassword) => {
   }
 };
 
-export const actualizarPerfil = async (formData) => {
+export const actualizarPerfil = async (payload) => {
   try {
-    // No fijar Content-Type a mano: Axios debe enviar multipart con boundary.
-    // Si se fuerza "multipart/form-data" sin boundary, Multer falla y el API responde 500.
-    const response = await apiAxios.patch('/auth/actualizar-perfil', formData);
+    // FormData (con foto): Axios pone multipart + boundary solo.
+    // Objeto plano (solo nombre/teléfono/avatar URL): JSON, más fiable en Vercel.
+    const response = await apiAxios.patch('/auth/actualizar-perfil', payload);
     return response.data;
   } catch (err) {
     throw err.response?.data || { message: "Error al actualizar el perfil." };

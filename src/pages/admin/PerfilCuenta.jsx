@@ -69,12 +69,20 @@ export default function PerfilCuenta({ adminMode = true }) {
     if (nombre.trim().length < 2) return setFeedback({ type: 'error', text: 'El nombre debe tener al menos 2 caracteres.' });
     setSaving(true);
     try {
-      const data = new FormData();
-      data.append('nombre', nombre.trim());
-      data.append('telefono', telefono.trim());
-      if (avatarFile) data.append('avatar', avatarFile);
-      else if (avatar) data.append('avatar', avatar);
-      const response = await actualizarPerfil(data);
+      let payload;
+      if (avatarFile) {
+        payload = new FormData();
+        payload.append('nombre', nombre.trim());
+        payload.append('telefono', telefono.trim());
+        payload.append('avatar', avatarFile);
+      } else {
+        payload = {
+          nombre: nombre.trim(),
+          telefono: telefono.trim(),
+          ...(avatar && !avatar.startsWith('blob:') ? { avatar } : {}),
+        };
+      }
+      const response = await actualizarPerfil(payload);
       const updatedUser = response.usuario;
       if (avatar.startsWith('blob:')) URL.revokeObjectURL(avatar);
       setAvatar(updatedUser?.avatar || avatar);

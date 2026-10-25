@@ -53,25 +53,28 @@ export default function ConfiguracionUsuario() {
     e.preventDefault();
     setMensaje("");
     try {
-      const formData = new FormData();
-      formData.append("nombre", nombre);
-      formData.append("telefono", telefono);
-
-      // Verificamos si el avatar seleccionado es un archivo local o una URL de texto
-      if (avatarSeleccionado instanceof File || (typeof avatarSeleccionado === 'string' && avatarSeleccionado.startsWith("blob:"))) {
-        if (avatarSeleccionado.startsWith("blob:")) {
-          const responseBlob = await fetch(avatarSeleccionado);
-          const blob = await responseBlob.blob();
-          formData.append("avatar", blob, "avatar_usuario.jpg");
-        } else {
-          formData.append("avatar", avatarSeleccionado);
-        }
+      let payload;
+      if (avatarSeleccionado instanceof File) {
+        payload = new FormData();
+        payload.append("nombre", nombre);
+        payload.append("telefono", telefono);
+        payload.append("avatar", avatarSeleccionado);
+      } else if (typeof avatarSeleccionado === "string" && avatarSeleccionado.startsWith("blob:")) {
+        const responseBlob = await fetch(avatarSeleccionado);
+        const blob = await responseBlob.blob();
+        payload = new FormData();
+        payload.append("nombre", nombre);
+        payload.append("telefono", telefono);
+        payload.append("avatar", blob, "avatar_usuario.jpg");
       } else {
-        // Es un avatar predeterminado de DiceBear o la URL existente de Cloudinary
-        formData.append("avatar", avatarSeleccionado);
+        payload = {
+          nombre,
+          telefono,
+          ...(avatarSeleccionado ? { avatar: avatarSeleccionado } : {}),
+        };
       }
 
-      const respuesta = await actualizarPerfil(formData);
+      const respuesta = await actualizarPerfil(payload);
 
       setTipoMensaje("success");
       setMensaje(respuesta.message || "¡Perfil y avatar actualizados correctamente!");
