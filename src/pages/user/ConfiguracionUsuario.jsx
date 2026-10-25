@@ -5,6 +5,7 @@ import HeaderDashboard from "../../components/layout/CustomerHeader";
 import { FaSave, FaCheckCircle } from "react-icons/fa";
 import Perfil from "./configuraciones/Perfil";
 import Seguridad from "./configuraciones/Seguridad";
+import Direcciones from "./configuraciones/Direcciones";
 import HeaderPerfil from "./configuraciones/HeaderPerfil";
 import SelectorAvatar from "./configuraciones/SelectorAvatar";
 import { cambiarPassword, actualizarPerfil } from "../../services/api/authService";
@@ -167,6 +168,13 @@ export default function ConfiguracionUsuario() {
               </button>
               <button
                 type="button"
+                onClick={() => { setActiveTab("direcciones"); setMensaje(""); }}
+                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-dir-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-dir-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-dir-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-dir-0": activeTab === 'direcciones' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-dir-1": activeTab === 'direcciones' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-dir-2": activeTab === 'direcciones' ? '700' : '500' }}
+              >
+                Direcciones
+              </button>
+              <button
+                type="button"
                 onClick={() => { setActiveTab("seguridad"); setMensaje(""); }}
                 className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-6485-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-6485-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-6485-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-6485-0": activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-6485-1": activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-6485-2": activeTab === 'seguridad' ? '700' : '500' }}
               >
@@ -197,6 +205,8 @@ export default function ConfiguracionUsuario() {
                     </button>
                   </div>
                 </form>
+              ) : activeTab === 'direcciones' ? (
+                <Direcciones onChanged={verifyToken} />
               ) : (
                 <form onSubmit={handleUpdatePassword}>
                   <Seguridad

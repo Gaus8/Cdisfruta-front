@@ -106,3 +106,30 @@ export const actualizarPerfil = async (payload) => {
     throw err.response?.data || { message: "Error al actualizar el perfil." };
   }
 };
+
+export const listarDireccionesEnvio = async () => {
+  try {
+    const response = await apiAxios.get('/auth/direcciones-envio');
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: 'Error al cargar las direcciones.' };
+  }
+};
+
+export const crearDireccionEnvio = async (payload) => {
+  try {
+    const response = await apiAxios.post('/auth/direcciones-envio', payload);
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: 'Error al guardar la dirección.' };
+  }
+};
+
+export const eliminarDireccionEnvio = async (id) => {
+  try {
+    const response = await apiAxios.delete(`/auth/direcciones-envio/${id}`);
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: 'Error al eliminar la dirección.' };
+  }
+};
