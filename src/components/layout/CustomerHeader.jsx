@@ -150,59 +150,86 @@ export default function HeaderDashboard() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir por WhatsApp"
-              className={tw(tw("icon-wrapper"), "![color:#25D366]", "![text-decoration:none]")}
+              className={tw('client-header__icon', '![color:#25D366]', '![text-decoration:none]')}
               title="WhatsApp"
             >
-              <FaWhatsapp className={tw("icon-btn-large")} />
+              <FaWhatsapp size={18} />
             </a>
 
-            <div
-              className={tw(tw("icon-wrapper"), "![cursor:pointer]")}
+            <button
+              type="button"
+              className={tw('client-header__icon')}
               onClick={() => setCartModalOpen(true)}
-              
+              aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
             >
-              <FaShoppingCart className={tw("icon-btn-large")} />
+              <FaShoppingCart size={18} />
               <span className={tw("notification-badge")}>{cartCount}</span>
-            </div>
+            </button>
 
             <div className={tw("dropdown-container")} ref={containerRef}>
-              <div className={tw("user-profile")} onClick={toggleDropdown}>
-                {avatarOverride ?? userData?.avatar ? <img src={avatarOverride ?? userData.avatar} alt="Foto de perfil" className={tw('h-[30px] w-[30px] rounded-full object-cover')} /> : <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />}
-              </div>
+              <button
+                type="button"
+                className={tw("user-profile")}
+                onClick={toggleDropdown}
+                aria-expanded={dropdownOpen}
+                aria-haspopup="menu"
+                aria-label="Menú de cuenta"
+              >
+                {avatarOverride ?? userData?.avatar
+                  ? <img src={avatarOverride ?? userData.avatar} alt="" className={tw('h-[30px] w-[30px] rounded-full object-cover')} />
+                  : <FaUserCircle size={30} color={userData ? "#ff7a5c" : "#ccc"} />}
+              </button>
 
               {dropdownOpen && (
-                <div className={tw("dropdown-menu profile-menu")}>
+                <div className={tw("client-account-menu")} role="menu">
                   {userData ? (
                     <>
-                      <div className={tw("dropdown-header")}>Hola, {userData.nombre ? userData.nombre.split(' ')[0] : 'Usuario'}</div>
-                      <ul className={tw("dropdown-list")}>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/configuracion'); }}>
-                          <FaCog /> Configuración
-                        </li>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/pedidos'); }}>
-                          <FaShoppingBag /> Mis Pedidos
-                        </li>
-                        <li onClick={() => { setDropdownOpen(false); goDirecciones(); }}>
-                          <FaMapMarkerAlt /> Direcciones
-                        </li>
-                        <hr />
-                        <li className={tw("logout-opt")} onClick={handleLogoutClick}>
-                          <FaSignOutAlt /> Cerrar Sesión
-                        </li>
-                      </ul>
+                      <div className={tw("client-account-menu__hero")}>
+                        <div className={tw("client-account-menu__avatar")}>
+                          {avatarOverride ?? userData?.avatar
+                            ? <img src={avatarOverride ?? userData.avatar} alt="" />
+                            : <FaUserCircle size={44} color="#ff7a5c" />}
+                        </div>
+                        <div className={tw("client-account-menu__identity")}>
+                          <p className={tw("client-account-menu__name")}>
+                            {userData.nombre || 'Cliente'}
+                          </p>
+                          <p className={tw("client-account-menu__email")}>{userData.email}</p>
+                        </div>
+                      </div>
+                      <div className={tw("client-account-menu__body")}>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className={tw("client-account-menu__primary")}
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            sessionStorage.setItem('config_tab_cdisfruta', 'perfil');
+                            navigate('/cliente/configuracion');
+                          }}
+                        >
+                          <FaCog /> Ir a mi cuenta
+                        </button>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className={tw("client-account-menu__logout")}
+                          onClick={handleLogoutClick}
+                        >
+                          <FaSignOutAlt /> Cerrar sesión
+                        </button>
+                      </div>
                     </>
                   ) : (
-                    <>
-                      <div className={tw("dropdown-header")}>Bienvenido</div>
-                      <ul className={tw("dropdown-list")}>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
-                          <FaSignInAlt /> Iniciar Sesión
-                        </li>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/registro'); }}>
-                          <FaUserPlus /> Crear Cuenta
-                        </li>
-                      </ul>
-                    </>
+                    <div className={tw("client-account-menu__body")}>
+                      <p className={tw("client-account-menu__guest")}>Accede para comprar más rápido</p>
+                      <button type="button" role="menuitem" className={tw("client-account-menu__primary")} onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
+                        <FaSignInAlt /> Iniciar sesión
+                      </button>
+                      <button type="button" role="menuitem" className={tw("client-account-menu__logout")} onClick={() => { setDropdownOpen(false); navigate('/registro'); }}>
+                        <FaUserPlus /> Crear cuenta
+                      </button>
+                    </div>
                   )}
                 </div>
               )}

@@ -55,6 +55,11 @@ export default function ConfiguracionUsuario() {
     if (TAB_VALIDOS.has(tab) && tab !== activeTab) setActiveTab(tab);
   }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Refresca sesión al entrar (trae direccionesEnvio actualizadas / migradas).
+  useEffect(() => {
+    verifyToken?.();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Precargar los datos tan pronto como userData cambie o esté disponible
   useEffect(() => {
     if (userData) {
@@ -176,26 +181,26 @@ export default function ConfiguracionUsuario() {
               />
             )}
 
-            {/* Pestañas de Navegación */}
-            <div className={tw("![display:flex]", "![border-bottom:1px_solid_#e2e8f0]", "![background:#f8fafc]", "![padding:0_30px]")}>
+            {/* Pestañas de Navegación (scroll horizontal en móvil para que Direcciones no quede oculta) */}
+            <div className={tw("![display:flex]", "![flex-wrap:nowrap]", "![overflow-x:auto]", "![border-bottom:1px_solid_#e2e8f0]", "![background:#f8fafc]", "![padding:0_16px]", "![gap:4px]", "![-webkit-overflow-scrolling:touch]")}>
               <button
                 type="button"
                 onClick={() => cambiarTab("perfil")}
-                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-5919-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-5919-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-5919-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-5919-0": activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-5919-1": activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-5919-2": activeTab === 'perfil' ? '700' : '500' }}
+                className={tw("![padding:16px_18px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-5919-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-5919-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-5919-2)]", "![cursor:pointer]", "![font-size:0.95rem]", "![white-space:nowrap]", "![flex-shrink:0]")} style={{ "--tw-inline-ConfiguracionUsuario-5919-0": activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-5919-1": activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-5919-2": activeTab === 'perfil' ? '700' : '500' }}
               >
                 Información Personal
               </button>
               <button
                 type="button"
                 onClick={() => cambiarTab("direcciones")}
-                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-dir-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-dir-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-dir-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-dir-0": activeTab === 'direcciones' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-dir-1": activeTab === 'direcciones' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-dir-2": activeTab === 'direcciones' ? '700' : '500' }}
+                className={tw("![padding:16px_18px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-dir-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-dir-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-dir-2)]", "![cursor:pointer]", "![font-size:0.95rem]", "![white-space:nowrap]", "![flex-shrink:0]")} style={{ "--tw-inline-ConfiguracionUsuario-dir-0": activeTab === 'direcciones' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-dir-1": activeTab === 'direcciones' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-dir-2": activeTab === 'direcciones' ? '700' : '500' }}
               >
                 Direcciones
               </button>
               <button
                 type="button"
                 onClick={() => cambiarTab("seguridad")}
-                className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-6485-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-6485-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-6485-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-6485-0": activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-6485-1": activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-6485-2": activeTab === 'seguridad' ? '700' : '500' }}
+                className={tw("![padding:16px_18px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-6485-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-6485-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-6485-2)]", "![cursor:pointer]", "![font-size:0.95rem]", "![white-space:nowrap]", "![flex-shrink:0]")} style={{ "--tw-inline-ConfiguracionUsuario-6485-0": activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-6485-1": activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-6485-2": activeTab === 'seguridad' ? '700' : '500' }}
               >
                 Cambiar Contraseña
               </button>
@@ -217,6 +222,7 @@ export default function ConfiguracionUsuario() {
                     telefono={telefono}
                     setTelefono={setTelefono}
                     email={email}
+                    onOpenDirecciones={() => cambiarTab('direcciones')}
                   />
                   <div className={tw("![margin-top:35px]", "![display:flex]", "![justify-content:flex-end]", "![border-top:1px_solid_#e2e8f0]", "![padding-top:20px]")}>
                     <button type="submit" className={tw(tw("hero-explore-btn"), "![margin:0]", "![display:flex]", "![align-items:center]", "![gap:10px]", "![padding:14px_30px]", "![font-size:1rem]")} >

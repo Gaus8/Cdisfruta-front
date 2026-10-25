@@ -31,6 +31,7 @@ const GestionPedidos = lazy(() => import('../pages/admin/GestionPedidos'));
 const DisenoPortada = lazy(() => import('../pages/admin/DisenoPortada'));
 const Inventario = lazy(() => import('../pages/admin/Inventario'));
 const PerfilCuenta = lazy(() => import('../pages/admin/PerfilCuenta'));
+const ConfiguracionUsuario = lazy(() => import('../pages/user/ConfiguracionUsuario'));
 const ConfiguracionAdmin = lazy(() => import('../pages/admin/ConfiguracionAdmin'));
 const ReportesAdmin = lazy(() => import('../pages/admin/ReportesAdmin'));
 const UsuariosAdmin = lazy(() => import('../pages/admin/UsuariosAdmin'));
@@ -180,7 +181,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/cliente/tienda', element: <DashboardUsuario /> },
       { path: '/cliente/perfil', element: <DashboardUsuario /> },
-      { path: '/cliente/configuracion', element: <PerfilCuenta adminMode={false} /> },
+      { path: '/cliente/configuracion', element: <ConfiguracionUsuario /> },
       { path: '/cliente/pedidos', element: <MisPedidos /> },
     ],
   },
