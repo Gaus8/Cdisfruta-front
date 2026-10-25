@@ -159,7 +159,7 @@ export default function DashboardUsuario() {
                 <div className={tw("client-hub__card-icon")} aria-hidden="true"><FaShoppingBag /></div>
                 <div className={tw("client-hub__card-body")}>
                   <h2>Seguir comprando</h2>
-                  <p className={tw("client-hub__muted")}>Ve directo al catálogo sin el hero de la tienda pública.</p>
+                  <p className={tw("client-hub__muted")}>Explora el catálogo y agrega snacks a tu carrito cuando quieras.</p>
                   <button type="button" className={tw("client-hub__btn client-hub__btn--solid")} onClick={scrollToProducts}>
                     Ir a productos
                   </button>

@@ -881,7 +881,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: .5rem;
-  margin-top: .85rem;
+  margin-top: 1.15rem;
+}
+
+.client-hub__card-body > .client-hub__btn {
+  margin-top: 1.15rem;
 }
 
 .client-hub__btn {
