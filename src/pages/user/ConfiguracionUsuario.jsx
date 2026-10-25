@@ -1,5 +1,6 @@
 import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import HeaderDashboard from "../../components/layout/CustomerHeader";
 import { FaSave, FaCheckCircle } from "react-icons/fa";
@@ -9,6 +10,8 @@ import Direcciones from "./configuraciones/Direcciones";
 import HeaderPerfil from "./configuraciones/HeaderPerfil";
 import SelectorAvatar from "./configuraciones/SelectorAvatar";
 import { cambiarPassword, actualizarPerfil } from "../../services/api/authService";
+
+const TAB_VALIDOS = new Set(['perfil', 'direcciones', 'seguridad']);
 
 const AVATAR_OPTIONS = [
   "https://api.dicebear.com/7.x/bottts/svg?seed=Gordi1",
@@ -22,6 +25,7 @@ const AVATAR_OPTIONS = [
 export default function ConfiguracionUsuario() {
   // 👇 1. Extraemos setUserData (o la función que actualice el estado global en tu useAuth)
   const { userData, verifyToken } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -32,9 +36,24 @@ export default function ConfiguracionUsuario() {
   const [passConfirmar, setPassConfirmar] = useState("");
 
   const [mostrarSelector, setMostrarSelector] = useState(false);
-  const [activeTab, setActiveTab] = useState("perfil");
+  const tabFromUrl = searchParams.get('tab');
+  const tabFromSession = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('config_tab_cdisfruta') : null;
+  const initialTab = TAB_VALIDOS.has(tabFromUrl) ? tabFromUrl : (TAB_VALIDOS.has(tabFromSession) ? tabFromSession : 'perfil');
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("success");
+
+  const cambiarTab = (tab) => {
+    setActiveTab(tab);
+    setMensaje("");
+    sessionStorage.setItem('config_tab_cdisfruta', tab);
+    setSearchParams(tab === 'perfil' ? {} : { tab });
+  };
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (TAB_VALIDOS.has(tab) && tab !== activeTab) setActiveTab(tab);
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Precargar los datos tan pronto como userData cambie o esté disponible
   useEffect(() => {
@@ -161,21 +180,21 @@ export default function ConfiguracionUsuario() {
             <div className={tw("![display:flex]", "![border-bottom:1px_solid_#e2e8f0]", "![background:#f8fafc]", "![padding:0_30px]")}>
               <button
                 type="button"
-                onClick={() => { setActiveTab("perfil"); setMensaje(""); }}
+                onClick={() => cambiarTab("perfil")}
                 className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-5919-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-5919-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-5919-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-5919-0": activeTab === 'perfil' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-5919-1": activeTab === 'perfil' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-5919-2": activeTab === 'perfil' ? '700' : '500' }}
               >
                 Información Personal
               </button>
               <button
                 type="button"
-                onClick={() => { setActiveTab("direcciones"); setMensaje(""); }}
+                onClick={() => cambiarTab("direcciones")}
                 className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-dir-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-dir-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-dir-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-dir-0": activeTab === 'direcciones' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-dir-1": activeTab === 'direcciones' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-dir-2": activeTab === 'direcciones' ? '700' : '500' }}
               >
                 Direcciones
               </button>
               <button
                 type="button"
-                onClick={() => { setActiveTab("seguridad"); setMensaje(""); }}
+                onClick={() => cambiarTab("seguridad")}
                 className={tw("![padding:16px_24px]", "![background:transparent]", "![border:none]", "![border-bottom:var(--tw-inline-ConfiguracionUsuario-6485-0)]", "![color:var(--tw-inline-ConfiguracionUsuario-6485-1)]", "![font-weight:var(--tw-inline-ConfiguracionUsuario-6485-2)]", "![cursor:pointer]", "![font-size:0.95rem]")} style={{ "--tw-inline-ConfiguracionUsuario-6485-0": activeTab === 'seguridad' ? '3px solid var(--primary-orange)' : '3px solid transparent', "--tw-inline-ConfiguracionUsuario-6485-1": activeTab === 'seguridad' ? 'var(--primary-blue)' : 'var(--text-light)', "--tw-inline-ConfiguracionUsuario-6485-2": activeTab === 'seguridad' ? '700' : '500' }}
               >
                 Cambiar Contraseña

@@ -1,10 +1,10 @@
 import { tw } from '../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import {
   FaShoppingCart, FaSearch, FaUserCircle, FaCog,
   FaSignOutAlt, FaExclamationTriangle, FaShoppingBag,
-  FaSignInAlt, FaUserPlus, FaWhatsapp
+  FaSignInAlt, FaUserPlus, FaWhatsapp, FaMapMarkerAlt, FaStore
 } from "react-icons/fa";
 import CartModal from "../../pages/user/CartModal";
 import { apiAxios } from "../../services/api/client"; // Usar instancia configurada con withCredentials
@@ -18,6 +18,7 @@ export default function HeaderDashboard() {
   const [cartModalOpen, setCartModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [avatarOverride, setAvatarOverride] = useState(null);
+  const location = useLocation();
 
   const [searchText, setSearchText] = useState(() => {
     return sessionStorage.getItem('search_cdisfruta') || "";
@@ -80,12 +81,15 @@ export default function HeaderDashboard() {
       const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
       setCartCount(totalItems);
     };
+    const openCart = () => setCartModalOpen(true);
     updateBadge();
     window.addEventListener('cartUpdate', updateBadge);
     window.addEventListener('storage', updateBadge);
+    window.addEventListener('openCart', openCart);
     return () => {
       window.removeEventListener('cartUpdate', updateBadge);
       window.removeEventListener('storage', updateBadge);
+      window.removeEventListener('openCart', openCart);
     };
   }, []);
 
@@ -108,18 +112,32 @@ export default function HeaderDashboard() {
     return () => { document.body.style.overflow = ""; };
   }, [logoutModalOpen, cartModalOpen]);
 
+  const goDirecciones = () => {
+    sessionStorage.setItem('config_tab_cdisfruta', 'direcciones');
+    navigate('/cliente/configuracion?tab=direcciones');
+  };
+
+  const configTab = new URLSearchParams(location.search).get('tab');
+  const onCuenta = location.pathname === '/cliente/configuracion' && configTab !== 'direcciones';
+  const onDirecciones = location.pathname === '/cliente/configuracion' && configTab === 'direcciones';
+
+  const navClass = ({ isActive }) => tw(
+    'client-nav__link',
+    isActive ? 'client-nav__link--active' : ''
+  );
+
   return (
     <>
-      <header className={tw("user-header")}>
+      <header className={tw("user-header client-header")}>
         <div className={tw("header-content")}>
           <h1 className={tw(tw("logo"), "![cursor:pointer]")} onClick={() => navigate('/cliente/tienda')} >
-            CDISFRUTA<span className={tw("dot-shop")}> SHOP</span>
+            CDISFRUTA<span className={tw("dot-shop")}> · Mi cuenta</span>
           </h1>
 
           <form className={tw("search-bar")} onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder="Buscar snacks saludables..." 
+              placeholder="Buscar en tu catálogo..." 
               value={searchText}
               onChange={handleSearchChange}
             />
@@ -164,6 +182,9 @@ export default function HeaderDashboard() {
                         <li onClick={() => { setDropdownOpen(false); navigate('/cliente/pedidos'); }}>
                           <FaShoppingBag /> Mis Pedidos
                         </li>
+                        <li onClick={() => { setDropdownOpen(false); goDirecciones(); }}>
+                          <FaMapMarkerAlt /> Direcciones
+                        </li>
                         <hr />
                         <li className={tw("logout-opt")} onClick={handleLogoutClick}>
                           <FaSignOutAlt /> Cerrar Sesión
@@ -188,6 +209,31 @@ export default function HeaderDashboard() {
             </div>
           </div>
         </div>
+
+        <nav className={tw("client-nav")} aria-label="Navegación de tu cuenta">
+          <NavLink to="/cliente/tienda" end className={navClass}>
+            <FaStore /> Catálogo
+          </NavLink>
+          <NavLink to="/cliente/pedidos" className={navClass}>
+            <FaShoppingBag /> Pedidos
+          </NavLink>
+          <button
+            type="button"
+            className={tw('client-nav__link', onDirecciones ? 'client-nav__link--active' : '')}
+            onClick={goDirecciones}
+          >
+            <FaMapMarkerAlt /> Direcciones
+          </button>
+          <NavLink
+            to="/cliente/configuracion"
+            className={() => tw('client-nav__link', onCuenta ? 'client-nav__link--active' : '')}
+            onClick={() => {
+              sessionStorage.setItem('config_tab_cdisfruta', 'perfil');
+            }}
+          >
+            <FaCog /> Cuenta
+          </NavLink>
+        </nav>
       </header>
 
       <CartModal

@@ -2,11 +2,12 @@ import { tw } from '../../utils/tw.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
-  FaArrowLeft, FaBoxOpen, FaClock, FaCheckCircle, 
+  FaBoxOpen, FaClock, FaCheckCircle, 
   FaTruck, FaHome, FaTimesCircle, FaWhatsapp, FaEye 
 } from "react-icons/fa";
 import { apiAxios } from "../../services/api/client";
 import { useAuth } from "../../hooks/useAuth";
+import HeaderDashboard from "../../components/layout/CustomerHeader.jsx";
 
 const PASOS_ESTADO = ["Pendiente", "Comprobado", "Enviado", "Entregado"];
 
@@ -97,14 +98,9 @@ export default function MisPedidos() {
   if (loading) return <div className={tw("loading-state")}>Cargando tus compras...</div>;
 
   return (
-    <div className={tw("mis-pedidos-container client-area")}>
-      
-      <div className={tw("mis-pedidos-nav-top")}>
-        <button className={tw("btn-volver-pro")} onClick={() => navigate('/cliente/tienda')}>
-          <FaArrowLeft /> Seguir Comprando
-        </button>
-      </div>
-
+    <div className={tw("client-area")}>
+      <HeaderDashboard />
+      <div className={tw("mis-pedidos-container")}>
       <div className={tw("mis-pedidos-header")}>
         <h2>Mis Pedidos</h2>
         <p>Consulta el historial, estado y seguimiento en tiempo real de tus compras en CDISFRUTA.</p>
@@ -359,6 +355,7 @@ export default function MisPedidos() {
         </div>
       )}
 
+      </div>
     </div>
   );
 }
