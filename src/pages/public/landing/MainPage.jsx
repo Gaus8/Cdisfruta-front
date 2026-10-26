@@ -4,6 +4,7 @@ import HeroCarousel from './Carrusel';
 import Header from './Header';
 import HistorySection from './HistorySection';
 import MissionVision from './MissionVision';
+import KnowSection from './KnowSection';
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
@@ -47,6 +48,8 @@ function MainPage() {
       <Header themeV2 />
       <main id="contenido-principal">
       <HeroCarousel />
+
+      <KnowSection />
 
       <HistorySection content={historyContent} />
  
