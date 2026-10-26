@@ -14,7 +14,7 @@
   isolation: isolate;
   overflow-x: clip;
   padding: clamp(32px, 4vw, 58px) clamp(16px, 5vw, 76px) clamp(40px, 4vw, 56px);
-  margin-bottom: clamp(28px, 3vw, 44px);
+  margin-bottom: 0;
   background: var(--know-cream);
   color: var(--know-ink);
   scroll-margin-top: 6rem;

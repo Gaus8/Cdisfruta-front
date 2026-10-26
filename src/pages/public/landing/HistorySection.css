@@ -23,6 +23,17 @@
   min-height: inherit;
   background: var(--history-cream);
 }
+.history-editorial__visual::before {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: clamp(36px, 3.5vw, 48px);
+  background: linear-gradient(to bottom, rgb(250 239 230 / .42), rgb(250 239 230 / .16) 42%, transparent 100%);
+  content: '';
+  pointer-events: none;
+}
 .history-editorial__defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 .history-editorial__photo-frame {
