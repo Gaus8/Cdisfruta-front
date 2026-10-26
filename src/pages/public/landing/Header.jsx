@@ -7,6 +7,7 @@ import { whatsappUrl } from '../../../utils/whatsapp.js';
 
 const SECTION_LINKS = [
   { id: 'inicio', label: 'Inicio', always: true },
+  { id: 'conoce', label: 'Conoce' },
   { id: 'historia', label: 'Historia', always: true },
   { id: 'videos', label: 'Videos', always: true },
   { id: 'contacto', label: 'Contacto', always: true },
@@ -150,7 +151,7 @@ export default function Header({ themeV2 = false }) {
         {menuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
       </button>
 
-      <nav id="home-primary-navigation" aria-label="Navegación principal" className={tw('absolute left-0 right-0 top-full flex max-h-[calc(100dvh-76px)] flex-col items-stretch overflow-y-auto border-b border-[#EAE0D5] bg-[rgba(254,250,246,.98)] px-0 py-2 shadow-[0_12px_32px_rgba(28,18,9,.1)] backdrop-blur-xl transition duration-200 min-[1200px]:static min-[1200px]:max-h-none min-[1200px]:flex min-[1200px]:flex-row min-[1200px]:items-center min-[1200px]:gap-4 min-[1200px]:overflow-visible min-[1200px]:border-0 min-[1200px]:bg-transparent min-[1200px]:p-0 min-[1200px]:opacity-100 min-[1200px]:shadow-none min-[1200px]:backdrop-blur-none min-[1200px]:transition-none min-[1200px]:xl:gap-7', menuOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0 min-[1200px]:pointer-events-auto min-[1200px]:translate-y-0')}>
+      <nav id="home-primary-navigation" aria-label="Navegación principal" className={tw('absolute left-0 right-0 top-full flex max-h-[calc(100dvh-76px)] flex-col items-stretch overflow-y-auto border-b border-[#EAE0D5] bg-[rgba(254,250,246,.98)] px-0 py-2 shadow-[0_12px_32px_rgba(28,18,9,.1)] backdrop-blur-xl transition duration-200 min-[1200px]:static min-[1200px]:max-h-none min-[1200px]:flex min-[1200px]:flex-row min-[1200px]:items-center min-[1200px]:gap-3 min-[1200px]:overflow-visible min-[1200px]:border-0 min-[1200px]:bg-transparent min-[1200px]:p-0 min-[1200px]:opacity-100 min-[1200px]:shadow-none min-[1200px]:backdrop-blur-none min-[1200px]:transition-none min-[1200px]:xl:gap-5', menuOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0 min-[1200px]:pointer-events-auto min-[1200px]:translate-y-0')}>
         {renderSectionLinks(menuOpen)}
         <a href="/login" onClick={(event) => { event.preventDefault(); handleAbrirLogin(); }} className={tw(linkClass(menuOpen), 'min-[1200px]:border-0 min-[1200px]:px-2 min-[1200px]:py-0 min-[1200px]:after:left-2 min-[1200px]:after:w-[calc(100%-1rem)]')}>Ingresar</a>
         <a
