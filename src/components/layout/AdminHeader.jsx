@@ -115,10 +115,10 @@ export default function Header({ userName, role = 'admin' }) {
     
         <div className={tw("header-actions")}>
           {canSeeNotifications && <div className={tw("dropdown-container")}>
-            <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper", "![width:42px]", "![height:42px]", "![flex-shrink:0]")} onClick={toggleNotifications}>
-              <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`, "![font-size:20px]")} />
+            <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper")} onClick={toggleNotifications}>
+              <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`)} />
               {notifications.length > 0 && (
-                <span className={tw("notification-badge")}>{notifications.length}</span>
+                <span className={tw("notification-badge")}>{notifications.length > 99 ? '99+' : notifications.length}</span>
               )}
             </button>
             

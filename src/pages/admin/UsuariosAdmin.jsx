@@ -56,7 +56,7 @@ function UserActivityModal({ userId, onClose, onRequestDelete }) {
             <div className={tw('flex items-center gap-3 border-b border-slate-100 p-4')}><span className={tw('flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-[#e06d43]')}><FaChartLine /></span><div><h3 className={tw('font-bold text-slate-800')}>Interés y conversión</h3><p className={tw('text-xs text-slate-500')}>Métricas basadas en eventos instrumentados.</p></div></div>
             <div className={tw('grid gap-4 p-4 md:grid-cols-2')}>
               <div><h4 className={tw('mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700')}><FaEye className={tw('text-slate-400')} />Productos visitados con frecuencia</h4>{activity.productosFrecuentes.length ? <ul className={tw('space-y-2')}>{activity.productosFrecuentes.map((product) => <li key={product.productoId || product.nombre} className={tw('flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2 text-sm')}><span className={tw('truncate font-medium text-slate-700')}>{product.nombre}</span><span className={tw('shrink-0 text-xs text-slate-500')}>{product.visitas} visitas</span></li>)}</ul> : <p className={tw('rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-500')}>Aún no hay visitas registradas. La integración ya puede recibir eventos de productos desde la tienda.</p>}</div>
-              <div><h4 className={tw('mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700')}><FaClipboardList className={tw('text-slate-400')} />Intentos de formularios</h4><div className={tw('grid grid-cols-3 gap-2')}>{[['Carrito', forms.cart], ['Cotización', forms.quote], ['Interés', forms.product_interest]].map(([label, value]) => <div key={label} className={tw('rounded-xl bg-slate-50 p-3 text-center')}><p className={tw('text-lg font-bold text-slate-800')}>{value || 0}</p><p className={tw('text-[11px] text-slate-500')}>{label}</p></div>)}</div><p className={tw('mt-3 text-xs leading-5 text-slate-500')}>{activity.disponible ? `${activity.eventosRegistrados} eventos analíticos recibidos.` : 'No se almacenan datos escritos en los formularios; solo se cuentan los intentos.'}</p></div>
+              <div><h4 className={tw('mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700')}><FaClipboardList className={tw('text-slate-400')} />Intentos de formularios</h4><div className={tw('grid grid-cols-3 gap-2')}>{[['Carrito', forms.cart], ['Cotización', forms.quote], ['Interés', forms.product_interest]].map(([label, value]) => <div key={label} className={tw('min-w-0 rounded-xl bg-slate-50 p-2 text-center sm:p-3')}><p className={tw('text-base font-bold text-slate-800 sm:text-lg')}>{value || 0}</p><p className={tw('text-[10px] leading-tight text-slate-500 sm:text-[11px]')}>{label}</p></div>)}</div><p className={tw('mt-3 text-xs leading-5 text-slate-500')}>{activity.disponible ? `${activity.eventosRegistrados} eventos analíticos recibidos.` : 'No se almacenan datos escritos en los formularios; solo se cuentan los intentos.'}</p></div>
             </div>
           </section>
           <section className={tw('rounded-2xl border border-slate-200')}>
@@ -90,12 +90,15 @@ export default function UsuariosAdmin() {
   const [deleting, setDeleting] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const selectAllRef = useRef(null);
+  const selectAllDesktopRef = useRef(null);
+  const selectAllMobileRef = useRef(null);
 
   const selectedOnPage = users.filter((user) => selectedIds.includes(user.id)).length;
   const allOnPageSelected = users.length > 0 && selectedOnPage === users.length;
   useEffect(() => {
-    if (selectAllRef.current) selectAllRef.current.indeterminate = selectedOnPage > 0 && !allOnPageSelected;
+    const indeterminate = selectedOnPage > 0 && !allOnPageSelected;
+    if (selectAllDesktopRef.current) selectAllDesktopRef.current.indeterminate = indeterminate;
+    if (selectAllMobileRef.current) selectAllMobileRef.current.indeterminate = indeterminate;
   }, [selectedOnPage, allOnPageSelected]);
 
   useEffect(() => {
@@ -179,9 +182,9 @@ export default function UsuariosAdmin() {
         </div>
       </div>
       {error && <div role="alert" className={tw('m-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700')}>{error}</div>}
-      <div className={tw('overflow-x-auto')}>
+      <div className={tw('hidden overflow-x-auto md:block')}>
         <table className={tw('w-full min-w-[650px] text-left')}>
-          <thead className={tw('bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500')}><tr><th scope="col" className={tw('w-12 px-4 py-3')}><input ref={selectAllRef} type="checkbox" checked={allOnPageSelected} onChange={togglePage} disabled={!users.length || loading} aria-label="Seleccionar todos los usuarios de esta página" className={tw('h-4 w-4 accent-[#ff7e5f]')} /></th><th scope="col" className={tw('px-5 py-3')}>Nombre</th><th scope="col" className={tw('px-5 py-3')}>Correo electrónico</th><th scope="col" className={tw('px-5 py-3')}>Fecha de registro</th><th scope="col" className={tw('px-5 py-3')}>Estado</th></tr></thead>
+          <thead className={tw('bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500')}><tr><th scope="col" className={tw('w-12 px-4 py-3')}><input ref={selectAllDesktopRef} type="checkbox" checked={allOnPageSelected} onChange={togglePage} disabled={!users.length || loading} aria-label="Seleccionar todos los usuarios de esta página" className={tw('h-4 w-4 accent-[#ff7e5f]')} /></th><th scope="col" className={tw('px-5 py-3')}>Nombre</th><th scope="col" className={tw('px-5 py-3')}>Correo electrónico</th><th scope="col" className={tw('px-5 py-3')}>Fecha de registro</th><th scope="col" className={tw('px-5 py-3')}>Estado</th></tr></thead>
           <tbody className={tw('divide-y divide-slate-100')}>
             {loading ? <tr><td colSpan="5" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>Cargando usuarios…</td></tr> : !users.length ? <tr><td colSpan="5" className={tw('px-5 py-14 text-center text-sm text-slate-500')}>{search || status !== 'all' ? 'No hay usuarios que coincidan con la búsqueda.' : 'Todavía no hay cuentas de cliente registradas.'}</td></tr> : users.map((user) => <tr key={user.id} className={tw('transition hover:bg-slate-50')}>
               <td className={tw('px-4 py-4')}><input type="checkbox" checked={selectedIds.includes(user.id)} onChange={() => toggleUser(user.id)} aria-label={`Seleccionar a ${user.nombre}`} className={tw('h-4 w-4 accent-[#ff7e5f]')} /></td>
@@ -190,6 +193,39 @@ export default function UsuariosAdmin() {
             </tr>)}
           </tbody>
         </table>
+      </div>
+      <div className={tw('divide-y divide-slate-100 md:hidden')}>
+        {loading ? (
+          <p className={tw('px-4 py-10 text-center text-sm text-slate-500')}>Cargando usuarios…</p>
+        ) : !users.length ? (
+          <p className={tw('px-4 py-10 text-center text-sm text-slate-500')}>{search || status !== 'all' ? 'No hay usuarios que coincidan con la búsqueda.' : 'Todavía no hay cuentas de cliente registradas.'}</p>
+        ) : (
+          <>
+            <div className={tw('flex items-center gap-2 px-4 py-3')}>
+              <input ref={selectAllMobileRef} type="checkbox" checked={allOnPageSelected} onChange={togglePage} disabled={!users.length || loading} aria-label="Seleccionar todos los usuarios de esta página" className={tw('h-4 w-4 accent-[#ff7e5f]')} />
+              <span className={tw('text-xs font-medium text-slate-500')}>Seleccionar página</span>
+            </div>
+            {users.map((user) => (
+              <article key={user.id} className={tw('flex gap-3 p-4')}>
+                <input type="checkbox" checked={selectedIds.includes(user.id)} onChange={() => toggleUser(user.id)} aria-label={`Seleccionar a ${user.nombre}`} className={tw('mt-1 h-4 w-4 shrink-0 accent-[#ff7e5f]')} />
+                <button type="button" onClick={() => openUserDetails(user)} className={tw('min-w-0 flex-1 text-left')} aria-label={`Ver detalle y actividad de ${user.nombre}`}>
+                  <div className={tw('flex items-start gap-3')}>
+                    <span className={tw('flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-50 text-xs font-bold text-[#e06d43]')}>{initials(user.nombre)}</span>
+                    <div className={tw('min-w-0 flex-1')}>
+                      <div className={tw('flex flex-wrap items-center gap-2')}>
+                        <p className={tw('font-semibold text-slate-800 [overflow-wrap:anywhere]')}>{user.nombre}</p>
+                        <span className={tw(`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${user.estado === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`)}>{user.estado === 'active' ? 'Verificado' : 'Pendiente'}</span>
+                      </div>
+                      <p className={tw('mt-1 break-all text-xs text-slate-500')}>{user.correo}</p>
+                      <p className={tw('mt-1 text-xs text-slate-400')}>{dateOnly(user.fechaRegistro)}</p>
+                    </div>
+                    <FaEye className={tw('mt-1 shrink-0 text-slate-400')} />
+                  </div>
+                </button>
+              </article>
+            ))}
+          </>
+        )}
       </div>
       <footer className={tw('flex flex-col gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5')}>
         <p className={tw('text-xs text-slate-500')}>Mostrando {firstRow}–{lastRow} de {total} usuarios</p>

@@ -309,10 +309,10 @@ export default function Inventario() {
 
   return <section className={tw('mx-auto w-full max-w-7xl space-y-6 pb-12')}>
     <header className={tw('flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between')}>
-      <div><p className={tw('mb-1 text-sm font-semibold uppercase tracking-[.14em] text-[#e06d43]')}>Operación</p><h1 className={tw('text-3xl font-bold tracking-tight text-slate-800')}>Inventario</h1><p className={tw('mt-2 text-sm text-slate-500')}>Controla existencias y actualiza el stock disponible en la tienda.</p></div>
-      {canWriteInventory && <div className={tw(BARCODE_FEATURE_ENABLED ? 'grid grid-cols-2 gap-2 sm:flex' : 'flex')}>
-        {BARCODE_FEATURE_ENABLED && <button type="button" onClick={openScanner} className={tw(buttonClass, 'border border-[#ff7e5f] bg-white text-[#e06d43] hover:bg-orange-50')}><FaCamera /> Escanear <span className={tw('hidden sm:inline')}>código</span></button>}
-        <button type="button" onClick={() => setModalOpen(true)} className={tw(buttonClass, 'bg-[#ff7e5f] text-white shadow-sm hover:bg-[#e06d43]')}><FaPlus /> Nuevo producto</button>
+      <div className={tw('min-w-0')}><p className={tw('mb-1 text-sm font-semibold uppercase tracking-[.14em] text-[#e06d43]')}>Operación</p><h1 className={tw('text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl')}>Inventario</h1><p className={tw('mt-2 text-sm text-slate-500')}>Controla existencias y actualiza el stock disponible en la tienda.</p></div>
+      {canWriteInventory && <div className={tw(BARCODE_FEATURE_ENABLED ? 'grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto' : 'flex w-full sm:w-auto')}>
+        {BARCODE_FEATURE_ENABLED && <button type="button" onClick={openScanner} className={tw(buttonClass, 'w-full justify-center border border-[#ff7e5f] bg-white text-[#e06d43] hover:bg-orange-50 sm:w-auto')}><FaCamera /> Escanear <span className={tw('hidden sm:inline')}>código</span></button>}
+        <button type="button" onClick={() => setModalOpen(true)} className={tw(buttonClass, 'w-full justify-center bg-[#ff7e5f] text-white shadow-sm hover:bg-[#e06d43] sm:w-auto')}><FaPlus /> Nuevo producto</button>
       </div>}
     </header>
 
@@ -362,15 +362,66 @@ export default function Inventario() {
           </table>
         </div>
         <div className={tw('divide-y divide-slate-100 md:hidden')}>
-          {filtered.map((product) => <article key={product._id} className={tw('flex gap-3 p-4')}>
-            {isFullAdmin && <input type="checkbox" aria-label={`Seleccionar ${product.nombre}`} checked={selectedIds.includes(product._id)} onChange={() => toggleSelected(product._id)} className={tw('mt-1 h-4 w-4 shrink-0 accent-[#ff7e5f]')} />}
-            <img src={product.imagen} alt={product.nombre} className={tw('h-16 w-16 shrink-0 rounded-xl bg-slate-100 object-cover')} width="64" height="64" loading="lazy" decoding="async" />
-            <div className={tw('min-w-0 flex-1')}><div className={tw('flex items-start justify-between gap-2')}><div className={tw('min-w-0')}><h3 className={tw('truncate font-semibold text-slate-800')}>{product.nombre}</h3><p className={tw('text-xs text-slate-500')}>{product.categoria}</p><span className={tw('text-[10px] font-semibold', product.enCatalogo === false ? 'text-slate-500' : product.publicarEnTienda === false ? 'text-amber-700' : 'text-orange-700')}>{product.enCatalogo === false ? 'Solo inventario' : product.publicarEnTienda === false ? 'Borrador en catálogo' : 'Tienda virtual'}</span></div><span className={tw('shrink-0 rounded-full px-2.5 py-1 text-xs font-bold', product.stock <= 5 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800')}>{product.stock} uds.</span></div>
-              {BARCODE_FEATURE_ENABLED && canWriteInventory && <div className={tw('mt-2 flex gap-1')}><input aria-label={`Código de barras de ${product.nombre}`} maxLength={64} className={tw(inputClass, 'min-w-0 px-2 py-2 text-xs')} placeholder="Asignar código" value={barcodeValues[product._id] ?? product.codigoBarras ?? ''} onChange={(e) => setBarcodeValues((old) => ({ ...old, [product._id]: e.target.value }))} /><button type="button" onClick={() => saveBarcode(product)} className={tw('shrink-0 rounded-lg bg-slate-100 px-2 text-xs font-semibold text-slate-700')}>Guardar</button></div>}
-              <div className={tw('mt-3 flex items-center justify-between')}><span className={tw('text-xs text-slate-400')}>{new Date(product.fechaCreacion || product.createdAt).toLocaleDateString('es-CO')}</span>{canWriteInventory && <div className={tw('flex gap-2')}><button type="button" disabled={updatingId === product._id || product.stock <= 0} onClick={() => setStock(product, -1)} className={tw('h-10 w-10 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-40')} aria-label="Restar unidad"><FaMinus className={tw('mx-auto')} /></button><button type="button" disabled={updatingId === product._id} onClick={() => setStock(product, 1)} className={tw('h-10 w-10 rounded-lg bg-[#ff7e5f] text-white disabled:opacity-40')} aria-label="Sumar unidad"><FaPlus className={tw('mx-auto')} /></button><button type="button" onClick={() => { setManualTarget(product); setManualQuantity(1); setManualDirection('ingreso'); }} aria-label={`Ajustar cantidad de ${product.nombre}`} className={tw('h-10 w-10 rounded-lg border border-slate-200 text-slate-600')}><FaEdit className={tw('mx-auto')} /></button><button type="button" onClick={() => setDeleteTarget(product)} aria-label={`Retirar ${product.nombre}`} className={tw('h-10 w-10 rounded-lg border border-rose-200 text-rose-600')}><FaTrash className={tw('mx-auto')} /></button></div>}</div>
-            </div>
-          </article>)}
-        </div>      </>}
+          {filtered.map((product) => (
+            <article key={product._id} className={tw('flex flex-col gap-3 p-4')}>
+              <div className={tw('flex gap-3')}>
+                {isFullAdmin && (
+                  <input
+                    type="checkbox"
+                    aria-label={`Seleccionar ${product.nombre}`}
+                    checked={selectedIds.includes(product._id)}
+                    onChange={() => toggleSelected(product._id)}
+                    className={tw('mt-1 h-4 w-4 shrink-0 accent-[#ff7e5f]')}
+                  />
+                )}
+                <img
+                  src={product.imagen}
+                  alt={product.nombre}
+                  className={tw('h-14 w-14 shrink-0 rounded-xl bg-slate-100 object-cover')}
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className={tw('min-w-0 flex-1')}>
+                  <div className={tw('flex items-start justify-between gap-2')}>
+                    <h3 className={tw('text-sm font-semibold leading-snug text-slate-800 [overflow-wrap:anywhere]')}>{product.nombre}</h3>
+                    <span className={tw('shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold', product.stock <= 5 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800')}>{product.stock} uds.</span>
+                  </div>
+                  <p className={tw('mt-0.5 text-xs text-slate-500')}>{product.categoria}</p>
+                  <span className={tw('mt-1 inline-block text-[10px] font-semibold', product.enCatalogo === false ? 'text-slate-500' : product.publicarEnTienda === false ? 'text-amber-700' : 'text-orange-700')}>
+                    {product.enCatalogo === false ? 'Solo inventario' : product.publicarEnTienda === false ? 'Borrador en catálogo' : 'Tienda virtual'}
+                  </span>
+                </div>
+              </div>
+              {BARCODE_FEATURE_ENABLED && canWriteInventory && (
+                <div className={tw('flex gap-1')}>
+                  <input
+                    aria-label={`Código de barras de ${product.nombre}`}
+                    maxLength={64}
+                    className={tw(inputClass, 'min-w-0 flex-1 px-2 py-2 text-xs')}
+                    placeholder="Asignar código"
+                    value={barcodeValues[product._id] ?? product.codigoBarras ?? ''}
+                    onChange={(e) => setBarcodeValues((old) => ({ ...old, [product._id]: e.target.value }))}
+                  />
+                  <button type="button" onClick={() => saveBarcode(product)} className={tw('shrink-0 rounded-lg bg-slate-100 px-2 text-xs font-semibold text-slate-700')}>Guardar</button>
+                </div>
+              )}
+              <div className={tw('flex flex-wrap items-center justify-between gap-2')}>
+                <span className={tw('text-xs text-slate-400')}>{new Date(product.fechaCreacion || product.createdAt).toLocaleDateString('es-CO')}</span>
+                {canWriteInventory && (
+                  <div className={tw('ml-auto flex flex-wrap justify-end gap-1.5')}>
+                    <button type="button" disabled={updatingId === product._id || product.stock <= 0} onClick={() => setStock(product, -1)} className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 disabled:opacity-40')} aria-label="Restar unidad"><FaMinus size={12} /></button>
+                    <button type="button" disabled={updatingId === product._id} onClick={() => setStock(product, 1)} className={tw('flex h-9 w-9 items-center justify-center rounded-lg bg-[#ff7e5f] text-white disabled:opacity-40')} aria-label="Sumar unidad"><FaPlus size={12} /></button>
+                    <button type="button" onClick={() => { setManualTarget(product); setManualQuantity(1); setManualDirection('ingreso'); }} aria-label={`Ajustar cantidad de ${product.nombre}`} className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600')}><FaEdit size={12} /></button>
+                    <button type="button" onClick={() => setDeleteTarget(product)} aria-label={`Retirar ${product.nombre}`} className={tw('flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 text-rose-600')}><FaTrash size={12} /></button>
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </>}
     </div>
 
     {canWriteInventory && modalOpen && createPortal(<div className={tw('fixed inset-0 z-[2000] flex items-end justify-center bg-slate-950/55 p-0 backdrop-blur-sm sm:items-center sm:p-4')} onMouseDown={(event) => { if (event.target === event.currentTarget) setModalOpen(false); }}><form onSubmit={saveProduct} className={tw('max-h-[calc(100vh-1rem)] w-full max-w-2xl space-y-4 overflow-y-auto rounded-t-3xl bg-white p-5 shadow-2xl sm:max-h-[calc(100vh-2rem)] sm:rounded-3xl sm:p-7')}><div className={tw('flex items-start justify-between')}><div><p className={tw('text-sm font-semibold text-[#e06d43]')}>Nuevo registro</p><h2 className={tw('mt-1 text-2xl font-bold text-slate-800')}>Agregar al inventario</h2><p className={tw('mt-1 text-sm text-slate-500')}>Registra cualquier artículo y sus existencias.</p></div><button type="button" onClick={() => setModalOpen(false)} className={tw('rounded-full p-2 text-slate-500 hover:bg-slate-100')} aria-label="Cerrar"><FaTimes /></button></div>

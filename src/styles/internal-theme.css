@@ -553,11 +553,26 @@
 @media (max-width: 768px) {
   .dashboard-container {
     width: 100%;
+    max-width: 100%;
     min-width: 0;
   }
 
   .dashboard-container .header-admin {
-    padding-left: 4.5rem;
+    padding-left: 4.25rem;
+    padding-right: 0.85rem;
+  }
+
+  .dashboard-container .header-actions {
+    gap: 8px;
+  }
+
+  .dashboard-container .user-profile {
+    padding: 2px;
+  }
+
+  .dashboard-container .btn-guardar-estado {
+    width: 100%;
+    justify-content: center;
   }
 
   .client-area .mis-pedidos-container {
