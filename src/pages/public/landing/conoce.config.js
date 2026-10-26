@@ -5,7 +5,7 @@ export const conoceConfig = {
     eyebrow: 'CONOCE NUESTRO PRODUCTO',
     tituloManuscrito: 'Conoce',
     titulo: 'nuestro producto estrella',
-    subtitulo: 'Toca cada + y descubre qué ingredientes hacen única nuestra aromática frutal.',
+    subtitulo: 'Toca cada icono y descubre qué ingredientes hacen única nuestra aromática frutal.',
     imagenEscenario: '/img/conoce-escenario-1600.webp',
     imagenEscenarioSrcSet: '/img/conoce-escenario-800.webp 800w, /img/conoce-escenario-1600.webp 1600w',
     altImagen: 'Empaque de aromática frutal CDISFRUTA rodeado de sus ingredientes',
