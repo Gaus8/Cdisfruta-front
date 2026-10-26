@@ -213,10 +213,15 @@
   --panel-muted: #f8f9fa;
   color: var(--brand-ink);
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .client-area.userpage-container {
   background: var(--brand-cream);
+  overflow-x: hidden;
 }
 
 .client-area .mis-pedidos-container {
@@ -647,8 +652,11 @@
   position: absolute;
   top: calc(100% + .55rem);
   right: 0;
+  left: auto;
   z-index: 9999;
   width: min(18.5rem, calc(100vw - 1.5rem));
+  max-width: calc(100vw - 1.5rem);
+  box-sizing: border-box;
   overflow: hidden;
   border: 1px solid #f1e4dc;
   border-radius: 1.1rem;
@@ -809,6 +817,9 @@
   margin: 1.25rem auto 1.75rem;
   padding: 0 1rem;
   max-width: 1100px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .client-hub__eyebrow {
@@ -900,6 +911,7 @@
   flex-wrap: wrap;
   gap: .5rem;
   margin-top: 1.15rem;
+  width: 100%;
 }
 
 .client-hub__card-body > .client-hub__btn {
@@ -969,16 +981,72 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .client-header .logo .dot-shop {
+    font-size: 0.85em;
+  }
+
+  .client-account-menu {
+    position: fixed;
+    top: 4.35rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-width: none;
+  }
+
   .client-header .client-nav {
-    padding-left: .75rem;
-    padding-right: .75rem;
+    padding: .45rem .75rem .65rem;
     overflow-x: auto;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .client-header .client-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .client-nav__link {
     flex-shrink: 0;
+  }
+
+  .client-hub {
+    margin: 1rem auto 1.35rem;
+    padding: 0 .85rem;
+  }
+
+  .client-hub__card {
+    padding: 1rem;
+  }
+
+  .client-hub__actions {
+    flex-direction: column;
+  }
+
+  .client-hub__actions .client-hub__btn,
+  .client-hub__card-body > .client-hub__btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .client-catalog-heading {
+    padding: 0 .85rem;
+  }
+
+  .client-area .mis-pedidos-container {
+    margin: 16px auto;
+    padding: 14px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 640px) {
+  .client-header .client-nav {
+    padding-left: .75rem;
+    padding-right: .75rem;
   }
 }
 

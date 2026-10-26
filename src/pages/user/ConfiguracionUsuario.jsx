@@ -161,10 +161,10 @@ export default function ConfiguracionUsuario() {
     <div className={tw("userpage-container client-area")}>
       <HeaderDashboard />
 
-      <div className={tw(tw("content-wrapper"), "![justify-content:center]", "![padding:40px_20px]")} >
-        <div className={tw("![width:100%]", "![max-width:900px]")}>
+      <div className={tw(tw("content-wrapper"), "![justify-content:center]", "![padding:24px_12px]", "sm:![padding:40px_20px]")} >
+        <div className={tw("![width:100%]", "![max-width:900px]", "![min-width:0]")}>
 
-          <div className={tw("![background:var(--white)]", "![border-radius:24px]", "![border:1px_solid_#e2e8f0]", "![box-shadow:0_15px_30px_-5px_rgba(30,_41,_59,_0.08)]", "![overflow:hidden]")}>
+          <div className={tw("![background:var(--white)]", "![border-radius:20px]", "sm:![border-radius:24px]", "![border:1px_solid_#e2e8f0]", "![box-shadow:0_15px_30px_-5px_rgba(30,_41,_59,_0.08)]", "![overflow:hidden]", "![max-width:100%]")}>
 
             <HeaderPerfil
               nombre={nombre}
@@ -206,7 +206,7 @@ export default function ConfiguracionUsuario() {
               </button>
             </div>
 
-            <div className={tw("![padding:40px]")}>
+            <div className={tw("![padding:20px]", "sm:![padding:40px]")}>
               {mensaje && (
                 <div className={tw("![background:var(--tw-inline-ConfiguracionUsuario-7157-0)]", "![border:var(--tw-inline-ConfiguracionUsuario-7157-1)]", "![color:var(--tw-inline-ConfiguracionUsuario-7157-2)]", "![padding:14px_20px]", "![border-radius:12px]", "![margin-bottom:25px]", "![display:flex]", "![align-items:center]", "![gap:10px]", "![font-weight:500]")} style={{ "--tw-inline-ConfiguracionUsuario-7157-0": tipoMensaje === 'success' ? '#ecfdf5' : '#fee2e2', "--tw-inline-ConfiguracionUsuario-7157-1": `1px solid ${tipoMensaje === 'success' ? '#a7f3d0' : '#fecaca'}`, "--tw-inline-ConfiguracionUsuario-7157-2": tipoMensaje === 'success' ? '#065f46' : '#991b1b' }}>
                   <FaCheckCircle color={tipoMensaje === 'success' ? '#10b981' : '#ef4444'} size={18} /> {mensaje}
