@@ -54,6 +54,15 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  /** Aplica sesión ya confirmada (p. ej. tras login) sin esperar otro round-trip. */
+  const establishSession = useCallback((user) => {
+    if (!user) return;
+    attempt.current += 1;
+    setUserData(user);
+    setAuthenticated(true);
+    setLoading(false);
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       await apiAxios.post('/logout');
@@ -82,7 +91,7 @@ export function AuthProvider({ children }) {
 
   return createElement(
     AuthContext.Provider,
-    { value: { userData, loading, authenticated, verifyToken, logout } },
+    { value: { userData, loading, authenticated, verifyToken, establishSession, logout } },
     children
   );
 }

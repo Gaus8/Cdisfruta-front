@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginConGoogle } from '../../services/api/authService';
 import { useAuth } from '../../hooks/useAuth';
+import { homePathForRole } from '../../utils/roleHome.js';
 
 export default function LoginGoogle({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");
@@ -11,7 +12,7 @@ export default function LoginGoogle({ cerrarModal }) {
   const [buttonWidth, setButtonWidth] = useState(320);
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const { verifyToken } = useAuth();
+  const { verifyToken, establishSession } = useAuth();
 
   useEffect(() => {
     const element = containerRef.current;
@@ -39,22 +40,15 @@ export default function LoginGoogle({ cerrarModal }) {
       // sigue en authenticated=false hasta verificar. Sin esto, RutaProtegida
       // redirige de vuelta a /login y parece que "recarga y no entra".
       const tokenData = await verifyToken();
-      if (!tokenData?.valid && !tokenData?.user) {
+      const sessionUser = (tokenData?.valid && tokenData?.user) ? tokenData.user : (data?.user || null);
+      if (!sessionUser) {
         setRespuestaServer('Google confirmó la cuenta, pero la sesión no quedó activa. Inténtalo de nuevo.');
         return;
       }
 
+      establishSession(sessionUser);
       if (cerrarModal) cerrarModal();
-
-      const rolUsuario = tokenData?.user?.rol || data?.user?.rol || data?.rol;
-      const destination = rolUsuario === 'logistica'
-        ? '/admin/inventario'
-        : rolUsuario === 'catalogo'
-          ? '/admin/productos'
-          : rolUsuario === 'admin'
-            ? '/admin'
-            : '/cliente/tienda';
-      navigate(destination, { replace: true });
+      navigate(homePathForRole(sessionUser.rol), { replace: true });
     } catch (err) {
       setRespuestaServer(err.message);
     } finally {
