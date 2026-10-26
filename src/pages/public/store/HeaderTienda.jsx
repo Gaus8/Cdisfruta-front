@@ -1,13 +1,17 @@
 import { tw } from '../../../utils/tw.js';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt, FaWhatsapp } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaUserCircle, FaSignInAlt, FaUserPlus, FaUser, FaSignOutAlt, FaWhatsapp, FaThLarge } from "react-icons/fa";
 import CartModal from "../../../components/ui/CartModal.jsx";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { whatsappUrl } from "../../../utils/whatsapp.js";
+import { homePathForRole, isStaffRole } from "../../../utils/roleHome.js";
 
 export default function HeaderTienda() {
   const { authenticated, logout, userData } = useAuth();
+  const staff = isStaffRole(userData?.rol);
+  const signedInHome = staff ? homePathForRole(userData.rol) : '/cliente/tienda';
+  const profilePath = staff ? '/admin/perfil' : '/cliente/configuracion';
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [cartModalOpen, setCartModalOpen] = useState(false);
@@ -94,8 +98,7 @@ export default function HeaderTienda() {
         <div className={tw("header-content")}>
           <h1 
             className={tw(tw("logo"), "![cursor:pointer]")} 
-            onClick={() => navigate(authenticated ? '/cliente/tienda' : '/tienda')} 
-            
+            onClick={() => navigate(authenticated ? signedInHome : '/tienda')}
           >
             CDISFRUTA<span className={tw("dot-shop")}> SHOP</span>
           </h1>
@@ -146,9 +149,14 @@ export default function HeaderTienda() {
                   <ul className={tw("dropdown-list")}>
                     {authenticated ? (
                       <>
-                        <li onClick={() => { setDropdownOpen(false); navigate('/cliente/perfil'); }}>
+                        <li onClick={() => { setDropdownOpen(false); navigate(profilePath); }}>
                           <FaUser /> Mi Perfil
                         </li>
+                        {staff && (
+                          <li onClick={() => { setDropdownOpen(false); navigate(signedInHome); }}>
+                            <FaThLarge /> Ir al panel
+                          </li>
+                        )}
                         <li onClick={handleCerrarSesion}>
                           <FaSignOutAlt /> Cerrar Sesión
                         </li>

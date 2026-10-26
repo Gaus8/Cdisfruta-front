@@ -15,9 +15,12 @@ import LoginGoogle from './LoginGoogle';
 import { ResetPasswordModal } from './ResetPasswordModal';
 import AuthLayout from './AuthLayout';
 import { apiAxios } from '../../services/api/client';
+import { useAuth } from '../../hooks/useAuth';
+import { homePathForRole } from '../../utils/roleHome.js';
 
 export default function Login({ verifyToken }) {
   const navigate = useNavigate();
+  const { establishSession } = useAuth();
   const [respuestaServer, setRespuestaServer] = useState("");
   const [mensajeExpirado, setMensajeExpirado] = useState(() => sessionStorage.getItem('session_was_expired') === 'true'
     ? 'Tu sesión ha expirado por inactividad. Debes ingresar nuevamente.'
@@ -72,25 +75,16 @@ export default function Login({ verifyToken }) {
 
       setMensajeExpirado("");
 
-      // 2. Verificamos el token de inmediato para capturar los datos reales del usuario y su rol
+      // 2. Fijamos la sesión en AuthContext (evita carrera: navegar al panel sin user/rol)
+      //    y confirmamos con verificar-token cuando esté disponible.
+      let sessionUser = loginResponse?.user || null;
       if (verifyToken) {
         const tokenData = await verifyToken();
-        const rolUsuario = tokenData?.user?.rol || loginResponse?.user?.rol;
-
-        // 3. Redirección dinámica basada exactamente en el rol obtenido
-        if (['admin', 'logistica', 'catalogo'].includes(rolUsuario)) {
-          const destination = rolUsuario === 'logistica'
-            ? '/admin/inventario'
-            : rolUsuario === 'catalogo'
-              ? '/admin/productos'
-              : '/admin';
-          navigate(destination, { replace: true });
-        } else {
-          navigate("/cliente/tienda", { replace: true });
-        }
-      } else {
-        navigate("/cliente/tienda", { replace: true });
+        if (tokenData?.valid && tokenData?.user) sessionUser = tokenData.user;
       }
+      if (sessionUser) establishSession(sessionUser);
+
+      navigate(homePathForRole(sessionUser?.rol), { replace: true });
     } catch (err) {
       setRespuestaServer(err.message || 'Error al iniciar sesión');
     } finally {

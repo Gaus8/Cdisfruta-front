@@ -1,24 +1,30 @@
 export const tailwindClassMap = {
   "dashboard-container": [
     "[display:flex]",
-    "[height:100vh]",
-    "[width:100vw]",
+    "[height:100dvh]",
+    "[width:100%]",
+    "[max-width:100%]",
+    "[min-width:0]",
     "[overflow:hidden]"
   ],
   "dashboard-main-content": [
     "[flex:1]",
+    "[min-width:0]",
     "[display:flex]",
     "[flex-direction:column]",
     "[overflow:hidden]"
   ],
   "dashboard-view-port": [
     "[flex:1]",
+    "[min-width:0]",
+    "[overflow-x:hidden]",
     "[overflow-y:auto]",
-    "[padding:clamp(16px,_2vw,_28px)]",
+    "[padding:clamp(12px,_2vw,_28px)]",
     "[background-color:#f1f5f9]",
     "[font-family:inherit]",
     "[font-size:14px]",
-    "[line-height:1.5]"
+    "[line-height:1.5]",
+    "max-[480px]:[padding:12px]"
   ],
   "cover-editor": [
     "[width:100%]",
@@ -448,7 +454,10 @@ export const tailwindClassMap = {
     "[display:flex]",
     "[flex-wrap:wrap]",
     "[align-items:center]",
-    "[gap:10px]"
+    "[gap:10px]",
+    "[width:100%]",
+    "max-[600px]:[flex-direction:column]",
+    "max-[600px]:[align-items:stretch]"
   ],
   "admin-order-select": [
     "[padding:10px_12px]",
@@ -456,7 +465,10 @@ export const tailwindClassMap = {
     "[border:1px_solid_#ccc]",
     "[font-weight:600]",
     "[background:#fafafa]",
-    "[cursor:pointer]"
+    "[cursor:pointer]",
+    "[min-width:0]",
+    "[max-width:100%]",
+    "max-[600px]:[width:100%]"
   ],
   "btn-guardar-estado": [
     "[display:flex]",
@@ -617,37 +629,43 @@ export const tailwindClassMap = {
   ],
   "header-admin": [
     "[height:65px]",
+    "[min-height:65px]",
     "[background-color:#ffffff]",
     "[border-bottom:1px_solid_#e0e0e0]",
     "[display:flex]",
     "[align-items:center]",
     "[justify-content:flex-end]",
-    "[padding:0_2rem]",
-    "[position:sticky]",
-    "[top:0]",
+    "[padding:0_1.25rem]",
+    "[position:relative]",
     "[z-index:1000]",
-    "max-[600px]:[padding:0_1rem]"
+    "[flex-shrink:0]",
+    "[overflow:visible]",
+    "[box-sizing:border-box]",
+    "max-[768px]:[padding:0_0.85rem_0_4.25rem]",
+    "max-[400px]:[padding:0_0.65rem_0_3.85rem]"
   ],
   "header-actions": [
     "[display:flex]",
     "[align-items:center]",
-    "[gap:20px]",
-    "[gap:25px]",
-    "max-[768px]:[order:2]",
-    "max-[768px]:[gap:15px]",
-    "max-[400px]:[gap:10px]"
+    "[justify-content:flex-end]",
+    "[gap:12px]",
+    "[min-width:0]",
+    "[overflow:visible]",
+    "max-[768px]:[gap:8px]",
+    "max-[400px]:[gap:6px]"
   ],
   "dropdown-container": [
     "[position:relative]",
     "[display:flex]",
     "[align-items:center]",
-    "[overflow:visible]"
+    "[overflow:visible]",
+    "[flex-shrink:0]"
   ],
   "icon-wrapper": [
     "[position:relative]",
     "[cursor:pointer]",
-    "[width:42px]",
-    "[height:42px]",
+    "[width:40px]",
+    "[height:40px]",
     "[border-radius:50%]",
     "[border:1px_solid_#e1e4e8]",
     "[background:#fff]",
@@ -655,60 +673,64 @@ export const tailwindClassMap = {
     "[align-items:center]",
     "[justify-content:center]",
     "[transition:all_0.3s_ease]",
+    "[flex-shrink:0]",
+    "[box-sizing:border-box]",
     "[&:hover]:[background:#f8f9fa]",
     "[&:hover]:[border-color:var(--coral-main)]",
-    "[width:60px]",
-    "[height:60px]",
-    "[background:rgba(255,_255,_255,_0.9)]",
-    "[color:#111]",
-    "[box-shadow:0_4px_12px_rgba(0,_0,_0,_0.3)]",
-    "[transition:transform_0.2s_ease,_background_0.2s_ease]",
+    "[.card_&]:[width:60px]",
+    "[.card_&]:[height:60px]",
+    "[.card_&]:[background:rgba(255,_255,_255,_0.9)]",
+    "[.card_&]:[box-shadow:0_4px_12px_rgba(0,_0,_0,_0.3)]",
     "[.card:hover_&]:[transform:scale(1.1)]",
     "[.card:hover_&]:[background:#ffffff]"
   ],
   "icon-btn-large": [
-    "[font-size:20px]",
+    "[font-size:18px]",
     "[color:#555]",
     "[transition:all_0.3s_ease]",
     "[.icon-wrapper:hover_&]:[color:var(--coral-main)]",
-    "[.icon-wrapper:hover_&]:[transform:scale(1.1)]",
-    "[font-size:24px]",
+    "[.icon-wrapper:hover_&]:[transform:scale(1.08)]",
     "[&:hover]:[color:var(--cdisfruta-orange)]",
-    "[&:hover]:[transform:scale(1.1)]",
-    "[&.active]:[color:var(--coral-main)]",
-    "[&.active]:[transform:scale(1.1)]",
     "[&.active]:[color:var(--cdisfruta-orange)]"
   ],
   "notification-badge": [
     "[position:absolute]",
-    "[top:-4px]",
-    "[right:-4px]",
-    "[background-color:var(--coral-main)]",
+    "[top:-2px]",
+    "[right:-2px]",
+    "[min-width:18px]",
+    "[height:18px]",
+    "[display:inline-flex]",
+    "[align-items:center]",
+    "[justify-content:center]",
+    "[background-color:var(--cdisfruta-orange,_#f97316)]",
     "[color:white]",
     "[font-size:10px]",
-    "[padding:2px_6px]",
-    "[border-radius:10px]",
+    "[line-height:1]",
+    "[padding:0_5px]",
+    "[border-radius:999px]",
     "[font-weight:bold]",
-    "[right:-6px]",
-    "[background-color:var(--cdisfruta-orange)]",
-    "[padding:2px_5px]"
+    "[box-sizing:border-box]",
+    "[z-index:2]"
   ],
   "user-profile": [
     "[display:flex]",
     "[align-items:center]",
-    "[gap:10px]",
+    "[gap:8px]",
     "[font-weight:500]",
     "[cursor:pointer]",
-    "[padding:6px_12px]",
+    "[padding:4px_8px]",
     "[border-radius:30px]",
     "[border:1px_solid_transparent]",
     "[transition:all_0.3s]",
+    "[flex-shrink:0]",
+    "[max-width:100%]",
     "[&:hover]:[background:#f8f9fa]",
     "[&:hover]:[border-color:#e1e4e8]",
     "[&:hover]:[color:var(--coral-main)]",
     "[color:var(--cdisfruta-blue)]",
-    "[transition:color_0.3s]",
-    "[&:hover]:[color:var(--cdisfruta-orange)]"
+    "[&:hover]:[color:var(--cdisfruta-orange)]",
+    "max-[600px]:[padding:2px]",
+    "max-[600px]:[gap:0]"
   ],
   "dropdown-menu": [
     "[position:absolute]",
@@ -886,10 +908,12 @@ export const tailwindClassMap = {
   "home-admin-content": [
     "[padding:20px]",
     "[width:100%]",
-    "[max-width:100vw]",
+    "[max-width:100%]",
+    "[min-width:0]",
     "[overflow-x:hidden]",
+    "[box-sizing:border-box]",
     "[animation:fadeIn_0.5s_ease]",
-    "max-[480px]:[padding:15px]"
+    "max-[480px]:[padding:12px]"
   ],
   "home-header": [
     "[&_h1]:[color:#333]",
@@ -1139,19 +1163,22 @@ export const tailwindClassMap = {
   "mobile-menu-btn": [
     "[display:none]",
     "[position:fixed]",
-    "[top:15px]",
-    "[left:15px]",
+    "[top:12px]",
+    "[left:12px]",
     "[z-index:1100]",
     "[background:#ff7e5f]",
     "[color:white]",
     "[border:none]",
-    "[padding:12px]",
-    "[border-radius:8px]",
-    "[font-size:1.2rem]",
+    "[width:40px]",
+    "[height:40px]",
+    "[padding:0]",
+    "[border-radius:999px]",
+    "[font-size:1.05rem]",
     "[cursor:pointer]",
     "[box-shadow:0_4px_10px_rgba(0,_0,_0,_0.2)]",
     "[align-items:center]",
     "[justify-content:center]",
+    "[box-sizing:border-box]",
     "max-[768px]:[display:flex]"
   ],
   "sidebar-overlay": [
@@ -2160,11 +2187,16 @@ export const tailwindClassMap = {
   ],
   "products-grid": [
     "[display:grid]",
-    "[grid-template-columns:repeat(auto-fill,_minmax(260px,_1fr))]",
-    "[gap:25px]",
-    "[grid-template-columns:repeat(auto-fill,_minmax(280px,_1fr))]",
-    "[gap:24px]",
-    "[padding:20px_0]"
+    "[grid-template-columns:repeat(auto-fill,_minmax(min(100%,_240px),_1fr))]",
+    "[gap:16px]",
+    "[width:100%]",
+    "[min-width:0]",
+    "[padding:12px_0]",
+    "sm:[grid-template-columns:repeat(auto-fill,_minmax(260px,_1fr))]",
+    "sm:[gap:20px]",
+    "md:[grid-template-columns:repeat(auto-fill,_minmax(280px,_1fr))]",
+    "md:[gap:24px]",
+    "md:[padding:20px_0]"
   ],
   "product-card": [
     "[background:#ffffff]",

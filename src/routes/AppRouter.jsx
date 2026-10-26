@@ -9,6 +9,7 @@ import { lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { RutaProtegida } from "../pages/auth/RutaProtegida";
 import { hasPermission } from "../utils/permissions.js";
+import { homePathForRole, isStaffRole, STAFF_ROLES } from "../utils/roleHome.js";
 
 import MainPage from '../pages/public/landing/MainPage';
 
@@ -115,6 +116,11 @@ function LayoutUsuario() {
     );
   }
 
+  // El personal no debe quedarse en el área /cliente (perfil, tienda hub, etc.)
+  if (authenticated && isStaffRole(userData?.rol)) {
+    return <Navigate to={homePathForRole(userData.rol)} replace />;
+  }
+
   return (
     <RutaProtegida 
       authenticated={authenticated} 
@@ -142,7 +148,7 @@ function LayoutAdmin() {
       authenticated={authenticated} 
       loading={loading} 
       user={userData} 
-      allowedRoles={['admin', 'logistica', 'catalogo']}
+      allowedRoles={STAFF_ROLES}
       redirectTo="/login"
     />
   );
@@ -152,12 +158,7 @@ function AdminModule({ permission, children }) {
   const { userData, loading } = useAuth();
   if (loading) return <div className={tw('flex min-h-72 items-center justify-center text-slate-500')}>Verificando permisos…</div>;
   if (hasPermission(userData, permission)) return children;
-  const ownModule = hasPermission(userData, 'inventory:read') && userData?.rol === 'logistica'
-    ? '/admin/inventario'
-    : hasPermission(userData, 'catalog:read') && userData?.rol === 'catalogo'
-      ? '/admin/productos'
-      : '/';
-  return <Navigate to={ownModule} replace />;
+  return <Navigate to={homePathForRole(userData?.rol)} replace />;
 }
 
 // Definición de las Rutas de la Aplicación

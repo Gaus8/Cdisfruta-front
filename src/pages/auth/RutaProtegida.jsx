@@ -1,5 +1,6 @@
 import { tw } from '../../utils/tw.js';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { homePathForRole } from '../../utils/roleHome.js';
 
 export const RutaProtegida = ({ 
   authenticated, 
@@ -25,9 +26,9 @@ export const RutaProtegida = ({
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // 3. Validación de rol: Redirige al cliente si intenta acceder a rutas administrativas sin rol de admin
+  // 3. Validación de rol: sin permiso de panel, vuelve al inicio de ese usuario (cliente → hub; staff → su módulo)
   if ((requiredRole && user?.rol !== requiredRole) || (allowedRoles && !allowedRoles.includes(user?.rol))) {
-    return <Navigate to="/cliente/tienda" replace />;
+    return <Navigate to={homePathForRole(user?.rol)} replace />;
   }
 
   // 4. Renderizar rutas protegidas hijas
