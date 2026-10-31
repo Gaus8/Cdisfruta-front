@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { tw } from '../../../utils/tw.js';
-import Videos from './Videos';
 import HeroCarousel from './Carrusel';
 import Header from './Header';
-import HistorySection from './HistorySection';
-import MissionVision from './MissionVision';
-import KnowSection from './KnowSection';
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { MdOutlineMail } from "react-icons/md";
+
+const KnowSection = lazy(() => import('./KnowSection'));
+const HistorySection = lazy(() => import('./HistorySection'));
+const MissionVision = lazy(() => import('./MissionVision'));
+const Videos = lazy(() => import('./Videos'));
 
 // Contenido editorial de Historia. Esta sección es estática y no está conectada al panel administrativo.
 // Los textos y distintivos visuales de esta configuración se pueden editar aquí sin tocar el panel.
@@ -36,6 +38,10 @@ const historyContent = {
   closingNote: 'Más que un snack... es naturaleza en cada bocado',
 };
 
+function SectionFallback({ minHeight = '20rem' }) {
+  return <div className={tw('w-full bg-[#FAEFE6]')} style={{ minHeight }} aria-hidden="true" />;
+}
+
 function MainPage() {
   return (
     <div className={tw("main-page-wrapper", "theme-v2")}>
@@ -49,15 +55,23 @@ function MainPage() {
       <main id="contenido-principal">
       <HeroCarousel />
 
-      <KnowSection />
+      <Suspense fallback={<SectionFallback minHeight="28rem" />}>
+        <KnowSection />
+      </Suspense>
 
-      <HistorySection content={historyContent} />
+      <Suspense fallback={<SectionFallback minHeight="32rem" />}>
+        <HistorySection content={historyContent} />
+      </Suspense>
  
-      <MissionVision />
+      <Suspense fallback={<SectionFallback minHeight="36rem" />}>
+        <MissionVision />
+      </Suspense>
  
       {/* ── GALERÍA / VIDEOS ── */}
       <section className={tw("media-section", "scroll-mt-24")} id="videos">
-        <Videos />
+        <Suspense fallback={<SectionFallback minHeight="24rem" />}>
+          <Videos />
+        </Suspense>
       </section>
       </main>
  

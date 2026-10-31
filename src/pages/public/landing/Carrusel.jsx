@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { URL_SERVER } from '../../../services/api/client.js';
+import { cloudinaryUrl } from '../../../utils/cloudinaryUrl.js';
 import HeroCarousel3D from './HeroCarousel3D';
 
 const isBannerActive = (banner) => banner.activo !== false && banner.active !== false && banner.estado !== 'inactivo';
@@ -52,6 +53,25 @@ export default function Carrusel() {
       window.removeEventListener('focus', refresh);
     };
   }, [loadBanners]);
+
+  // Precarga el LCP real (Cloudinary o local) en el tamaño móvil del hero.
+  useEffect(() => {
+    const first = banners[0]?.img;
+    if (!first) return undefined;
+    const href = cloudinaryUrl(first, { width: 480 }) || first;
+    let link = document.querySelector('link[data-lcp-hero]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.setAttribute('data-lcp-hero', '1');
+      document.head.appendChild(link);
+    }
+    if (link.href !== new URL(href, window.location.origin).href) {
+      link.href = href;
+    }
+    return undefined;
+  }, [banners]);
 
   return <HeroCarousel3D
     banners={banners}

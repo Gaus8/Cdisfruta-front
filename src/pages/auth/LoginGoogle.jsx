@@ -1,12 +1,14 @@
 import { tw } from '../../utils/tw.js';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginConGoogle } from '../../services/api/authService';
 import { useAuth } from '../../hooks/useAuth';
 import { homePathForRole } from '../../utils/roleHome.js';
 
-export default function LoginGoogle({ cerrarModal }) {
+const GOOGLE_CLIENT_ID = '291876279012-gsnvnoi8b3v6ja2odjl5mdvvd6rjd3d3.apps.googleusercontent.com';
+
+function LoginGoogleButton({ cerrarModal }) {
   const [respuestaServer, setRespuestaServer] = useState("");
   const [loading, setLoading] = useState(false);
   const [buttonWidth, setButtonWidth] = useState(320);
@@ -78,5 +80,14 @@ export default function LoginGoogle({ cerrarModal }) {
         </p>
       )}
     </div>
+  );
+}
+
+/** Provider solo aquí: evita cargar gsi/client en la landing y el resto del sitio. */
+export default function LoginGoogle({ cerrarModal }) {
+  return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} locale="es">
+      <LoginGoogleButton cerrarModal={cerrarModal} />
+    </GoogleOAuthProvider>
   );
 }

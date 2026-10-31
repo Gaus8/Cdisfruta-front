@@ -95,12 +95,12 @@ export default function MissionVision() {
               style={{ '--active-place-blob': `url(#mission-vision-${ACTIVE_BLOB})` }}
               src="/img/ubate-iglesia.webp"
               alt="Iglesia y paisaje de Ubaté, Cundinamarca"
-              width="1024"
-              height="768"
+              width="800"
+              height="600"
               loading="lazy"
               onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
             />
-            <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.webp" alt="" aria-hidden="true" width="900" height="900" decoding="async" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
+            <img className="mission-vision__fruit-art" src="/img/frutas-decorativas.webp" alt="" aria-hidden="true" width="700" height="563" decoding="async" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
             <button
               className="mission-vision__fact-trigger"
               type="button"

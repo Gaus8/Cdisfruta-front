@@ -90,7 +90,9 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
   const spacing = screenWidth < 640 ? Math.min(126, screenWidth * 0.35) : screenWidth < 1024 ? 155 : Math.min(190, screenWidth / 6);
   const cardWidth = screenWidth < 640 ? 'min(66vw, 232px)' : 'clamp(210px, 24vw, 292px)';
   const transitionTime = reducedMotion ? '0ms' : '500ms';
-  const getImage = (banner, width = 600) =>
+  const centerWidth = screenWidth < 640 ? 480 : screenWidth < 1024 ? 640 : 720;
+  const sideWidth = screenWidth < 640 ? 280 : screenWidth < 1024 ? 360 : 420;
+  const getImage = (banner, width = centerWidth) =>
     cloudinaryUrl(banner.img || BRAND_PLACEHOLDER, { width }) || BRAND_PLACEHOLDER;
 
   return <section
@@ -144,7 +146,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
           }} onClick={() => { if (!isCenter) setActiveIndex(index); }}>
             <div className={tw('relative aspect-[3/4] overflow-hidden rounded-[28px] border border-white/70 bg-[#f2dfd1] shadow-[0_18px_48px_rgba(84,48,25,.2)] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_28px_60px_rgba(195,67,31,.3)] motion-reduce:transition-none', isCenter && 'shadow-[0_24px_58px_rgba(195,67,31,.28)]')}>
               <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={`Mostrar banner: ${banner.titulo}`} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
-                <img src={getImage(banner, isCenter ? 720 : 420)} alt={banner.titulo || 'Banner CDISFRUTA'} width="600" height="800" decoding="async" loading={isCenter && index === 0 ? 'eager' : 'lazy'} fetchPriority={isCenter && index === 0 ? 'high' : 'low'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
+                <img src={getImage(banner, isCenter ? centerWidth : sideWidth)} alt={banner.titulo || 'Banner CDISFRUTA'} width="600" height="800" decoding="async" loading={isCenter ? 'eager' : 'lazy'} fetchPriority={isCenter ? 'high' : 'low'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
               </button>
               <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-2 pt-16 text-white sm:px-5 sm:pb-3 sm:pt-16')}>
                 {isCenter && <>
@@ -166,7 +168,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     {showDetails && createPortal(<div className={tw('fixed inset-0 z-[2500] flex items-end justify-center bg-slate-950/55 p-0 backdrop-blur-sm sm:items-center sm:p-4')} onMouseDown={(event) => { if (event.target === event.currentTarget) setShowDetails(false); }}>
       <section role="dialog" aria-modal="true" aria-labelledby="hero-banner-details-title" className={tw('relative w-full max-w-xl overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl')}>
         <button type="button" aria-label="Cerrar información" onClick={() => setShowDetails(false)} className={tw('absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full bg-white/90 text-slate-700 shadow-sm hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-[#E8603C]')}><FaTimes /></button>
-        <img src={getImage(current, 960)} alt={current.titulo || 'CDISFRUTA'} width="960" height="256" loading="lazy" decoding="async" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} className={tw('h-52 w-full object-cover sm:h-64')} />
+        <img src={getImage(current, screenWidth < 640 ? 640 : 960)} alt={current.titulo || 'CDISFRUTA'} width="960" height="256" loading="lazy" decoding="async" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} className={tw('h-52 w-full object-cover sm:h-64')} />
         <div className={tw('space-y-3 p-5 sm:p-7')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#E8603C]')}>{current.etiqueta || current.eyebrow}</p><h2 id="hero-banner-details-title" className={tw('text-2xl font-extrabold tracking-[-.02em] text-[#2D1B0A]')}>{current.titulo}</h2><p className={tw('max-h-48 overflow-y-auto whitespace-pre-line text-sm leading-6 text-[#5C4033]')} style={{ fontFamily: 'var(--font-mono)' }}>{current.detalle || current.desc}</p><p className={tw('inline-flex rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-[#5C4033]')}>{current.tag || current.etiqueta}</p><div><button type="button" onClick={() => { setShowDetails(false); navigate('/tienda'); }} className={tw('min-h-11 rounded-full bg-[#E8603C] px-5 text-sm font-bold text-white transition hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>Ver en la tienda</button></div></div>
       </section>
     </div>, document.body)}
