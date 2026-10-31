@@ -271,8 +271,8 @@ export default function KnowSection() {
     <>
     <section ref={sectionRef} id="conoce" className={`know-section${visible ? ' is-visible' : ''}`} aria-labelledby="know-title">
       <div className="know-stage__foliage" aria-hidden="true">
-        <img className="know-stage__foliage-image know-stage__foliage-image--back" src="/img/conoce-marco-hojas.png" alt="" width="1792" height="878" loading="lazy" decoding="async" />
-        <img className="know-stage__foliage-image know-stage__foliage-image--front" src="/img/conoce-marco-hojas.png" alt="" width="1792" height="878" loading="lazy" decoding="async" />
+        <img className="know-stage__foliage-image know-stage__foliage-image--back" src="/img/conoce-marco-hojas.webp" alt="" width="1792" height="878" loading="lazy" decoding="async" />
+        <img className="know-stage__foliage-image know-stage__foliage-image--front" src="/img/conoce-marco-hojas.webp" alt="" width="1792" height="878" loading="lazy" decoding="async" />
       </div>
       <div className="know-section__inner">
         <header className="know-section__heading">

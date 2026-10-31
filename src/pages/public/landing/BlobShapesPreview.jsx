@@ -40,8 +40,8 @@ export default function BlobShapesPreview() {
       <section className="blob-preview__selected" aria-label="Vista ampliada de la forma seleccionada">
         <div className="blob-preview__selected-heading"><strong>Vista ampliada · {selected}</strong><span>Ancho de referencia: {width}px</span></div>
         <div className="blob-preview__selected-stage" style={{ '--selected-width': `${width}px`, '--preview-clip': `url(#preview-${selected})` }}>
-          <div className={`blob-preview__photo${showGrid ? ' has-grid' : ''}`}><img src="/img/ubate-iglesia.png" alt="Iglesia de Ubaté" /></div>
-          <img className="blob-preview__fruit" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" />
+          <div className={`blob-preview__photo${showGrid ? ' has-grid' : ''}`}><img src="/img/ubate-iglesia.webp" alt="Iglesia de Ubaté" /></div>
+          <img className="blob-preview__fruit" src="/img/frutas-decorativas.webp" alt="" aria-hidden="true" />
         </div>
       </section>
 
@@ -57,9 +57,9 @@ export default function BlobShapesPreview() {
               <div className="blob-preview__stage-wrap">
                 <div className="blob-preview__stage" style={{ '--stage-width': `${Math.min(width, 480)}px`, '--preview-clip': `url(#preview-${name})` }}>
                   <div className={`blob-preview__photo${showGrid ? ' has-grid' : ''}`}>
-                    <img src="/img/ubate-iglesia.png" alt="Iglesia de Ubaté" />
+                    <img src="/img/ubate-iglesia.webp" alt="Iglesia de Ubaté" />
                   </div>
-                  <img className="blob-preview__fruit" src="/img/frutas-decorativas.png" alt="" aria-hidden="true" />
+                  <img className="blob-preview__fruit" src="/img/frutas-decorativas.webp" alt="" aria-hidden="true" />
                 </div>
               </div>
               <button type="button" className="blob-preview__use" onClick={() => chooseShape(name)}>{selected === name ? 'Seleccionada' : 'Usar esta forma'}</button>

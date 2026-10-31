@@ -3103,10 +3103,10 @@ export const tailwindClassMap = {
     "[.feature-card:hover_&]:[color:#fff]"
   ],
   "media-section": [
-    "[padding:5rem]",
+    "[padding:4rem_clamp(1rem,_4vw,_5rem)]",
     "[background:var(--brand-cream)]",
-    "max-[1024px]:[padding:4rem_3rem]",
-    "max-[768px]:[padding:3rem_1.5rem]"
+    "max-[1024px]:[padding:3.25rem_clamp(1rem,_3vw,_3rem)]",
+    "max-[768px]:[padding:2.5rem_0.85rem]"
   ],
   "media-header": [
     "[margin-bottom:2.5rem]"
