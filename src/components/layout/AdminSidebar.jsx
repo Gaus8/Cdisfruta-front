@@ -7,8 +7,10 @@ import { URL_SERVER } from "../../services/api/client.js";
 import ConfirmModal from '../ui/ConfirmModal';
 import { useAuth } from '../../hooks/useAuth';
 import { hasPermission } from '../../utils/permissions.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Sidebar() {
+  const { t } = useTranslation(['admin', 'common']);
   const navigate = useNavigate();
   const { userData } = useAuth();
   const role = userData?.rol;
@@ -28,11 +30,11 @@ export default function Sidebar() {
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const can = (permission) => hasPermission(userData, permission);
-  const panelTitle = role === 'admin' ? 'Panel Admin' : role === 'logistica' ? 'Panel Logística' : role === 'catalogo' ? 'Panel Catálogo' : 'Panel';
+  const panelTitle = role === 'admin' ? t('panel.admin', { ns: 'admin' }) : role === 'logistica' ? t('panel.logistics', { ns: 'admin' }) : role === 'catalogo' ? t('panel.catalog', { ns: 'admin' }) : t('panel.default', { ns: 'admin' });
 
   return (
     <>
-      <button className={tw("mobile-menu-btn")} onClick={toggleSidebar}>
+      <button className={tw("mobile-menu-btn")} onClick={toggleSidebar} aria-label={isOpen ? t('menu.close', { ns: 'admin' }) : t('menu.open', { ns: 'admin' })} aria-expanded={isOpen}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
@@ -44,67 +46,67 @@ export default function Sidebar() {
         </div>
         <nav className={tw("sidebar-nav")}>
           {can('dashboard:read') && (
-            <Link title="Inicio" to="/admin" onClick={() => setIsOpen(false)}>
-              <FaHome /> <span>Inicio</span>
+            <Link title={t('navigation.home', { ns: 'admin' })} to="/admin" onClick={() => setIsOpen(false)}>
+              <FaHome /> <span>{t('navigation.home', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('catalog:read') && (
-            <Link title="Catálogo" to="/admin/productos" onClick={() => setIsOpen(false)}>
-              <FaStore /> <span>Catálogo</span>
+            <Link title={t('navigation.catalog', { ns: 'admin' })} to="/admin/productos" onClick={() => setIsOpen(false)}>
+              <FaStore /> <span>{t('navigation.catalog', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('inventory:read') && (
-            <Link title="Inventario" to="/admin/inventario" onClick={() => setIsOpen(false)}>
-              <FaBoxes /> <span>Inventario</span>
+            <Link title={t('navigation.inventory', { ns: 'admin' })} to="/admin/inventario" onClick={() => setIsOpen(false)}>
+              <FaBoxes /> <span>{t('navigation.inventory', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('orders:read') && (
-            <Link title="Pedidos" to="/admin/pedidos" onClick={() => setIsOpen(false)}>
-              <FaClipboardList /> <span>Pedidos</span>
+            <Link title={t('navigation.orders', { ns: 'admin' })} to="/admin/pedidos" onClick={() => setIsOpen(false)}>
+              <FaClipboardList /> <span>{t('navigation.orders', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('users:read') && (
-            <Link title="Usuarios" to="/admin/usuarios" onClick={() => setIsOpen(false)}>
-              <FaUsers /> <span>Usuarios</span>
+            <Link title={t('navigation.users', { ns: 'admin' })} to="/admin/usuarios" onClick={() => setIsOpen(false)}>
+              <FaUsers /> <span>{t('navigation.users', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('analytics:read') && (
-            <Link title="Analítica de productos" to="/admin/analitica-productos" onClick={() => setIsOpen(false)}>
-              <FaChartBar /> <span>Analítica de productos</span>
+            <Link title={t('navigation.analytics', { ns: 'admin' })} to="/admin/analitica-productos" onClick={() => setIsOpen(false)}>
+              <FaChartBar /> <span>{t('navigation.analytics', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('reports:read') && (
-            <Link title="Reportes" to="/admin/reportes" onClick={() => setIsOpen(false)}>
-              <FaChartLine /> <span>Reportes</span>
+            <Link title={t('navigation.reports', { ns: 'admin' })} to="/admin/reportes" onClick={() => setIsOpen(false)}>
+              <FaChartLine /> <span>{t('navigation.reports', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('landing:write') && (
-            <Link title="Diseño de portada" to="/admin/diseno-portada" onClick={() => setIsOpen(false)}>
-              <FaPaintBrush /> <span>Diseño de portada</span>
+            <Link title={t('navigation.landingDesign', { ns: 'admin' })} to="/admin/diseno-portada" onClick={() => setIsOpen(false)}>
+              <FaPaintBrush /> <span>{t('navigation.landingDesign', { ns: 'admin' })}</span>
             </Link>
           )}
 
           {can('settings:write') && (
-            <Link title="Configuración" to="/admin/config" onClick={() => setIsOpen(false)}>
-              <FaCog /> <span>Configuración</span>
+            <Link title={t('navigation.settings', { ns: 'admin' })} to="/admin/config" onClick={() => setIsOpen(false)}>
+              <FaCog /> <span>{t('navigation.settings', { ns: 'admin' })}</span>
             </Link>
           )}
         </nav>
         <div className={tw("sidebar-footer")}>
           <button className={tw("btn-logout")} onClick={() => setShowLogoutModal(true)}>
-            <span>Cerrar Sesión</span>
+            <span>{t('actions.logout', { ns: 'common' })}</span>
           </button>
         </div>
       </aside>
 
-      <ConfirmModal open={showLogoutModal} title="¿Cerrar sesión?" description="¿Estás seguro de que deseas salir de la administración de CDISFRUTA?" confirmLabel="Sí, cerrar sesión" onCancel={() => setShowLogoutModal(false)} onConfirm={handleLogout} />
+      <ConfirmModal open={showLogoutModal} title={t('logoutTitle', { ns: 'admin' })} description={t('logoutDescription', { ns: 'admin' })} confirmLabel={t('confirmLogout', { ns: 'admin' })} onCancel={() => setShowLogoutModal(false)} onConfirm={handleLogout} />
     </>
   );
 }

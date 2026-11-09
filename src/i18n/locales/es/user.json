@@ -1,0 +1,20 @@
+{
+  "account": "Mi cuenta",
+  "catalog": "Catálogo",
+  "orders": "Pedidos",
+  "addresses": "Direcciones",
+  "profile": "Perfil",
+  "security": "Seguridad",
+  "settings": "Configuración",
+  "search": "Buscar en tu catálogo...",
+  "logoutTitle": "¿Cerrar sesión?",
+  "logoutDescription": "¿Estás seguro de que deseas salir de tu cuenta en CDISFRUTA?",
+  "confirmLogout": "Sí, cerrar sesión",
+  "changeAvatar": "Cambiar avatar",
+  "customer": "Cliente",
+  "profileSummary": "Perfil, direcciones y seguridad",
+  "guestPrompt": "Accede para comprar más rápido",
+  "signIn": "Iniciar sesión",
+  "register": "Crear cuenta",
+  "accountNavigation": "Navegación de tu cuenta"
+}

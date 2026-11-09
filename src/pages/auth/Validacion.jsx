@@ -4,8 +4,10 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import { URL_SERVER } from '../../services/api/client';
 import AuthBackground from './AuthBackground';
+import { useTranslation } from 'react-i18next';
 
 function Validacion() {
+  const { t } = useTranslation('auth');
   const [codigo, setCodigo] = useState(new Array(6).fill(""));
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -75,8 +77,8 @@ function Validacion() {
       <AuthBackground />
       <form className={tw("form-container-validacion", "relative z-10")} onSubmit={handleVerify}>
         <img className={tw("logo-empresa-validacion")} src="/img/logo_siecu.webp" alt="Logo CDISFRUTA" width="160" height="160" decoding="async" />
-        <h3>Verificación de Cuenta</h3>
-        <p>Ingresa el código enviado a tu correo.</p>
+        <h3>{t('verificationTitle')}</h3>
+        <p>{t('verificationSubtitle')}</p>
 
         <div className={tw("otp-container")}>
           {codigo.map((data, index) => (
@@ -105,7 +107,7 @@ function Validacion() {
         </button>
 
         <div className={tw("footer-links")}>
-          <a href="/login">Volver al Inicio de Sesión</a>
+          <a href="/login">{t('backToLogin')}</a>
         </div>
       </form>
     </div>

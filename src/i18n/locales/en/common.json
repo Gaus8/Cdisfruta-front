@@ -1,0 +1,35 @@
+{
+  "language": {
+    "select": "Select language",
+    "spanish": "Spanish",
+    "english": "English",
+    "active": "Current language: {{language}}"
+  },
+  "navigation": {
+    "home": "Home",
+    "know": "Discover",
+    "history": "Our story",
+    "videos": "Videos",
+    "contact": "Contact",
+    "login": "Sign in",
+    "shop": "Shop",
+    "whatsapp": "Message us on WhatsApp",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "main": "Main navigation"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "search": "Search",
+    "loading": "Loading…",
+    "logout": "Sign out",
+    "account": "My account",
+    "profile": "My profile",
+    "editProfile": "Edit profile",
+    "goToPanel": "Open dashboard"
+  },
+  "brand": { "tagline": "Dehydrated fruit · Ubaté" },
+  "meta": { "title": "CDISFRUTA | Dehydrated fruit and fruit infusions" }
+}

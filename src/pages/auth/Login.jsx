@@ -17,8 +17,10 @@ import AuthLayout from './AuthLayout';
 import { apiAxios } from '../../services/api/client';
 import { useAuth } from '../../hooks/useAuth';
 import { homePathForRole } from '../../utils/roleHome.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Login({ verifyToken }) {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const { establishSession } = useAuth();
   const [respuestaServer, setRespuestaServer] = useState("");
@@ -110,8 +112,8 @@ export default function Login({ verifyToken }) {
           </button>
 
           <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="Logo CDISFRUTA" width="160" height="160" decoding="async" />
-          <h3>Inicio de Sesión</h3>
-          <p className={tw("auth-login-subtitle")}>Bienvenido, ingresa tus datos para continuar.</p>
+          <h3>{t('loginTitle')}</h3>
+          <p className={tw("auth-login-subtitle")}>{t('loginSubtitle')}</p>
 
           {mensajeExpirado && (
             <div
@@ -126,7 +128,7 @@ export default function Login({ verifyToken }) {
             <IoMailOutline className={tw("icon-react")} />
             <input
               type="email"
-              placeholder="Ingrese su email"
+              placeholder={t('emailPlaceholder')}
               name="email"
               value={data.email}
               onChange={handleChange}
@@ -139,7 +141,7 @@ export default function Login({ verifyToken }) {
             <IoLockClosedOutline className={tw("icon-react")} />
             <input
               type={mostrarPassword ? "text" : "password"}
-              placeholder="Ingrese su contraseña"
+              placeholder={t('passwordPlaceholder')}
               name="password"
               value={data.password}
               onChange={handleChange}
@@ -167,11 +169,11 @@ export default function Login({ verifyToken }) {
             {loading ? (
               <span className={tw("![display:flex]", "![align-items:center]", "![justify-content:center]", "![gap:8px]")}>
                 <span className={tw("spinner-css")}></span>
-                <span>Iniciando Sesión...</span>
+                <span>{t('signingIn')}</span>
               </span>
             ) : (
               <>
-                <span>Iniciar Sesión</span>
+                <span>{t('signIn')}</span>
                 <IoArrowForwardOutline className={tw("icon-btn")} />
               </>
             )}
@@ -185,7 +187,7 @@ export default function Login({ verifyToken }) {
             onClick={() => setIsResetOpen(true)}
             
           >
-            ¿Olvidaste tu contraseña?
+            {t('forgotPassword')}
           </button>
 
           <span
@@ -193,7 +195,7 @@ export default function Login({ verifyToken }) {
             onClick={() => !loading && navigate('/registro')}
             style={{ "--tw-inline-Login-6355-0": loading ? 'not-allowed' : 'pointer' }}
           >
-            ¿No tienes cuenta? Regístrate aquí
+            {t('noAccount')}
           </span>
         </form>
       </AuthLayout>

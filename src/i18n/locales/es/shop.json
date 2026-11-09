@@ -1,0 +1,11 @@
+{
+  "search": { "placeholder": "Buscar snacks saludables...", "aria": "Buscar productos" },
+  "cart": { "aria": "Carrito", "products": "{{count}} productos" },
+  "account": { "menu": "Menú de usuario", "welcome": "Bienvenido", "user": "Usuario", "hello": "Hola, {{name}}", "profile": "Mi perfil", "panel": "Ir al panel", "signIn": "Iniciar sesión", "register": "Crear cuenta" },
+  "loading": "Cargando tu experiencia saludable...",
+  "hero": { "eyebrow": "100% Natural • Artesanal", "title": "Sabor real, Energía de nuestra tierra", "description": "Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas y deshidratadas con amor para acompañar tu estilo de vida saludable.", "viewProducts": "Ver Productos" },
+  "backToTop": "Volver arriba",
+  "catalog": { "loading": "Cargando delicias...", "filterAndSort": "Filtrar y Ordenar", "filterTitle": "Filtrar Catálogo", "searchResults": "Resultados de búsqueda para:", "noResults": "No se encontraron productos con los filtros o búsqueda seleccionados." },
+  "products": { "category": "Categoría", "priceRange": "Rango de precios", "sortBy": "Ordenar por", "apply": "Aplicar", "all": "Todos los productos", "minimum": "Mínimo", "maximum": "Máximo", "newest": "Más recientes", "view": "Ver productos", "priceAscending": "Precio: menor a mayor", "priceDescending": "Precio: mayor a menor", "clear": "Limpiar", "lastUnits": "¡Últimas unidades!", "outOfStock": "Agotado", "viewDetail": "Ver detalle", "noDescription": "Sin descripción", "price": "Precio", "available_one": "{{count}} disponible", "available_other": "{{count}} disponibles", "noStock": "Sin existencias", "add": "Agregar" },
+  "pagination": { "previous": "Anterior", "next": "Siguiente" }
+}

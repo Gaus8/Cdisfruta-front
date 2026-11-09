@@ -4,8 +4,10 @@ import { useAuth } from "../../../hooks/useAuth.js";
 import HeaderTienda from "./HeaderTienda";
 import ProductosTienda from "./ProductosTienda";
 import { FaArrowRight, FaChevronUp } from "react-icons/fa";
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function Tienda() {
+  const { t } = useTranslation('shop');
   const { userData, loading } = useAuth();
 
   const [categoriaActiva] = useState("Todos los productos");
@@ -35,7 +37,7 @@ export default function Tienda() {
     return (
       <div className={tw("status-container")}>
         <div className={tw("spinner-auth")}></div>
-        <p>Cargando tu experiencia saludable...</p>
+        <p>{t('loading')}</p>
       </div>
     );
   }
@@ -49,15 +51,14 @@ export default function Tienda() {
           <header className={tw("products-hero-section")}>
             <div className={tw("hero-content")}>
               <div className={tw("hero-text")}>
-                <span className={tw("hero-subtitle")}>100% Natural • Artesanal</span>
-                <h1>Sabor real, Energía de nuestra tierra</h1>
+                <span className={tw("hero-subtitle")}>{t('hero.eyebrow')}</span>
+                <h1>{t('hero.title')}</h1>
                 <p>
-                  Disfruta del auténtico sabor de <strong>Ubaté</strong>. Frutas seleccionadas
-                  y deshidratadas con amor para acompañar tu estilo de vida saludable.
+                  <Trans ns="shop" i18nKey="hero.description" components={{ strong: <strong /> }} />
                 </p>
                 
                 <button className={tw("hero-explore-btn")} onClick={scrollToProducts}>
-                  <span>Ver Productos</span>
+                  <span>{t('hero.viewProducts')}</span>
                   <FaArrowRight aria-hidden="true" />
                 </button>
               </div>
@@ -95,7 +96,7 @@ export default function Tienda() {
       </div>
 
       {mostrarBotonSubir && (
-        <button className={tw("scroll-to-top-btn")} onClick={scrollToTop} title="Volver arriba">
+        <button className={tw("scroll-to-top-btn")} onClick={scrollToTop} title={t('backToTop')} aria-label={t('backToTop')}>
           <FaChevronUp />
         </button>
       )}

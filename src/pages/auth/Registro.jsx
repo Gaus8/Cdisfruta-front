@@ -13,8 +13,10 @@ import {
 import { registrarUsuario, procesarErroresRegistro } from '../../services/api/authService';
 import LoginGoogle from './LoginGoogle';
 import AuthLayout from './AuthLayout';
+import { useTranslation } from 'react-i18next';
 
 export default function Registro() {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [terminos, setTerminos] = useState(false); 
@@ -74,14 +76,14 @@ export default function Registro() {
         </button>
 
         <img className={tw("logo-empresa")} src="/img/logo_cdisfruta.webp" alt="CDISFRUTA" />
-        <h3>Crear cuenta</h3>
-        <p className={tw("auth-login-subtitle")}>Completa tus datos para crear tu cuenta.</p>
+        <h3>{t('registerTitle')}</h3>
+        <p className={tw("auth-login-subtitle")}>{t('registerSubtitle')}</p>
 
         <div className={tw("form-container-input")}>
           <IoPersonOutline className={tw("icon-react")} />
           <input
             type="text"
-            placeholder="Nombre completo"
+            placeholder={t('fullNamePlaceholder')}
             name="name"
             value={data.name}
             onChange={handleChange}
@@ -94,7 +96,7 @@ export default function Registro() {
           <IoMailOutline className={tw("icon-react")} />
           <input
             type="email"
-            placeholder="Correo electrónico"
+            placeholder={t('emailPlaceholder')}
             name="email"
             value={data.email}
             onChange={handleChange}
@@ -107,7 +109,7 @@ export default function Registro() {
           <IoLockClosedOutline className={tw("icon-react")} />
           <input
             type={mostrarPassword ? "text" : "password"}
-            placeholder="Contraseña"
+            placeholder={t('passwordPlaceholder')}
             name="password"
             value={data.password}
             onChange={handleChange}
@@ -118,8 +120,8 @@ export default function Registro() {
             className={tw("btn-eye")}
             onClick={() => setMostrarPassword((visible) => !visible)}
             disabled={loading}
-            aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-            title={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            aria-label={mostrarPassword ? t('hidePassword') : t('showPassword')}
+            title={mostrarPassword ? t('hidePassword') : t('showPassword')}
           >
             {mostrarPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
           </button>
@@ -136,13 +138,13 @@ export default function Registro() {
             className={tw("![cursor:var(--tw-inline-Registro-3601-0)]")} style={{ "--tw-inline-Registro-3601-0": loading ? 'not-allowed' : 'pointer' }}
           />
           <label htmlFor="terminos" className={tw("![cursor:var(--tw-inline-Registro-3878-0)]")} style={{ "--tw-inline-Registro-3878-0": loading ? 'not-allowed' : 'pointer' }}>
-            Acepto los{' '}
+            {t('acceptTerms')}{' '}
             <Link to="/terminos" target="_blank" rel="noopener noreferrer" className={tw("auth-terms-link")}>
-              Términos y Condiciones
+              {t('terms')}
             </Link>{' '}
-            y la{' '}
+            {` ${t('andThe')} `}
             <Link to="/politica-datos" target="_blank" rel="noopener noreferrer" className={tw("auth-terms-link")}>
-              Política de Tratamiento de Datos
+              {t('privacyPolicy')}
             </Link>
           </label>
         </div>
@@ -156,11 +158,11 @@ export default function Registro() {
           {loading ? (
             <span className={tw("![display:flex]", "![align-items:center]", "![justify-content:center]", "![gap:8px]")}>
               <span className={tw("spinner-css")}></span>
-              <span>Registrando...</span>
+              <span>{t('registering')}</span>
             </span>
           ) : (
             <>
-              <span>Registrarse</span>
+              <span>{t('register')}</span>
               <IoArrowForwardOutline className={tw("icon-btn")} />
             </>
           )}
@@ -173,7 +175,7 @@ export default function Registro() {
           onClick={() => !loading && navigate('/login')} 
           style={{ "--tw-inline-Registro-5137-0": loading ? 'not-allowed' : 'pointer' }}
         >
-          ¿Ya tienes cuenta? Inicia Sesión
+          {t('haveAccount')}
         </span>
       </form>
     </AuthLayout>

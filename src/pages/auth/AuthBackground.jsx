@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { URL_SERVER } from '../../services/api/client';
 import { tw } from '../../utils/tw.js';
 import { cloudinaryUrl } from '../../utils/cloudinaryUrl.js';
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher.jsx';
 
 const fallbackImages = ['/img/cdisfruta_01.webp', '/img/cdisfruta_02.webp', '/img/cdisfruta_07.webp'];
 
@@ -47,9 +48,12 @@ export default function AuthBackground() {
     return () => window.clearInterval(timer);
   }, [images.length]);
 
-  return <div aria-hidden="true" className={tw('pointer-events-none fixed inset-0 z-0 overflow-hidden bg-slate-950')}>
-    {images.map((image, index) => loaded.has(index) && <img key={image} src={cloudinaryUrl(image, { width: 960 })} alt="" decoding="async" loading="lazy" fetchPriority="low" className={tw('absolute inset-0 h-full w-full scale-105 object-cover blur-[3px] transition-opacity duration-1000', index === active ? 'opacity-100' : 'opacity-0')} />)}
-    <div className={tw('absolute inset-0 bg-gradient-to-br from-slate-950/75 via-slate-950/60 to-orange-950/65')} />
-    <div className={tw('absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,126,95,0.18),transparent_45%)]')} />
-  </div>;
+  return <>
+    <div aria-hidden="true" className={tw('pointer-events-none fixed inset-0 z-0 overflow-hidden bg-slate-950')}>
+      {images.map((image, index) => loaded.has(index) && <img key={image} src={cloudinaryUrl(image, { width: 960 })} alt="" decoding="async" loading="lazy" fetchPriority="low" className={tw('absolute inset-0 h-full w-full scale-105 object-cover blur-[3px] transition-opacity duration-1000', index === active ? 'opacity-100' : 'opacity-0')} />)}
+      <div className={tw('absolute inset-0 bg-gradient-to-br from-slate-950/75 via-slate-950/60 to-orange-950/65')} />
+      <div className={tw('absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,126,95,0.18),transparent_45%)]')} />
+    </div>
+    <div className="cdi-auth-language"><LanguageSwitcher /></div>
+  </>;
 }

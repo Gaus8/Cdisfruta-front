@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { loginConGoogle } from '../../services/api/authService';
 import { useAuth } from '../../hooks/useAuth';
 import { homePathForRole } from '../../utils/roleHome.js';
+import { useTranslation } from 'react-i18next';
 
 const GOOGLE_CLIENT_ID = '291876279012-gsnvnoi8b3v6ja2odjl5mdvvd6rjd3d3.apps.googleusercontent.com';
 
 function LoginGoogleButton({ cerrarModal }) {
+  const { t } = useTranslation('auth');
   const [respuestaServer, setRespuestaServer] = useState("");
   const [loading, setLoading] = useState(false);
   const [buttonWidth, setButtonWidth] = useState(320);
@@ -61,11 +63,11 @@ function LoginGoogleButton({ cerrarModal }) {
   return (
     <div ref={containerRef} className={tw("google-btn-container")}>
       {loading ? (
-        <button className={tw("button-google")} type="button" disabled>Autenticando...</button>
+        <button className={tw("button-google")} type="button" disabled>{t('authenticating')}</button>
       ) : (
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
-          onError={() => setRespuestaServer('No se pudo completar el ingreso con Google. Inténtalo de nuevo.')}
+          onError={() => setRespuestaServer(t('googleError'))}
           theme="outline"
           size="large"
           shape="pill"
@@ -85,8 +87,9 @@ function LoginGoogleButton({ cerrarModal }) {
 
 /** Provider solo aquí: evita cargar gsi/client en la landing y el resto del sitio. */
 export default function LoginGoogle({ cerrarModal }) {
+  const { i18n } = useTranslation('auth');
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} locale="es">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} locale={i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es'}>
       <LoginGoogleButton cerrarModal={cerrarModal} />
     </GoogleOAuthProvider>
   );

@@ -1,0 +1,10 @@
+{
+  "eyebrow": { "knowProduct": "Conoce nuestro producto" },
+  "hero": {
+    "natural": "100% natural · artesanal",
+    "title": "Sabor real, energía de nuestra tierra",
+    "description": "Disfruta del auténtico sabor de Ubaté. Frutas seleccionadas y deshidratadas con amor para acompañar tu estilo de vida saludable.",
+    "products": "Ver productos"
+  },
+  "footer": { "navigation": "Navegación", "company": "Empresa", "contact": "Contacto" }
+}

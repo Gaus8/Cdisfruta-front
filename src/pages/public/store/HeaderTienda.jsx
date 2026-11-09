@@ -6,8 +6,11 @@ import CartModal from "../../../components/ui/CartModal.jsx";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { whatsappUrl } from "../../../utils/whatsapp.js";
 import { homePathForRole, isStaffRole } from "../../../utils/roleHome.js";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../../../components/ui/LanguageSwitcher.jsx';
 
 export default function HeaderTienda() {
+  const { t } = useTranslation(['shop', 'common']);
   const { authenticated, logout, userData } = useAuth();
   const staff = isStaffRole(userData?.rol);
   const signedInHome = staff ? homePathForRole(userData.rol) : '/cliente/tienda';
@@ -106,7 +109,7 @@ export default function HeaderTienda() {
           <form className={tw("search-bar")} onSubmit={handleSearchSubmit}>
             <input
               type="text"
-              placeholder="Buscar snacks saludables..."
+              placeholder={t('search.placeholder', { ns: 'shop' })}
               value={searchText}
               onChange={handleSearchChange}
             />
@@ -114,13 +117,14 @@ export default function HeaderTienda() {
           </form>
 
           <div className={tw("header-actions")}>
+            <LanguageSwitcher />
             <a
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Escribir por WhatsApp"
+              aria-label={t('navigation.whatsapp', { ns: 'common' })}
               className={tw('shop-header__icon', '![color:#25D366]', '![text-decoration:none]')}
-              title="WhatsApp"
+              title={t('navigation.whatsapp', { ns: 'common' })}
             >
               <FaWhatsapp size={18} />
             </a>
@@ -130,41 +134,41 @@ export default function HeaderTienda() {
               className={tw('shop-header__icon')}
               data-cart-animation-target="true"
               onClick={() => setCartModalOpen(true)}
-              aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
+              aria-label={cartCount ? `${t('cart.aria', { ns: 'shop' })}, ${t('cart.products', { ns: 'shop', count: cartCount })}` : t('cart.aria', { ns: 'shop' })}
             >
               <FaShoppingCart size={18} />
               <span className={tw("notification-badge")}>{cartCount}</span>
             </button>
 
             <div className={tw("dropdown-container")} ref={containerRef}>
-              <button type="button" className={tw('shop-header__icon')} onClick={toggleDropdown} aria-label="Menú de usuario" aria-expanded={dropdownOpen}>
+              <button type="button" className={tw('shop-header__icon')} onClick={toggleDropdown} aria-label={t('account.menu', { ns: 'shop' })} aria-expanded={dropdownOpen}>
                 <FaUserCircle size={20} />
               </button>
 
               {dropdownOpen && (
                 <div className={tw("dropdown-menu profile-menu")}>
                   <div className={tw("dropdown-header")}>
-                    {authenticated ? `Hola, ${userData?.nombre || 'Usuario'}` : 'Bienvenido'}
+                    {authenticated ? t('account.hello', { ns: 'shop', name: userData?.nombre || t('account.user', { ns: 'shop' }) }) : t('account.welcome', { ns: 'shop' })}
                   </div>
                   <ul className={tw("dropdown-list")}>
                     {authenticated ? (
                       <>
                         <li onClick={() => { setDropdownOpen(false); navigate(profilePath); }}>
-                          <FaUser /> Mi Perfil
+                          <FaUser /> {t('account.profile', { ns: 'shop' })}
                         </li>
                         {staff && (
                           <li onClick={() => { setDropdownOpen(false); navigate(signedInHome); }}>
-                            <FaThLarge /> Ir al panel
+                            <FaThLarge /> {t('account.panel', { ns: 'shop' })}
                           </li>
                         )}
                         <li onClick={handleCerrarSesion}>
-                          <FaSignOutAlt /> Cerrar Sesión
+                          <FaSignOutAlt /> {t('actions.logout', { ns: 'common' })}
                         </li>
                       </>
                     ) : (
                       <>
-                        <li onClick={handleAbrirLogin}><FaSignInAlt /> Iniciar Sesión</li>
-                        <li onClick={handleAbrirRegistro}><FaUserPlus /> Crear Cuenta</li>
+                        <li onClick={handleAbrirLogin}><FaSignInAlt /> {t('account.signIn', { ns: 'shop' })}</li>
+                        <li onClick={handleAbrirRegistro}><FaUserPlus /> {t('account.register', { ns: 'shop' })}</li>
                       </>
                     )}
                   </ul>

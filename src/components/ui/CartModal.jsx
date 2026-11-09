@@ -7,6 +7,8 @@ import {
 import { apiAxios } from "../../services/api/client.js";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '../../i18n/format.js';
 
 import { COLOMBIA_GEO, DEPARTAMENTOS_ORDENADOS } from '../../utils/geoColombia.js';
 
@@ -94,6 +96,7 @@ const formFromUser = (user) => {
 };
 
 export default function CartModal({ isOpen, onClose }) {
+  const { t, i18n } = useTranslation('orders');
   const [cartItems, setCartItems] = useState([]);
   const formRef = useRef(null);
   const navigate = useNavigate();
@@ -193,6 +196,8 @@ export default function CartModal({ isOpen, onClose }) {
     if (authenticated && userData) {
       const list = addressesFromUser(userData);
       if (list.length) {
+        // This effect initializes the checkout form when the cart opens.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setUseNewAddress(false);
         setSelectedAddressId(list[0].id);
         setFormData(applyAddressToForm(list[0], userData));
@@ -242,7 +247,7 @@ export default function CartModal({ isOpen, onClose }) {
     }
 
     if (!formData.compromiso) {
-      alert("Debes confirmar que tus datos de envío son correctos para continuar.");
+      alert(t('checkout.confirmShipping'));
       return;
     }
 
@@ -439,8 +444,8 @@ export default function CartModal({ isOpen, onClose }) {
     <div className={tw("cart-modal-overlay")} onClick={closeCart}>
       <div className={tw("cart-modal-content")} onClick={(e) => e.stopPropagation()}>
         <div className={tw("cart-header")}>
-          <h2><FaCheckCircle className={tw("![color:#ff7a5c]")} /> Tu Carrito</h2>
-          <button className={tw("close-cart-btn")} onClick={closeCart} aria-label="Cerrar carrito">
+          <h2><FaCheckCircle className={tw("![color:#ff7a5c]")} /> {t('cart.title')}</h2>
+          <button className={tw("close-cart-btn")} onClick={closeCart} aria-label={t('cart.close')}>
             <FaTimes />
           </button>
         </div>
@@ -448,13 +453,13 @@ export default function CartModal({ isOpen, onClose }) {
         {orderComplete ? <section className={tw('cart-body')}>
           <div className={tw('mx-auto my-6 w-full max-w-2xl rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm sm:my-10 sm:p-8')}>
             <div className={tw('mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-2xl text-emerald-600')}><FaCheckCircle /></div>
-            <h3 className={tw('mt-4 text-center text-2xl font-bold text-slate-800')}>¡Pedido confirmado!</h3>
-            <p className={tw('mt-2 text-center text-sm leading-6 text-slate-600')}>Registramos tu pedido{orderComplete.id ? ` #${String(orderComplete.id).slice(-8).toUpperCase()}` : ''} por <strong>${orderComplete.total.toLocaleString('es-CO')}</strong>. Te contactaremos con los datos de envío que proporcionaste.</p>
+            <h3 className={tw('mt-4 text-center text-2xl font-bold text-slate-800')}>{t('confirmation.title')}</h3>
+            <p className={tw('mt-2 text-center text-sm leading-6 text-slate-600')}>{t('confirmation.summary', { order: orderComplete.id ? ` #${String(orderComplete.id).slice(-8).toUpperCase()}` : '', total: formatCurrency(orderComplete.total, i18n.resolvedLanguage) })}</p>
             {orderComplete.guest && !registrationComplete && <div className={tw('mt-6 rounded-2xl border border-orange-100 bg-orange-50/50 p-4 sm:p-5')}>
-              <div className={tw('mb-4')}><h4 className={tw('font-bold text-slate-800')}>Crea tu cuenta para consultar el pedido</h4><p className={tw('mt-1 text-sm leading-5 text-slate-600')}>Tu compra quedará vinculada automáticamente. Confirma el correo del pedido y define una contraseña.</p></div>
+              <div className={tw('mb-4')}><h4 className={tw('font-bold text-slate-800')}>{t('confirmation.createAccount')}</h4><p className={tw('mt-1 text-sm leading-5 text-slate-600')}>{t('confirmation.accountHelp')}</p></div>
               <form onSubmit={handlePostPurchaseRegistration} className={tw('space-y-3')}>
-                <label className={tw('block text-sm font-medium text-slate-700')}>Correo del pedido<input type="email" value={formData.correo} readOnly className={tw('mt-1 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 text-sm text-slate-600')} /></label>
-                <label className={tw('block text-sm font-medium text-slate-700')}>Confirma tu correo<input type="email" required autoComplete="email" value={confirmEmail} onChange={(event) => setConfirmEmail(event.target.value)} className={tw('mt-1 min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100')} /></label>
+                <label className={tw('block text-sm font-medium text-slate-700')}>{t('confirmation.orderEmail')}<input type="email" value={formData.correo} readOnly className={tw('mt-1 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 text-sm text-slate-600')} /></label>
+                <label className={tw('block text-sm font-medium text-slate-700')}>{t('confirmation.confirmEmail')}<input type="email" required autoComplete="email" value={confirmEmail} onChange={(event) => setConfirmEmail(event.target.value)} className={tw('mt-1 min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100')} /></label>
                 <label className={tw('block text-sm font-medium text-slate-700')}>Crea una contraseña<input type="password" required minLength={8} maxLength={16} autoComplete="new-password" value={accountPassword} onChange={(event) => setAccountPassword(event.target.value)} className={tw('mt-1 min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-[#ff7e5f] focus:ring-4 focus:ring-orange-100')} /><span className={tw('mt-1 block text-xs font-normal text-slate-500')}>8–16 caracteres, una mayúscula, minúscula, número y símbolo.</span></label>
                 <label className={tw('flex items-start gap-2 text-xs leading-5 text-slate-600')}><input type="checkbox" checked={acceptTerms} onChange={(event) => setAcceptTerms(event.target.checked)} className={tw('mt-1 accent-[#ff7e5f]')} /><span>Acepto los <a href="/terminos" target="_blank" rel="noreferrer" className={tw('font-semibold text-[#e06d43] underline')}>Términos y Condiciones</a> y la <a href="/politica-datos" target="_blank" rel="noreferrer" className={tw('font-semibold text-[#e06d43] underline')}>Política de Tratamiento de Datos</a>.</span></label>
                 {registerError && <p role="alert" className={tw('rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700')}>{registerError}</p>}
@@ -468,7 +473,7 @@ export default function CartModal({ isOpen, onClose }) {
         </section> : <div className={tw("cart-body")}>
           <div className={tw("cart-items-section")}>
             {cartItems.length === 0 ? (
-              <p className={tw("empty-cart-msg")}>Tu carrito está vacío</p>
+            <p className={tw("empty-cart-msg")}>{t('cart.empty')}</p>
             ) : (
               cartItems.map((item) => (
                 <div key={item._id} className={tw("cart-item-professional")}>
@@ -486,11 +491,11 @@ export default function CartModal({ isOpen, onClose }) {
           </div>
 
           <form ref={formRef} className={tw("checkout-form-professional")} onSubmit={(e) => e.preventDefault()}>
-            <h3>Datos de Entrega</h3>
+            <h3>{t('checkout.shippingDetails')}</h3>
 
             {showAddressPicker ? (
               <div className={tw('mb-4 space-y-3')} role="radiogroup" aria-label="Direcciones guardadas">
-                <p className={tw('text-sm text-slate-600')}>Elige una dirección guardada o agrega una nueva.</p>
+                <p className={tw('text-sm text-slate-600')}>{t('checkout.savedAddressHelp')}</p>
                 {savedAddresses.map((addr) => {
                   const selected = selectedAddressId === addr.id;
                   return (
@@ -553,22 +558,22 @@ export default function CartModal({ isOpen, onClose }) {
                   </button>
                 )}
                 <div className={tw("input-box")}>
-                  <label>Nombres *</label>
+                  <label>{t('checkout.firstName')} *</label>
                   <div className={tw("input-field")}>
                     <FaUser />
-                    <input type="text" name="nombres" required value={formData.nombres} onChange={handleInputChange} placeholder="Ej. Juan" />
+                    <input type="text" name="nombres" required value={formData.nombres} onChange={handleInputChange} placeholder={t('checkout.exampleFirstName')} />
                   </div>
                 </div>
                 <div className={tw("input-box")}>
-                  <label>Apellidos *</label>
+                  <label>{t('checkout.lastName')} *</label>
                   <div className={tw("input-field")}>
                     <FaUser />
-                    <input type="text" name="apellidos" required value={formData.apellidos} onChange={handleInputChange} placeholder="Ej. Pérez" />
+                    <input type="text" name="apellidos" required value={formData.apellidos} onChange={handleInputChange} placeholder={t('checkout.exampleLastName')} />
                   </div>
                 </div>
 
                 <div className={tw("input-box")}>
-                  <label>Número de WhatsApp *</label>
+                  <label>{t('checkout.whatsapp')} *</label>
                   <div className={tw("input-field")}>
                     <FaPhone />
                     <input type="tel" name="whatsapp" required value={formData.whatsapp} onChange={handleInputChange} placeholder="310..." />
@@ -576,11 +581,11 @@ export default function CartModal({ isOpen, onClose }) {
                 </div>
 
                 <div className={tw("input-box")}>
-                  <label>Departamento *</label>
+                  <label>{t('checkout.department')} *</label>
                   <div className={tw("input-field")}>
                     <FaGlobeAmericas />
                     <select name="departamento" value={formData.departamento} onChange={handleInputChange} className={tw("filter-select")} required>
-                      <option value="">Seleccione departamento...</option>
+                      <option value="">{t('checkout.selectDepartment')}</option>
                       {DEPARTAMENTOS_ORDENADOS.map((dep, idx) => (
                         <option key={idx} value={dep}>{dep}</option>
                       ))}
@@ -588,7 +593,7 @@ export default function CartModal({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div className={tw("input-box")}>
-                  <label>Municipio / Ciudad *</label>
+                  <label>{t('checkout.city')} *</label>
                   <div className={tw("input-field")}>
                     <FaCity />
                     <select
@@ -599,7 +604,7 @@ export default function CartModal({ isOpen, onClose }) {
                       required
                       disabled={!formData.departamento}
                     >
-                      <option value="">{formData.departamento ? "Seleccione municipio..." : "Elija un departamento primero"}</option>
+                      <option value="">{formData.departamento ? t('checkout.selectCity') : t('checkout.selectDepartmentFirst')}</option>
                       {municipiosDisponibles.map((mun, idx) => (
                         <option key={idx} value={mun}>{mun}</option>
                       ))}
@@ -608,14 +613,14 @@ export default function CartModal({ isOpen, onClose }) {
                 </div>
 
                 <div className={tw("input-box")}>
-                  <label>Dirección *</label>
+                  <label>{t('checkout.address')} *</label>
                   <div className={tw("input-field")}>
                     <FaMapMarkerAlt />
                     <input type="text" name="direccion" required value={formData.direccion} onChange={handleInputChange} placeholder="Calle/Cra..." />
                   </div>
                 </div>
                 <div className={tw("input-box")}>
-                  <label>Barrio o Sector *</label>
+                  <label>{t('checkout.neighborhood')} *</label>
                   <div className={tw("input-field")}>
                     <FaHome />
                     <input type="text" name="barrio" required value={formData.barrio} onChange={handleInputChange} placeholder="Ej. Centro" />
@@ -623,7 +628,7 @@ export default function CartModal({ isOpen, onClose }) {
                 </div>
 
                 <div className={tw("input-box")}>
-                  <label>Correo electrónico *</label>
+                  <label>{t('checkout.email')} *</label>
                   <div className={tw("input-field")}>
                     <FaEnvelope />
                     <input type="email" name="correo" required value={formData.correo} onChange={handleInputChange} placeholder="tu@email.com" readOnly={authenticated} />
@@ -639,7 +644,7 @@ export default function CartModal({ isOpen, onClose }) {
                         onChange={(e) => setSaveNewAddress(e.target.checked)}
                         className={tw('mt-1 accent-[#ff7e5f]')}
                       />
-                      <span>Guardar esta dirección en mi cuenta para la próxima compra</span>
+                      <span>{t('checkout.saveAddress')}</span>
                     </label>
                     {saveNewAddress && (
                       <label className={tw('block text-sm text-slate-700')}>
@@ -648,7 +653,7 @@ export default function CartModal({ isOpen, onClose }) {
                           type="text"
                           value={addressLabel}
                           onChange={(e) => setAddressLabel(e.target.value)}
-                          placeholder="Casa, Oficina…"
+                          placeholder={t('checkout.addressLabelPlaceholder')}
                           className={tw('mt-1 min-h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm')}
                         />
                       </label>
@@ -659,10 +664,10 @@ export default function CartModal({ isOpen, onClose }) {
             )}
 
             <div className={tw("input-box")}>
-              <label>Nota del pedido</label>
+              <label>{t('checkout.orderNote')}</label>
               <div className={tw("input-field textarea")}>
                 <FaStickyNote />
-                <textarea name="nota" value={formData.nota} onChange={handleInputChange} placeholder="Especificar detalles de Casa, Unidad y/o Apartamento"></textarea>
+                <textarea name="nota" value={formData.nota} onChange={handleInputChange} placeholder={t('checkout.orderNotePlaceholder')}></textarea>
               </div>
             </div>
 
@@ -673,10 +678,10 @@ export default function CartModal({ isOpen, onClose }) {
               </label>
             </div>
 
-            <section className={tw('mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-4')} aria-label="Opciones de envío y pago">
-              <div><h3 className={tw('text-base font-bold text-slate-800')}>Envío</h3><label className={tw('mt-2 flex cursor-pointer items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-800')}><input type="radio" checked readOnly className={tw('accent-emerald-600')} /><span><strong>Envío gratis</strong><br /><span className={tw('text-xs')}>Sin costo adicional</span></span></label></div>
+            <section className={tw('mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-4')} aria-label={t('checkout.shippingPaymentOptions')}>
+              <div><h3 className={tw('text-base font-bold text-slate-800')}>{t('checkout.shipping')}</h3><label className={tw('mt-2 flex cursor-pointer items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-800')}><input type="radio" checked readOnly className={tw('accent-emerald-600')} /><span><strong>{t('checkout.freeShipping')}</strong><br /><span className={tw('text-xs')}>{t('checkout.noExtraCost')}</span></span></label></div>
               <div>
-                <h3 className={tw('text-base font-bold text-slate-800')}>Método de pago</h3>
+                <h3 className={tw('text-base font-bold text-slate-800')}>{t('checkout.paymentMethod')}</h3>
                 <div className={tw('mt-2 grid gap-2 sm:grid-cols-3')}>
                   {[
                     ['NEQUI', 'Nequi'],
@@ -716,7 +721,7 @@ export default function CartModal({ isOpen, onClose }) {
 
             <div className={tw("cart-footer-sticky")}>
               <div className={tw("total-display")}>
-                <span>Total a pagar</span>
+                <span>{t('checkout.totalDue')}</span>
                 <strong>${total.toLocaleString("es-CO")}</strong>
               </div>
               {!canCheckout && (
@@ -735,7 +740,7 @@ export default function CartModal({ isOpen, onClose }) {
                 {submittingOrder
                   ? 'Registrando pedido…'
                   : metodoPago === 'Contraentrega'
-                    ? <>Confirmar Pedido <FaWhatsapp size={20} /></>
+                    ? <>{t('checkout.confirmOrder')} <FaWhatsapp size={20} /></>
                     : 'Ir a pagar con Wompi'}
               </button>
             </div>

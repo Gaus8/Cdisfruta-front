@@ -10,8 +10,11 @@ import CartModal from "../../pages/user/CartModal";
 import { apiAxios } from "../../services/api/client"; // Usar instancia configurada con withCredentials
 import { useAuth } from "../../hooks/useAuth";
 import { whatsappUrl } from "../../utils/whatsapp.js";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../ui/LanguageSwitcher.jsx';
 
 export default function HeaderDashboard() {
+  const { t } = useTranslation(['common', 'shop']);
   const { userData, verifyToken } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -131,13 +134,14 @@ export default function HeaderDashboard() {
       <header className={tw("user-header client-header")}>
         <div className={tw("header-content")}>
           <h1 className={tw(tw("logo"), "![cursor:pointer]")} onClick={() => navigate('/cliente/tienda')} >
-            CDISFRUTA<span className={tw("dot-shop")}> · Mi cuenta</span>
+            CDISFRUTA<span className={tw("dot-shop")}> · {t('account', { ns: 'user' })}</span>
           </h1>
 
           <form className={tw("search-bar")} onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder="Buscar en tu catálogo..." 
+              placeholder={t('search', { ns: 'user' })}
+              aria-label={t('search', { ns: 'user' })}
               value={searchText}
               onChange={handleSearchChange}
             />
@@ -145,11 +149,12 @@ export default function HeaderDashboard() {
           </form>
 
           <div className={tw("header-actions")}>
+            <LanguageSwitcher />
             <a
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Escribir por WhatsApp"
+              aria-label={t('navigation.whatsapp', { ns: 'common' })}
               className={tw('client-header__icon', '![color:#25D366]', '![text-decoration:none]')}
               title="WhatsApp"
             >
@@ -161,7 +166,7 @@ export default function HeaderDashboard() {
               className={tw('client-header__icon')}
               data-cart-animation-target="true"
               onClick={() => setCartModalOpen(true)}
-              aria-label={`Carrito${cartCount ? `, ${cartCount} productos` : ''}`}
+              aria-label={cartCount ? `${t('cart.aria', { ns: 'shop' })}, ${t('cart.products', { ns: 'shop', count: cartCount })}` : t('cart.aria', { ns: 'shop' })}
             >
               <FaShoppingCart size={18} />
               <span className={tw("notification-badge")}>{cartCount}</span>
@@ -174,7 +179,7 @@ export default function HeaderDashboard() {
                 onClick={toggleDropdown}
                 aria-expanded={dropdownOpen}
                 aria-haspopup="menu"
-                aria-label="Menú de cuenta"
+                aria-label={t('account.menu', { ns: 'shop' })}
               >
                 {avatarOverride ?? userData?.avatar
                   ? <img src={avatarOverride ?? userData.avatar} alt="" className={tw('h-[30px] w-[30px] rounded-full object-cover')} />
@@ -193,7 +198,7 @@ export default function HeaderDashboard() {
                         </div>
                         <div className={tw("client-account-menu__identity")}>
                           <p className={tw("client-account-menu__name")}>
-                            {userData.nombre || 'Cliente'}
+                            {userData.nombre || t('customer', { ns: 'user' })}
                           </p>
                           <p className={tw("client-account-menu__email")}>{userData.email}</p>
                         </div>
@@ -209,7 +214,7 @@ export default function HeaderDashboard() {
                             navigate('/cliente/configuracion');
                           }}
                         >
-                          <FaCog /> Ir a mi cuenta
+                          <FaCog /> {t('account', { ns: 'user' })}
                         </button>
                         <button
                           type="button"
@@ -217,18 +222,18 @@ export default function HeaderDashboard() {
                           className={tw("client-account-menu__logout")}
                           onClick={handleLogoutClick}
                         >
-                          <FaSignOutAlt /> Cerrar sesión
+                          <FaSignOutAlt /> {t('logout', { ns: 'common' })}
                         </button>
                       </div>
                     </>
                   ) : (
                     <div className={tw("client-account-menu__body")}>
-                      <p className={tw("client-account-menu__guest")}>Accede para comprar más rápido</p>
+                      <p className={tw("client-account-menu__guest")}>{t('guestPrompt', { ns: 'user' })}</p>
                       <button type="button" role="menuitem" className={tw("client-account-menu__primary")} onClick={() => { setDropdownOpen(false); navigate('/login'); }}>
-                        <FaSignInAlt /> Iniciar sesión
+                        <FaSignInAlt /> {t('signIn', { ns: 'user' })}
                       </button>
                       <button type="button" role="menuitem" className={tw("client-account-menu__logout")} onClick={() => { setDropdownOpen(false); navigate('/registro'); }}>
-                        <FaUserPlus /> Crear cuenta
+                        <FaUserPlus /> {t('register', { ns: 'user' })}
                       </button>
                     </div>
                   )}
@@ -238,19 +243,19 @@ export default function HeaderDashboard() {
           </div>
         </div>
 
-        <nav className={tw("client-nav")} aria-label="Navegación de tu cuenta">
+        <nav className={tw("client-nav")} aria-label={t('accountNavigation', { ns: 'user' })}>
           <NavLink to="/cliente/tienda" end className={navClass}>
-            <FaStore /> Catálogo
+            <FaStore /> {t('catalog', { ns: 'user' })}
           </NavLink>
           <NavLink to="/cliente/pedidos" className={navClass}>
-            <FaShoppingBag /> Pedidos
+            <FaShoppingBag /> {t('orders', { ns: 'user' })}
           </NavLink>
           <button
             type="button"
             className={tw('client-nav__link', onDirecciones ? 'client-nav__link--active' : '')}
             onClick={goDirecciones}
           >
-            <FaMapMarkerAlt /> Direcciones
+            <FaMapMarkerAlt /> {t('addresses', { ns: 'user' })}
           </button>
           <NavLink
             to="/cliente/configuracion"
@@ -259,7 +264,7 @@ export default function HeaderDashboard() {
               sessionStorage.setItem('config_tab_cdisfruta', 'perfil');
             }}
           >
-            <FaCog /> Cuenta
+            <FaCog /> {t('account', { ns: 'user' })}
           </NavLink>
         </nav>
       </header>
@@ -273,11 +278,11 @@ export default function HeaderDashboard() {
         <div className={tw("modal-overlay-logout")} onClick={handleCancelLogout}>
           <div className={tw("logout-modal-content")} onClick={(e) => e.stopPropagation()}>
             <FaExclamationTriangle className={tw("warning-icon")} />
-            <h3>¿Cerrar Sesión?</h3>
-            <p>¿Estás seguro de que deseas salir de tu cuenta en CDISFRUTA?</p>
+            <h3>{t('logoutTitle', { ns: 'user' })}</h3>
+            <p>{t('logoutDescription', { ns: 'user' })}</p>
             <div className={tw("modal-actions")}>
-              <button className={tw("btn-cancel")} onClick={handleCancelLogout}>Cancelar</button>
-              <button className={tw("btn-confirm")} onClick={handleConfirmLogout}>Sí, Cerrar Sesión</button>
+              <button className={tw("btn-cancel")} onClick={handleCancelLogout}>{t('cancel', { ns: 'common' })}</button>
+              <button className={tw("btn-confirm")} onClick={handleConfirmLogout}>{t('confirmLogout', { ns: 'user' })}</button>
             </div>
           </div>
         </div>

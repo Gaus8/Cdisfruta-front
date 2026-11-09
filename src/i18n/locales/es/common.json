@@ -1,0 +1,35 @@
+{
+  "language": {
+    "select": "Seleccionar idioma",
+    "spanish": "Español",
+    "english": "Inglés",
+    "active": "Idioma actual: {{language}}"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "know": "Conoce",
+    "history": "Historia",
+    "videos": "Videos",
+    "contact": "Contacto",
+    "login": "Ingresar",
+    "shop": "Tienda",
+    "whatsapp": "Escribir por WhatsApp",
+    "menuOpen": "Abrir menú",
+    "menuClose": "Cerrar menú",
+    "main": "Navegación principal"
+  },
+  "actions": {
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "search": "Buscar",
+    "loading": "Cargando…",
+    "logout": "Cerrar sesión",
+    "account": "Mi cuenta",
+    "profile": "Mi perfil",
+    "editProfile": "Editar perfil",
+    "goToPanel": "Ir al panel"
+  },
+  "brand": { "tagline": "Frutas deshidratadas · Ubaté" },
+  "meta": { "title": "CDISFRUTA | Frutas deshidratadas y aromáticas" }
+}

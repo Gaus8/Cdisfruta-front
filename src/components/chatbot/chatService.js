@@ -33,8 +33,8 @@ export const clearChatHistory = () => {
   try { sessionStorage.removeItem(STORAGE_KEY); } catch { /* Ignore storage restrictions. */ }
 };
 
-export const sendChatMessage = async (message, history) => {
-  const { data } = await apiAxios.post('/chat', { message, history });
+export const sendChatMessage = async (message, history, lang = 'es') => {
+  const { data } = await apiAxios.post('/chat', { message, history, lang });
   return data;
 };
 

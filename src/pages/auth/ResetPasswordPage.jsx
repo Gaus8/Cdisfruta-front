@@ -4,8 +4,10 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { restablecerPasswordConToken } from '../../services/api/authService';
 import AuthBackground from './AuthBackground';
+import { useTranslation } from 'react-i18next';
 
 export const ResetPasswordPage = () => {
+  const { t } = useTranslation('auth');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get('token'); // Obtiene el ?token=xxx de la URL
@@ -69,8 +71,8 @@ export const ResetPasswordPage = () => {
           className={tw("reset-page-logo")}
         />
 
-        <h3>Restablecer Contraseña</h3>
-        <p className={tw("modal-description")}>Ingresa tu nueva contraseña para actualizar la cuenta.</p>
+        <h3>{t('resetTitle')}</h3>
+        <p className={tw("modal-description")}>{t('resetSubtitle')}</p>
 
         <form onSubmit={handleSubmit} className={tw("![width:100%]")}>
           {/* Campo Nueva Contraseña */}
@@ -78,7 +80,7 @@ export const ResetPasswordPage = () => {
             <FaLock className={tw("icon-react")} />
             <input
               type={showNuevaPassword ? 'text' : 'password'}
-              placeholder="Nueva contraseña"
+              placeholder={t('newPassword')}
               value={nuevaPassword}
               onChange={(e) => setNuevaPassword(e.target.value)}
               disabled={loading}
@@ -97,7 +99,7 @@ export const ResetPasswordPage = () => {
             <FaLock className={tw("icon-react")} />
             <input
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirmar nueva contraseña"
+              placeholder={t('confirmNewPassword')}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               disabled={loading}
@@ -122,7 +124,7 @@ export const ResetPasswordPage = () => {
           )}
 
           <button type="submit" className={tw("button")} disabled={loading}>
-            {loading ? <div className={tw("spinner-css")} /> : 'Guardar nueva contraseña'}
+            {loading ? <div className={tw("spinner-css")} /> : t('saveNewPassword')}
           </button>
         </form>
       </div>

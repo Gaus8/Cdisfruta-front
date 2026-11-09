@@ -5,8 +5,11 @@ import { URL_SERVER } from "../../../services/api/client.js";
 import { cloudinaryUrl } from "../../../utils/cloudinaryUrl.js";
 import { animateProductToCart } from "../../../utils/cartFlightAnimation.js";
 import ProductDetailModal from "../../../components/ui/ProductDetailModal.jsx";
+import { useTranslation } from 'react-i18next';
+import { formatCurrency, formatNumber } from '../../../i18n/format.js';
 
 export default function ProductosTienda({ categoria }) {
+  const { t, i18n } = useTranslation('shop');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
@@ -46,6 +49,8 @@ export default function ProductosTienda({ categoria }) {
     // Opcional: leer si ya hay un valor previo en sessionStorage/localStorage al cargar
     const storedSearch = sessionStorage.getItem('search_cdisfruta') || "";
     if (storedSearch) {
+      // Restore the cross-page search state on mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchTerm(storedSearch);
     }
 
@@ -66,6 +71,8 @@ export default function ProductosTienda({ categoria }) {
   // Sincronizar categoría si cambia por props externas
   useEffect(() => {
     if (categoria) {
+      // Keep externally selected categories synchronized with this filter panel.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTempCategoria(categoria);
       setSelectedCategoria(categoria);
       setCurrentPage(1);
@@ -73,7 +80,7 @@ export default function ProductosTienda({ categoria }) {
   }, [categoria]);
 
   // Estado inicial del carrito desde localStorage
-  const [cart, setCart] = useState(() => {
+  const [, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart_cdisfruta');
     return savedCart ? JSON.parse(savedCart) : [];
   });
@@ -150,7 +157,7 @@ export default function ProductosTienda({ categoria }) {
   const formatInputCurrency = (value) => {
     const numericValue = value.replace(/\D/g, "");
     if (!numericValue) return "";
-    return Number(numericValue).toLocaleString("es-CO");
+    return formatNumber(numericValue, i18n.resolvedLanguage);
   };
 
   const handlePrecioChange = (e, setter) => {
@@ -266,7 +273,7 @@ export default function ProductosTienda({ categoria }) {
     return productosFiltradosYOrdenados.slice(start, start + productsPerPage);
   }, [productosFiltradosYOrdenados, currentPage]);
 
-  if (loading) return <div className={tw("loading-state")}>Cargando delicias...</div>;
+  if (loading) return <div className={tw("loading-state")}>{t('catalog.loading')}</div>;
 
   return (
     <div className={tw("tienda-container-wrapper")}>
@@ -276,7 +283,7 @@ export default function ProductosTienda({ categoria }) {
         className={tw("mobile-filter-toggle-btn")}
         onClick={() => setShowMobileFilters(true)}
       >
-        <FaFilter /> Filtrar y Ordenar
+        <FaFilter /> {t('catalog.filterAndSort')}
       </button>
 
       {/* Overlay para cerrar al hacer clic fuera en móviles */}
@@ -290,33 +297,33 @@ export default function ProductosTienda({ categoria }) {
       {/* Barra de Filtros Superior */}
       <div className={tw(`filters-advanced-container ${showMobileFilters ? 'show-mobile' : ''}`)}>
         <div className={tw("filters-header-mobile")}>
-          <h3>Filtrar Catálogo</h3>
+          <h3>{t('catalog.filterTitle')}</h3>
           <button className={tw("close-filter-btn")} onClick={() => setShowMobileFilters(false)}>
             <FaTimes size={18} />
           </button>
         </div>
 
         <div className={tw("filter-group")}>
-          <label>Categoría</label>
+          <label>{t('products.category')}</label>
           <select 
             value={tempCategoria} 
             onChange={(e) => setTempCategoria(e.target.value)}
             className={tw("filter-select")}
           >
             {categoriasDisponibles.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat}</option>
+              <option key={idx} value={cat}>{cat === 'Todos los productos' ? t('products.all') : cat}</option>
             ))}
           </select>
         </div>
 
         <div className={tw("filter-group")}>
-          <label>Rango de Precios</label>
+          <label>{t('products.priceRange')}</label>
           <div className={tw("price-inputs-wrapper")}>
             <div className={tw("price-input-container")}>
               <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
-                placeholder="Mínimo" 
+                placeholder={t('products.minimum')}
                 value={formatInputCurrency(tempPrecioMin)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMin)}
                 className={tw("price-input-colombia")}
@@ -327,7 +334,7 @@ export default function ProductosTienda({ categoria }) {
               <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
-                placeholder="Máximo" 
+                placeholder={t('products.maximum')}
                 value={formatInputCurrency(tempPrecioMax)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMax)}
                 className={tw("price-input-colombia")}
@@ -337,26 +344,26 @@ export default function ProductosTienda({ categoria }) {
         </div>
 
         <div className={tw("filter-group")}>
-          <label><FaSortAmountDown /> Ordenar por</label>
+          <label><FaSortAmountDown /> {t('products.sortBy')}</label>
           <select 
             value={tempOrden} 
             onChange={(e) => setTempOrden(e.target.value)}
             className={tw("filter-select")}
           >
-            <option value="recientes">Más recientes</option>
-            <option value="asc">Precio: menor a mayor</option>
-            <option value="desc">Precio: mayor a menor</option>
+            <option value="recientes">{t('products.newest')}</option>
+            <option value="asc">{t('products.priceAscending')}</option>
+            <option value="desc">{t('products.priceDescending')}</option>
           </select>
         </div>
 
         <div className={tw("filter-actions-group")}>
           <button className={tw("apply-filters-btn")} onClick={aplicarFiltros}>
-            <FaCheck /> Aplicar
+            <FaCheck /> {t('products.apply')}
           </button>
 
           {(selectedCategoria !== "Todos los productos" || precioMin !== "" || precioMax !== "" || orden !== "recientes" || searchTerm !== "") && (
             <button className={tw("clear-filters-btn")} onClick={limpiarFiltros}>
-              Limpiar
+              {t('products.clear')}
             </button>
           )}
         </div>
@@ -366,13 +373,13 @@ export default function ProductosTienda({ categoria }) {
       <div className={tw("products-grid-section")}>
         {searchTerm && (
           <div className={tw(tw("search-active-indicator"), "![margin-bottom:15px]", "![font-size:0.9rem]", "![color:#64748b]")} >
-            Resultados de búsqueda para: <strong>"{searchTerm}"</strong>
+            {t('catalog.searchResults')} <strong>"{searchTerm}"</strong>
           </div>
         )}
 
         {productosFiltradosYOrdenados.length === 0 ? (
           <div className={tw("no-products")}>
-            No se encontraron productos con los filtros o búsqueda seleccionados.
+            {t('catalog.noResults')}
           </div>
         ) : (
           <>
@@ -380,16 +387,16 @@ export default function ProductosTienda({ categoria }) {
               {productosPaginados.map(product => (
                 <div key={product._id} className={tw("product-card")}>
                   {product.stock <= 5 && product.stock > 0 && (
-                    <span className={tw("product-tag alert")}>¡Últimas unidades!</span>
+                    <span className={tw("product-tag alert")}>{t('products.lastUnits')}</span>
                   )}
                   {product.stock === 0 && (
-                    <span className={tw("product-tag out")}>Agotado</span>
+                    <span className={tw("product-tag out")}>{t('products.outOfStock')}</span>
                   )}
 
                   <div
                     className={tw(tw("product-image"), "![cursor:pointer]")}
                     onClick={() => setProductoSeleccionado(product)}
-                    title="Ver detalle"
+                    title={t('products.viewDetail')}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(event) => {
@@ -412,7 +419,7 @@ export default function ProductosTienda({ categoria }) {
                       <div className={tw("placeholder-img")} />
                     )}
                     <div className={tw("quick-view-overlay")}>
-                      <FaEye /> Ver Detalle
+                      <FaEye /> {t('products.viewDetail')}
                     </div>
                   </div>
 
@@ -425,17 +432,17 @@ export default function ProductosTienda({ categoria }) {
                       {product.nombre}
                     </h3>
                     <p className={tw("product-description-short")}>
-                      {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
+                      {product.descripcion ? product.descripcion.substring(0, 60) : t('products.noDescription')}...
                     </p>
                     
                     <div className={tw("product-footer")}>
                       <div className={tw("price-container")}>
-                        <span className={tw("price-label")}>PRECIO</span>
+                        <span className={tw("price-label")}>{t('products.price').toLocaleUpperCase(i18n.resolvedLanguage === 'en' ? 'en-US' : 'es-CO')}</span>
                         <span className={tw("product-price")}>
-                          ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
+                          {formatCurrency(product.precio, i18n.resolvedLanguage)}
                         </span>
                         <span className={tw("product-stock-text")}>
-                          {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
+                          {product.stock > 0 ? t('products.available', { count: product.stock }) : t('products.noStock')}
                         </span>
                       </div>
 
@@ -458,7 +465,7 @@ export default function ProductosTienda({ categoria }) {
                           disabled={product.stock === 0}
                         >
                           <FaShoppingCart />
-                          {product.stock === 0 ? 'Agotado' : 'Agregar'}
+                          {product.stock === 0 ? t('products.outOfStock') : t('products.add')}
                         </button>
                       </div>
                     </div>
@@ -475,7 +482,7 @@ export default function ProductosTienda({ categoria }) {
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
-                  <FaChevronLeft size={12} /> Anterior
+                  <FaChevronLeft size={12} /> {t('pagination.previous')}
                 </button>
 
                 <div className={tw("pagination-numbers")}>
@@ -498,7 +505,7 @@ export default function ProductosTienda({ categoria }) {
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                 >
-                  Siguiente <FaChevronRight size={12} />
+                  {t('pagination.next')} <FaChevronRight size={12} />
                 </button>
               </div>
             )}

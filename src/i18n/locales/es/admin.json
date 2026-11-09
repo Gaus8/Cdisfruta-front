@@ -1,0 +1,17 @@
+{
+  "notifications": "Notificaciones",
+  "noNotifications": "No tienes novedades",
+  "clearAll": "Limpiar todo",
+  "markRead": "Marcar como leído",
+  "account": "Mi cuenta",
+  "editProfile": "Editar perfil",
+  "settings": "Configuración",
+  "logout": "Cerrar sesión",
+  "dashboard": "Panel de administración",
+  "logoutTitle": "¿Cerrar sesión?",
+  "logoutDescription": "¿Estás seguro de que deseas salir de la administración de CDISFRUTA?",
+  "confirmLogout": "Sí, cerrar sesión",
+  "panel": { "admin": "Panel Admin", "logistics": "Panel Logística", "catalog": "Panel Catálogo", "default": "Panel" },
+  "menu": { "open": "Abrir navegación", "close": "Cerrar navegación" },
+  "navigation": { "home": "Inicio", "catalog": "Catálogo", "inventory": "Inventario", "orders": "Pedidos", "users": "Usuarios", "analytics": "Analítica de productos", "reports": "Reportes", "landingDesign": "Diseño de portada", "settings": "Configuración" }
+}

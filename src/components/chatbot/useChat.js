@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { clearChatHistory, fetchChatStatus, readChatHistory, saveChatHistory, sendChatMessage } from './chatService.js';
 
 const WELCOME = { id: 'welcome', role: 'assistant', content: '¡Hola! Soy CDISFRUTA IA. Puedo ayudarte con nuestros productos, compras y navegación por la plataforma.' };
 
 export default function useChat() {
-  const [messages, setMessages] = useState(() => [WELCOME, ...readChatHistory().map((item, index) => ({ ...item, id: `history-${index}` }))]);
+  const { t, i18n } = useTranslation('chatbot');
+  const language = i18n.resolvedLanguage;
+  const welcome = useMemo(() => ({ ...WELCOME, content: t('welcome', { lng: language }) }), [t, language]);
+  const [storedMessages, setMessages] = useState(() => [WELCOME, ...readChatHistory().map((item, index) => ({ ...item, id: `history-${index}` }))]);
+  const messages = useMemo(() => storedMessages[0]?.id === 'welcome' ? [welcome, ...storedMessages.slice(1)] : storedMessages, [storedMessages, welcome]);
   const [loading, setLoading] = useState(false);
   const [lock, setLock] = useState(null);
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -57,12 +62,14 @@ export default function useChat() {
     setMessages((current) => [...current, userMessage]);
     try {
       const history = messages.filter((item) => ['user', 'assistant'].includes(item.role)).slice(-10).map(({ role, content }) => ({ role, content }));
-      const response = await sendChatMessage(message, history);
+      const response = await sendChatMessage(message, history, i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es');
       if (response.blocked) {
         setLock({ blockedUntil: response.blockedUntil });
         setSecondsLeft(response.retryAfterSeconds || 600);
       }
-      const content = response.message || 'No recibí una respuesta. Inténtalo de nuevo.';
+      const content = response.moderation && t(`moderation.${response.moderation}`) !== `moderation.${response.moderation}`
+        ? t(`moderation.${response.moderation}`)
+        : response.message || t('noReply');
       setMessages((current) => {
         const safeCurrent = response.moderation ? current.filter((item) => item.id !== userMessage.id) : current;
         const updated = [...safeCurrent, { id: `assistant-${Date.now()}`, role: response.moderation || response.blocked ? 'system' : 'assistant', content, links: response.links || [], moderation: response.moderation, incidentCount: response.incidentCount, blocked: response.blocked }];
@@ -78,18 +85,18 @@ export default function useChat() {
       if (payload?.message) {
         setMessages((current) => [...current, { id: `system-${Date.now()}`, role: 'system', content: payload.message, moderation: payload.moderation, incidentCount: payload.incidentCount, blocked: payload.blocked }]);
       } else {
-        setError('No se pudo enviar. Revisa tu conexión e inténtalo otra vez.');
+        setError(t('sendError'));
       }
     } finally {
       setLoading(false);
     }
-  }, [loading, lock, messages]);
+  }, [i18n.resolvedLanguage, loading, lock, messages, t]);
 
   const reset = useCallback(() => {
     clearChatHistory();
-    setMessages([WELCOME]);
+    setMessages([welcome]);
     setError('');
-  }, []);
+  }, [welcome]);
 
   return { messages, loading, lock, secondsLeft, error, send, reset, syncLock };
 }

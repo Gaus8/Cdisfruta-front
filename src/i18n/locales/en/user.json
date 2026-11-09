@@ -1,0 +1,20 @@
+{
+  "account": "My account",
+  "catalog": "Catalog",
+  "orders": "Orders",
+  "addresses": "Addresses",
+  "profile": "Profile",
+  "security": "Security",
+  "settings": "Settings",
+  "search": "Search your catalog...",
+  "logoutTitle": "Sign out?",
+  "logoutDescription": "Are you sure you want to sign out of your CDISFRUTA account?",
+  "confirmLogout": "Yes, sign out",
+  "changeAvatar": "Change avatar",
+  "customer": "Customer",
+  "profileSummary": "Profile, addresses, and security",
+  "guestPrompt": "Sign in for faster shopping",
+  "signIn": "Sign in",
+  "register": "Create account",
+  "accountNavigation": "Account navigation"
+}

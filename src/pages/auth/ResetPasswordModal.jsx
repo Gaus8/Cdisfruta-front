@@ -2,8 +2,10 @@ import { tw } from '../../utils/tw.js';
 import React, { useState } from 'react';
 import { FaEnvelope, FaTimes } from 'react-icons/fa';
 import { solicitarRestablecerPassword } from '../../services/api/authService';
+import { useTranslation } from 'react-i18next';
 
 export const ResetPasswordModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -17,7 +19,7 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
     setSuccessMessage('');
 
     if (!email) {
-      setError('Por favor ingresa tu correo electrónico');
+      setError(t('requiredEmail'));
       return;
     }
 
@@ -25,10 +27,10 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
 
     try {
       const data = await solicitarRestablecerPassword(email);
-      setSuccessMessage(data.message || 'Se ha enviado un enlace a tu correo.');
+      setSuccessMessage(data.message || t('resetLinkSent'));
       setEmail('');
     } catch (err) {
-      setError(err.message || 'Ocurrió un error al procesar la solicitud.');
+      setError(err.message || t('requestError'));
     } finally {
       setLoading(false);
     }
@@ -37,11 +39,11 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
   return (
     <div className={tw("modal-overlay")} onClick={onClose}>
       <div className={tw("form-container")} onClick={(e) => e.stopPropagation()}>
-        <button className={tw("btn-close-modal")} onClick={onClose} aria-label="Cerrar">
+        <button className={tw("btn-close-modal")} onClick={onClose} aria-label={t('close')}>
           <FaTimes />
         </button>
 
-        <h3>Recuperar Contraseña</h3>
+        <h3>{t('recoverPassword')}</h3>
         
         <p className={tw("modal-description")}>
           Ingresa tu correo electrónico registrado y te enviaremos un enlace para restablecer tu contraseña.
@@ -52,7 +54,7 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
             <FaEnvelope className={tw("icon-react")} />
             <input
               type="email"
-              placeholder="Correo electrónico"
+              placeholder={t('emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
@@ -70,7 +72,7 @@ export const ResetPasswordModal = ({ isOpen, onClose }) => {
           )}
 
           <button type="submit" className={tw("button")} disabled={loading}>
-            {loading ? <div className={tw("spinner-css")} /> : 'Enviar enlace'}
+            {loading ? <div className={tw("spinner-css")} /> : t('sendLink')}
           </button>
         </form>
 

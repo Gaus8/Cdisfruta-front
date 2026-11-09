@@ -1,0 +1,17 @@
+{
+  "notifications": "Notifications",
+  "noNotifications": "You're all caught up",
+  "clearAll": "Clear all",
+  "markRead": "Mark as read",
+  "account": "My account",
+  "editProfile": "Edit profile",
+  "settings": "Settings",
+  "logout": "Sign out",
+  "dashboard": "Admin dashboard",
+  "logoutTitle": "Sign out?",
+  "logoutDescription": "Are you sure you want to leave CDISFRUTA administration?",
+  "confirmLogout": "Yes, sign out",
+  "panel": { "admin": "Admin panel", "logistics": "Logistics panel", "catalog": "Catalog panel", "default": "Panel" },
+  "menu": { "open": "Open navigation", "close": "Close navigation" },
+  "navigation": { "home": "Home", "catalog": "Catalog", "inventory": "Inventory", "orders": "Orders", "users": "Users", "analytics": "Product analytics", "reports": "Reports", "landingDesign": "Landing design", "settings": "Settings" }
+}

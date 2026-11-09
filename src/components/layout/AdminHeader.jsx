@@ -9,8 +9,11 @@ import { apiAxios } from '../../services/api/client';
 import ConfirmModal from '../ui/ConfirmModal';
 import { useAuth } from '../../hooks/useAuth';
 import { hasPermission } from '../../utils/permissions.js';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../ui/LanguageSwitcher.jsx';
 
 export default function Header({ userName, role = 'admin' }) {
+  const { t } = useTranslation(['common', 'admin']);
   const { userData } = useAuth();
   const isAdmin = role === 'admin';
   const canSeeNotifications = hasPermission(userData, 'notifications:read');
@@ -114,8 +117,9 @@ export default function Header({ userName, role = 'admin' }) {
         
     
         <div className={tw("header-actions")}>
+          <LanguageSwitcher />
           {canSeeNotifications && <div className={tw("dropdown-container")}>
-            <button type="button" aria-label="Notificaciones" aria-expanded={showNotifications} className={tw("icon-wrapper")} onClick={toggleNotifications}>
+            <button type="button" aria-label={t('notifications', { ns: 'admin' })} aria-expanded={showNotifications} className={tw("icon-wrapper")} onClick={toggleNotifications}>
               <FaBell className={tw(`icon-btn-large ${showNotifications ? 'active' : ''}`)} />
               {notifications.length > 0 && (
                 <span className={tw("notification-badge")}>{notifications.length > 99 ? '99+' : notifications.length}</span>
@@ -124,7 +128,7 @@ export default function Header({ userName, role = 'admin' }) {
             
             {showNotifications && (
               <div className={tw("dropdown-menu notifications-menu")}>
-                <div className={tw("dropdown-header")}>Notificaciones</div>
+                <div className={tw("dropdown-header")}>{t('notifications', { ns: 'admin' })}</div>
                 <ul className={tw("dropdown-list")}>
                   {notifications.length > 0 ? (
                     notifications.map((notif) => (
@@ -140,12 +144,12 @@ export default function Header({ userName, role = 'admin' }) {
                       </li>
                     ))
                   ) : (
-                    <li className={tw("no-notifications")}>No tienes novedades</li>
+                    <li className={tw("no-notifications")}>{t('noNotifications', { ns: 'admin' })}</li>
                   )}
                 </ul>
                 {notifications.length > 0 && (
                   <div className={tw(tw("dropdown-footer"), "![cursor:pointer]")} onClick={clearAll} >
-                    Limpiar todo
+                    {t('clearAll', { ns: 'admin' })}
                   </div>
                 )}
               </div>
@@ -159,16 +163,16 @@ export default function Header({ userName, role = 'admin' }) {
             </button>
             {showUserMenu && (
               <div className={tw("dropdown-menu profile-menu")}>
-                <div className={tw("dropdown-header")}>Mi Cuenta</div>
+                <div className={tw("dropdown-header")}>{t('actions.account', { ns: 'common' })}</div>
                 <ul className={tw("dropdown-list")}>
-                  {canEditProfile && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> Editar perfil</button></li>}
-                  {isAdmin && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> Configuración</button></li>}
+                  {canEditProfile && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/perfil'); }}><FaUserEdit /> {t('editProfile', { ns: 'admin' })}</button></li>}
+                  {isAdmin && <li><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => { setShowUserMenu(false); navigate('/admin/configuracion'); }}><FaCog /> {t('settings', { ns: 'admin' })}</button></li>}
                   <hr />
                   <li className={tw("logout-opt")}><button type="button" className={tw('flex w-full items-center gap-3 text-left', '![border:0]', '![background:transparent]', '![padding:0]', '![font:inherit]', '![color:inherit]', '![cursor:pointer]')} onClick={() => {
                     setShowLogoutModal(true);
                     setShowUserMenu(false);
                   }}>
-                    <FaSignOutAlt /> Cerrar Sesión
+                    <FaSignOutAlt /> {t('logout', { ns: 'admin' })}
                   </button></li>
                 </ul>
               </div>
@@ -177,7 +181,7 @@ export default function Header({ userName, role = 'admin' }) {
         </div>
       </header>
 
-      <ConfirmModal open={showLogoutModal} title="¿Cerrar sesión?" description="¿Estás seguro de que deseas salir de la administración de CDISFRUTA?" confirmLabel="Sí, cerrar sesión" busy={logoutLoading} onCancel={() => setShowLogoutModal(false)} onConfirm={handleLogout} />
+      <ConfirmModal open={showLogoutModal} title={t('logoutTitle', { ns: 'admin' })} description={t('logoutDescription', { ns: 'admin' })} confirmLabel={t('confirmLogout', { ns: 'admin' })} busy={logoutLoading} onCancel={() => setShowLogoutModal(false)} onConfirm={handleLogout} />
     </>
   );
 }

@@ -1,0 +1,10 @@
+{
+  "eyebrow": { "knowProduct": "Discover our product" },
+  "hero": {
+    "natural": "100% natural · handcrafted",
+    "title": "Real flavor, energy from our land",
+    "description": "Enjoy the authentic taste of Ubaté. Carefully selected fruit, lovingly dehydrated to complement your healthy lifestyle.",
+    "products": "View products"
+  },
+  "footer": { "navigation": "Navigation", "company": "Company", "contact": "Contact" }
+}
