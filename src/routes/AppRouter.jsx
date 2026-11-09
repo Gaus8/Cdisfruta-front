@@ -3,13 +3,15 @@ import {
   createBrowserRouter, 
   RouterProvider, 
   Navigate,
-  useLocation
+  useLocation,
+  Outlet
 } from "react-router-dom";
 import { lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { RutaProtegida } from "../pages/auth/RutaProtegida";
 import { hasPermission } from "../utils/permissions.js";
 import { homePathForRole, isStaffRole, STAFF_ROLES } from "../utils/roleHome.js";
+import ChatWidget from '../components/chatbot/ChatWidget.jsx';
 
 import MainPage from '../pages/public/landing/MainPage';
 
@@ -162,7 +164,13 @@ function AdminModule({ permission, children }) {
 }
 
 // Definición de las Rutas de la Aplicación
-const router = createBrowserRouter([
+function GlobalAppLayout() {
+  return <><Outlet /><ChatWidget /></>;
+}
+
+const router = createBrowserRouter([{
+  element: <GlobalAppLayout />,
+  children: [
   ...(import.meta.env.DEV ? [{ path: '/dev/formas', element: <BlobShapesPreview /> }] : []),
   ...(import.meta.env.DEV ? [{ path: '/dev/mision-vision', element: <MissionVisionShapesPreview /> }] : []),
   // Rutas públicas independientes
@@ -213,7 +221,8 @@ const router = createBrowserRouter([
   },
 
   { path: '*', element: <Navigate to="/" replace /> }
-]);
+  ]
+}]);
 
 export default function App() {
   return (
