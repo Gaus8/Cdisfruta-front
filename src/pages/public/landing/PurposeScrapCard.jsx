@@ -1,4 +1,5 @@
 import './PurposeScrapCard.css';
+import { useTranslation } from 'react-i18next';
 
 function HandDrawnIcon({ type }) {
   return (
@@ -27,7 +28,7 @@ function Glints({ className = '' }) {
   return <svg className={`purpose-scrap__glints ${className}`} viewBox="0 0 70 70" fill="none" aria-hidden="true"><path d="m14 14 20 19M7 36l22-1m7-28 2 20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /></svg>;
 }
 
-function PaperMission({ item, visible, index }) {
+function PaperMission({ item, visible, index, t }) {
   return (
     <article className={`purpose-scrap purpose-scrap--mission${visible ? ' is-visible' : ''}`} style={{ '--scrap-delay': `${index * 120}ms` }}>
       <figure className="purpose-scrap__mission-photo">
@@ -40,7 +41,7 @@ function PaperMission({ item, visible, index }) {
         <span className="purpose-scrap__tape" aria-hidden="true" />
         <span className="sr-only">{item.eyebrow}</span>
         <HandDrawnIcon type={item.icon} />
-        <h3 className="purpose-scrap__hand-title purpose-scrap__hand-title--mission"><span>Nuestra</span>Misión</h3>
+        <h3 className="purpose-scrap__hand-title purpose-scrap__hand-title--mission"><span>{t('purpose.missionLead')}</span>{t('purpose.missionWord')}</h3>
         <BrushStroke className="purpose-scrap__title-stroke" />
         <h4 className="purpose-scrap__original-title">{item.title}</h4>
         <p className="purpose-scrap__description">{item.description}</p>
@@ -50,14 +51,14 @@ function PaperMission({ item, visible, index }) {
   );
 }
 
-function PaintedVision({ item, visible, index, style }) {
+function PaintedVision({ item, visible, index, style, t }) {
   return (
     <article className={`purpose-scrap purpose-scrap--vision${visible ? ' is-visible' : ''}`} style={{ '--scrap-delay': `${index * 120}ms`, ...style }}>
       <div className="purpose-scrap__paint">
         <div className="purpose-scrap__vision-copy">
           <span className="sr-only">{item.eyebrow}</span>
           <HandDrawnIcon type={item.icon} />
-          <h3 className="purpose-scrap__hand-title purpose-scrap__hand-title--vision"><span>Nuestra</span>Visión</h3>
+          <h3 className="purpose-scrap__hand-title purpose-scrap__hand-title--vision"><span>{t('purpose.visionLead')}</span>{t('purpose.visionWord')}</h3>
           <BrushStroke className="purpose-scrap__title-stroke" />
           <h4 className="purpose-scrap__original-title">{item.title}</h4>
           <p className="purpose-scrap__description">{item.description}</p>
@@ -66,7 +67,7 @@ function PaintedVision({ item, visible, index, style }) {
         <figure className="purpose-scrap__polaroid">
           <span className="purpose-scrap__clothespin" aria-hidden="true" />
           <img src={item.image} alt={item.alt} loading="lazy" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} />
-          <figcaption>{item.caption || 'Sabor de nuestra tierra'} <span aria-hidden="true">♡</span></figcaption>
+          <figcaption>{item.caption || t('purpose.caption')} <span aria-hidden="true">♡</span></figcaption>
         </figure>
       </div>
       {/* Adornos hermanos del fondo: pueden superponerse sin quedar recortados por la mancha. */}
@@ -77,7 +78,8 @@ function PaintedVision({ item, visible, index, style }) {
 }
 
 export default function PurposeScrapCard({ item, visible, index, style }) {
+  const { t } = useTranslation('landing');
   return item.id === 'mision'
-    ? <PaperMission item={item} visible={visible} index={index} />
-    : <PaintedVision item={item} visible={visible} index={index} style={style} />;
+    ? <PaperMission item={item} visible={visible} index={index} t={t} />
+    : <PaintedVision item={item} visible={visible} index={index} style={style} t={t} />;
 }

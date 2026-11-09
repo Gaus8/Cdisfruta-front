@@ -4,11 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { tw } from '../../../utils/tw.js';
 import { cloudinaryUrl } from '../../../utils/cloudinaryUrl.js';
+import { useTranslation } from 'react-i18next';
 
 const BRAND_PLACEHOLDER = '/img/logo_cdisfruta.webp';
+const DEFAULT_BANNER_TITLES = ['cdisfruta en australia', 'aromáticas frutales', 'tradición de ubaté'];
 
-function HeroSkeleton() {
-  return <section id="inicio" aria-label="Cargando banners de portada" className={tw('scroll-mt-24 bg-[#FAEFE6] px-4 pb-10 pt-10 sm:px-8 sm:pb-12 sm:pt-12')}>
+function HeroSkeleton({ label }) {
+  return <section id="inicio" aria-label={label} className={tw('scroll-mt-24 bg-[#FAEFE6] px-4 pb-10 pt-10 sm:px-8 sm:pb-12 sm:pt-12')}>
     <div className={tw('mx-auto flex max-w-3xl flex-col items-center gap-4 text-center')}>
       <div className={tw('h-3 w-44 animate-pulse rounded-full bg-orange-200')} />
       <div className={tw('h-12 w-3/4 max-w-xl animate-pulse rounded-xl bg-orange-100')} />
@@ -22,6 +24,7 @@ function HeroSkeleton() {
 }
 
 export default function HeroCarousel3D({ banners = [], loading = false }) {
+  const { t, i18n } = useTranslation(['landing', 'common']);
   const [activeIndex, setActiveIndex] = useState(0);
   const [sideCount, setSideCount] = useState(3);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -49,8 +52,6 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     return () => query.removeEventListener?.('change', update);
   }, []);
 
-  const current = banners[activeIndex] || null;
-
   const move = useCallback((direction) => {
     if (banners.length < 2) return;
     setActiveIndex((index) => (index + direction + banners.length) % banners.length);
@@ -74,17 +75,27 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
     };
   }, [showDetails]);
 
+  const localizedDefaults = t('banner.default', { ns: 'landing', returnObjects: true });
+  const displayBanners = useMemo(() => banners.map((banner) => {
+    const index = DEFAULT_BANNER_TITLES.indexOf(String(banner.titulo || '').toLocaleLowerCase('es'));
+    if (i18n.resolvedLanguage?.startsWith('en') && index >= 0 && Array.isArray(localizedDefaults)) {
+      const copy = localizedDefaults[index];
+      return { ...banner, eyebrow: copy.eyebrow, etiqueta: copy.eyebrow, titulo: copy.title, desc: copy.description, tag: copy.tag, detalle: copy.detail };
+    }
+    return banner;
+  }), [banners, i18n.resolvedLanguage, localizedDefaults]);
+  const current = displayBanners[activeIndex] || null;
   const virtualCards = useMemo(() => {
-    if (banners.length <= 1) return banners.map((banner, index) => ({ banner, index, offset: 0 }));
+    if (displayBanners.length <= 1) return displayBanners.map((banner, index) => ({ banner, index, offset: 0 }));
     return Array.from({ length: sideCount * 2 + 1 }, (_, slot) => {
       const offset = slot - sideCount;
-      const index = (activeIndex + offset + banners.length * 10) % banners.length;
-      return { banner: banners[index], index, offset };
+      const index = (activeIndex + offset + displayBanners.length * 10) % displayBanners.length;
+      return { banner: displayBanners[index], index, offset };
     });
-  }, [activeIndex, banners, sideCount]);
+  }, [activeIndex, displayBanners, sideCount]);
 
-  if (loading) return <HeroSkeleton />;
-  if (!banners.length || !current) return null;
+  if (loading) return <HeroSkeleton label={t('banner.loading', { ns: 'landing' })} />;
+  if (!displayBanners.length || !current) return null;
 
   const screenWidth = typeof window === 'undefined' ? 1280 : window.innerWidth;
   const spacing = screenWidth < 640 ? Math.min(126, screenWidth * 0.35) : screenWidth < 1024 ? 155 : Math.min(190, screenWidth / 6);
@@ -98,8 +109,8 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
   return <section
     id="inicio"
     role="region"
-    aria-roledescription="carrusel de portada"
-    aria-label="Historias y productos de CDISFRUTA"
+    aria-roledescription={t('banner.carouselDescription', { ns: 'landing' })}
+    aria-label={t('banner.stories', { ns: 'landing' })}
     tabIndex={0}
     className={tw('scroll-mt-24 overflow-hidden bg-[#FAEFE6] px-4 pb-10 pt-9 outline-none sm:px-8 sm:pb-12 sm:pt-12 lg:px-10', '[font-family:var(--font-display)]', 'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#E8603C]')}
     onMouseEnter={() => setPaused(true)}
@@ -124,13 +135,13 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
       <h1 className={tw('line-clamp-2 max-w-4xl text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold uppercase leading-[1.1] tracking-[-.03em] text-[#2D1B0A]')}>{current.titulo}</h1>
       <p className={tw('mt-6 max-w-[650px] whitespace-pre-line break-words text-[13px] leading-[1.8] text-[#5C4033] sm:mt-8 sm:text-sm')} style={{ fontFamily: 'var(--font-mono)' }}>{current.desc}</p>
       <div className={tw('mt-8 flex flex-wrap justify-center gap-3 sm:mt-10')}>
-        <Link to="/tienda" aria-label="Comprar ahora en la tienda CDISFRUTA" className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{current.textoBotonPrincipal || 'Comprar ahora'}</Link>
-        <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{current.textoBotonSecundario || 'Más información'}</button>
+        <Link to="/tienda" aria-label={t('banner.buyNow', { ns: 'landing' })} className={tw('inline-flex min-h-11 items-center justify-center rounded-full bg-[#E8603C] px-6 text-sm font-bold text-white shadow-[0_8px_20px_rgba(232,96,60,.25)] transition hover:-translate-y-0.5 hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D1B0A]')}>{t('banner.buyNow', { ns: 'landing' })}</Link>
+        <button type="button" onClick={() => setShowDetails(true)} className={tw('inline-flex min-h-11 items-center justify-center rounded-full border border-[#E4D4C7] bg-white/60 px-6 text-sm font-bold text-[#2D1B0A] transition hover:border-[#E8603C] hover:text-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{t('banner.moreInfo', { ns: 'landing' })}</button>
       </div>
     </div>
 
     <div className={tw('relative mx-auto mt-7 h-[310px] max-w-[1400px] touch-pan-y sm:mt-9 sm:h-[390px] lg:mt-10 lg:h-[430px]')}>
-      {banners.length > 1 && <button type="button" aria-label="Banner anterior" onClick={() => move(-1)} className={tw('absolute left-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:left-2 sm:size-12')}><FaChevronLeft /></button>}
+      {banners.length > 1 && <button type="button" aria-label={t('banner.previous', { ns: 'landing' })} onClick={() => move(-1)} className={tw('absolute left-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:left-2 sm:size-12')}><FaChevronLeft /></button>}
       <div className={tw('absolute inset-0 [perspective:1200px] [transform-style:preserve-3d]')} aria-live="off">
         {virtualCards.map(({ banner, index, offset }, virtualIndex) => {
           const isCenter = offset === 0;
@@ -145,7 +156,7 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
             transitionDuration: transitionTime
           }} onClick={() => { if (!isCenter) setActiveIndex(index); }}>
             <div className={tw('relative aspect-[3/4] overflow-hidden rounded-[28px] border border-white/70 bg-[#f2dfd1] shadow-[0_18px_48px_rgba(84,48,25,.2)] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_28px_60px_rgba(195,67,31,.3)] motion-reduce:transition-none', isCenter && 'shadow-[0_24px_58px_rgba(195,67,31,.28)]')}>
-              <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={`Mostrar banner: ${banner.titulo}`} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
+              <button type="button" tabIndex={isCenter ? 0 : -1} onClick={() => setActiveIndex(index)} aria-label={t('banner.show', { ns: 'landing', title: banner.titulo })} className={tw('absolute inset-0 h-full w-full cursor-pointer focus-visible:z-20 focus-visible:outline-4 focus-visible:outline-[#E8603C]')}>
                 <img src={getImage(banner, isCenter ? centerWidth : sideWidth)} alt={banner.titulo || 'Banner CDISFRUTA'} width="600" height="800" decoding="async" loading={isCenter ? 'eager' : 'lazy'} fetchPriority={isCenter ? 'high' : 'low'} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} draggable="false" className={tw('h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none')} />
               </button>
               <div className={tw('pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1d120b]/90 via-[#1d120b]/35 to-transparent px-4 pb-2 pt-16 text-white sm:px-5 sm:pb-3 sm:pt-16')}>
@@ -158,18 +169,18 @@ export default function HeroCarousel3D({ banners = [], loading = false }) {
           </article>;
         })}
       </div>
-      {banners.length > 1 && <button type="button" aria-label="Banner siguiente" onClick={() => move(1)} className={tw('absolute right-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:right-2 sm:size-12')}><FaChevronRight /></button>}
+      {banners.length > 1 && <button type="button" aria-label={t('banner.next', { ns: 'landing' })} onClick={() => move(1)} className={tw('absolute right-0 top-1/2 z-40 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-[#ead9cb] bg-white/90 text-[#6d4c37] shadow-md transition hover:border-[#E8603C] hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C] sm:right-2 sm:size-12')}><FaChevronRight /></button>}
     </div>
 
-    {banners.length > 1 && <nav aria-label="Paginación de banners" className={tw('mt-3 flex min-h-8 flex-wrap items-center justify-center gap-2 px-4')}>
-      {banners.map((banner, index) => <button key={banner._id || index} type="button" onClick={() => setActiveIndex(index)} aria-label={`Ir al banner ${index + 1}: ${banner.titulo}`} aria-current={index === activeIndex ? 'true' : undefined} className={tw('h-2.5 rounded-full bg-[#d8c8bc] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]', index === activeIndex ? 'w-9 bg-[#E8603C]' : 'w-2.5 hover:bg-[#E8603C]')} />)}
+    {banners.length > 1 && <nav aria-label={t('banner.pagination', { ns: 'landing' })} className={tw('mt-3 flex min-h-8 flex-wrap items-center justify-center gap-2 px-4')}>
+      {displayBanners.map((banner, index) => <button key={banner._id || index} type="button" onClick={() => setActiveIndex(index)} aria-label={t('banner.slide', { ns: 'landing', number: index + 1, title: banner.titulo })} aria-current={index === activeIndex ? 'true' : undefined} className={tw('h-2.5 rounded-full bg-[#d8c8bc] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]', index === activeIndex ? 'w-9 bg-[#E8603C]' : 'w-2.5 hover:bg-[#E8603C]')} />)}
     </nav>}
 
     {showDetails && createPortal(<div className={tw('fixed inset-0 z-[2500] flex items-end justify-center bg-slate-950/55 p-0 backdrop-blur-sm sm:items-center sm:p-4')} onMouseDown={(event) => { if (event.target === event.currentTarget) setShowDetails(false); }}>
       <section role="dialog" aria-modal="true" aria-labelledby="hero-banner-details-title" className={tw('relative w-full max-w-xl overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl')}>
-        <button type="button" aria-label="Cerrar información" onClick={() => setShowDetails(false)} className={tw('absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full bg-white/90 text-slate-700 shadow-sm hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-[#E8603C]')}><FaTimes /></button>
+        <button type="button" aria-label={t('banner.closeInfo', { ns: 'landing' })} onClick={() => setShowDetails(false)} className={tw('absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full bg-white/90 text-slate-700 shadow-sm hover:text-[#E8603C] focus-visible:outline-2 focus-visible:outline-[#E8603C]')}><FaTimes /></button>
         <img src={getImage(current, screenWidth < 640 ? 640 : 960)} alt={current.titulo || 'CDISFRUTA'} width="960" height="256" loading="lazy" decoding="async" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = BRAND_PLACEHOLDER; }} className={tw('h-52 w-full object-cover sm:h-64')} />
-        <div className={tw('space-y-3 p-5 sm:p-7')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#E8603C]')}>{current.etiqueta || current.eyebrow}</p><h2 id="hero-banner-details-title" className={tw('text-2xl font-extrabold tracking-[-.02em] text-[#2D1B0A]')}>{current.titulo}</h2><p className={tw('max-h-48 overflow-y-auto whitespace-pre-line text-sm leading-6 text-[#5C4033]')} style={{ fontFamily: 'var(--font-mono)' }}>{current.detalle || current.desc}</p><p className={tw('inline-flex rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-[#5C4033]')}>{current.tag || current.etiqueta}</p><div><button type="button" onClick={() => { setShowDetails(false); navigate('/tienda'); }} className={tw('min-h-11 rounded-full bg-[#E8603C] px-5 text-sm font-bold text-white transition hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>Ver en la tienda</button></div></div>
+        <div className={tw('space-y-3 p-5 sm:p-7')}><p className={tw('text-xs font-bold uppercase tracking-[.14em] text-[#E8603C]')}>{current.etiqueta || current.eyebrow}</p><h2 id="hero-banner-details-title" className={tw('text-2xl font-extrabold tracking-[-.02em] text-[#2D1B0A]')}>{current.titulo}</h2><p className={tw('max-h-48 overflow-y-auto whitespace-pre-line text-sm leading-6 text-[#5C4033]')} style={{ fontFamily: 'var(--font-mono)' }}>{current.detalle || current.desc}</p><p className={tw('inline-flex rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-[#5C4033]')}>{current.tag || current.etiqueta}</p><div><button type="button" onClick={() => { setShowDetails(false); navigate('/tienda'); }} className={tw('min-h-11 rounded-full bg-[#E8603C] px-5 text-sm font-bold text-white transition hover:bg-[#C4431F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8603C]')}>{t('banner.viewInShop', { ns: 'landing' })}</button></div></div>
       </section>
     </div>, document.body)}
 

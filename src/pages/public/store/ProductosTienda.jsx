@@ -7,9 +7,11 @@ import { animateProductToCart } from "../../../utils/cartFlightAnimation.js";
 import ProductDetailModal from "../../../components/ui/ProductDetailModal.jsx";
 import { useTranslation } from 'react-i18next';
 import { formatCurrency, formatNumber } from '../../../i18n/format.js';
+import { translateCatalogText } from '../../../i18n/catalogText.js';
 
 export default function ProductosTienda({ categoria }) {
   const { t, i18n } = useTranslation('shop');
+  const displayText = (value) => translateCatalogText(value, i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
@@ -198,7 +200,7 @@ export default function ProductosTienda({ categoria }) {
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
     const alreadyInCart = existingItemIndex === -1 ? 0 : currentStorageCart[existingItemIndex].quantity;
     if (alreadyInCart + quantityToAdd > product.stock) {
-      alert(`Solo quedan ${product.stock} unidades disponibles de ${product.nombre}.`);
+      alert(t('products.stockAlert', { count: product.stock, name: displayText(product.nombre) }));
       return;
     }
     
@@ -311,7 +313,7 @@ export default function ProductosTienda({ categoria }) {
             className={tw("filter-select")}
           >
             {categoriasDisponibles.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat === 'Todos los productos' ? t('products.all') : cat}</option>
+              <option key={idx} value={cat}>{cat === 'Todos los productos' ? t('products.all') : displayText(cat)}</option>
             ))}
           </select>
         </div>
@@ -409,7 +411,7 @@ export default function ProductosTienda({ categoria }) {
                     {product.imagen ? (
                       <img
                         src={cloudinaryUrl(product.imagen, { width: 480 })}
-                        alt={product.nombre}
+                        alt={displayText(product.nombre)}
                         width="480"
                         height="480"
                         loading="lazy"
@@ -424,15 +426,15 @@ export default function ProductosTienda({ categoria }) {
                   </div>
 
                   <div className={tw("product-info")}>
-                    <span className={tw("product-category-label")}>{product.categoria}</span>
+                    <span className={tw("product-category-label")}>{displayText(product.categoria)}</span>
                     <h3
                       onClick={() => setProductoSeleccionado(product)}
                       className={tw("![cursor:pointer]")}
                     >
-                      {product.nombre}
+                      {displayText(product.nombre)}
                     </h3>
                     <p className={tw("product-description-short")}>
-                      {product.descripcion ? product.descripcion.substring(0, 60) : t('products.noDescription')}...
+                      {product.descripcion ? `${displayText(product.descripcion).substring(0, 60)}...` : t('products.noDescription')}
                     </p>
                     
                     <div className={tw("product-footer")}>

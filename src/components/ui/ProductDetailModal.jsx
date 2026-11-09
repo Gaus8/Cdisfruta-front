@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaTimes, FaChevronLeft, FaChevronRight, FaBoxOpen } from 'react-icons/fa';
 import { tw } from '../../utils/tw.js';
 import { cloudinaryUrl } from '../../utils/cloudinaryUrl.js';
+import { useTranslation } from 'react-i18next';
+import { translateCatalogText } from '../../i18n/catalogText.js';
+import { formatCurrency } from '../../i18n/format.js';
 
 const imagesOf = (product) => {
   if (!product) return [];
@@ -19,6 +22,9 @@ export default function ProductDetailModal({
   onDecrease,
   onAddToCart,
 }) {
+  const { t, i18n } = useTranslation('shop');
+  const language = i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es';
+  const displayText = (value) => translateCatalogText(value, language);
   const images = imagesOf(product);
   const [activeImage, setActiveImage] = useState(images[0] || '');
   const activeIndex = Math.max(0, images.indexOf(activeImage));
@@ -72,9 +78,9 @@ export default function ProductDetailModal({
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label={product.nombre}
+        aria-label={displayText(product.nombre)}
       >
-        <button type="button" className={tw('close-modal-btn')} onClick={onClose} aria-label="Cerrar detalle">
+        <button type="button" className={tw('close-modal-btn')} onClick={onClose} aria-label={t('detail.close')}>
           <FaTimes size={16} />
         </button>
 
@@ -85,7 +91,7 @@ export default function ProductDetailModal({
                 <>
                   <img
                     src={cloudinaryUrl(activeImage, { width: 900 })}
-                    alt={product.nombre}
+                    alt={displayText(product.nombre)}
                     width="900"
                     height="900"
                     loading="lazy"
@@ -93,10 +99,10 @@ export default function ProductDetailModal({
                   />
                   {images.length > 1 && (
                     <>
-                      <button type="button" className={tw('modal-slider-arrow modal-prev')} onClick={goPrev} aria-label="Imagen anterior">
+                      <button type="button" className={tw('modal-slider-arrow modal-prev')} onClick={goPrev} aria-label={t('detail.previousImage')}>
                         <FaChevronLeft size={14} />
                       </button>
-                      <button type="button" className={tw('modal-slider-arrow modal-next')} onClick={goNext} aria-label="Imagen siguiente">
+                      <button type="button" className={tw('modal-slider-arrow modal-next')} onClick={goNext} aria-label={t('detail.nextImage')}>
                         <FaChevronRight size={14} />
                       </button>
                       <span className={tw('modal-image-counter')}>
@@ -120,11 +126,11 @@ export default function ProductDetailModal({
                     type="button"
                     className={tw(`thumbnail-btn ${activeImage === imgUrl ? 'active' : ''}`)}
                     onClick={() => setActiveImage(imgUrl)}
-                    aria-label={`Vista ${index + 1}`}
+                    aria-label={t('detail.imageView', { number: index + 1 })}
                   >
                     <img
                       src={cloudinaryUrl(imgUrl, { width: 160 })}
-                      alt={`${product.nombre} vista ${index + 1}`}
+                      alt={t('detail.productViewAlt', { name: displayText(product.nombre), number: index + 1 })}
                       width="160"
                       height="160"
                       loading="lazy"
@@ -138,40 +144,39 @@ export default function ProductDetailModal({
 
           <div className={tw('modal-details-container')}>
             {product.categoria && (
-              <span className={tw('modal-category-pill')}>{product.categoria}</span>
+              <span className={tw('modal-category-pill')}>{displayText(product.categoria)}</span>
             )}
-            <h2>{product.nombre}</h2>
+            <h2>{displayText(product.nombre)}</h2>
 
             <div className={tw('modal-price-box')}>
               <div className={tw('modal-price-row')}>
                 <div>
-                  <span className={tw('price-label')}>Precio unitario</span>
+                  <span className={tw('price-label')}>{t('detail.unitPrice')}</span>
                   <span className={tw('product-price')}>
-                    ${product.precio ? product.precio.toLocaleString('es-CO') : '0'}
+                    {formatCurrency(product.precio || 0, language)}
                   </span>
                 </div>
                 <span className={tw(inStock ? 'modal-stock-badge modal-stock-ok' : 'modal-stock-badge modal-stock-out')}>
-                  {inStock ? `${product.stock} disponibles` : 'Agotado'}
+                  {inStock ? t('products.available', { count: product.stock }) : t('products.outOfStock')}
                 </span>
               </div>
             </div>
 
             <div className={tw('modal-description-box')}>
-              <h4>Descripción</h4>
+              <h4>{t('detail.description')}</h4>
               <p>
-                {product.descripcion
-                  || 'Producto artesanal de CDISFRUTA, elaborado con ingredientes naturales y el mismo cuidado de siempre.'}
+                {displayText(product.descripcion || t('detail.defaultDescription'))}
               </p>
             </div>
 
             {inStock ? (
               <div className={tw('product-detail-actions')}>
                 <div className={tw('product-detail-qty-box')}>
-                  <button type="button" onClick={() => onDecrease?.(product._id)} className={tw('product-detail-qty-btn')} aria-label="Disminuir cantidad">
+                  <button type="button" onClick={() => onDecrease?.(product._id)} className={tw('product-detail-qty-btn')} aria-label={t('detail.decrease')}>
                     <FaMinus size={11} />
                   </button>
                   <span className={tw('product-detail-qty-number')}>{quantity}</span>
-                  <button type="button" onClick={() => onIncrease?.(product._id, product.stock)} className={tw('product-detail-qty-btn')} aria-label="Aumentar cantidad">
+                  <button type="button" onClick={() => onIncrease?.(product._id, product.stock)} className={tw('product-detail-qty-btn')} aria-label={t('detail.increase')}>
                     <FaPlus size={11} />
                   </button>
                 </div>
@@ -181,13 +186,11 @@ export default function ProductDetailModal({
                   className={tw('product-detail-submit-btn')}
                   onClick={(event) => onAddToCart?.(product, event.currentTarget)}
                 >
-                  <FaShoppingCart size={16} /> Agregar al carrito
+                  <FaShoppingCart size={16} /> {t('products.add')}
                 </button>
               </div>
             ) : (
-              <p className={tw('modal-out-of-stock-note')}>
-                Este producto no está disponible por ahora. Vuelve pronto.
-              </p>
+              <p className={tw('modal-out-of-stock-note')}>{t('detail.unavailable')}</p>
             )}
           </div>
         </div>

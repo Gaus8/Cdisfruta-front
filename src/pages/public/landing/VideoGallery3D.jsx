@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import './VideoGallery3D.css';
 
 function PlayIcon() {
@@ -37,6 +38,7 @@ function relativeSlot(index, active, total) {
 }
 
 export default function VideoGallery3D({ videos = [], title = 'nuestra pasión', loading = false }) {
+  const { t } = useTranslation('landing');
   const sectionRef = useRef(null);
   const stageRef = useRef(null);
   const videoRefs = useRef(new Map());
@@ -140,7 +142,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
       data-count={cleanVideos.length}
     >
       {loading ? (
-        <div className="video-gallery__skeleton" aria-label="Cargando videos">
+        <div className="video-gallery__skeleton" aria-label={t('videos.loading')}>
           <span />
           <span />
           <span />
@@ -150,7 +152,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
           <header className="video-gallery__intro">
             <p className="video-gallery__eyebrow">
               <FilmIcon />
-              <span>Escena en profundidad</span>
+              <span>{t('videos.eyebrow')}</span>
             </p>
             <div className="video-gallery__intro-copy">
               <h2 className="video-gallery__title">
@@ -158,8 +160,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                 <strong>{titleRest}</strong>
               </h2>
               <p className="video-gallery__lead">
-                Un escenario 3D con las historias de CDISFRUTA. Elige un fotograma
-                lateral y salta al frente; pulsa reproducir para verlo en grande.
+                {t('videos.lead')}
               </p>
             </div>
             <div className="video-gallery__progress" aria-hidden="true">
@@ -185,7 +186,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                 '--tilt-y': `${tilt.y}deg`,
               }}
               role="listbox"
-              aria-label="Historias en video"
+              aria-label={t('videos.aria')}
               aria-activedescendant={`video-card-${activeIndex}`}
               onKeyDown={(event) => {
                 if (event.key === 'ArrowRight') {
@@ -249,7 +250,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       <div className="video-gallery__card-copy">
-                        <p>Historia</p>
+                        <p>{t('videos.story')}</p>
                         <h3>{video.title}</h3>
                       </div>
 
@@ -257,7 +258,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                         <button
                           className="video-gallery__play"
                           type="button"
-                          aria-label={`Reproducir video: ${video.title}`}
+                          aria-label={t('videos.play', { title: video.title })}
                           ref={(node) => {
                             if (node) playButtonRefs.current.set(index, node);
                             else playButtonRefs.current.delete(index);
@@ -271,8 +272,8 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                             <PlayIcon />
                           </span>
                           <span className="video-gallery__play-text">
-                            Reproducir
-                            <small>En escena</small>
+                            {t('videos.playLabel')}
+                            <small>{t('videos.onScene')}</small>
                           </span>
                         </button>
                       )}
@@ -287,19 +288,19 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                 <button
                   type="button"
                   className="video-gallery__nav"
-                  aria-label="Historia anterior"
+                  aria-label={t('videos.previous')}
                   onClick={() => goTo(activeIndex - 1)}
                 >
                   ‹
                 </button>
-                <div className="video-gallery__dots" role="tablist" aria-label="Elegir historia">
+                <div className="video-gallery__dots" role="tablist" aria-label={t('videos.choose')}>
                   {cleanVideos.map((video, index) => (
                     <button
                       key={`dot-${video.src}`}
                       type="button"
                       role="tab"
                       aria-selected={index === activeIndex}
-                      aria-label={`Mostrar: ${video.title}`}
+                      aria-label={t('videos.show', { title: video.title })}
                       className={`video-gallery__dot${index === activeIndex ? ' is-active' : ''}`}
                       onClick={() => goTo(index)}
                     />
@@ -308,7 +309,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                 <button
                   type="button"
                   className="video-gallery__nav"
-                  aria-label="Historia siguiente"
+                  aria-label={t('videos.next')}
                   onClick={() => goTo(activeIndex + 1)}
                 >
                   ›
@@ -319,7 +320,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
 
           {featured && (
             <p className="video-gallery__now-playing" aria-live="polite">
-              En primer plano: <strong>{featured.title}</strong>
+              {t('videos.featured')}: <strong>{featured.title}</strong>
             </p>
           )}
 
@@ -336,7 +337,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                   className="video-gallery__modal-panel"
                   role="dialog"
                   aria-modal="true"
-                  aria-label={`Reproduciendo: ${activeVideo.title}`}
+                  aria-label={t('videos.nowPlaying', { title: activeVideo.title })}
                 >
                   <div className="video-gallery__modal-header">
                     <p>{activeVideo.title}</p>
@@ -345,7 +346,7 @@ export default function VideoGallery3D({ videos = [], title = 'nuestra pasión',
                       type="button"
                       ref={closeButtonRef}
                       onClick={() => setPlayingIndex(null)}
-                      aria-label="Cerrar video"
+                      aria-label={t('videos.close')}
                     >
                       <CloseIcon />
                     </button>

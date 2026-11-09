@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CountUpNumber from './CountUpNumber';
 import './HistorySection.css';
 
@@ -40,9 +41,10 @@ function SmallGlints({ className = '' }) {
 }
 
 function PhotoBadges({ items = [] }) {
+  const { t } = useTranslation('landing');
   if (!items.length) return null;
   return (
-    <ul className={`history-editorial__photo-badges history-editorial__photo-badges--count-${items.length > 3 ? 'many' : items.length}`} aria-label="Características de nuestros productos">
+    <ul className={`history-editorial__photo-badges history-editorial__photo-badges--count-${items.length > 3 ? 'many' : items.length}`} aria-label={t('history.photoBadges')}>
       {items.map((item) => (
         <li className="history-editorial__photo-badge" key={item.id}>
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
@@ -67,6 +69,7 @@ function HistoryValue({ item, index }) {
 }
 
 export default function HistorySection({ content }) {
+  const { t } = useTranslation('landing');
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const values = (content.values || []).filter((item) => item?.label);
@@ -145,12 +148,12 @@ export default function HistorySection({ content }) {
           </div>
         )}
 
-        <div className="history-editorial__years" aria-label={`${content.years} años en el mercado`}>
+        <div className="history-editorial__years" aria-label={`${content.years} ${t('history.marketYears')}`}>
           <SmallGlints className="history-editorial__years-glints history-editorial__years-glints--left" />
           <div className="history-editorial__years-number">
             <strong><CountUpNumber value={content.years} /></strong>
           </div>
-          <span className="history-editorial__years-label">años en el mercado</span>
+          <span className="history-editorial__years-label">{t('history.marketYears')}</span>
           <SmallGlints className="history-editorial__years-glints history-editorial__years-glints--right" />
         </div>
 
@@ -173,7 +176,7 @@ export default function HistorySection({ content }) {
         </div>
 
         {values.length > 0 && (
-          <ul className={`history-editorial__values${values.length > 4 ? ' history-editorial__values--many' : ''}`} aria-label="Lo que nos representa">
+            <ul className={`history-editorial__values${values.length > 4 ? ' history-editorial__values--many' : ''}`} aria-label={t('history.represents')}>
             {values.map((item, index) => <HistoryValue item={item} index={index} key={item.id || `${item.icon}-${index}`} />)}
           </ul>
         )}

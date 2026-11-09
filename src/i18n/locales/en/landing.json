@@ -6,5 +6,41 @@
     "description": "Enjoy the authentic taste of Ubaté. Carefully selected fruit, lovingly dehydrated to complement your healthy lifestyle.",
     "products": "View products"
   },
-  "footer": { "navigation": "Navigation", "company": "Company", "contact": "Contact" }
+  "footer": {
+    "navigation": "Navigation", "company": "Company", "contact": "Contact", "brandTagline": "Dehydrated fruit and infusions from Ubaté, Cundinamarca. Colombian natural flavor for the world.",
+    "skip": "Skip to main content", "about": "About us", "features": "Features", "gallery": "Gallery", "ourStory": "Our story", "craft": "Artisanal process", "international": "International presence", "distributors": "Distributors", "location": "Ubaté, Cundinamarca, Colombia", "rights": "© 2026 CDISFRUTA - SIECU · All rights reserved", "made": "Made with ❤️ in Ubaté, Colombia", "logoAlt": "CDISFRUTA logo"
+  },
+  "banner": {
+    "buyNow": "Shop now", "moreInfo": "More information", "previous": "Previous banner", "next": "Next banner", "pagination": "Banner pagination", "closeInfo": "Close information", "viewInShop": "View in shop", "slide": "Go to banner {{number}}: {{title}}", "show": "Show banner: {{title}}", "loading": "Loading homepage banners", "carousel": "Homepage carousel", "carouselDescription": "homepage carousel", "stories": "CDISFRUTA stories and products",
+    "default": [
+      { "eyebrow": "International presence", "title": "CDISFRUTA in Australia", "description": "Our fruit infusions are reaching new destinations. Colombian flavor is now in Melbourne.", "tag": "Australia · Melbourne", "detail": "Our international expansion began with a dream of bringing Ubaté's flavor to the world." },
+      { "eyebrow": "Featured product", "title": "Fruit infusions", "description": "Natural infusions made with selected fruit, bringing flavor, freshness, and well-being to every cup.", "tag": "100% Natural", "detail": "We select each fruit at its perfect stage of ripeness." },
+      { "eyebrow": "Our land", "title": "Ubaté tradition", "description": "We reflect the richness of our land in every blend, with carefully selected fruit and herbs.", "tag": "Ubaté · Cundinamarca", "detail": "CDISFRUTA was born in the heart of the Ubaté province." }
+    ]
+  },
+  "history": {
+    "eyebrow": "Our story", "quote": "\"From Ubaté's fields to the world\"", "photoAlt": "CDISFRUTA dehydrated fruit products on a wooden table", "photoTagline": "The natural flavor of our land", "marketYears": "years in business", "photoBadges": "Product features", "represents": "What we stand for", "closing": "More than a snack... nature in every bite",
+    "paragraphOne": "Founded in 2020 by a family from Ubaté, CDISFRUTA grew from the opportunities and needs that emerged during the pandemic. We make dehydrated fruit snacks and fruit infusions, promoting healthy, completely natural eating.",
+    "paragraphTwo": "Each product comes from the agricultural richness of our region and is made with fruit grown by local farming families, ensuring quality, freshness, and authentic natural flavor.",
+    "badgeNatural": "100% NATURAL", "badgeNoPreservatives": "NO PRESERVATIVES", "badgeNutrients": "RICH IN NUTRIENTS", "valueFruit": "100% natural fruit", "valueFarmers": "Supporting local farmers", "valueQuality": "Quality and safety", "valueFlavor": "Authentic flavor"
+  },
+  "missionVision": {
+    "eyebrow": "Our compass", "title": "A purpose that grows with the land", "subtitle": "Farming traditions, fresh ideas, and a vision for the future.", "place": "Ubaté landscape and church", "churchAlt": "Church and landscape in Ubaté, Cundinamarca", "fact": "Did you know?", "closeFact": "Close fun fact", "factEyebrow": "CDISFRUTA quality and care", "factTitle": "Dehydrated fruit: great flavor and shelf life", "factBody": "We are inspired to make the most of this fruit, preserving its quality for {{months}} when stored properly.", "months": "6 to 12 months"
+  },
+  "purpose": {
+    "missionEyebrow": "Our mission", "missionLead": "Our", "missionWord": "Mission", "missionTitle": "Well-being rooted in the land", "missionDescription": "We turn local fruit into natural snacks and infusions, carefully made alongside farming families to share well-being and authentic flavor.", "missionAlt": "CDISFRUTA products and dehydrated fruit on a wooden table",
+    "visionEyebrow": "Our vision", "visionLead": "Our", "visionWord": "Vision", "visionTitle": "Taking Ubaté's flavor further", "visionDescription": "We aim to be a recognized Colombian brand that innovates with natural products, strengthens our farming roots, and brings Ubaté's flavor to new markets.", "visionAlt": "CDISFRUTA infusion pouch surrounded by fresh and dehydrated fruit", "caption": "The flavor of our land"
+  },
+  "know": {
+    "eyebrow": "DISCOVER OUR PRODUCT", "titleLead": "Discover", "title": "our signature product", "subtitle": "Tap each icon to discover the ingredients that make our fruit infusion unique.", "imageAlt": "CDISFRUTA fruit infusion pouch surrounded by its ingredients", "closeInfo": "Close information", "closeIngredient": "Close ingredient information", "benefit": "Benefit", "reminder": "Tap a + to explore", "placeholderTitle": "Your product, ingredient by ingredient", "placeholderText": "The transparent scene will appear here.", "calibration": "Ingredient calibration tool", "moveIngredient": "Move ingredient", "calibrationHelp": "Click the image or drag a dot to adjust its position.", "viewInfo": "View information about {{name}}",
+    "ingredients": {
+      "fresa": { "name": "Strawberry", "category": "FRUIT", "description": "Dehydrated strawberry adds natural sweetness, a bright red color, and fruity aroma to the infusion.", "benefit": "A natural source of vitamin C." },
+      "pina": { "name": "Pineapple", "category": "FRUIT", "description": "Tropical dehydrated pineapple with a tart note that adds freshness and body to the infusion.", "benefit": "Contains bromelain and vitamin C." },
+      "manzana": { "name": "Apple", "category": "FRUIT", "description": "Dehydrated apple softens the blend with light sweetness and fresh notes.", "benefit": "Provides natural fiber." },
+      "cidron": { "name": "Lemon verbena leaves", "category": "AROMATIC HERB", "description": "Citrusy aromatic leaves traditionally used in infusions for their fresh, relaxing flavor.", "benefit": "Traditionally associated with relaxation." },
+      "azucar-morena": { "name": "Brown sugar", "category": "NATURAL SWEETENER", "description": "Unrefined natural sweetener with gentle sweetness and caramel notes.", "benefit": "Adds warm sweetness to the blend." },
+      "panela-menta": { "name": "Mint-flavored panela", "category": "NATURAL SWEETENER", "description": "Artisanal panela with farm-style sweetness and a refreshing touch of mint.", "benefit": "Combines panela sweetness with refreshing mint." }
+    }
+  },
+  "videos": { "title": "our passion", "eyebrow": "A closer look", "lead": "A 3D stage featuring CDISFRUTA stories. Choose a side frame to bring it forward, then press play to watch it full size.", "aria": "Stories on video", "story": "Story", "onScene": "On screen", "playLabel": "Play", "featured": "Now in focus", "previous": "Previous story", "next": "Next story", "choose": "Choose a story", "close": "Close video", "loading": "Loading videos", "play": "Play video: {{title}}", "show": "Show: {{title}}", "nowPlaying": "Playing: {{title}}", "thumbnail": "Video thumbnail: {{title}}", "items": ["Authentic flavor from Ubaté", "From Ubaté to the world", "Perfect for any moment"] }
 }

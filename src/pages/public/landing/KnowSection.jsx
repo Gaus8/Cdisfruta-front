@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { conoceConfig } from './conoce.config.js';
 import './KnowSection.css';
 
@@ -23,6 +24,7 @@ function IngredientIcon({ id, className = '' }) {
 }
 
 export default function KnowSection() {
+  const { t } = useTranslation('landing');
   const activeIngredients = useMemo(
     () => conoceConfig.ingredientes.filter((item) => item.activo && item.descripcion).sort((a, b) => a.orden - b.orden),
     [],
@@ -45,7 +47,13 @@ export default function KnowSection() {
   const closeTimerRef = useRef(null);
   const pageScrollRef = useRef(0);
   const devMode = new URLSearchParams(window.location.search).get('devConoce') === '1';
-  const selected = ingredients.find((item) => item.id === selectedId) || null;
+  const displayIngredients = ingredients.map((item) => {
+    const copy = t(`know.ingredients.${item.id}`, { returnObjects: true });
+    return copy && typeof copy === 'object' && copy.name
+      ? { ...item, nombre: copy.name, categoria: copy.category, descripcion: copy.description, beneficio: copy.benefit }
+      : item;
+  });
+  const selected = displayIngredients.find((item) => item.id === selectedId) || null;
 
   const closeIngredient = useCallback(() => {
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
@@ -254,7 +262,7 @@ export default function KnowSection() {
       />
       <span className="know-card__stack" aria-hidden="true" />
       <span className="know-card__surface" aria-hidden="true" />
-      <button type="button" className="know-card__close" aria-label="Cerrar información" onClick={closeIngredient}><IoCloseOutline /></button>
+      <button type="button" className="know-card__close" aria-label={t('know.closeInfo')} onClick={closeIngredient}><IoCloseOutline /></button>
       <div className="know-card__header">
         <p className="know-card__category">{selected.categoria}</p>
         <h3 id="know-card-title" ref={cardTitleRef} tabIndex="-1">{selected.nombre}</h3>
@@ -262,11 +270,11 @@ export default function KnowSection() {
       <div className="know-card__body">
         <p className="know-card__description" id="know-card-description">{selected.descripcion}</p>
         {selected.beneficio && <div className="know-card__divider" aria-hidden="true" />}
-        {selected.beneficio && <p className="know-card__benefit"><span><strong>Beneficio</strong><span>{selected.beneficio}</span></span></p>}
+        {selected.beneficio && <p className="know-card__benefit"><span><strong>{t('know.benefit')}</strong><span>{selected.beneficio}</span></span></p>}
       </div>
     </article>
   );
-  const dismissLayer = selected && imageReady && <button type="button" className={`know-sheet-scrim${isMobileModal && closing ? ' is-closing' : ''}`} aria-label="Cerrar información del ingrediente" onClick={closeIngredient} />;
+  const dismissLayer = selected && imageReady && <button type="button" className={`know-sheet-scrim${isMobileModal && closing ? ' is-closing' : ''}`} aria-label={t('know.closeIngredient')} onClick={closeIngredient} />;
   return (
     <>
     <section ref={sectionRef} id="conoce" className={`know-section${visible ? ' is-visible' : ''}`} aria-labelledby="know-title">
@@ -276,18 +284,18 @@ export default function KnowSection() {
       </div>
       <div className="know-section__inner">
         <header className="know-section__heading">
-          <p className="know-section__eyebrow">{conoceConfig.seccion.eyebrow}</p>
-          <h2 id="know-title"><span>{conoceConfig.seccion.tituloManuscrito}</span><strong>{conoceConfig.seccion.titulo}</strong><i aria-hidden="true" /></h2>
-          <p className="know-section__subtitle">{conoceConfig.seccion.subtitulo}</p>
+          <p className="know-section__eyebrow">{t('know.eyebrow')}</p>
+          <h2 id="know-title"><span>{t('know.titleLead')}</span><strong>{t('know.title')}</strong><i aria-hidden="true" /></h2>
+          <p className="know-section__subtitle">{t('know.subtitle')}</p>
         </header>
 
         {devMode && (
-          <div className="know-calibration" aria-label="Herramienta de calibración de ingredientes">
-            <label htmlFor="know-calibration-select">Mover ingrediente</label>
+          <div className="know-calibration" aria-label={t('know.calibration')}>
+            <label htmlFor="know-calibration-select">{t('know.moveIngredient')}</label>
             <select id="know-calibration-select" value={devId} onChange={(event) => setDevId(event.target.value)}>
               {ingredients.map((item) => <option value={item.id} key={item.id}>{item.nombre}</option>)}
             </select>
-            <p>Haz clic en la imagen o arrastra un punto para calibrar.</p>
+            <p>{t('know.calibrationHelp')}</p>
             <pre>{devJson}</pre>
           </div>
         )}
@@ -311,7 +319,7 @@ export default function KnowSection() {
               src={conoceConfig.seccion.imagenEscenario}
               srcSet={conoceConfig.seccion.imagenEscenarioSrcSet}
               sizes="(max-width: 699px) 92vw, (max-width: 1100px) 92vw, 1100px"
-              alt={conoceConfig.seccion.altImagen}
+              alt={t('know.imageAlt')}
               width="1600"
               height="784"
               loading="lazy"
@@ -319,7 +327,7 @@ export default function KnowSection() {
               onLoad={() => setImageReady(true)}
               onError={() => setImageReady(false)}
             />
-            {!imageReady && <div className="know-stage__placeholder" role="status"><span className="know-stage__placeholder-icon" aria-hidden="true">✦</span><strong>Tu producto, ingrediente por ingrediente</strong><span>El escenario transparente se añadirá aquí.</span></div>}
+            {!imageReady && <div className="know-stage__placeholder" role="status"><span className="know-stage__placeholder-icon" aria-hidden="true">✦</span><strong>{t('know.placeholderTitle')}</strong><span>{t('know.placeholderText')}</span></div>}
             {imageReady && (
               <>
                 <svg className="know-stage__connectors" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -329,14 +337,14 @@ export default function KnowSection() {
                     return <g key={item.id} className={`${selected && selected.id !== item.id ? 'is-dimmed' : ''}${selected?.id === item.id ? ' is-active' : ''}`}><line pathLength="1" x1={item.x} y1={item.y} x2={endpoint} y2={item.y} /><circle cx={item.x} cy={item.y} r=".45" /></g>;
                   })}
                 </svg>
-                {ingredients.map((item, index) => (
+                {displayIngredients.map((item, index) => (
                   <button
                     key={item.id}
                     ref={(node) => { if (node) hotspotRefs.current.set(item.id, node); else hotspotRefs.current.delete(item.id); }}
                     type="button"
                     className={`know-hotspot know-hotspot--${item.lado}${selected && selected.id !== item.id ? ' is-dimmed' : ''}${selected?.id === item.id ? ' is-active' : ''}`}
                     style={{ '--hotspot-x': `${item.x}%`, '--hotspot-y': `${item.y}%`, '--hotspot-delay': `${index * 90}ms` }}
-                    aria-label={`Ver información de ${item.nombre}`}
+                    aria-label={t('know.viewInfo', { name: item.nombre })}
                     aria-expanded={selectedId === item.id}
                     aria-controls="know-ingredient-card"
                     onPointerDown={(event) => { if (devMode) { event.stopPropagation(); setDevId(item.id); setDragId(item.id); event.currentTarget.setPointerCapture(event.pointerId); } }}
@@ -350,10 +358,10 @@ export default function KnowSection() {
             )}
 
             {selected && imageReady && !isMobileModal && <>{dismissLayer}{ingredientCard}</>}
-            {reminderVisible && imageReady && !selected && <p className="know-stage__reminder">Toca un + para explorar</p>}
+            {reminderVisible && imageReady && !selected && <p className="know-stage__reminder">{t('know.reminder')}</p>}
           </div>
 
-          <ul className="know-sr-list">{ingredients.map((item) => <li key={item.id}>{item.nombre}: {item.descripcion}</li>)}</ul>
+          <ul className="know-sr-list">{displayIngredients.map((item) => <li key={item.id}>{item.nombre}: {item.descripcion}</li>)}</ul>
         </div>
       </div>
     </section>

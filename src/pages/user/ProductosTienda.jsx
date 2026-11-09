@@ -7,8 +7,12 @@ import { registrarIntentoFormulario, registrarVistaProducto } from "../../servic
 import { cloudinaryUrl } from "../../utils/cloudinaryUrl.js";
 import { animateProductToCart } from "../../utils/cartFlightAnimation.js";
 import ProductDetailModal from "../../components/ui/ProductDetailModal.jsx";
+import { useTranslation } from 'react-i18next';
+import { translateCatalogText } from '../../i18n/catalogText.js';
 
 export default function ProductosTienda({ categoria, user }) {
+  const { t, i18n } = useTranslation('shop');
+  const displayText = (value) => translateCatalogText(value, i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
@@ -194,7 +198,7 @@ export default function ProductosTienda({ categoria, user }) {
   // Función de agregar al carrito (valida sesión si es invitado)
   const addToCart = (product, customQty = null, sourceElement = null) => {
     if (!user) {
-      alert("Para añadir productos al carrito e iniciar tu compra, por favor inicia sesión o regístrate.");
+      alert(t('products.signInToBuy'));
       navigate('/login');
       return;
     }
@@ -204,7 +208,7 @@ export default function ProductosTienda({ categoria, user }) {
     const existingItemIndex = currentStorageCart.findIndex(item => item._id === product._id);
     const alreadyInCart = existingItemIndex === -1 ? 0 : currentStorageCart[existingItemIndex].quantity;
     if (alreadyInCart + quantityToAdd > product.stock) {
-      alert(`Solo quedan ${product.stock} unidades disponibles de ${product.nombre}.`);
+      alert(t('products.stockAlert', { count: product.stock, name: displayText(product.nombre) }));
       return;
     }
     
@@ -276,7 +280,7 @@ export default function ProductosTienda({ categoria, user }) {
     return productosFiltradosYOrdenados.slice(start, start + productsPerPage);
   }, [productosFiltradosYOrdenados, currentPage]);
 
-  if (loading) return <div className={tw("loading-state")}>Cargando delicias...</div>;
+  if (loading) return <div className={tw("loading-state")}>{t('catalog.loading')}</div>;
 
   return (
     <div className={tw(tw("tienda-container-wrapper"), "![width:100%]", "![max-width:1400px]", "![margin:0_auto]", "![padding:0_20px]")} >
@@ -286,7 +290,7 @@ export default function ProductosTienda({ categoria, user }) {
         className={tw("mobile-filter-toggle-btn")}
         onClick={() => setShowMobileFilters(true)}
       >
-        <FaFilter /> Filtrar y Ordenar
+        <FaFilter /> {t('catalog.filterAndSort')}
       </button>
 
       {/* Overlay para cerrar al hacer clic fuera en móviles */}
@@ -300,33 +304,33 @@ export default function ProductosTienda({ categoria, user }) {
       {/* Barra de Filtros Superior */}
       <div className={tw(`filters-advanced-container ${showMobileFilters ? 'show-mobile' : ''}`)}>
         <div className={tw("filters-header-mobile")}>
-          <h3>Filtrar Catálogo</h3>
+          <h3>{t('catalog.filterTitle')}</h3>
           <button className={tw("close-filter-btn")} onClick={() => setShowMobileFilters(false)}>
             <FaTimes size={18} />
           </button>
         </div>
 
         <div className={tw("filter-group")}>
-          <label>Categoría</label>
+          <label>{t('products.category')}</label>
           <select 
             value={tempCategoria} 
             onChange={(e) => setTempCategoria(e.target.value)}
             className={tw("filter-select")}
           >
             {categoriasDisponibles.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat}</option>
+            <option key={idx} value={cat}>{cat === 'Todos los productos' ? t('products.all') : displayText(cat)}</option>
             ))}
           </select>
         </div>
 
         <div className={tw("filter-group")}>
-          <label>Rango de Precios</label>
+          <label>{t('products.priceRange')}</label>
           <div className={tw("price-inputs-wrapper")}>
             <div className={tw("price-input-container")}>
               <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
-                placeholder="Mínimo" 
+                placeholder={t('products.minimum')}
                 value={formatInputCurrency(tempPrecioMin)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMin)}
                 className={tw("price-input-colombia")}
@@ -337,7 +341,7 @@ export default function ProductosTienda({ categoria, user }) {
               <span className={tw("currency-symbol")}>$</span>
               <input 
                 type="text" 
-                placeholder="Máximo" 
+                placeholder={t('products.maximum')}
                 value={formatInputCurrency(tempPrecioMax)} 
                 onChange={(e) => handlePrecioChange(e, setTempPrecioMax)}
                 className={tw("price-input-colombia")}
@@ -347,26 +351,26 @@ export default function ProductosTienda({ categoria, user }) {
         </div>
 
         <div className={tw("filter-group")}>
-          <label><FaSortAmountDown /> Ordenar por</label>
+          <label><FaSortAmountDown /> {t('products.sortBy')}</label>
           <select 
             value={tempOrden} 
             onChange={(e) => setTempOrden(e.target.value)}
             className={tw("filter-select")}
           >
-            <option value="recientes">Más recientes</option>
-            <option value="asc">Precio: menor a mayor</option>
-            <option value="desc">Precio: mayor a menor</option>
+            <option value="recientes">{t('products.newest')}</option>
+            <option value="asc">{t('products.priceAscending')}</option>
+            <option value="desc">{t('products.priceDescending')}</option>
           </select>
         </div>
 
         <div className={tw("filter-actions-group")}>
           <button className={tw("apply-filters-btn")} onClick={aplicarFiltros}>
-            <FaCheck /> Aplicar
+            <FaCheck /> {t('products.apply')}
           </button>
 
           {(selectedCategoria !== "Todos los productos" || precioMin !== "" || precioMax !== "" || orden !== "recientes" || searchTerm !== "") && (
             <button className={tw("clear-filters-btn")} onClick={limpiarFiltros}>
-              Limpiar
+              {t('products.clear')}
             </button>
           )}
         </div>
@@ -376,13 +380,13 @@ export default function ProductosTienda({ categoria, user }) {
       <div className={tw("products-grid-section")}>
         {searchTerm && (
           <div className={tw(tw("search-active-indicator"), "![margin-bottom:15px]", "![font-size:0.9rem]", "![color:#64748b]")} >
-            Resultados de búsqueda para: <strong>"{searchTerm}"</strong>
+            {t('catalog.searchResults')} <strong>"{searchTerm}"</strong>
           </div>
         )}
 
         {productosFiltradosYOrdenados.length === 0 ? (
           <div className={tw("no-products")}>
-            No se encontraron productos con los filtros o búsqueda seleccionados.
+            {t('catalog.noResults')}
           </div>
         ) : (
           <>
@@ -390,17 +394,17 @@ export default function ProductosTienda({ categoria, user }) {
               {productosPaginados.map(product => (
                 <div key={product._id} className={tw("product-card")}>
                   {product.stock <= 5 && product.stock > 0 && (
-                    <span className={tw("product-tag alert")}>¡Últimas unidades!</span>
+                    <span className={tw("product-tag alert")}>{t('products.lastUnits')}</span>
                   )}
                   {product.stock === 0 && (
-                    <span className={tw("product-tag out")}>Agotado</span>
+                    <span className={tw("product-tag out")}>{t('products.outOfStock')}</span>
                   )}
 
-                  <div className={tw(tw("product-image"), "![cursor:pointer]")} onClick={() => abrirModalDetalle(product)}  title="Ver detalle">
+                  <div className={tw(tw("product-image"), "![cursor:pointer]")} onClick={() => abrirModalDetalle(product)} title={t('products.viewDetail')} role="button" tabIndex={0} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalDetalle(product); } }}>
                     {product.imagen ? (
                       <img
                         src={cloudinaryUrl(product.imagen, { width: 480 })}
-                        alt={product.nombre}
+                        alt={displayText(product.nombre)}
                         width="480"
                         height="480"
                         loading="lazy"
@@ -410,25 +414,25 @@ export default function ProductosTienda({ categoria, user }) {
                       <div className={tw("placeholder-img")} />
                     )}
                     <div className={tw("quick-view-overlay")}>
-                      <FaEye /> Ver Detalle
+                      <FaEye /> {t('products.viewDetail')}
                     </div>
                   </div>
 
                   <div className={tw("product-info")}>
-                    <span className={tw("product-category-label")}>{product.categoria}</span>
-                    <h3 onClick={() => abrirModalDetalle(product)} className={tw("![cursor:pointer]")}>{product.nombre}</h3>
+                    <span className={tw("product-category-label")}>{displayText(product.categoria)}</span>
+                    <h3 onClick={() => abrirModalDetalle(product)} className={tw("![cursor:pointer]")}>{displayText(product.nombre)}</h3>
                     <p className={tw("product-description-short")}>
-                      {product.descripcion ? product.descripcion.substring(0, 60) : "Sin descripción"}...
+                      {product.descripcion ? `${displayText(product.descripcion).substring(0, 60)}...` : t('products.noDescription')}
                     </p>
                     
                     <div className={tw("product-footer")}>
                       <div className={tw("price-container")}>
-                        <span className={tw("price-label")}>PRECIO</span>
+                        <span className={tw("price-label")}>{t('products.price').toLocaleUpperCase(i18n.resolvedLanguage?.startsWith('en') ? 'en-US' : 'es-CO')}</span>
                         <span className={tw("product-price")}>
-                          ${product.precio ? product.precio.toLocaleString("es-CO") : "0"}
+                          {new Intl.NumberFormat(i18n.resolvedLanguage?.startsWith('en') ? 'en-US' : 'es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.precio || 0)}
                         </span>
                         <span className={tw("product-stock-text")}>
-                          {product.stock > 0 ? `${product.stock} disponibles` : 'Sin existencias'}
+                          {product.stock > 0 ? t('products.available', { count: product.stock }) : t('products.noStock')}
                         </span>
                       </div>
 
@@ -451,7 +455,7 @@ export default function ProductosTienda({ categoria, user }) {
                           disabled={product.stock === 0}
                         >
                           <FaShoppingCart />
-                          {product.stock === 0 ? 'Agotado' : 'Agregar'}
+                          {product.stock === 0 ? t('products.outOfStock') : t('products.add')}
                         </button>
                       </div>
                     </div>
@@ -468,7 +472,7 @@ export default function ProductosTienda({ categoria, user }) {
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
-                  <FaChevronLeft size={12} /> Anterior
+                  <FaChevronLeft size={12} /> {t('pagination.previous')}
                 </button>
 
                 <div className={tw("pagination-numbers")}>
@@ -491,7 +495,7 @@ export default function ProductosTienda({ categoria, user }) {
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                 >
-                  Siguiente <FaChevronRight size={12} />
+                  {t('pagination.next')} <FaChevronRight size={12} />
                 </button>
               </div>
             )}

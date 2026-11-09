@@ -1,4 +1,5 @@
 import VideoGallery3D from './VideoGallery3D';
+import { useTranslation } from 'react-i18next';
 
 // Fuente actual de los videos de la galería: configuración local, no conectada al panel.
 const videoData = [
@@ -8,5 +9,11 @@ const videoData = [
 ];
 
 export default function Videos() {
-  return <VideoGallery3D videos={videoData} title="nuestra pasión" />;
+  const { t } = useTranslation('landing');
+  const videos = videoData.map((video, index) => ({
+    ...video,
+    title: t(`videos.items.${index}`),
+    alt: t('videos.thumbnail', { title: t(`videos.items.${index}`) }),
+  }));
+  return <VideoGallery3D videos={videos} title={t('videos.title')} />;
 }

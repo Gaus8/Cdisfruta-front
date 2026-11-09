@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './MissionVision.css';
 import {
   ACTIVE_BLOB,
@@ -26,6 +27,7 @@ function OrganicClipPaths() {
 }
 
 export default function MissionVision() {
+  const { t } = useTranslation('landing');
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef(null);
   const fruitFactDialogRef = useRef(null);
@@ -83,18 +85,18 @@ export default function MissionVision() {
       <div className="mission-vision__inner">
         <div className="mission-vision__intro">
           <header className="mission-vision__heading">
-            <p className="mission-vision__eyebrow">Nuestra brújula</p>
-            <h2 id="purpose-heading">Un propósito que crece con la tierra</h2>
-            <p className="mission-vision__subtitle">Tradición campesina, ideas frescas y una mirada puesta en el futuro.</p>
+            <p className="mission-vision__eyebrow">{t('missionVision.eyebrow')}</p>
+            <h2 id="purpose-heading">{t('missionVision.title')}</h2>
+            <p className="mission-vision__subtitle">{t('missionVision.subtitle')}</p>
             <span className="mission-vision__underline" aria-hidden="true"><i /><i /><i /></span>
           </header>
 
-          <figure className="mission-vision__place" aria-label="Paisaje e iglesia de Ubaté">
+          <figure className="mission-vision__place" aria-label={t('missionVision.place')}>
             <img
               className="mission-vision__place-photo"
               style={{ '--active-place-blob': `url(#mission-vision-${ACTIVE_BLOB})` }}
               src="/img/ubate-iglesia.webp"
-              alt="Iglesia y paisaje de Ubaté, Cundinamarca"
+              alt={t('missionVision.churchAlt')}
               width="800"
               height="600"
               loading="lazy"
@@ -108,7 +110,7 @@ export default function MissionVision() {
               onClick={() => fruitFactDialogRef.current?.showModal()}
             >
               <span className="mission-vision__fact-spark" aria-hidden="true">✳</span>
-              <span>¿Sabías que?</span>
+              <span>{t('missionVision.fact')}</span>
             </button>
           </figure>
         </div>
@@ -122,7 +124,11 @@ export default function MissionVision() {
             '--active-vision-shape-desktop': `url(#mission-vision-${ACTIVE_VISION_SHAPE_DESKTOP})`,
           }}
         >
-          {PURPOSE_ITEMS.map((item, index) => <PurposeScrapCard key={item.id} item={item} index={index} visible={visible} />)}
+          {PURPOSE_ITEMS.map((item, index) => {
+            const prefix = item.id === 'mision' ? 'purpose.mission' : 'purpose.vision';
+            const localizedItem = { ...item, eyebrow: t(`${prefix}Eyebrow`), title: t(`${prefix}Title`), description: t(`${prefix}Description`), alt: t(`${prefix}Alt`), caption: item.id === 'vision' ? t('purpose.caption') : item.caption };
+            return <PurposeScrapCard key={item.id} item={localizedItem} index={index} visible={visible} />;
+          })}
         </div>
       </div>
 
@@ -133,10 +139,10 @@ export default function MissionVision() {
         onClick={(event) => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
       >
         <div className="fruit-fact-dialog__card">
-          <button className="fruit-fact-dialog__close" type="button" aria-label="Cerrar dato curioso" onClick={() => fruitFactDialogRef.current?.close()}>×</button>
-          <span className="fruit-fact-dialog__eyebrow">Aprovechamiento y Calidad CDISFRUTA</span>
-          <h2 id="fruit-fact-title">Fruta deshidratada: sabor y duración óptima</h2>
-         <p>Nuestra inspiración es sacarle el mayor aprovechamiento a esta fruta; por ello, conservan su máxima calidad entre <span style={{ color: '#d9381e', backgroundColor: '#fde8e5', padding: '2px 6px', borderRadius: '4px' }}>6 y 12 meses</span> mediante un óptimo almacenamiento.</p>
+          <button className="fruit-fact-dialog__close" type="button" aria-label={t('missionVision.closeFact')} onClick={() => fruitFactDialogRef.current?.close()}>×</button>
+          <span className="fruit-fact-dialog__eyebrow">{t('missionVision.factEyebrow')}</span>
+          <h2 id="fruit-fact-title">{t('missionVision.factTitle')}</h2>
+          <p>{t('missionVision.factBody', { months: t('missionVision.months') })}</p>
         </div>
       </dialog>
     </section>

@@ -6,5 +6,41 @@
     "description": "Disfruta del auténtico sabor de Ubaté. Frutas seleccionadas y deshidratadas con amor para acompañar tu estilo de vida saludable.",
     "products": "Ver productos"
   },
-  "footer": { "navigation": "Navegación", "company": "Empresa", "contact": "Contacto" }
+  "footer": {
+    "navigation": "Navegación", "company": "Empresa", "contact": "Contacto", "brandTagline": "Frutas deshidratadas y aromáticas de Ubaté, Cundinamarca. Sabor natural colombiano para el mundo.",
+    "skip": "Saltar al contenido principal", "about": "Sobre Nosotros", "features": "Características", "gallery": "Galería", "ourStory": "Nuestra historia", "craft": "Proceso artesanal", "international": "Presencia internacional", "distributors": "Distribuidores", "location": "Ubaté, Cundinamarca - Colombia", "rights": "© 2026 CDISFRUTA - SIECU · Todos los derechos reservados", "made": "Hecho con ❤️ en Ubaté, Colombia", "logoAlt": "Logo CDISFRUTA"
+  },
+  "banner": {
+    "buyNow": "Comprar ahora", "moreInfo": "Más información", "previous": "Banner anterior", "next": "Banner siguiente", "pagination": "Paginación de banners", "closeInfo": "Cerrar información", "viewInShop": "Ver en la tienda", "slide": "Ir al banner {{number}}: {{title}}", "show": "Mostrar banner: {{title}}", "loading": "Cargando banners de portada", "carousel": "Carrusel de portada", "carouselDescription": "carrusel de portada", "stories": "Historias y productos de CDISFRUTA",
+    "default": [
+      { "eyebrow": "Presencia internacional", "title": "CDISFRUTA en Australia", "description": "Nuestras aromáticas llegando a nuevos destinos. Sabor colombiano presente en Melbourne.", "tag": "Australia · Melbourne", "detail": "Nuestra expansión internacional comenzó con el sueño de llevar el sabor de Ubaté al mundo." },
+      { "eyebrow": "Producto destacado", "title": "Aromáticas frutales", "description": "Infusiones naturales elaboradas con frutas seleccionadas, que brindan sabor, frescura y bienestar en cada taza.", "tag": "100% Natural", "detail": "Seleccionamos cada fruta en su punto exacto de maduración." },
+      { "eyebrow": "Nuestra tierra", "title": "Tradición de Ubaté", "description": "Reflejamos la riqueza de nuestra tierra en cada mezcla, con frutas y hierbas cuidadosamente seleccionadas.", "tag": "Ubaté · Cundinamarca", "detail": "CDISFRUTA nace en el corazón de la provincia de Ubaté." }
+    ]
+  },
+  "history": {
+    "eyebrow": "Nuestra historia", "quote": "\"Del campo de Ubaté al mundo\"", "photoAlt": "Productos CDISFRUTA de fruta deshidratada sobre una mesa de madera", "photoTagline": "El sabor natural de nuestra tierra", "marketYears": "años en el mercado", "photoBadges": "Características de nuestros productos", "represents": "Lo que nos representa", "closing": "Más que un snack... es naturaleza en cada bocado",
+    "paragraphOne": "Somos una empresa fundada en el año 2020 por una Familia Ubatense, a partir de las oportunidades y necesidades generadas por la pandemia. Dedicada a la producción de snacks de fruta deshidratada y aromáticas frutales, promoviendo una alimentación saludable y completamente natural.",
+    "paragraphTwo": "Cada producto nace de la riqueza agrícola de nuestra región, elaborado con frutas cultivadas por manos campesinas, garantizando calidad, frescura y el auténtico sabor natural.",
+    "badgeNatural": "100% NATURAL", "badgeNoPreservatives": "SIN CONSERVANTES", "badgeNutrients": "RICO EN NUTRIENTES", "valueFruit": "Frutas 100% naturales", "valueFarmers": "Apoyo al campesino local", "valueQuality": "Calidad y seguridad", "valueFlavor": "Sabor auténtico"
+  },
+  "missionVision": {
+    "eyebrow": "Nuestra brújula", "title": "Un propósito que crece con la tierra", "subtitle": "Tradición campesina, ideas frescas y una mirada puesta en el futuro.", "place": "Paisaje e iglesia de Ubaté", "churchAlt": "Iglesia y paisaje de Ubaté, Cundinamarca", "fact": "¿Sabías que?", "closeFact": "Cerrar dato curioso", "factEyebrow": "Aprovechamiento y Calidad CDISFRUTA", "factTitle": "Fruta deshidratada: sabor y duración óptima", "factBody": "Nuestra inspiración es sacarle el mayor aprovechamiento a esta fruta; por ello, conservan su máxima calidad entre {{months}} mediante un óptimo almacenamiento.", "months": "6 y 12 meses"
+  },
+  "purpose": {
+    "missionEyebrow": "Nuestra misión", "missionLead": "Nuestra", "missionWord": "Misión", "missionTitle": "Bienestar que nace de la tierra", "missionDescription": "Transformamos frutas de nuestra región en snacks y aromáticas naturales, elaborados con cuidado junto a familias campesinas, para compartir bienestar y sabor auténtico.", "missionAlt": "Productos CDISFRUTA y frutas deshidratadas sobre una mesa de madera",
+    "visionEyebrow": "Nuestra visión", "visionLead": "Nuestra", "visionWord": "Visión", "visionTitle": "El sabor de Ubaté llega más lejos", "visionDescription": "Queremos ser una marca colombiana reconocida por innovar con productos naturales, fortalecer el origen campesino y llevar el sabor de Ubaté a nuevos mercados.", "visionAlt": "Bolsa de aromáticas CDISFRUTA rodeada de fruta fresca y deshidratada", "caption": "Sabor de nuestra tierra"
+  },
+  "know": {
+    "eyebrow": "CONOCE NUESTRO PRODUCTO", "titleLead": "Conoce", "title": "nuestro producto estrella", "subtitle": "Toca cada icono y descubre qué ingredientes hacen única nuestra aromática frutal.", "imageAlt": "Empaque de aromática frutal CDISFRUTA rodeado de sus ingredientes", "closeInfo": "Cerrar información", "closeIngredient": "Cerrar información del ingrediente", "benefit": "Beneficio", "reminder": "Toca un + para explorar", "placeholderTitle": "Tu producto, ingrediente por ingrediente", "placeholderText": "El escenario transparente se añadirá aquí.", "calibration": "Herramienta de calibración de ingredientes", "moveIngredient": "Mover ingrediente", "calibrationHelp": "Haz clic en la imagen o arrastra un punto para calibrar.", "viewInfo": "Ver información de {{name}}",
+    "ingredients": {
+      "fresa": { "name": "Fresa", "category": "FRUTA", "description": "Fresa deshidratada que aporta dulzor natural, color rojo intenso y aroma frutal a la aromática.", "benefit": "Fuente natural de vitamina C." },
+      "pina": { "name": "Piña", "category": "FRUTA", "description": "Piña deshidratada de sabor tropical y toque ácido, que le da frescura y cuerpo a la infusión.", "benefit": "Contiene bromelina y vitamina C." },
+      "manzana": { "name": "Manzana", "category": "FRUTA", "description": "Manzana deshidratada que suaviza la mezcla con un dulzor ligero y notas frescas.", "benefit": "Aporta fibra natural." },
+      "cidron": { "name": "Hojas de cidrón", "category": "HIERBA AROMÁTICA", "description": "Hojas aromáticas de aroma cítrico, tradicionalmente usadas en infusiones por su sabor fresco y relajante.", "benefit": "Tradicionalmente asociada a la relajación." },
+      "azucar-morena": { "name": "Azúcar morena", "category": "ENDULZANTE NATURAL", "description": "Endulzante natural sin refinar con un dulzor suave y notas de caramelo.", "benefit": "Aporta un dulzor cálido a la mezcla." },
+      "panela-menta": { "name": "Panela saborizada con menta", "category": "ENDULZANTE NATURAL", "description": "Panela artesanal con dulzor campesino y un toque refrescante de menta.", "benefit": "Combina dulzor de panela con frescura de menta." }
+    }
+  },
+  "videos": { "title": "nuestra pasión", "eyebrow": "Escena en profundidad", "lead": "Un escenario 3D con las historias de CDISFRUTA. Elige un fotograma lateral y salta al frente; pulsa reproducir para verlo en grande.", "aria": "Historias en video", "story": "Historia", "onScene": "En escena", "playLabel": "Reproducir", "featured": "En primer plano", "previous": "Historia anterior", "next": "Historia siguiente", "choose": "Elegir historia", "close": "Cerrar video", "loading": "Cargando videos", "play": "Reproducir video: {{title}}", "show": "Mostrar: {{title}}", "nowPlaying": "Reproduciendo: {{title}}", "thumbnail": "Miniatura del video {{title}}", "items": ["Auténtico sabor de Ubaté", "De Ubaté para el mundo", "Ideal para cualquier momento"] }
 }
